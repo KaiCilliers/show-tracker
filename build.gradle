@@ -1,0 +1,35 @@
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    ext {
+        kotlin_version = "1.4.20"
+        retrofit_version = "2.9.0"
+        hilt_version = "2.28-alpha"
+        timber_version = "4.7.1"
+        room_version = "2.3.0-alpha02"
+        lifecycle_version = "2.2.0"
+        okhttp_version = "4.7.2"
+        recycler_version = "1.2.0-alpha06"
+        paging_version = "3.0.0-alpha07"
+        nav_version = "2.3.1"
+        moshi_version = "1.8.0"
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+    }
+}
