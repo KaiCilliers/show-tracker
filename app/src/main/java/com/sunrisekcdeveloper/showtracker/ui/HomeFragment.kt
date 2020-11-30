@@ -13,18 +13,6 @@ import timber.log.Timber
 class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHomeBinding.inflate(inflater)
-        binding.apply {
-            tvOther.click {
-                findNavController().navigate(
-                        HomeFragmentDirections.toSearch()
-                )
-            }
-            tvBack.click {
-                findNavController().navigate(
-                        HomeFragmentDirections.toProgress()
-                )
-            }
-        }
         return binding.root
     }
 }

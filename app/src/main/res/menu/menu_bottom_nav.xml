@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Same IDs as fragment destinations in nav graph -->
+    <item
+        android:id="@+id/progress_fragment_dest"
+        android:enabled="true"
+        android:icon="@drawable/temp_progress"
+        android:title="@string/menu_label_progress"/>
+    <item
+        android:id="@+id/home_fragment_dest"
+        android:enabled="true"
+        android:icon="@drawable/temp_home"
+        android:title="@string/menu_label_home"/>
+    <item
+        android:id="@+id/search_fragment_dest"
+        android:enabled="true"
+        android:icon="@drawable/temp_search"
+        android:title="@string/menu_label_search"/>
+</menu>

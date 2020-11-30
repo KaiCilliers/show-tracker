@@ -12,13 +12,6 @@ import com.sunrisekcdeveloper.showtracker.util.click
 class ProgressFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentProgressBinding.inflate(inflater)
-        binding.apply {
-            tvProgress.click {
-                findNavController().navigate(
-                    ProgressFragmentDirections.toHome()
-                )
-            }
-        }
         return binding.root
     }
 }

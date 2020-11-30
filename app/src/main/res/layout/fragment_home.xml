@@ -9,24 +9,13 @@
         android:layout_width="match_parent"
         tools:context=".ui.HomeFragment">
         <TextView
-            android:id="@+id/tv_other"
+            android:id="@+id/tv_home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TO SEARCH"
+            android:text="HOME"
             android:textSize="24sp"
             android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-        <TextView
-            android:id="@+id/tv_back"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="TO PROGRESS"
-            android:textSize="24sp"
-            android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/tv_other"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
