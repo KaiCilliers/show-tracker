@@ -2,36 +2,21 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph_main"
-    app:startDestination="@id/progressFragment">
+    app:startDestination="@id/progress_fragment_dest">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/home_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.ui.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/to_progress"
-            app:destination="@id/progressFragment" />
-        <action
-            android:id="@+id/to_search"
-            app:destination="@id/searchFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_home"/>
     <fragment
-        android:id="@+id/progressFragment"
+        android:id="@+id/progress_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.ui.ProgressFragment"
         android:label="ProgressFragment"
-        tools:layout="@layout/fragment_progress">
-        <action
-            android:id="@+id/to_home"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_progress"/>
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/search_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.ui.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/to_home"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_search"/>
 </navigation>
