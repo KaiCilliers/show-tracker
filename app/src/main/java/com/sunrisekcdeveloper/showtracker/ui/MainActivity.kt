@@ -1,7 +1,8 @@
-package com.sunrisekcdeveloper.showtracker
+package com.sunrisekcdeveloper.showtracker.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.remote.service.FanartService
 import com.sunrisekcdeveloper.showtracker.remote.service.TraktService
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         CoroutineScope(Dispatchers.IO).launch {
-            go()
+//            go()
         }
     }
     suspend fun go() {
