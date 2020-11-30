@@ -1,25 +1,14 @@
 package com.sunrisekcdeveloper.showtracker.ui
 
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.navigation.Navigation
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.*
 import com.sunrisekcdeveloper.showtracker.R
-import okhttp3.internal.notify
 import org.hamcrest.CoreMatchers.not
-import org.hamcrest.core.AllOf
-import org.hamcrest.core.AllOf.*
-import org.hamcrest.core.Is.`is`
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
