@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="movie"
+            type="com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie" />
+
+        <variable
+            name="clickListener"
+            type="com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(movie)}">
+
+        <ImageView
+            android:id="@+id/imgv_poster"
+            android:layout_width="112dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_8"
+            android:scaleType="centerInside"
+            android:src="@drawable/test"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/test" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:padding="@dimen/padding_8"
+            android:text="@{movie.title}"
+            app:layout_constraintStart_toEndOf="@id/imgv_poster"
+            app:layout_constraintTop_toTopOf="@id/imgv_poster"
+            tools:text="Finding Nemo" />
+
+        <TextView
+            android:id="@+id/tv_season"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:padding="@dimen/padding_8"
+            android:text="@{movie.season}"
+            app:layout_constraintBottom_toBottomOf="@id/imgv_poster"
+            app:layout_constraintStart_toEndOf="@id/imgv_poster"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:text="S02" />
+
+        <TextView
+            android:id="@+id/tv_episode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:padding="@dimen/padding_8"
+            android:text="@{movie.episode}"
+            app:layout_constraintBottom_toBottomOf="@id/imgv_poster"
+            app:layout_constraintStart_toEndOf="@id/tv_season"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:text="E14" />
+
+        <TextView
+            android:id="@+id/tv_episode_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:padding="@dimen/padding_8"
+            android:text="@{movie.episodeTitle}"
+            app:layout_constraintBottom_toBottomOf="@id/imgv_poster"
+            app:layout_constraintStart_toEndOf="@id/tv_episode"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:text="Marlin and Dory find some sharks" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

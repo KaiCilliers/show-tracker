@@ -31,8 +31,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Movie Title"/>
         <ImageView
-            android:layout_width="42dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/poster_small_width"
+            android:layout_height="@dimen/poster_small_height"
             android:padding="@dimen/padding_2"
             android:layout_marginEnd="@dimen/margin_24"
             android:src="@drawable/test"
