@@ -3,4 +3,8 @@
     <string name="menu_label_progress">Progress</string>
     <string name="menu_label_home">Home</string>
     <string name="menu_label_search">Search</string>
+    <string name="hint_search">Search Here</string>
+
+    <!-- TESTING -->
+    <string name="input_text_value">Testing value</string>
 </resources>

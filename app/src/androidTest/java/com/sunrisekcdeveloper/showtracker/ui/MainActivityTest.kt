@@ -26,6 +26,7 @@ class MainActivityTest {
         onView(withId(R.id.progress_fragment_dest)).check(matches(isDisplayed()))
         onView(withId(R.id.home_fragment_dest)).check(matches(isDisplayed()))
         onView(withId(R.id.search_fragment_dest)).check(matches(isDisplayed()))
+        onView(withId(R.id.sv_search)).check(matches(isDisplayed()))
 
         // status
         onView(withId(R.id.progress_fragment_dest)).check(matches(isSelected()))
