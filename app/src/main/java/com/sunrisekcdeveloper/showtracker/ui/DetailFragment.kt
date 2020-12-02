@@ -11,6 +11,7 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import timber.log.Timber
 
+// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
 class DetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
