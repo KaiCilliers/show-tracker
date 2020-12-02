@@ -8,6 +8,52 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         tools:context=".ui.HomeFragment">
+        <!-- TODO these could be that view called badges (I believe) used for filtering -->
+        <TextView
+            android:id="@+id/tv_filter_tv_shows"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/margin_8"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_filter_movies"
+            tools:text="TV Shows"/>
+        <TextView
+            android:id="@+id/tv_filter_movies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/margin_8"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_filter_tv_shows"
+            app:layout_constraintEnd_toStartOf="@id/tv_filter_watchlist"
+            tools:text="Movies"/>
+        <TextView
+            android:id="@+id/tv_filter_watchlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/margin_8"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_filter_movies"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Watchlist"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_featured_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_8"
+            android:padding="@dimen/padding_8"
+            app:layout_constraintTop_toBottomOf="@id/tv_filter_tv_shows"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- TODO remove -->
         <TextView
             android:id="@+id/tv_home"
             android:layout_width="0dp"
