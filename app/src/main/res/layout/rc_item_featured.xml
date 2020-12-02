@@ -21,7 +21,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{featuredList.heading}"
-            android:onClick="@{() -> clickListener.onClick(featuredList.results[0])}"
             android:layout_margin="@dimen/margin_8"
             android:textSize="@dimen/text_24"
             app:layout_constraintTop_toTopOf="parent"
