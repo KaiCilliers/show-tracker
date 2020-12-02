@@ -2,21 +2,43 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph_main"
-    app:startDestination="@id/progress_fragment_dest">
+    app:startDestination="@id/detail_fragment_dest">
 
     <fragment
         android:id="@+id/home_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.ui.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_fragment_dest_to_detailFragment"
+            app:destination="@id/detail_fragment_dest" />
+    </fragment>
     <fragment
         android:id="@+id/progress_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.ui.ProgressFragment"
         android:label="ProgressFragment"
-        tools:layout="@layout/fragment_progress"/>
+        tools:layout="@layout/fragment_progress">
+        <action
+            android:id="@+id/action_progress_fragment_dest_to_detailFragment"
+            app:destination="@id/detail_fragment_dest" />
+    </fragment>
     <fragment
         android:id="@+id/search_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.ui.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_search_fragment_dest_to_detailFragment"
+            app:destination="@id/detail_fragment_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/detail_fragment_dest"
+        android:name="com.sunrisekcdeveloper.showtracker.ui.DetailFragment"
+        android:label="DetailFragment"
+        tools:layout="@layout/fragment_movie_detail">
+        <argument
+            android:name="dummy"
+            app:argType="string"
+            android:defaultValue="def" />
+    </fragment>
 </navigation>

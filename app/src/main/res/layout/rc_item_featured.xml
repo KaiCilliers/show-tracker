@@ -28,6 +28,7 @@
             tools:text="New Releases" />
 
         <!--TODO bottom nav bar covers the bottom of the RC list data -->
+        <!-- TODO long press for toast with movie title (ideally posters should contain movie title)-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_featured_list"
             android:layout_width="wrap_content"

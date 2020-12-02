@@ -9,4 +9,5 @@
     <dimen name="poster_small_width">42dp</dimen>
     <dimen name="poster_small_height">60dp</dimen>
     <dimen name="text_36">36sp</dimen>
+    <dimen name="text_18">18sp</dimen>
 </resources>
