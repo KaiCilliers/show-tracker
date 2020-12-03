@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph_main"
-    app:startDestination="@id/detail_fragment_dest">
+    app:startDestination="@id/progress_fragment_dest">
 
     <fragment
         android:id="@+id/home_fragment_dest"
@@ -40,5 +40,10 @@
             android:name="dummy"
             app:argType="string"
             android:defaultValue="def" />
+        <action
+            android:id="@+id/action_detail_fragment_dest_self"
+            app:destination="@id/detail_fragment_dest"
+            app:popUpTo="@id/detail_fragment_dest"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

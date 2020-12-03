@@ -23,6 +23,9 @@ class HomeFragment : Fragment() {
         FeaturedCategoryAdapter(
             PosterClickAction { title ->
                 Timber.d("Featured: $title")
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentDestToDetailFragment("FROM HOME FRAGMENT")
+                )
             }
         )
     }

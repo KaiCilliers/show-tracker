@@ -20,6 +20,7 @@ class SearchFragment : Fragment() {
     private val adapter by lazy {
         FilterMediumAdapter(PosterClickAction { title ->
             Timber.d("Search Filter: $title")
+            findNavController().navigate(SearchFragmentDirections.actionSearchFragmentDestToDetailFragment("FROM SEARCH FRAGMENT"))
         })
     }
 

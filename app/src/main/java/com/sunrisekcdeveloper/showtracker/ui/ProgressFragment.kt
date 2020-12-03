@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
@@ -23,6 +24,7 @@ class ProgressFragment : Fragment() {
         FilterAdapter(
             PosterClickAction { title ->
                 Timber.d("TITLE: $title")
+                findNavController().navigate(ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment("FROM PROGRESS FRAGMENT"))
             }
         )
     }
