@@ -3,6 +3,7 @@ package com.sunrisekcdeveloper.showtracker.ui.rc
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.sunrisekcdeveloper.showtracker.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import kotlinx.coroutines.CoroutineScope
@@ -11,12 +12,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FilterAdapter(val clickListener: PosterClickAction) :
-    ListAdapter<DisplayMovie, PosterViewHolder>(
+    BaseListAdapter<DisplayMovie, PosterViewHolder>(
         PosterDifferenceCallBack()
     ) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    fun addData(list: List<DisplayMovie>) {
+    override fun addData(list: List<DisplayMovie>) {
         adapterScope.launch {
             withContext(Dispatchers.Main) {
                 submitList(list)
