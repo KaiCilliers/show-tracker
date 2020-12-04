@@ -1,9 +1,12 @@
 package com.sunrisekcdeveloper.showtracker.ui.rcupcoming
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
+import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +24,17 @@ class UpcomingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == R.layout.rc_item_movie_summary) {
-            UpcomingItemViewHolder.create(parent)
+            UpcomingItemViewHolder(
+                RcItemMovieSummaryBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
         } else {
-            CategoryViewHolder.create(parent)
+            CategoryViewHolder(
+                RcItemProgressHeaderBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
         }
     }
 
@@ -33,7 +44,8 @@ class UpcomingAdapter(
             is UiModel.MovieItem -> (holder as UpcomingItemViewHolder).bind(
                 uiModel.movie, clickListener
             )
-            is UiModel.CategoryHeader -> (holder as CategoryViewHolder).bind(uiModel.name)
+            /** TODO DO NOT PASS NULL - REPLACE WITH SMART CLASS OR SOMETHING */
+            is UiModel.CategoryHeader -> (holder as CategoryViewHolder).bind(uiModel.name, null)
         }
     }
 

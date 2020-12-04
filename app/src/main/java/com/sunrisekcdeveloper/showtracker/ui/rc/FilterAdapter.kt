@@ -1,14 +1,16 @@
 package com.sunrisekcdeveloper.showtracker.ui.rc
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FilterAdapter(val clickListener: PosterClickAction):
+class FilterAdapter(val clickListener: PosterClickAction) :
     ListAdapter<DisplayMovie, PosterViewHolder>(
         PosterDifferenceCallBack()
     ) {
@@ -23,7 +25,11 @@ class FilterAdapter(val clickListener: PosterClickAction):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PosterViewHolder =
-        PosterViewHolder.from(parent)
+        PosterViewHolder(
+            RcItemSmallPosterBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
 
     override fun onBindViewHolder(holder: PosterViewHolder, position: Int) =
         holder.bind(

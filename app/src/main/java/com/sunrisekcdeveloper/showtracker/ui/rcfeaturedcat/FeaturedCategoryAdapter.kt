@@ -1,9 +1,11 @@
 package com.sunrisekcdeveloper.showtracker.ui.rcfeaturedcat
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
@@ -23,7 +25,11 @@ class FeaturedCategoryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeaturedCategoryViewHolder =
-        FeaturedCategoryViewHolder.from(parent)
+        FeaturedCategoryViewHolder(
+            RcItemFeaturedBinding.inflate(
+                LayoutInflater.from(parent.context)
+            )
+        )
 
     override fun onBindViewHolder(holder: FeaturedCategoryViewHolder, position: Int) {
         holder.bind(getItem(position), clickListener)
