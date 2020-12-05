@@ -7,13 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
-import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterMediumAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
-import com.sunrisekcdeveloper.showtracker.util.click
 import timber.log.Timber
 
 class SearchFragment : Fragment() {
@@ -39,7 +36,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.addData(fakedata())
+        adapter.submit(fakedata())
     }
 
     private fun fakedata(): List<DisplayMovie> = listOf(

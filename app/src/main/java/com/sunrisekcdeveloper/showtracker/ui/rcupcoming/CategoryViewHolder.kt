@@ -2,11 +2,14 @@ package com.sunrisekcdeveloper.showtracker.ui.rcupcoming
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.showtracker.BaseViewHolder
 import com.sunrisekcdeveloper.showtracker.ViewHolderContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
+import com.sunrisekcdeveloper.showtracker.ui.rc.PosterDifferenceCallBack
 
 /**
  * Today, Tomorrow, Next Week etc.
@@ -14,18 +17,12 @@ import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
  */
 class CategoryViewHolder(
     private val binding: RcItemProgressHeaderBinding
-    ) : RecyclerView.ViewHolder(binding.root), ViewHolderContract<String> {
-    override fun bind(item: String, clickAction: PosterClickAction?) {
+    ) : BaseViewHolder<String>(binding) {
+    override fun bind(item: String) {
         binding.content = item
     }
-//    companion object {
-//        fun create(parent: ViewGroup) : CategoryViewHolder {
-//            val binding = RcItemProgressHeaderBinding.inflate(
-//                LayoutInflater.from(parent.context),
-//                parent,
-//                false
-//            )
-//            return CategoryViewHolder(binding)
-//        }
-//    }
+
+    override fun subRecyclerView(): RecyclerView? = null
+
+    override fun comparison(): DiffUtil.ItemCallback<String>? = null
 }

@@ -7,15 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
 import com.sunrisekcdeveloper.showtracker.ui.rcupcoming.UiModel
 import com.sunrisekcdeveloper.showtracker.ui.rcupcoming.UpcomingAdapter
-import com.sunrisekcdeveloper.showtracker.util.click
 import timber.log.Timber
 
 class ProgressFragment : Fragment() {
@@ -54,8 +51,8 @@ class ProgressFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.addData(dummyMovies)
-        upComingAdapter.addData(mixeddummydata())
+        adapter.submit(dummyMovies)
+        upComingAdapter.submit(mixeddummydata())
     }
 
     private fun mixeddummydata(): List<UiModel> =

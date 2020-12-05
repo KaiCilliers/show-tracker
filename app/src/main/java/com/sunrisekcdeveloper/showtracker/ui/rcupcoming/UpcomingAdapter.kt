@@ -2,24 +2,19 @@ package com.sunrisekcdeveloper.showtracker.ui.rcupcoming
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.showtracker.AdapterContract
+import com.sunrisekcdeveloper.showtracker.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.UnsupportedOperationException
 
 class UpcomingAdapter(
     private val clickListener: PosterClickAction
-) : ListAdapter<UiModel, RecyclerView.ViewHolder>(UiModelDiff()), AdapterContract<UiModel> {
+) : BaseListAdapter<UiModel, RecyclerView.ViewHolder>(UiModelDiff()) {
 
-    override fun addData(list: List<UiModel>) {
+    override fun submit(list: List<UiModel>) {
         submitList(list)
     }
 
@@ -43,10 +38,9 @@ class UpcomingAdapter(
         val uiModel = getItem(position)
         when (uiModel) {
             is UiModel.MovieItem -> (holder as UpcomingItemViewHolder).bind(
-                uiModel.movie, clickListener
+                uiModel.movie
             )
-            /** TODO DO NOT PASS NULL - REPLACE WITH SMART CLASS OR SOMETHING */
-            is UiModel.CategoryHeader -> (holder as CategoryViewHolder).bind(uiModel.name, null)
+            is UiModel.CategoryHeader -> (holder as CategoryViewHolder).bind(uiModel.name)
         }
     }
 

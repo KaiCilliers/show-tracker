@@ -8,13 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
-import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
-import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
 import com.sunrisekcdeveloper.showtracker.ui.rcfeaturedcat.FeaturedCategoryAdapter
-import com.sunrisekcdeveloper.showtracker.util.click
 import timber.log.Timber
 
 class HomeFragment : Fragment() {
@@ -41,7 +38,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.addData(populateFeaturedDummy())
+        adapter.submit(populateFeaturedDummy())
     }
 
     private fun populateFeaturedDummy(): List<FeaturedList> =

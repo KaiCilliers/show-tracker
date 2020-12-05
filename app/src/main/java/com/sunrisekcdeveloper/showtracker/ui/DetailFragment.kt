@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,7 +11,6 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
-import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterMediumAdapter
 import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
 import timber.log.Timber
@@ -55,7 +53,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.addData(fakedata())
+        adapter.submit(fakedata())
     }
     private fun fakedata(): List<DisplayMovie> = listOf(
         DisplayMovie("Finding Nemo"),
