@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.showtracker.BaseListAdapter
+import com.sunrisekcdeveloper.showtracker.AdapterContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
@@ -13,7 +13,7 @@ import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
 
 class FeaturedCategoryAdapter(
     val clickListener: PosterClickAction
-) : BaseListAdapter<FeaturedList, FeaturedCategoryViewHolder>(CategoryDifferenceCallBack()){
+) : ListAdapter<FeaturedList, FeaturedCategoryViewHolder>(CategoryDifferenceCallBack()), AdapterContract<FeaturedList>{
 
     // TODO better impl, mayhap make a call to subList's submistList in addData?
     // allows onBind access to data to populate sub recyclerview

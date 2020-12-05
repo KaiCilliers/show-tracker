@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.showtracker.BaseListAdapter
+import com.sunrisekcdeveloper.showtracker.AdapterContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
@@ -17,7 +17,7 @@ import java.lang.UnsupportedOperationException
 
 class UpcomingAdapter(
     private val clickListener: PosterClickAction
-) : BaseListAdapter<UiModel, RecyclerView.ViewHolder>(UiModelDiff()) {
+) : ListAdapter<UiModel, RecyclerView.ViewHolder>(UiModelDiff()), AdapterContract<UiModel> {
 
     override fun addData(list: List<UiModel>) {
         submitList(list)

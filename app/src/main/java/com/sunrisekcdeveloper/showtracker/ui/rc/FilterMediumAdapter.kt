@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.sunrisekcdeveloper.showtracker.BaseListAdapter
+import com.sunrisekcdeveloper.showtracker.AdapterContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 
 class FilterMediumAdapter(
     val clickListener: PosterClickAction
-) : BaseListAdapter<DisplayMovie, PosterMediumViewHolder>(PosterDifferenceCallBack()) {
+) : ListAdapter<DisplayMovie, PosterMediumViewHolder>(PosterDifferenceCallBack()), AdapterContract<DisplayMovie> {
     override fun addData(list: List<DisplayMovie>) {
         submitList(list)
     }
