@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunrisekcdeveloper.showtracker.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
@@ -17,14 +18,14 @@ import timber.log.Timber
 class HomeFragment : Fragment() {
 
     private val adapter by lazy {
-        FeaturedCategoryAdapter(
-            PosterClickAction { title ->
-                Timber.d("Featured: $title")
+        FeaturedCategoryAdapter(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("Featured: $item")
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeFragmentDestToDetailFragment("FROM HOME FRAGMENT")
                 )
             }
-        )
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

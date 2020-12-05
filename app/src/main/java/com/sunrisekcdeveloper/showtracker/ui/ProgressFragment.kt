@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunrisekcdeveloper.showtracker.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterAdapter
@@ -19,15 +20,25 @@ class ProgressFragment : Fragment() {
 
     private val adapter by lazy {
         FilterAdapter(
-            PosterClickAction { title ->
-                Timber.d("TITLE: $title")
-                findNavController().navigate(ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment("FROM PROGRESS FRAGMENT"))
+            object : ClickActionContract {
+                override fun onClick(item: Any) {
+                    Timber.d("TITLE: $item")
+                    findNavController().navigate(
+                        ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
+                            "FROM PROGRESS FRAGMENT"
+                        )
+                    )
+                }
             }
         )
     }
 
     private val upComingAdapter by lazy {
-        UpcomingAdapter(PosterClickAction { Timber.d("SPECIAL click: $it") })
+        UpcomingAdapter(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("SPECIAL click: $item")
+            }
+        })
     }
 
     private val dummyMovies: List<DisplayMovie> by lazy {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sunrisekcdeveloper.showtracker.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
@@ -18,10 +19,12 @@ import timber.log.Timber
 // TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
 class DetailFragment : Fragment() {
     private val adapter by lazy {
-        FilterMediumAdapter(PosterClickAction {
-            Timber.d("DETAIL TITLE: $it")
-            // TODO refresh view with new movie data and scroll to top
-            findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
+        FilterMediumAdapter(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("DETAIL TITLE: $item")
+                // TODO refresh view with new movie data and scroll to top
+                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
+            }
         })
     }
     override fun onCreateView(

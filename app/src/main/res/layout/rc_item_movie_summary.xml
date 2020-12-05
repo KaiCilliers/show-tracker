@@ -11,7 +11,7 @@
 
         <variable
             name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction" />
+            type="com.sunrisekcdeveloper.showtracker.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

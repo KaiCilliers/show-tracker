@@ -1,5 +1,5 @@
 package com.sunrisekcdeveloper.showtracker
 
-interface ClickActionContract<in T> {
-    fun onClick(item: T)
+interface ClickActionContract {
+    fun onClick(item: Any)
 }

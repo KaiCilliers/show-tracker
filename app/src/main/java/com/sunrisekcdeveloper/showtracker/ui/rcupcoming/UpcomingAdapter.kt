@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.BaseListAdapter
+import com.sunrisekcdeveloper.showtracker.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
@@ -11,7 +12,7 @@ import com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction
 import java.lang.UnsupportedOperationException
 
 class UpcomingAdapter(
-    private val clickListener: PosterClickAction
+    private val clickAction: ClickActionContract
 ) : BaseListAdapter<UiModel, RecyclerView.ViewHolder>(UiModelDiff()) {
 
     override fun submit(list: List<UiModel>) {
@@ -23,7 +24,7 @@ class UpcomingAdapter(
             UpcomingItemViewHolder(
                 RcItemMovieSummaryBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                )
+                ), clickAction
             )
         } else {
             CategoryViewHolder(

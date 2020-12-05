@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sunrisekcdeveloper.showtracker.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 import com.sunrisekcdeveloper.showtracker.ui.rc.FilterMediumAdapter
@@ -15,9 +16,15 @@ import timber.log.Timber
 
 class SearchFragment : Fragment() {
     private val adapter by lazy {
-        FilterMediumAdapter(PosterClickAction { title ->
-            Timber.d("Search Filter: $title")
-            findNavController().navigate(SearchFragmentDirections.actionSearchFragmentDestToDetailFragment("FROM SEARCH FRAGMENT"))
+        FilterMediumAdapter(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("Search Filter: $item")
+                findNavController().navigate(
+                    SearchFragmentDirections.actionSearchFragmentDestToDetailFragment(
+                        "FROM SEARCH FRAGMENT"
+                    )
+                )
+            }
         })
     }
 

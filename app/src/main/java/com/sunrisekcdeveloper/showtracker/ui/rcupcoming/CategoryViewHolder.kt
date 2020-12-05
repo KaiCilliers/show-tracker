@@ -13,5 +13,4 @@ class CategoryViewHolder(
     override fun bind(item: String) {
         binding.content = item
     }
-
 }
