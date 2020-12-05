@@ -1,11 +1,6 @@
 package com.sunrisekcdeveloper.showtracker.ui.rc
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.BaseViewHolder
-import com.sunrisekcdeveloper.showtracker.ViewHolderContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie
 
@@ -20,7 +15,4 @@ class PosterViewHolder(
         binding.executePendingBindings()
     }
 
-    override fun subRecyclerView(): RecyclerView? = null
-
-    override fun comparison(): DiffUtil.ItemCallback<DisplayMovie> = PosterDifferenceCallBack()
 }
