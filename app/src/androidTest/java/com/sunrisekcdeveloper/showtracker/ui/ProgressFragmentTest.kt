@@ -1,26 +1,21 @@
 package com.sunrisekcdeveloper.showtracker.ui
 
-import android.content.res.Resources
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
-import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.ui.screens.ProgressFragment
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

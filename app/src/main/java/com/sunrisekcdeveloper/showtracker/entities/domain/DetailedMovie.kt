@@ -1,7 +1,7 @@
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
 data class DetailedMovie(
-    val basics: DisplayMovie,
+    val basics: Movie,
     val releaseDate: String,
     val ageRating: String,
     val runningTime: String,

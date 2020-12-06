@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:context=".ui.SearchFragment">
+        tools:context=".ui.screens.SearchFragment">
         <androidx.appcompat.widget.SearchView
             android:id="@+id/sv_filter_all"
             android:layout_width="match_parent"

@@ -5,9 +5,9 @@
     <data>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_width="match_parent"
-        tools:context=".ui.HomeFragment">
+        tools:context=".ui.screens.HomeFragment">
         <!-- TODO these could be that view called badges (I believe) used for filtering -->
         <TextView
             android:id="@+id/tv_filter_tv_shows"

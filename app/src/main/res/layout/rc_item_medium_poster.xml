@@ -6,10 +6,10 @@
     <data>
         <variable
             name="movie"
-            type="com.sunrisekcdeveloper.showtracker.entities.domain.DisplayMovie" />
+            type="com.sunrisekcdeveloper.showtracker.entities.domain.Movie" />
         <variable
             name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.ui.rc.PosterClickAction" />
+            type="com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
