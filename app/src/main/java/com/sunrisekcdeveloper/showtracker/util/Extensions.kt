@@ -20,4 +20,10 @@ package com.sunrisekcdeveloper.showtracker.util
 
 import android.view.View
 
+/**
+ * Click simplifies adding an onClickListener to a [View]
+ *
+ * @param action lambda expression to be called when [View] is clicked
+ * @receiver [View]
+ */
 inline fun View.click(crossinline action: () -> Unit) = setOnClickListener { action() }

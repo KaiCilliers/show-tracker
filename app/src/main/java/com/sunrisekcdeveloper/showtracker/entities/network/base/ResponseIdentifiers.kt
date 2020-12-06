@@ -21,9 +21,16 @@ package com.sunrisekcdeveloper.showtracker.entities.network.base
 import com.squareup.moshi.Json
 
 /**
- * All the possible IDs assocaited with movies and shows
- * Not all entities have all the ID types, thus some
- * fields are nullable
+ * Response Identifiers represents a network object containing IDs that can be used to reference
+ * the same object / entity by different APIs. Not all objects / entities have all the ID types,
+ * thus some are nullable
+ *
+ * @property trakt represents the ID used to reference the object / entity using the Trakt API
+ * @property slug not 100% clear what slug is used for
+ * @property imdb represents the ID used to reference the object / entity using the IMDB API
+ * @property tmdb represents the ID used to reference the object / entity using the TMDB API
+ * @property tvdb represents the ID used to reference the object / entity using the TVDB API
+ * @constructor Create empty Response identifiers
  */
 class ResponseIdentifiers(
     @Json(name = "trakt") val trakt: Int,

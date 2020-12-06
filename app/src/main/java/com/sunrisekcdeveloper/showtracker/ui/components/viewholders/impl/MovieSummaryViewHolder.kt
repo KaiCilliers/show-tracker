@@ -23,6 +23,13 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
+/**
+ * Movie Summary ViewHolder represents a movie or show item with limited information and a poster
+ * preview
+ *
+ * @property binding is the auto generated binding object that represents the associated item layout
+ * @property clickAction is the action executed when the [binding] object is clicked
+ */
 class MovieSummaryViewHolder(
     private val binding: RcItemMovieSummaryBinding,
     private val clickAction: ClickActionContract

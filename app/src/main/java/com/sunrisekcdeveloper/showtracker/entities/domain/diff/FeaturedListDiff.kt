@@ -21,6 +21,11 @@ package com.sunrisekcdeveloper.showtracker.entities.domain.diff
 import androidx.recyclerview.widget.DiffUtil
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 
+/**
+ * FeaturedList Diff knows how to compared [FeaturedList] objects which prevents ListAdapters and
+ * PagingDataAdapters replacing an entire list of data and instead only replace the items that got
+ * changed
+ */
 class FeaturedListDiff : DiffUtil.ItemCallback<FeaturedList>() {
     override fun areItemsTheSame(oldItem: FeaturedList, newItem: FeaturedList): Boolean =
         oldItem.heading == newItem.heading

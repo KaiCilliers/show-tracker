@@ -22,8 +22,13 @@ import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponsePoster
 
 /**
- * TODO better name
+ * Response Image represents a network response which consists of a movie or show name with all of
+ * its associated poster urls
+ *
+ * @property name is the name of the movie or show
+ * @property posters is a list of [ResponsePoster]
  */
+// TODO provide a better name
 data class ResponseImage(
     @Json(name = "name") val name: String,
     @Json(name = "movieposter") val posters: List<ResponsePoster>

@@ -18,6 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components
 
+/**
+ * Adapter Contract defines the responsibilities of adapters
+ *
+ * @param T is the data type required by the associated viewholder
+ */
 interface AdapterContract<in T> {
+    /**
+     * Submit defines how the adapter provides a list of data
+     *
+     * @param list is a list of the data type required by the associated viewholder
+     */
     fun submit(list: List<T>)
 }

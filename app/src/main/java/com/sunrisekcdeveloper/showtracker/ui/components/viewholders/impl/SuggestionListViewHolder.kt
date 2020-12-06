@@ -24,6 +24,12 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.NestedViewHo
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 
+/**
+ * Suggestion List ViewHolder represents a list of movies or shows identified by a category header
+ *
+ * @property binding is the auto generated binding object that represents the associated item layout
+ * @property clickAction is the action executed when the [binding] object is clicked
+ */
 class SuggestionListViewHolder(
     private val binding: RcItemFeaturedBinding,
     private val clickAction: ClickActionContract

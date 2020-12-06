@@ -33,6 +33,12 @@ import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSumma
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
 import timber.log.Timber
 
+/**
+ * Progress Fragment that displays upcoming movies and shows with the capability to filter
+ * based on movie or show
+ *
+ * @constructor Create empty Progress fragment
+ */
 class ProgressFragment : Fragment() {
 
     private val adapter by lazy {

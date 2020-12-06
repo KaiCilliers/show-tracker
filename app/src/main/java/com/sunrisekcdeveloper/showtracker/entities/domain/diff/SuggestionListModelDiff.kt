@@ -21,6 +21,11 @@ package com.sunrisekcdeveloper.showtracker.entities.domain.diff
 import androidx.recyclerview.widget.DiffUtil
 import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 
+/**
+ * SuggestionList Diff knows how to compared [SuggestionListModel] objects which prevents ListAdapters and
+ * PagingDataAdapters replacing an entire list of data and instead only replace the items that got
+ * changed
+ */
 class SuggestionListModelDiff : DiffUtil.ItemCallback<SuggestionListModel>() {
     override fun areItemsTheSame(oldItem: SuggestionListModel, newItem: SuggestionListModel): Boolean {
         return (oldItem is SuggestionListModel.MovieItem && newItem is SuggestionListModel.MovieItem

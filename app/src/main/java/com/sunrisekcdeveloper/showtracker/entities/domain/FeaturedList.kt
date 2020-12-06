@@ -18,6 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
+/**
+ * Featured List is a domain object that represents a collection of [Movie]s associated to a common
+ * category represented by [heading]
+ *
+ * @property heading of the collection of [Movie]s
+ * @property results is the list of [Movie] objects
+ */
 data class FeaturedList(
     val heading: String,
     val results: List<Movie>

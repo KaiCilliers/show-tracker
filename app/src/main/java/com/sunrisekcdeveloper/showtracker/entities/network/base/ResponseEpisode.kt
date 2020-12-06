@@ -20,6 +20,16 @@ package com.sunrisekcdeveloper.showtracker.entities.network.base
 
 import com.squareup.moshi.Json
 
+/**
+ * Response Episode represents a network object containing information of a single episode of a
+ * [ResponseSeason]
+ *
+ * @property season is a single season of a show
+ * @property number is the [ResponseEpisode] number in the [ResponseSeason]
+ * @property title is the title of the [ResponseEpisode]
+ * @property identifiers is a collection of identifiers of the episode that can be used with other
+ * APIs
+ */
 data class ResponseEpisode(
     @Json(name = "season") val season: Int,
     @Json(name = "number") val number: Int,

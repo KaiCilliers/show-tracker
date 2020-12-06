@@ -28,6 +28,13 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.entities.domain.diff.FeaturedListDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SuggestionListViewHolder
 
+/**
+ * Suggestion List Adapter binds [FeaturedList] to [SuggestionListViewHolder] and also
+ * inflates any child RecyclerView lists with their own adapters
+ *
+ * @property clickAction is the action executed when the [RcItemFeaturedBinding] object is
+ * clicked
+ */
 class SuggestionListAdapter(
     private val clickAction: ClickActionContract
 ) : BaseListAdapter<FeaturedList, SuggestionListViewHolder>(FeaturedListDiff()) {

@@ -18,6 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
+/**
+ * Movie is a domain object with basic information of a single movie
+ *
+ * @property title of the movie
+ * @property episode temp value for testing purposes
+ * @property season temp value for testing purposes
+ * @property episodeTitle temp value for testing purposes
+ * @property image references a URL that points to a movie poster image
+ */
+// TODO split class into Movie and Show
 data class Movie(
     val title: String,
     val episode: String = "${(1..55).random()}",

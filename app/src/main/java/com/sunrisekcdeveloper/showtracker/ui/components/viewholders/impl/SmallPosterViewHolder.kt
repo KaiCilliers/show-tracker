@@ -24,7 +24,10 @@ import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
 /**
- * Horizontal RC view item
+ * Small Poster ViewHolder represents a small poster icon that represents a movie or show
+ *
+ * @property binding is the auto generated binding object that represents the associated item layout
+ * @property clickAction is the action executed when the [binding] object is clicked
  */
 class SmallPosterViewHolder(
     private val binding: RcItemSmallPosterBinding,
@@ -35,5 +38,4 @@ class SmallPosterViewHolder(
         binding.clickListener = clickAction
         binding.executePendingBindings()
     }
-
 }

@@ -21,6 +21,14 @@ package com.sunrisekcdeveloper.showtracker.entities.network.base
 import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifiers
 
+/**
+ * Response Movie represents a network object containing basic information of a movie
+ *
+ * @property title is the title of a movie
+ * @property year is the year the movie was released
+ * @property identifiers contains some IDs used to identify the movie using different APIs
+ * @constructor Create empty Response movie
+ */
 data class ResponseMovie(
         @Json(name = "title") val title: String,
         @Json(name = "year") val year: Int,

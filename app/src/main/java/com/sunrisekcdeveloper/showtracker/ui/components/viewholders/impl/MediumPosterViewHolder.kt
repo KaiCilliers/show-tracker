@@ -23,6 +23,12 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
+/**
+ * Medium Poster ViewHolder represents a medium poster icon that represents a movie or show
+ *
+ * @property binding is the auto generated binding object that represents the associated item layout
+ * @property clickAction is the action executed when the [binding] object is clicked
+ */
 class MediumPosterViewHolder(
     private val binding: RcItemMediumPosterBinding,
     private val clickAction: ClickActionContract

@@ -27,6 +27,12 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.diff.MovieDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SmallPosterViewHolder
 
+/**
+ * Small Poster Adapter binds [Movie] to [SmallPosterViewHolder]
+ *
+ * @property clickAction is the action executed when the [RcItemSmallPosterBinding] object is
+ * clicked
+ */
 class SmallPosterAdapter(private val clickAction: ClickActionContract) :
     BaseListAdapter<Movie, SmallPosterViewHolder>(MovieDiff()) {
 

@@ -32,6 +32,12 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
 import timber.log.Timber
 
+/**
+ * Home Fragment displays suggested movies and shows for the user to add to their watchlist,
+ * categorised with appropriate headings
+ *
+ * @constructor Create empty Home fragment
+ */
 class HomeFragment : Fragment() {
 
     private val adapter by lazy {

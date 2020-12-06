@@ -18,6 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components
 
+/**
+ * View Holder Contract that defines the responsibilities of a viewholder
+ *
+ * @param T is a data type that the viewholder binds to the associated item layout
+ */
 interface ViewHolderContract<T>{
+    /**
+     * Bind used to bind [T] to the associate item layout
+     *
+     * @param item is the data item required by the associated item layout
+     */
     fun bind(item: T)
 }

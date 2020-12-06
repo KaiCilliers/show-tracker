@@ -21,6 +21,11 @@ package com.sunrisekcdeveloper.showtracker
 import android.app.Application
 import timber.log.Timber
 
+/**
+ * App Extension of [Application]
+ *
+ * @constructor Create empty App
+ */
 class App : Application() {
     override fun onCreate() {
         super.onCreate()

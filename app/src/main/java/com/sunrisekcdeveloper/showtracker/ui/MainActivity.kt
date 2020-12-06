@@ -38,6 +38,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+/**
+ * Main activity Primary container for fragments that provide app functionality
+ *
+ * @constructor Create empty Main activity
+ */
 class MainActivity : AppCompatActivity() {
     val traktService by lazy { TraktService.create() }
     val fanartService by lazy { FanartService.create() }
@@ -65,6 +70,9 @@ class MainActivity : AppCompatActivity() {
 //        })
     }
 
+    /**
+     * Go Temporary method to confirm results from remote services
+     */
     suspend fun go() {
         val res = traktService.trendingMovies()
         val res2 = traktService.popularMovies()

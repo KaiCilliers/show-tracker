@@ -19,9 +19,21 @@
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
 /**
- * Wrapper for data types for a single recyclerview
+ * Suggestion List Model is a domain object that represents a single list item that consists of
+ * multiple data types, namely [MovieItem] and [HeaderItem]
  */
 sealed class SuggestionListModel {
+    /**
+     * Movie Item encapsulates a single [Movie] object
+     *
+     * @property movie
+     */
     data class MovieItem(val movie: Movie) : SuggestionListModel()
+
+    /**
+     * Header Item encapsulates a header title
+     *
+     * @property name of header
+     */
     data class HeaderItem(val name: String) : SuggestionListModel()
 }

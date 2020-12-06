@@ -22,8 +22,10 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHold
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 
 /**
- * Today, Tomorrow, Next Week etc.
- * headers for upcoming episode releases
+ * Header ViewHolder represents a simple header list item that is used to to categorise a list of
+ * items
+ *
+ * @property binding is the auto generated binding object that represents the associated item layout
  */
 class HeaderViewHolder(
     private val binding: RcItemProgressHeaderBinding

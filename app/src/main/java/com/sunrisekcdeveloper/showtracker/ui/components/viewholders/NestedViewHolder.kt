@@ -20,7 +20,20 @@ package com.sunrisekcdeveloper.showtracker.ui.components.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.sunrisekcdeveloper.showtracker.ui.components.ViewHolderContract
 
+/**
+ * Nested ViewHolder represents a viewholder that contains a [RecyclerView] as one of it's child
+ * elements in the associated item layout and extends the abstract [BaseViewHolder]
+ *
+ * @param T is the data type required by the associated item layout
+ * @param binding is the auto generated binding object that represents the associated item layout
+ */
 abstract class NestedViewHolder<T>(binding: ViewBinding) : BaseViewHolder<T>(binding) {
+    /**
+     * Nested List simply returns the [RecyclerView] child item in the associated item layout
+     *
+     * @return [RecyclerView] contained in the associated item layout
+     */
     abstract fun nestedList(): RecyclerView
 }

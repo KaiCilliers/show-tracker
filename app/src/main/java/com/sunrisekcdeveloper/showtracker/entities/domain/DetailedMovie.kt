@@ -18,6 +18,18 @@
 
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
+/**
+ * Detailed Movie is a domain object with detailed information of a [Movie]
+ *
+ * @property basics is where the basic information is located as [Movie] object
+ * @property releaseDate of the movie
+ * @property ageRating of the movie
+ * @property runningTime of the movie
+ * @property description of the movie
+ * @property notableActors is a list of actors in the movie
+ * @property director of the movie
+ */
+// TODO provide appropriate data types to each property
 data class DetailedMovie(
     val basics: Movie,
     val releaseDate: String,

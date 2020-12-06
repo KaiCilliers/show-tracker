@@ -21,5 +21,12 @@ package com.sunrisekcdeveloper.showtracker.ui.components.adapters
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.ui.components.AdapterContract
 
+/**
+ * Base Adapter represents an adapter that extends [RecyclerView.Adapter] and implements
+ * [AdapterContract]
+ *
+ * @param T is the data type required by the associated [RecyclerView.ViewHolder]
+ * @param VH is a class that extends [RecyclerView.ViewHolder]
+ */
 abstract class BaseAdapter<T, VH: RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>(),
     AdapterContract<T>

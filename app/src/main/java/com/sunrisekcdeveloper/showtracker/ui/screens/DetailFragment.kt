@@ -33,7 +33,13 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
 import timber.log.Timber
 
-// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
+/**
+ * Detail Fragment that provides detailed information about a show or movie. Also provides a list
+ * of suggested shows or movies that are deemed similar to the movie or show displayed in this
+ * screen
+ *
+ * @constructor Create empty Detail fragment
+ */// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
 class DetailFragment : Fragment() {
     private val adapter by lazy {
         MediumPosterAdapter(object : ClickActionContract {

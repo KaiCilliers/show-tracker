@@ -20,6 +20,15 @@ package com.sunrisekcdeveloper.showtracker.entities.network.base
 
 import com.squareup.moshi.Json
 
+/**
+ * Response Poster represents a network object containing information primarily a url to a poster
+ * of a movie or show
+ *
+ * @property id is a network id associated with the specific poster
+ * @property url is where the poster image is located
+ * @property lang is the language the poster is written in
+ * @property likes is the amount of likes the poster has received
+ */
 data class ResponsePoster(
     @Json(name = "id") val id: String,
     @Json(name = "url") val url: String,

@@ -23,5 +23,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.ui.components.AdapterContract
 
-abstract class BaseListAdapter<T, VH: RecyclerView.ViewHolder>(diff: DiffUtil.ItemCallback<T>) : ListAdapter<T, VH>(diff),
-    AdapterContract<T>
+/**
+ * Base ListAdapter represents an adapter that extends [ListAdapter] and implements
+ * [AdapterContract]
+ *
+ * @param T is the data type required by the associated [RecyclerView.ViewHolder]
+ * @param VH is a class that extends [RecyclerView.ViewHolder]
+ * @param diff is a class that extends [DiffUtil.ItemCallback]
+ */
+abstract class BaseListAdapter<T, VH: RecyclerView.ViewHolder>(
+    diff: DiffUtil.ItemCallback<T>
+) : ListAdapter<T, VH>(diff), AdapterContract<T>

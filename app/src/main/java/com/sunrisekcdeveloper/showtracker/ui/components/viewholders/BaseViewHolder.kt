@@ -22,6 +22,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.ViewHolderContract
 
+/**
+ * Base ViewHolder represents a viewholder that extends [RecyclerView.ViewHolder] and implements
+ * [ViewHolderContract]
+ *
+ * @param T is the data type required by the associated item layout
+ * @param binding is the auto generated binding object that represents the associated item layout
+ */
 abstract class BaseViewHolder<T>(
     binding: ViewBinding
 ) : RecyclerView.ViewHolder(binding.root), ViewHolderContract<T>

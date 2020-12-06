@@ -22,8 +22,13 @@ import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 
 /**
- * TODO better name
+ * Response Watcher represents a network response which consists of a [ResponseMovie] with the
+ * amount of current [watchers] of the [ResponseMovie]
+ *
+ * @property watchers is the amount of accounts currently watching the [ResponseMovie]
+ * @property movie represents a [ResponseMovie] object
  */
+// TODO rename class
 data class ResponseWatcher(
     @Json(name = "watchers") val watchers: Int,
     @Json(name = "movie") val movie: ResponseMovie

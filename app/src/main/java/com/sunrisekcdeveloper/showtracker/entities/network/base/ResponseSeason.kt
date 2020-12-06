@@ -21,6 +21,13 @@ package com.sunrisekcdeveloper.showtracker.entities.network.base
 import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifiers
 
+/**
+ * Response Season represents a network object containing information on a single season of a show
+ *
+ * @property number is the season number of a show
+ * @property identifiers is a collection of identifiers of the season that can be used with other
+ * APIs
+ */
 data class ResponseSeason(
     @Json(name = "number") val number: Int,
     @Json(name = "ids") val identifiers: ResponseIdentifiers

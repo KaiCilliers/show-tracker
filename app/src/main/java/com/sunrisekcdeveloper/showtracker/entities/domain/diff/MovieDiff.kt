@@ -21,6 +21,11 @@ package com.sunrisekcdeveloper.showtracker.entities.domain.diff
 import androidx.recyclerview.widget.DiffUtil
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
+/**
+ * Movie Diff knows how to compared [Movie] objects which prevents ListAdapters and
+ * PagingDataAdapters replacing an entire list of data and instead only replace the items that got
+ * changed
+ */
 class MovieDiff : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
         oldItem.title == newItem.title

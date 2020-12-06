@@ -27,6 +27,12 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.diff.MovieDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MediumPosterViewHolder
 
+/**
+ * Medium Poster Adapter binds [Movie] to [MediumPosterViewHolder]
+ *
+ * @property clickAction is the action executed when the [RcItemMediumPosterBinding] object is
+ * clicked
+ */
 class MediumPosterAdapter(
     private val clickAction: ClickActionContract
 ) : BaseListAdapter<Movie, MediumPosterViewHolder>(MovieDiff()) {

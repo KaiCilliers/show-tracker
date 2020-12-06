@@ -18,6 +18,14 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components
 
+/**
+ * Click Action Contract that defines the responsibilities of an onClickListener
+ */
 interface ClickActionContract {
+    /**
+     * On Click defines the action taken when object is clicked
+     *
+     * @param item can be any type that an onClickListener might require
+     */
     fun onClick(item: Any)
 }

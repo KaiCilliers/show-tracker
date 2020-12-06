@@ -31,6 +31,12 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
 import timber.log.Timber
 
+/**
+ * Search Fragment that provides a search bar that filters through all movies and shows and presents
+ * a list of results based on the user input
+ *
+ * @constructor Create empty Search fragment
+ */
 class SearchFragment : Fragment() {
     private val adapter by lazy {
         MediumPosterAdapter(object : ClickActionContract {

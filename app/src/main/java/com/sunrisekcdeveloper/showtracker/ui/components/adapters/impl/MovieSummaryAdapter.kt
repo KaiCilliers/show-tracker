@@ -32,6 +32,13 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.HeaderV
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MovieSummaryViewHolder
 import java.lang.UnsupportedOperationException
 
+/**
+ * Movie Summary Adapter binds [SuggestionListModel] to both [MovieSummaryViewHolder] and
+ * [HeaderViewHolder] and determines which item to provide based on the view type required
+ *
+ * @property clickAction is the action executed when the [RcItemMovieSummaryBinding] object is
+ * clicked
+ */
 class MovieSummaryAdapter(
     private val clickAction: ClickActionContract
 ) : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(SuggestionListModelDiff()) {
