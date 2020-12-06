@@ -1,7 +1,7 @@
 package com.sunrisekcdeveloper.showtracker.remote.source
 
-import com.sunrisekcdeveloper.showtracker.entities.wrapper.ImageResponse
+import com.sunrisekcdeveloper.showtracker.entities.network.ResponseImage
 
 interface NetworkImageDataSource {
-    suspend fun poster(id: String): ImageResponse
+    suspend fun poster(id: String): ResponseImage
 }

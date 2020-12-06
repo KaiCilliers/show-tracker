@@ -9,7 +9,7 @@
             type="com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList" />
         <variable
             name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.ClickActionContract" />
+            type="com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
