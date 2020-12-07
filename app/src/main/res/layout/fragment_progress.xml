@@ -24,60 +24,67 @@
 
     <data></data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- TODO bottom nav still overlaps fragment, wrapping view in ScrollView is a temp fix -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.screens.progress.ProgressFragment">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
-        <EditText
-            android:id="@+id/et_temp"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sv_search" />
+            tools:context=".ui.screens.progress.ProgressFragment">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/sv_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_8"
-            android:hint="@string/hint_search"
-            app:iconifiedByDefault="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="@string/hint_search" />
+            <EditText
+                android:id="@+id/et_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sv_search" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_filter_options"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_8"
-            android:padding="@dimen/padding_8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sv_search" />
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/sv_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:hint="@string/hint_search"
+                app:iconifiedByDefault="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryHint="@string/hint_search" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_upcoming"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_8"
-            android:padding="@dimen/padding_8"
-            app:layout_constraintTop_toBottomOf="@id/rc_filter_options"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_filter_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:padding="@dimen/padding_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sv_search" />
 
-        <TextView
-            android:id="@+id/tv_progress"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="PROGRESS"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_upcoming"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:padding="@dimen/padding_8"
+                app:layout_constraintTop_toBottomOf="@id/rc_filter_options"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_progress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="PROGRESS"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
