@@ -42,7 +42,17 @@ import javax.inject.Inject
  */
 class SearchFragment : Fragment() {
     private val adapter by lazy {
-        MediumPosterAdapter(object : ClickActionContract {
+        MediumPosterAdapter()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentSearchBinding.inflate(inflater)
+        // Temporal Coupling
+        adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
                 Timber.d("Search Filter: $item")
                 findNavController().navigate(
@@ -52,14 +62,6 @@ class SearchFragment : Fragment() {
                 )
             }
         })
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val binding = FragmentSearchBinding.inflate(inflater)
         binding.rcSearchResults.adapter = adapter
         binding.rcSearchResults.layoutManager = GridLayoutManager(
             requireContext(), 3, GridLayoutManager.VERTICAL, false

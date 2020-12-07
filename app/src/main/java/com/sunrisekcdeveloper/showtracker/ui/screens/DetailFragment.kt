@@ -42,13 +42,7 @@ import timber.log.Timber
  */// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
 class DetailFragment : Fragment() {
     private val adapter by lazy {
-        MediumPosterAdapter(object : ClickActionContract {
-            override fun onClick(item: Any) {
-                Timber.d("DETAIL TITLE: $item")
-                // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
-                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
-            }
-        })
+        MediumPosterAdapter()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +63,14 @@ class DetailFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        // Temporal Coupling
+        adapter.addOnClickAction(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("DETAIL TITLE: $item")
+                // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
+                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
+            }
+        })
         binding.rcMoreLikeThis.adapter = adapter
         binding.rcMoreLikeThis.layoutManager = GridLayoutManager(
             requireContext(), 3, GridLayoutManager.VERTICAL, false

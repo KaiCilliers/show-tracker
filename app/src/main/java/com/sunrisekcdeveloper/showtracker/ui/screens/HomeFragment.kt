@@ -41,7 +41,13 @@ import timber.log.Timber
 class HomeFragment : Fragment() {
 
     private val adapter by lazy {
-        SuggestionListAdapter(object : ClickActionContract {
+        SuggestionListAdapter()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val binding = FragmentHomeBinding.inflate(inflater)
+        // Temporal Coupling
+        adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
                 Timber.d("Featured: $item")
                 findNavController().navigate(
@@ -49,10 +55,6 @@ class HomeFragment : Fragment() {
                 )
             }
         })
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = FragmentHomeBinding.inflate(inflater)
         binding.rcFeaturedCategories.adapter = adapter
         binding.rcFeaturedCategories.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false

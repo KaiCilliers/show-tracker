@@ -42,26 +42,11 @@ import timber.log.Timber
 class ProgressFragment : Fragment() {
 
     private val adapter by lazy {
-        SmallPosterAdapter(
-            object : ClickActionContract {
-                override fun onClick(item: Any) {
-                    Timber.d("TITLE: $item")
-                    findNavController().navigate(
-                        ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
-                            "FROM PROGRESS FRAGMENT"
-                        )
-                    )
-                }
-            }
-        )
+        SmallPosterAdapter()
     }
 
     private val upComingAdapter by lazy {
-        MovieSummaryAdapter(object : ClickActionContract {
-            override fun onClick(item: Any) {
-                Timber.d("SPECIAL click: $item")
-            }
-        })
+        MovieSummaryAdapter()
     }
 
     private val dummyMovies: List<Movie> by lazy {
@@ -70,13 +55,29 @@ class ProgressFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentProgressBinding.inflate(inflater)
+        // Temporal Coupling
+        adapter.addOnClickAction(object : ClickActionContract {
+                override fun onClick(item: Any) {
+                    Timber.d("TITLE: $item")
+                    findNavController().navigate(
+                        ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
+                            "FROM PROGRESS FRAGMENT"
+                        )
+                    )
+                }
+            })
         binding.rcFilterOptions.adapter = adapter
         binding.rcFilterOptions.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
-
+        // Temporal Coupling
+        upComingAdapter.addOnClickAction(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("SPECIAL click: $item")
+            }
+        })
         binding.rcUpcoming.adapter = upComingAdapter
         binding.rcUpcoming.layoutManager = LinearLayoutManager(requireContext())
 

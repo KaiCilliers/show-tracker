@@ -39,13 +39,16 @@ import java.lang.UnsupportedOperationException
  * @property clickAction is the action executed when the [RcItemMovieSummaryBinding] object is
  * clicked
  */
-class MovieSummaryAdapter(
-    private val clickAction: ClickActionContract
-) : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(SuggestionListModelDiff()) {
+class MovieSummaryAdapter : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(SuggestionListModelDiff()) {
+
+    private lateinit var clickAction: ClickActionContract
 
     override fun submit(list: List<SuggestionListModel>) {
         submitList(list)
     }
+
+    // Temporal Coupling introduced having to call this function before setting Recycler's adapter
+    override fun addOnClickAction(action: ClickActionContract) { clickAction = action }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == R.layout.rc_item_movie_summary) {
