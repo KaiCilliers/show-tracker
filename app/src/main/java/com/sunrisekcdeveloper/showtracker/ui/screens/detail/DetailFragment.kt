@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
@@ -31,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,12 +48,22 @@ class DetailFragment : Fragment() {
 
     @Inject lateinit var adapter: MediumPosterAdapter
 
+    private lateinit var binding: FragmentMovieDetailBinding
+
+    private val viewModel: DetailViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMovieDetailBinding.inflate(inflater)
+        binding = FragmentMovieDetailBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        setupBinding()
+        observeViewModel()
+        return binding.root
+    }
+    private fun setupBinding() {
         binding.movie = DetailedMovie(
             Movie("The Incredibles"),
             "1997",
@@ -78,61 +90,10 @@ class DetailFragment : Fragment() {
             requireContext(), 3, GridLayoutManager.VERTICAL, false
         )
         binding.rcMoreLikeThis.isNestedScrollingEnabled = false
-        return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submit(fakedata())
+    private fun observeViewModel() {
+        viewModel.movieListData.subscribe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
-    private fun fakedata(): List<Movie> = listOf(
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("End"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("End")
-    )
 }

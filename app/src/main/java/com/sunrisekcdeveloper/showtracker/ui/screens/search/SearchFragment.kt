@@ -16,20 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,14 +40,25 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
+
     @Inject lateinit var adapter: MediumPosterAdapter
+
+    private lateinit var binding: FragmentSearchBinding
+
+    private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentSearchBinding.inflate(inflater)
+        binding = FragmentSearchBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        setupBinding()
+        observeViewModel()
+        return binding.root
+    }
+    private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
@@ -63,37 +74,10 @@ class SearchFragment : Fragment() {
         binding.rcSearchResults.layoutManager = GridLayoutManager(
             requireContext(), 3, GridLayoutManager.VERTICAL, false
         )
-        return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submit(fakedata())
+    private fun observeViewModel() {
+        viewModel.movieListData.subscribe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
-
-    private fun fakedata(): List<Movie> = listOf(
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump")
-    )
 }

@@ -16,58 +16,32 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.home
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
-import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
-import javax.inject.Inject
+import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
 /**
- * Home Fragment displays suggested movies and shows for the user to add to their watchlist,
- * categorised with appropriate headings
+ * Home ViewModel
+ *
+ * @constructor Create empty Home view model
  */
-@AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeViewModel @ViewModelInject constructor() : ViewModel() {
 
-    @Inject lateinit var adapter: SuggestionListAdapter
+    private val _featuredListData = MutableLiveData<List<FeaturedList>>()
+    val featuredListData: LiveData<List<FeaturedList>>
+        get() = _featuredListData
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = FragmentHomeBinding.inflate(inflater)
-        // Temporal Coupling
-        adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
-                Timber.d("Featured: $item")
-                findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentDestToDetailFragment("FROM HOME FRAGMENT")
-                )
-            }
-        })
-        binding.rcFeaturedCategories.adapter = adapter
-        binding.rcFeaturedCategories.layoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.VERTICAL, false
-        )
-        return binding.root
+    init {
+        _featuredListData.value = fakeFeaturedData()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submit(populateFeaturedDummy())
-    }
-
-    private fun populateFeaturedDummy(): List<FeaturedList> =
-        listOf(
+    private fun fakeFeaturedData(): List<FeaturedList> {
+        return listOf(
             FeaturedList(
                 "Featured",
                 listOf<Movie>(
@@ -265,5 +239,5 @@ class HomeFragment : Fragment() {
                 )
             )
         )
-
+}
 }

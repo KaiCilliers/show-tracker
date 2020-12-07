@@ -16,21 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.progress
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
-import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,23 +46,30 @@ class ProgressFragment : Fragment() {
 
     @Inject lateinit var upComingAdapter: MovieSummaryAdapter
 
-    private val dummyMovies: List<Movie> by lazy {
-        populatedummydata()
-    }
+    private val viewModel: ProgressViewModel by viewModels()
+
+    private lateinit var binding: FragmentProgressBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentProgressBinding.inflate(inflater)
+        binding = FragmentProgressBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner // This removes observers when fragment is destroyed
+        setupBinding()
+        observeViewModel()
+        return binding.root
+    }
+
+    private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
-                override fun onClick(item: Any) {
-                    Timber.d("TITLE: $item")
-                    findNavController().navigate(
-                        ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
-                            "FROM PROGRESS FRAGMENT"
-                        )
+            override fun onClick(item: Any) {
+                Timber.d("TITLE: $item")
+                findNavController().navigate(
+                    ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
+                        "FROM PROGRESS FRAGMENT"
                     )
-                }
-            })
+                )
+            }
+        })
         binding.rcFilterOptions.adapter = adapter
         binding.rcFilterOptions.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -77,44 +84,14 @@ class ProgressFragment : Fragment() {
         })
         binding.rcUpcoming.adapter = upComingAdapter
         binding.rcUpcoming.layoutManager = LinearLayoutManager(requireContext())
-
-        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submit(dummyMovies)
-        upComingAdapter.submit(mixeddummydata())
+    private fun observeViewModel() {
+        viewModel.movieListData.subscribe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+        viewModel.suggestionListData.subscribe(viewLifecycleOwner) {
+            upComingAdapter.submitList(it)
+        }
     }
-
-    private fun mixeddummydata(): List<SuggestionListModel> =
-        listOf(
-            SuggestionListModel.HeaderItem("Today"),
-            SuggestionListModel.MovieItem(Movie("Finding Nemo")),
-            SuggestionListModel.MovieItem(Movie("Harry Potter")),
-            SuggestionListModel.MovieItem(Movie("Deadpool")),
-            SuggestionListModel.HeaderItem("Tomorrow"),
-            SuggestionListModel.MovieItem(Movie("Jurassic Park")),
-            SuggestionListModel.MovieItem(Movie("Forest Gump")),
-            SuggestionListModel.HeaderItem("Next Week"),
-            SuggestionListModel.MovieItem(Movie("Mall Cop")),
-            SuggestionListModel.MovieItem(Movie("Miss Congeniality")),
-            SuggestionListModel.MovieItem(Movie("Gladiator")),
-            SuggestionListModel.MovieItem(Movie("Finding Dory")),
-            SuggestionListModel.MovieItem(Movie("Shrek")),
-            SuggestionListModel.MovieItem(Movie("Snow White"))
-        )
-
-    private fun populatedummydata(): List<Movie> =
-        listOf<Movie>(
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory")
-        )
 }
