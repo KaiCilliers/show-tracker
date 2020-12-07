@@ -31,19 +31,29 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Progress Fragment that displays upcoming movies and shows with the capability to filter
  * based on movie or show
- *
- * @constructor Create empty Progress fragment
  */
+@AndroidEntryPoint
 class ProgressFragment : Fragment() {
 
-    private val adapter by lazy {
-        SmallPosterAdapter(
-            object : ClickActionContract {
+    @Inject lateinit var adapter: SmallPosterAdapter
+
+    @Inject lateinit var upComingAdapter: MovieSummaryAdapter
+
+    private val dummyMovies: List<Movie> by lazy {
+        populatedummydata()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding = FragmentProgressBinding.inflate(inflater)
+        // Temporal Coupling
+        adapter.addOnClickAction(object : ClickActionContract {
                 override fun onClick(item: Any) {
                     Timber.d("TITLE: $item")
                     findNavController().navigate(
@@ -52,31 +62,19 @@ class ProgressFragment : Fragment() {
                         )
                     )
                 }
-            }
-        )
-    }
-
-    private val upComingAdapter by lazy {
-        MovieSummaryAdapter(object : ClickActionContract {
-            override fun onClick(item: Any) {
-                Timber.d("SPECIAL click: $item")
-            }
-        })
-    }
-
-    private val dummyMovies: List<Movie> by lazy {
-        populatedummydata()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentProgressBinding.inflate(inflater)
+            })
         binding.rcFilterOptions.adapter = adapter
         binding.rcFilterOptions.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
-
+        // Temporal Coupling
+        upComingAdapter.addOnClickAction(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("SPECIAL click: $item")
+            }
+        })
         binding.rcUpcoming.adapter = upComingAdapter
         binding.rcUpcoming.layoutManager = LinearLayoutManager(requireContext())
 

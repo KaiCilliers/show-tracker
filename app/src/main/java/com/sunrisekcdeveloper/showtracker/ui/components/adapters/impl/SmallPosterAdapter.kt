@@ -33,12 +33,16 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SmallPo
  * @property clickAction is the action executed when the [RcItemSmallPosterBinding] object is
  * clicked
  */
-class SmallPosterAdapter(private val clickAction: ClickActionContract) :
-    BaseListAdapter<Movie, SmallPosterViewHolder>(MovieDiff()) {
+class SmallPosterAdapter : BaseListAdapter<Movie, SmallPosterViewHolder>(MovieDiff()) {
+
+    private lateinit var clickAction: ClickActionContract
 
     override fun submit(list: List<Movie>) {
         submitList(list)
     }
+
+    // Temporal Coupling introduced having to call this function before setting Recycler's adapter
+    override fun addOnClickAction(action: ClickActionContract) { clickAction = action }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SmallPosterViewHolder =
         SmallPosterViewHolder(

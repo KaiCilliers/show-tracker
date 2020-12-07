@@ -33,6 +33,7 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import com.sunrisekcdeveloper.showtracker.remote.service.FanartService
 import com.sunrisekcdeveloper.showtracker.remote.service.TraktService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +44,7 @@ import timber.log.Timber
  *
  * @constructor Create empty Main activity
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     val traktService by lazy { TraktService.create() }
     val fanartService by lazy { FanartService.create() }

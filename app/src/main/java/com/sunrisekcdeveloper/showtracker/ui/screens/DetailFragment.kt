@@ -25,31 +25,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
+import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Detail Fragment that provides detailed information about a show or movie. Also provides a list
  * of suggested shows or movies that are deemed similar to the movie or show displayed in this
  * screen
- *
- * @constructor Create empty Detail fragment
- */// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
+ */
+// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
-    private val adapter by lazy {
-        MediumPosterAdapter(object : ClickActionContract {
-            override fun onClick(item: Any) {
-                Timber.d("DETAIL TITLE: $item")
-                // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
-                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
-            }
-        })
-    }
+
+    @Inject lateinit var adapter: MediumPosterAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,6 +65,14 @@ class DetailFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        // Temporal Coupling
+        adapter.addOnClickAction(object : ClickActionContract {
+            override fun onClick(item: Any) {
+                Timber.d("DETAIL TITLE: $item")
+                // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
+                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
+            }
+        })
         binding.rcMoreLikeThis.adapter = adapter
         binding.rcMoreLikeThis.layoutManager = GridLayoutManager(
             requireContext(), 3, GridLayoutManager.VERTICAL, false
