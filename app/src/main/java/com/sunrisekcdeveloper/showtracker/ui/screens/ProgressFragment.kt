@@ -31,23 +31,20 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Progress Fragment that displays upcoming movies and shows with the capability to filter
  * based on movie or show
- *
- * @constructor Create empty Progress fragment
  */
+@AndroidEntryPoint
 class ProgressFragment : Fragment() {
 
-    private val adapter by lazy {
-        SmallPosterAdapter()
-    }
+    @Inject lateinit var adapter: SmallPosterAdapter
 
-    private val upComingAdapter by lazy {
-        MovieSummaryAdapter()
-    }
+    @Inject lateinit var upComingAdapter: MovieSummaryAdapter
 
     private val dummyMovies: List<Movie> by lazy {
         populatedummydata()

@@ -31,19 +31,21 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Detail Fragment that provides detailed information about a show or movie. Also provides a list
  * of suggested shows or movies that are deemed similar to the movie or show displayed in this
  * screen
- *
- * @constructor Create empty Detail fragment
- */// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
+ */
+// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
-    private val adapter by lazy {
-        MediumPosterAdapter()
-    }
+
+    @Inject lateinit var adapter: MediumPosterAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

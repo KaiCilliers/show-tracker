@@ -37,13 +37,10 @@ import javax.inject.Inject
 /**
  * Search Fragment that provides a search bar that filters through all movies and shows and presents
  * a list of results based on the user input
- *
- * @constructor Create empty Search fragment
  */
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
-    private val adapter by lazy {
-        MediumPosterAdapter()
-    }
+    @Inject lateinit var adapter: MediumPosterAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,

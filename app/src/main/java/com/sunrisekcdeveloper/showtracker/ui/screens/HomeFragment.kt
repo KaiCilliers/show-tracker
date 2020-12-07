@@ -30,19 +30,18 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Home Fragment displays suggested movies and shows for the user to add to their watchlist,
  * categorised with appropriate headings
- *
- * @constructor Create empty Home fragment
  */
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val adapter by lazy {
-        SuggestionListAdapter()
-    }
+    @Inject lateinit var adapter: SuggestionListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentHomeBinding.inflate(inflater)
