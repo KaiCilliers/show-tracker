@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
@@ -43,8 +44,18 @@ class HomeFragment : Fragment() {
 
     @Inject lateinit var adapter: SuggestionListAdapter
 
+    private lateinit var binding: FragmentHomeBinding
+
+    private val viewModel = HomeViewModel()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = FragmentHomeBinding.inflate(inflater)
+        binding = FragmentHomeBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        setupBinding()
+        observeViewModel()
+        return binding.root
+    }
+    private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
@@ -58,212 +69,10 @@ class HomeFragment : Fragment() {
         binding.rcFeaturedCategories.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
-        return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submit(populateFeaturedDummy())
+    private fun observeViewModel() {
+        viewModel.featuredListData.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
     }
-
-    private fun populateFeaturedDummy(): List<FeaturedList> =
-        listOf(
-            FeaturedList(
-                "Featured",
-                listOf<Movie>(
-                    Movie("ONE ONE"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "New Releases",
-                listOf<Movie>(
-                    Movie("TWO TWO"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Comedy",
-                listOf<Movie>(
-                    Movie("THREE THREE"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Watchlist",
-                listOf<Movie>(
-                    Movie("FOUR FOUR"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "For you",
-                listOf<Movie>(
-                    Movie("FIVE FIVE"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Horror",
-                listOf<Movie>(
-                    Movie("SIX SIX"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Beacuse you watched Breaking Bad",
-                listOf<Movie>(
-                    Movie("SEVEN SEVEN"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Featured",
-                listOf<Movie>(
-                    Movie("EIGHT EIGHT"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "New Releases",
-                listOf<Movie>(
-                    Movie("NINE NINE"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Comedy",
-                listOf<Movie>(
-                    Movie("TEN TEN"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Watchlist",
-                listOf<Movie>(
-                    Movie("ELEVEN ELEVEN"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "For you",
-                listOf<Movie>(
-                    Movie("Finding Nemo"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Horror",
-                listOf<Movie>(
-                    Movie("Finding Nemo"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            ),
-            FeaturedList(
-                "Beacuse you watched Breaking Bad",
-                listOf<Movie>(
-                    Movie("Finding Nemo"),
-                    Movie("Harry Potter"),
-                    Movie("Deadpool"),
-                    Movie("Jurassic Park"),
-                    Movie("Forest Gump"),
-                    Movie("Mall Cop"),
-                    Movie("Miss Congeniality"),
-                    Movie("Gladiator"),
-                    Movie("Finding Dory")
-                )
-            )
-        )
-
 }

@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
@@ -40,14 +41,25 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
+
     @Inject lateinit var adapter: MediumPosterAdapter
+
+    private lateinit var binding: FragmentSearchBinding
+
+    private val viewModel = SearchViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentSearchBinding.inflate(inflater)
+        binding = FragmentSearchBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        setupBinding()
+        observeViewModel()
+        return binding.root
+    }
+    private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
@@ -63,37 +75,10 @@ class SearchFragment : Fragment() {
         binding.rcSearchResults.layoutManager = GridLayoutManager(
             requireContext(), 3, GridLayoutManager.VERTICAL, false
         )
-        return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submit(fakedata())
+    private fun observeViewModel() {
+        viewModel.movieListData.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
     }
-
-    private fun fakedata(): List<Movie> = listOf(
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump"),
-        Movie("Mall Cop"),
-        Movie("Miss Congeniality"),
-        Movie("Gladiator"),
-        Movie("Finding Dory"),
-        Movie("Finding Nemo"),
-        Movie("Harry Potter"),
-        Movie("Deadpool"),
-        Movie("Jurassic Park"),
-        Movie("Forest Gump")
-    )
 }
