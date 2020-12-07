@@ -25,6 +25,11 @@ import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 
+/**
+ * Progress ViewModel
+ *
+ * @constructor Create empty Progress view model
+ */
 class ProgressViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()

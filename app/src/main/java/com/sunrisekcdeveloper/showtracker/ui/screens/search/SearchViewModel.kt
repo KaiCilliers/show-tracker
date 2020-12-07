@@ -24,6 +24,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
+/**
+ * Search ViewModel
+ *
+ * @constructor Create empty Search view model
+ */
 class SearchViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _movieListData = MutableLiveData<List<Movie>>()

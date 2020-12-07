@@ -24,12 +24,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -76,8 +76,8 @@ class SearchFragment : Fragment() {
         )
     }
     private fun observeViewModel() {
-        viewModel.movieListData.observe(viewLifecycleOwner, Observer {
+        viewModel.movieListData.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
-        })
+        }
     }
 }

@@ -24,12 +24,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -70,8 +70,8 @@ class HomeFragment : Fragment() {
         )
     }
     private fun observeViewModel() {
-        viewModel.featuredListData.observe(viewLifecycleOwner, Observer {
+        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
-        })
+        }
     }
 }

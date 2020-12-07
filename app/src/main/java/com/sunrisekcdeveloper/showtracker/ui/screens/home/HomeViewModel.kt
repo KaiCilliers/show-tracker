@@ -25,6 +25,11 @@ import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
+/**
+ * Home ViewModel
+ *
+ * @constructor Create empty Home view model
+ */
 class HomeViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()

@@ -24,6 +24,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
+/**
+ * Detail ViewModel
+ *
+ * @constructor Create empty Detail view model
+ */
 class DetailViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _movieListData = MutableLiveData<List<Movie>>()
