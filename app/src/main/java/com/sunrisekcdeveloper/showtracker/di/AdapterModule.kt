@@ -25,31 +25,32 @@ import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.Suggestion
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.scopes.FragmentScoped
 
 @Module
-@InstallIn(FragmentComponent::class)
+@InstallIn(ApplicationComponent::class)
 class AdapterModule {
-    @FragmentScoped
+//    @FragmentScoped
     @Provides
     fun provideMediumPosterAdapter(): MediumPosterAdapter {
         return MediumPosterAdapter()
     }
 
-    @FragmentScoped
+//    @FragmentScoped
     @Provides
     fun provideSmallPosterAdapter(): SmallPosterAdapter {
         return SmallPosterAdapter()
     }
 
-    @FragmentScoped
+//    @FragmentScoped
     @Provides
     fun provideMovieSummaryAdapter(): MovieSummaryAdapter {
         return MovieSummaryAdapter()
     }
 
-    @FragmentScoped
+//    @FragmentScoped
     @Provides
     fun provideSuggestionListAdapter(): SuggestionListAdapter {
         return SuggestionListAdapter()
