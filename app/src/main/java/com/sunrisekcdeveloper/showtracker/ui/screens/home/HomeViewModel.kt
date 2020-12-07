@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.home
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()
     val featuredListData: LiveData<List<FeaturedList>>

@@ -16,14 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.search
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 
-class DetailViewModel : ViewModel() {
+class SearchViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _movieListData = MutableLiveData<List<Movie>>()
     val movieListData: LiveData<List<Movie>>
@@ -57,32 +58,7 @@ class DetailViewModel : ViewModel() {
             Movie("Harry Potter"),
             Movie("Deadpool"),
             Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("End"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("End")
+            Movie("Forest Gump")
         )
     }
 }

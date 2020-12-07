@@ -27,7 +27,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.screens.ProgressFragment">
+        tools:context=".ui.screens.progress.ProgressFragment">
 
         <EditText
             android:id="@+id/et_temp"

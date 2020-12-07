@@ -16,20 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.progress
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
-import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +46,7 @@ class ProgressFragment : Fragment() {
 
     @Inject lateinit var upComingAdapter: MovieSummaryAdapter
 
-    private val viewModel = ProgressViewModel()
+    private val viewModel: ProgressViewModel by viewModels()
 
     private lateinit var binding: FragmentProgressBinding
 

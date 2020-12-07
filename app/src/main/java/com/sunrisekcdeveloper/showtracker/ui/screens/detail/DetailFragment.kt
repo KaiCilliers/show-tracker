@@ -16,18 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
+import com.sunrisekcdeveloper.showtracker.entities.domain.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
@@ -36,45 +38,58 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * Search Fragment that provides a search bar that filters through all movies and shows and presents
- * a list of results based on the user input
+ * Detail Fragment that provides detailed information about a show or movie. Also provides a list
+ * of suggested shows or movies that are deemed similar to the movie or show displayed in this
+ * screen
  */
+// TODO make new activity: reason: no bottom nav bar and to get back button in titlebargit
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class DetailFragment : Fragment() {
 
     @Inject lateinit var adapter: MediumPosterAdapter
 
-    private lateinit var binding: FragmentSearchBinding
+    private lateinit var binding: FragmentMovieDetailBinding
 
-    private val viewModel = SearchViewModel()
+    private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSearchBinding.inflate(inflater)
+    ): View {
+        binding = FragmentMovieDetailBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
         return binding.root
     }
     private fun setupBinding() {
+        binding.movie = DetailedMovie(
+            Movie("The Incredibles"),
+            "1997",
+            "16+",
+            "1h58m",
+            getString(R.string.movie_description_dummy),
+            "Jack Black, Peter Griff.. more",
+            "James Cameron"
+        )
+        Timber.d(arguments?.getString("dummy","2ndDef"))
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
-                Timber.d("Search Filter: $item")
-                findNavController().navigate(
-                    SearchFragmentDirections.actionSearchFragmentDestToDetailFragment(
-                        "FROM SEARCH FRAGMENT"
-                    )
-                )
+                Timber.d("DETAIL TITLE: $item")
+                // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
+                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
             }
         })
-        binding.rcSearchResults.adapter = adapter
-        binding.rcSearchResults.layoutManager = GridLayoutManager(
+        binding.rcMoreLikeThis.adapter = adapter
+        binding.rcMoreLikeThis.layoutManager = GridLayoutManager(
             requireContext(), 3, GridLayoutManager.VERTICAL, false
         )
+        binding.rcMoreLikeThis.isNestedScrollingEnabled = false
     }
     private fun observeViewModel() {
         viewModel.movieListData.observe(viewLifecycleOwner, Observer {

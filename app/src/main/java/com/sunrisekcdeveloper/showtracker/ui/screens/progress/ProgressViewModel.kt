@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens
+package com.sunrisekcdeveloper.showtracker.ui.screens.progress
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
 import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
 
-class ProgressViewModel : ViewModel() {
+class ProgressViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()
     val suggestionListData: LiveData<List<SuggestionListModel>>
