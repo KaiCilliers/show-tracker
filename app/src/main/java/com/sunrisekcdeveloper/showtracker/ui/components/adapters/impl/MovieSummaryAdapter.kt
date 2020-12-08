@@ -27,7 +27,6 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
-import com.sunrisekcdeveloper.showtracker.entities.domain.diff.SuggestionListModelDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.HeaderViewHolder
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MovieSummaryViewHolder
 import java.lang.UnsupportedOperationException
@@ -39,7 +38,7 @@ import java.lang.UnsupportedOperationException
  * @property clickAction is the action executed when the [RcItemMovieSummaryBinding] object is
  * clicked
  */
-class MovieSummaryAdapter : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(SuggestionListModelDiff()) {
+class MovieSummaryAdapter : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(SuggestionListModel.Diff) {
 
     private lateinit var clickAction: ClickActionContract
 

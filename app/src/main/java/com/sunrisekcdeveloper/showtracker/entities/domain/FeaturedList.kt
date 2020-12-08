@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
+import androidx.recyclerview.widget.DiffUtil
+
 /**
  * Featured List is a domain object that represents a collection of [Movie]s associated to a common
  * category represented by [heading]
@@ -28,4 +30,17 @@ package com.sunrisekcdeveloper.showtracker.entities.domain
 data class FeaturedList(
     val heading: String,
     val results: List<Movie>
-)
+) {
+    /**
+     * FeaturedList Diff knows how to compared [FeaturedList] objects which prevents ListAdapters and
+     * PagingDataAdapters replacing an entire list of data and instead only replace the items that got
+     * changed
+     */
+    companion object Diff : DiffUtil.ItemCallback<FeaturedList>() {
+        override fun areItemsTheSame(oldItem: FeaturedList, newItem: FeaturedList): Boolean =
+            oldItem.heading == newItem.heading
+
+        override fun areContentsTheSame(oldItem: FeaturedList, newItem: FeaturedList): Boolean =
+            oldItem == newItem
+    }
+}

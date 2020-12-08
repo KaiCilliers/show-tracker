@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
+import androidx.recyclerview.widget.DiffUtil
+
 /**
  * Suggestion List Model is a domain object that represents a single list item that consists of
  * multiple data types, namely [MovieItem] and [HeaderItem]
@@ -36,4 +38,27 @@ sealed class SuggestionListModel {
      * @property name of header
      */
     data class HeaderItem(val name: String) : SuggestionListModel()
+
+    /**
+     * SuggestionList Diff knows how to compared [SuggestionListModel] objects which prevents ListAdapters and
+     * PagingDataAdapters replacing an entire list of data and instead only replace the items that got
+     * changed
+     */
+    companion object Diff : DiffUtil.ItemCallback<SuggestionListModel>() {
+        override fun areItemsTheSame(
+            oldItem: SuggestionListModel,
+            newItem: SuggestionListModel
+        ): Boolean {
+            return (oldItem is SuggestionListModel.MovieItem && newItem is SuggestionListModel.MovieItem
+                    && oldItem.movie.title == newItem.movie.title) ||
+                    (oldItem is SuggestionListModel.HeaderItem && newItem is SuggestionListModel.HeaderItem
+                            && oldItem.name == newItem.name)
+        }
+
+        override fun areContentsTheSame(
+            oldItem: SuggestionListModel,
+            newItem: SuggestionListModel
+        ): Boolean =
+            oldItem == newItem
+    }
 }
