@@ -25,7 +25,6 @@ import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
-import com.sunrisekcdeveloper.showtracker.entities.domain.diff.FeaturedListDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SuggestionListViewHolder
 
 /**
@@ -35,7 +34,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.Suggest
  * @property clickAction is the action executed when the [RcItemFeaturedBinding] object is
  * clicked
  */
-class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHolder>(FeaturedListDiff()) {
+class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHolder>(FeaturedList.Diff) {
 
     private var data: List<FeaturedList> = listOf()
     private lateinit var clickAction: ClickActionContract

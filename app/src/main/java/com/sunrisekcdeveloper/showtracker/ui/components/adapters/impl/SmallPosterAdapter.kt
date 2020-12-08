@@ -24,7 +24,6 @@ import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
-import com.sunrisekcdeveloper.showtracker.entities.domain.diff.MovieDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SmallPosterViewHolder
 
 /**
@@ -33,7 +32,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SmallPo
  * @property clickAction is the action executed when the [RcItemSmallPosterBinding] object is
  * clicked
  */
-class SmallPosterAdapter : BaseListAdapter<Movie, SmallPosterViewHolder>(MovieDiff()) {
+class SmallPosterAdapter : BaseListAdapter<Movie, SmallPosterViewHolder>(Movie.Diff) {
 
     private lateinit var clickAction: ClickActionContract
 

@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
 import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
-import com.sunrisekcdeveloper.showtracker.entities.domain.diff.MovieDiff
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MediumPosterViewHolder
 
@@ -33,7 +32,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MediumP
  * @property clickAction is the action executed when the [RcItemMediumPosterBinding] object is
  * clicked
  */
-class MediumPosterAdapter : BaseListAdapter<Movie, MediumPosterViewHolder>(MovieDiff()) {
+class MediumPosterAdapter : BaseListAdapter<Movie, MediumPosterViewHolder>(Movie.Diff) {
 
     private lateinit var clickAction: ClickActionContract
 

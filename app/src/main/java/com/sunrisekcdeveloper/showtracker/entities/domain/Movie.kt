@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.entities.domain
 
+import androidx.recyclerview.widget.DiffUtil
+
 /**
  * Movie is a domain object with basic information of a single movie
  *
@@ -34,4 +36,17 @@ data class Movie(
     val season: String = "${(1..14).random()}",
     val episodeTitle: String = "Pilot: The best default title",
     val image: String = "https://source.unsplash.com/random"
-)
+) {
+    /**
+     * Movie Diff knows how to compared [Movie] objects which prevents ListAdapters and
+     * PagingDataAdapters replacing an entire list of data and instead only replace the items that got
+     * changed
+     */
+    companion object Diff : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+            oldItem.title == newItem.title
+
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+            oldItem == newItem
+    }
+}
