@@ -36,6 +36,7 @@ import com.sunrisekcdeveloper.showtracker.remote.service.TraktService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -83,13 +84,47 @@ class MainActivity : AppCompatActivity() {
      * Go Temporary method to confirm results from remote services
      */
     suspend fun go() {
-        val res = traktService.trendingMovies()
-        val res2 = traktService.popularMovies()
-        println(res)
-        println(res2)
+        /** MISCELLANEOUS */
 
-        val single = res[3]
+//        Timber.d("========================MOVIE GENRES========================")
+//        val movieGenres = traktService.genres("movies"); delay(2000)
+//        Timber.d("========================SHOW GENRES========================")
+//        val showGenres = traktService.genres("shows"); delay(2000)
+//        Timber.d("========================MOVIE LANGUAGES========================")
+//        val movieLangs = traktService.languages("movies"); delay(2000)
+//        Timber.d("========================SHOW LANGUAGES========================")
+//        val showLangs = traktService.languages("shows"); delay(2000)
 
-        println(fanartService.poster("${single.movie.identifiers.tmdb}"))
+        /** MOVIES */
+
+//        Timber.d("========================TRENDING MOVIES========================")
+//        val trending = traktService.trendingMovies(); delay(2000)
+//        Timber.d("========================POPULAR MOVIES========================")
+        val popular = traktService.popularMovies(); delay(2000)
+//        val recommendedWeekly = traktService.recommendedMovies()
+//        val recommendedYearly = traktService.recommendedMovies("yearly")
+//        val mostPlayedYearly = traktService.mostPlayedMovies("yearly")
+//        val mostWatchedAll = traktService.mostWatchedMovies("all")
+//        val anticipated = traktService.mostAnticipated()
+//        val boxoffice = traktService.boxOffice()
+//        val movie = traktService.movie(popular[4].identifiers.slug)
+//        val aliases = traktService.movieAliases(popular[4].identifiers.slug)
+//        val releases = traktService.movieReleases(popular[5].identifiers.slug, "au")
+//        val translations = traktService.movieTranslations(popular[5].identifiers.slug,"ta")
+//        val moviePeople = traktService.moviePersons(popular[4].identifiers.slug)
+        val ratings = traktService.movieRatings(popular[5].identifiers.slug)
+        val related = traktService.moviesRelatedTo(popular[5].identifiers.slug)
+        val stats = traktService.movieStats(popular[5].identifiers.slug)
+
+        Timber.d("DONE")
+
+        Timber.d("========================RESULT========================\n$ratings")
+        Timber.d("========================RESULT========================\n$related")
+        Timber.d("========================RESULT========================\n$stats")
+
+
+//        val single = trending[3]
+//
+//        println(fanartService.poster("${single.movie.identifiers.tmdb}"))
     }
 }
