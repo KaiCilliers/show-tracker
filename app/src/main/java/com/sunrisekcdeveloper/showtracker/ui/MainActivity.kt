@@ -46,13 +46,20 @@ import timber.log.Timber
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     val traktService by lazy { TraktService.create() }
     val fanartService by lazy { FanartService.create() }
+
+    private val ioScope by lazy { CoroutineScope(Dispatchers.IO) }
+
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setup()
+        ioScope.launch {
+            go()
+        }
     }
 
     private fun setup() {
@@ -81,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         println(res)
         println(res2)
 
-        val single = res[0]
+        val single = res[3]
 
         println(fanartService.poster("${single.movie.identifiers.tmdb}"))
     }
