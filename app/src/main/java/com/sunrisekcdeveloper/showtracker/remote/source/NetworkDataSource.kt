@@ -40,6 +40,13 @@ interface NetworkDataSource {
      */
     suspend fun languages(type: String): List<ResponseLanguage>
 
+    /**
+     * Networks that a show could have originally aired from
+     *
+     * @return
+     */
+    suspend fun networks(): List<ResponseNetwork>
+
     /** TODO MOVIES */
     /**
      * Trending movies all movies currently being watched sorted with most
@@ -156,7 +163,7 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun moviePersons(id: String): ResponseCastCrew
+    suspend fun moviePersons(id: String): ResponseCastCrewPerson
 
     /**
      * Movie ratings
@@ -182,4 +189,35 @@ interface NetworkDataSource {
      * @return
      */
     suspend fun movieStats(id: String): ResponseMovieStats
+
+    /** TODO SHOWS */
+
+
+    /** TODO PEOPLE */
+    /**
+     * Person
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun person(id: String): ResponsePerson
+
+    /**
+     * Movie credits all movies where person is either part the cast or the crew
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun movieCredits(id: String): ResponseCastCrewMovie
+
+    /**
+     * Show credits all shows where person is either part of the cast or the crew
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showCredits(id: String): ResponseCastCrewShow
 }

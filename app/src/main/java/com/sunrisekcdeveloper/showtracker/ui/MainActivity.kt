@@ -111,17 +111,17 @@ class MainActivity : AppCompatActivity() {
 //        val aliases = traktService.movieAliases(popular[4].identifiers.slug)
 //        val releases = traktService.movieReleases(popular[5].identifiers.slug, "au")
 //        val translations = traktService.movieTranslations(popular[5].identifiers.slug,"ta")
-//        val moviePeople = traktService.moviePersons(popular[4].identifiers.slug)
-        val ratings = traktService.movieRatings(popular[5].identifiers.slug)
-        val related = traktService.moviesRelatedTo(popular[5].identifiers.slug)
-        val stats = traktService.movieStats(popular[5].identifiers.slug)
+        val moviePeople = traktService.moviePersons(popular[4].identifiers.slug); delay(2000)
+//        val ratings = traktService.movieRatings(popular[5].identifiers.slug)
+//        val related = traktService.moviesRelatedTo(popular[5].identifiers.slug)
+//        val stats = traktService.movieStats(popular[5].identifiers.slug)
+//        val networks = traktService.networks()
+//        val movieCreditsOnlyCast = traktService.movieCredits(moviePeople.cast[5].person.identifiers.slug)
+//        val movieCreditsBoth = traktService.movieCredits("bryan-cranston")
+        val person = traktService.person(moviePeople.cast[8].person.identifiers.slug)
 
-        Timber.d("DONE")
-
-        Timber.d("========================RESULT========================\n$ratings")
-        Timber.d("========================RESULT========================\n$related")
-        Timber.d("========================RESULT========================\n$stats")
-
+        Timber.d("========================RESULT========================\n$person")
+//        Timber.d("========================RESULT========================\n$movieCreditsBoth")
 
 //        val single = trending[3]
 //

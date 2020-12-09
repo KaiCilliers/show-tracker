@@ -23,6 +23,7 @@ import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.Path
 
 // TODO remove repeating headers
@@ -43,6 +44,14 @@ interface TraktDataSource : NetworkDataSource {
     )
     @GET("languages/{type}")
     override suspend fun languages(@Path("type") type: String): List<ResponseLanguage>
+
+    @Headers(
+        "Content-Type: application/json",
+        "trakt-api-key: 62845b4c84daa248ede22b78b90b5b13cc7d7dc39830d2eb408bd1d54ca55db1",
+        "trakt-api-version: 2"
+    )
+    @GET("networks")
+    override suspend fun networks(): List<ResponseNetwork>
 
     /** TODO MOVIES */
     @Headers(
@@ -139,7 +148,7 @@ interface TraktDataSource : NetworkDataSource {
         "trakt-api-version: 2"
     )
     @GET("movies/{id}/people")
-    override suspend fun moviePersons(@Path("id") id: String): ResponseCastCrew
+    override suspend fun moviePersons(@Path("id") id: String): ResponseCastCrewPerson
 
     @Headers(
         "Content-Type: application/json",
@@ -164,4 +173,30 @@ interface TraktDataSource : NetworkDataSource {
     )
     @GET("movies/{id}/stats")
     override suspend fun movieStats(@Path("id") id: String): ResponseMovieStats
+
+    /** TODO PERSON */
+
+    @Headers(
+        "Content-Type: application/json",
+        "trakt-api-key: 62845b4c84daa248ede22b78b90b5b13cc7d7dc39830d2eb408bd1d54ca55db1",
+        "trakt-api-version: 2"
+    )
+    @GET("people/{id}")
+    override suspend fun person(@Path("id") id: String): ResponsePerson
+
+    @Headers(
+        "Content-Type: application/json",
+        "trakt-api-key: 62845b4c84daa248ede22b78b90b5b13cc7d7dc39830d2eb408bd1d54ca55db1",
+        "trakt-api-version: 2"
+    )
+    @GET("people/{id}/movies")
+    override suspend fun movieCredits(@Path("id") id: String): ResponseCastCrewMovie
+
+    @Headers(
+        "Content-Type: application/json",
+        "trakt-api-key: 62845b4c84daa248ede22b78b90b5b13cc7d7dc39830d2eb408bd1d54ca55db1",
+        "trakt-api-version: 2"
+    )
+    @GET("people/{id}/shows")
+    override suspend fun showCredits(@Path("id") id: String): ResponseCastCrewShow
 }
