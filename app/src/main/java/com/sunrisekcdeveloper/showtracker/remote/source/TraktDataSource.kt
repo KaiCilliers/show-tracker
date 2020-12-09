@@ -174,6 +174,12 @@ interface TraktDataSource : NetworkDataSource {
     @GET("movies/{id}/stats")
     override suspend fun movieStats(@Path("id") id: String): ResponseMovieStats
 
+    /** TODO SHOWS */
+
+    // TODO OI! START BY OVERRIDING AND MANUALLY testing each show endpoint
+    //  move on to season and episode endpoints and manually test them
+    //  structure these endpoints and refactor the response objects
+
     /** TODO PERSON */
 
     @Headers(

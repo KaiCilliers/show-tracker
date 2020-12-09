@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.remote.source
 
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
 
 interface NetworkDataSource {
@@ -128,7 +129,7 @@ interface NetworkDataSource {
     suspend fun movie(id: String): ResponseMovie
 
     /**
-     * Movie aliases all title aliases for a movie including countries where name is differenr
+     * Movie aliases all title aliases for a movie including countries where name is different
      *
      * @param id
      * @return
@@ -192,6 +193,101 @@ interface NetworkDataSource {
 
     /** TODO SHOWS */
 
+    /**
+     * Trending shows all shows being watched right now with the shows with the
+     * most users returned first
+     * Supports Pagination, Extended Info, Filters
+     *
+     * @return
+     */
+    suspend fun trendingShows(): List<ResponseWatchersShow>
+
+    /**
+     * Popular shows where popularity is calculated using rating percentage and the
+     * number of ratings
+     * Supports Pagination, Extended Info, Filters
+     *
+     * @return
+     */
+    suspend fun popularShows(): List<ResponseShow>
+
+    /**
+     * Recommended shows in specified time period
+     * Supports Pagination, Extended, Filter
+     *
+     * @param period Optional.
+     *      Possible values:  daily , weekly , monthly , yearly , all
+     *      Default value: weekly
+     * @return
+     */
+    suspend fun recommendedShows(period: String = "weekly"): List<ResponseShowUserCount>
+
+    /**
+     * Most played shows in specified time period (single account can watch multiple times)
+     * Supports Pagination, Extended, Filter
+     *
+     * @param period Optional.
+     *      Possible values:  daily , weekly , monthly , yearly , all
+     *      Default value: weekly
+     * @return
+     */
+    suspend fun mostPlayedShows(period: String = "weekly"): ResponseWrapperMostPlayedWatchedCollectedShow
+
+    /**
+     * Most watched movies in specified time period (unique watches)
+     * Supports Pagination, Extended, Filter
+     *
+     * @param period Optional.
+     *      Possible values:  daily , weekly , monthly , yearly , all
+     *      Default value: weekly
+     * @return
+     */
+    suspend fun mostWatchedShows(period: String = "weekly"): ResponseWrapperMostPlayedWatchedCollectedShow
+
+    /**
+     * Most anticipated shows based on number of lists a show appears on
+     * Supports Pagination, Extended, Filter
+     *
+     * @return
+     */
+    suspend fun mostAnticipatedShows(): ResponseWrapperListCountShow
+
+    /**
+     * Show
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun show(id: String): ResponseShow
+
+    /**
+     * Show title aliases all including countries where name is different
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showTitleAliases(id: String): List<ResponseTitleAlias>
+
+    /**
+     * Show certifications all of a show including the country
+     *
+     * @param id
+     * @return
+     */
+    // TODO add movie certifications
+    suspend fun showCertifications(id: String): List<ResponseCertification>
+
+    /**
+     * Show translations including language and translated values for title, and
+     * overview
+     *
+     * @param id
+     * @param language Optional two character language code
+     * @return
+     */
+    // TODO might need different return obj due to missing tagline in json
+    suspend fun showTranslations(id: String, language: String = ""): List<ResponseTranslation>
 
     /** TODO PEOPLE */
     /**
