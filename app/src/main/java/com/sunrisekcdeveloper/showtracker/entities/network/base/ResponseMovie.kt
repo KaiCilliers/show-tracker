@@ -31,6 +31,6 @@ import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifi
  */
 data class ResponseMovie(
         @Json(name = "title") val title: String,
-        @Json(name = "year") val year: Int,
+        @Json(name = "year") val year: Int?, // network results can give a null year
         @Json(name = "ids") val identifiers: ResponseIdentifiers
 )
