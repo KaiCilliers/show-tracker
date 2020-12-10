@@ -87,13 +87,13 @@ class MainActivity : AppCompatActivity() {
         /** MISCELLANEOUS */
 
 //        Timber.d("========================MOVIE GENRES========================")
-//        val movieGenres = traktService.genres("movies"); delay(2000)
+        val movieGenres = traktService.genres("movies"); delay(2000)
 //        Timber.d("========================SHOW GENRES========================")
-//        val showGenres = traktService.genres("shows"); delay(2000)
+        val showGenres = traktService.genres("shows"); delay(2000)
 //        Timber.d("========================MOVIE LANGUAGES========================")
-//        val movieLangs = traktService.languages("movies"); delay(2000)
+        val movieLangs = traktService.languages("movies"); delay(2000)
 //        Timber.d("========================SHOW LANGUAGES========================")
-//        val showLangs = traktService.languages("shows"); delay(2000)
+        val showLangs = traktService.languages("shows"); delay(2000)
 
         /** MOVIES */
 
