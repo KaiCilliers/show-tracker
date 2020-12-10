@@ -34,7 +34,7 @@ import com.squareup.moshi.Json
  */
 class ResponseIdentifiers(
     @Json(name = "trakt") val trakt: Int,
-    @Json(name = "slug") val slug: String,
+    @Json(name = "slug") val slug: String?, // seasons dont have slugs
     @Json(name = "imdb") val imdb: String?,
     @Json(name = "tmdb") val tmdb: Int,
     @Json(name = "tvdb") val tvdb: Int?,

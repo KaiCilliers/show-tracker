@@ -23,8 +23,6 @@ import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.PATCH
 import retrofit2.http.Path
 
 // TODO remove repeating headers
@@ -83,7 +81,7 @@ interface TraktDataSource : NetworkDataSource {
     override suspend fun moviesRelatedTo(@Path("id") id: String): List<ResponseMovie>
 
     @GET("movies/{id}/stats")
-    override suspend fun movieStats(@Path("id") id: String): ResponseMovieStats
+    override suspend fun movieStats(@Path("id") id: String): ResponseStats
 
     /** TODO SHOWS */
 
