@@ -20,8 +20,11 @@ package com.sunrisekcdeveloper.showtracker.remote.source
 
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseEpisode
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseSeason
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -121,6 +124,76 @@ interface TraktDataSource : NetworkDataSource {
 
     @GET("shows/{id}/people")
     override suspend fun showPeople(@Path("id") id: String): ResponseCastCrewPerson
+
+    @GET("shows/{id}/ratings")
+    override suspend fun showRatings(@Path("id") id: String): ResponseRating
+
+    @GET("shows/{id}/related")
+    override suspend fun relatedShows(@Path("id") id: String): List<ResponseShow>
+
+    @GET("shows/{id}/stats")
+    override suspend fun showStats(@Path("id") id: String): ResponseStats
+
+    @GET("shows/{id}/next_episode")
+    override suspend fun showNextScheduledAirEpisode(@Path("id") id: String): Response<ResponseEpisode>?
+
+    @GET("shows/{id}/last_episode")
+    override suspend fun showMostRecentlyAiredEpisode(@Path("id") id: String): ResponseEpisode
+
+    /** TODO SEASON */
+
+    @GET("shows/{id}/seasons/{season}")
+    override suspend fun seasonEpisodes(@Path("id") id: String, @Path("season") season: Int): List<ResponseEpisode>
+
+    @GET("shows/{id}/seasons")
+    override suspend fun seasonsOfShow(@Path("id") id: String): List<ResponseSeason>
+
+    @GET("shows/{id}/seasons/{season}/people")
+    override suspend fun seasonPeople(@Path("id") id: String, @Path("season") season: Int): ResponseCastCrewPerson
+
+    @GET("shows/{id}/seasons/{season}/ratings")
+    override suspend fun seasonRatings(@Path("id") id: String, @Path("season") season: Int): ResponseRating
+
+    @GET("shows/{id}/seasons/{season}/stats")
+    override suspend fun seasonStats(@Path("id") id: String, @Path("season") season: Int): ResponseStats
+
+    /** TODO EPISODE */
+
+    @GET("shows/{id}/seasons/{season}/episodes/{episode}")
+    override suspend fun episode(
+        @Path("id") id: String,
+        @Path("season") season: Int,
+        @Path("episode") episode: Int
+    ): ResponseEpisode
+
+    @GET("shows/{id}/seasons/{season}/episodes/{episode}/translations/{language}")
+    override suspend fun episodeTranslations(
+        @Path("id") id: String,
+        @Path("season") season: Int,
+        @Path("episode") episode: Int,
+        @Path("language") language: String
+    ): List<ResponseTranslation>
+
+    @GET("shows/{id}/seasons/{season}/episodes/{episode}/people")
+    override suspend fun episodePeople(
+        @Path("id") id: String,
+        @Path("season") season: Int,
+        @Path("episode") episode: Int
+    ): ResponseCastCrewPerson
+
+    @GET("shows/{id}/seasons/{season}/episodes/{episode}/ratings")
+    override suspend fun episodeRatings(
+        @Path("id") id: String,
+        @Path("season") season: Int,
+        @Path("episode") episode: Int
+    ): ResponseRating
+
+    @GET("shows/{id}/seasons/{season}/episodes/{episode}/stats")
+    override suspend fun episodeStats(
+        @Path("id") id: String,
+        @Path("season") season: Int,
+        @Path("episode") episode: Int
+    ): ResponseStats
 
     /** TODO PERSON */
 

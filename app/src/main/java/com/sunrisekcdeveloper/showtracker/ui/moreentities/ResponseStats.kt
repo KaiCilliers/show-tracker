@@ -28,5 +28,5 @@ data class ResponseStats(
     @Json(name = "comments") val comments: Int,
     @Json(name = "lists") val lists: Int,
     @Json(name = "votes") val votes: Int,
-    @Json(name = "recommended") val recommended: Int
+    @Json(name = "recommended") val recommended: Int?
 )

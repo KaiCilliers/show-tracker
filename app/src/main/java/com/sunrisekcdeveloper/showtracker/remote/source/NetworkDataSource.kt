@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.remote.source
 import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
 import com.sunrisekcdeveloper.showtracker.entities.network.base.*
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
+import retrofit2.Response
 
 interface NetworkDataSource {
     /** TODO MISCELLANEOUS */
@@ -330,7 +331,7 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun showNextScheduledAirEpisode(id: String): ResponseEpisode
+    suspend fun showNextScheduledAirEpisode(id: String): Response<ResponseEpisode>? // null if there is none
 
     /**
      * Show most recently aired episode
@@ -416,7 +417,7 @@ interface NetworkDataSource {
         season: Int,
         episode: Int,
         language: String = ""
-    ): ResponseTranslation
+    ): List<ResponseTranslation>
 
     /**
      * Episode people
