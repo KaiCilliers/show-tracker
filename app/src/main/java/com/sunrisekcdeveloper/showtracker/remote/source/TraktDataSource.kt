@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.remote.source
 
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -89,6 +90,36 @@ interface TraktDataSource : NetworkDataSource {
     // TODO OI! START BY OVERRIDING AND MANUALLY testing each show endpoint
     //  move on to season and episode endpoints and manually test them
     //  structure these endpoints and refactor the response objects
+    @GET("shows/trending")
+    override suspend fun trendingShows(): List<ResponseWatchersShow>
+
+    @GET("shows/popular")
+    override suspend fun popularShows(): List<ResponseShow>
+
+    @GET("shows/recommended/{period}")
+    override suspend fun recommendedShows(@Path("period") period: String): List<ResponseShowUserCount>
+
+    @GET("shows/played/{period}")
+    override suspend fun mostPlayedShows(@Path("period") period: String): List<ResponseWrapperMostPlayedWatchedCollectedShow>
+
+    @GET("shows/watched/{period}")
+    override suspend fun mostWatchedShows(@Path("period") period: String): List<ResponseWrapperMostPlayedWatchedCollectedShow>
+
+    @GET("shows/anticipated")
+    override suspend fun mostAnticipatedShows(): List<ResponseWrapperListCountShow>
+
+    @GET("shows/{id}")
+    override suspend fun show(@Path("id") id: String): ResponseShow
+
+    @GET("shows/{id}/aliases")
+    override suspend fun showTitleAliases(@Path("id") id: String): List<ResponseTitleAlias>
+
+    // Giving a HTTP 500 status code
+    @GET("shows/{id}/certifications")
+    override suspend fun showCertifications(@Path("id") id: String): List<ResponseCertification>
+
+    @GET("shows/{id}/translations/{language}")
+    override suspend fun showTranslations(@Path("id") id: String, @Path("language") language: String): List<ResponseTranslation>
 
     /** TODO PERSON */
 

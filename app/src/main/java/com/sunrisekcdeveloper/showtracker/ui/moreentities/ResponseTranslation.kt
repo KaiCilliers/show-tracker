@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.ui.moreentities
 import com.squareup.moshi.Json
 
 data class ResponseTranslation(
-    @Json(name = "title") private val title: String,
+    @Json(name = "title") private val title: String?,
     @Json(name = "overview") private val overview: String?,
     @Json(name = "tagline") private val tagline: String?,
     @Json(name = "language") private val language: String

@@ -231,7 +231,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostPlayedShows(period: String = "weekly"): ResponseWrapperMostPlayedWatchedCollectedShow
+    suspend fun mostPlayedShows(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollectedShow>
 
     /**
      * Most watched movies in specified time period (unique watches)
@@ -242,7 +242,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostWatchedShows(period: String = "weekly"): ResponseWrapperMostPlayedWatchedCollectedShow
+    suspend fun mostWatchedShows(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollectedShow>
 
     /**
      * Most anticipated shows based on number of lists a show appears on
@@ -250,7 +250,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun mostAnticipatedShows(): ResponseWrapperListCountShow
+    suspend fun mostAnticipatedShows(): List<ResponseWrapperListCountShow>
 
     /**
      * Show

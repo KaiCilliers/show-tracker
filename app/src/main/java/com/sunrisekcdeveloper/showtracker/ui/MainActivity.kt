@@ -31,13 +31,17 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 import com.sunrisekcdeveloper.showtracker.remote.service.FanartService
 import com.sunrisekcdeveloper.showtracker.remote.service.TraktService
+import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.http.GET
+import retrofit2.http.Path
 import timber.log.Timber
 
 /**
@@ -87,20 +91,20 @@ class MainActivity : AppCompatActivity() {
         /** MISCELLANEOUS */
 
 //        Timber.d("========================MOVIE GENRES========================")
-        val movieGenres = traktService.genres("movies"); delay(2000)
+//        val movieGenres = traktService.genres("movies"); delay(2000)
 //        Timber.d("========================SHOW GENRES========================")
-        val showGenres = traktService.genres("shows"); delay(2000)
+//        val showGenres = traktService.genres("shows"); delay(2000)
 //        Timber.d("========================MOVIE LANGUAGES========================")
-        val movieLangs = traktService.languages("movies"); delay(2000)
+//        val movieLangs = traktService.languages("movies"); delay(2000)
 //        Timber.d("========================SHOW LANGUAGES========================")
-        val showLangs = traktService.languages("shows"); delay(2000)
+//        val showLangs = traktService.languages("shows"); delay(2000)
 
         /** MOVIES */
 
 //        Timber.d("========================TRENDING MOVIES========================")
 //        val trending = traktService.trendingMovies(); delay(2000)
 //        Timber.d("========================POPULAR MOVIES========================")
-        val popular = traktService.popularMovies(); delay(2000)
+//        val popular = traktService.popularMovies(); delay(2000)
 //        val recommendedWeekly = traktService.recommendedMovies()
 //        val recommendedYearly = traktService.recommendedMovies("yearly")
 //        val mostPlayedYearly = traktService.mostPlayedMovies("yearly")
@@ -111,16 +115,26 @@ class MainActivity : AppCompatActivity() {
 //        val aliases = traktService.movieAliases(popular[4].identifiers.slug)
 //        val releases = traktService.movieReleases(popular[5].identifiers.slug, "au")
 //        val translations = traktService.movieTranslations(popular[5].identifiers.slug,"ta")
-        val moviePeople = traktService.moviePersons(popular[4].identifiers.slug); delay(2000)
+//        val moviePeople = traktService.moviePersons(popular[4].identifiers.slug); delay(2000)
 //        val ratings = traktService.movieRatings(popular[5].identifiers.slug)
 //        val related = traktService.moviesRelatedTo(popular[5].identifiers.slug)
 //        val stats = traktService.movieStats(popular[5].identifiers.slug)
 //        val networks = traktService.networks()
 //        val movieCreditsOnlyCast = traktService.movieCredits(moviePeople.cast[5].person.identifiers.slug)
 //        val movieCreditsBoth = traktService.movieCredits("bryan-cranston")
-        val person = traktService.person(moviePeople.cast[8].person.identifiers.slug)
+//        val person = traktService.person(moviePeople.cast[8].person.identifiers.slug)
+//        val trendingShows = traktService.trendingShows(); delay(4000)
+//        val popularShows = traktService.popularShows(); delay(4000)
+//        val recommendedShows = traktService.recommendedShows(); delay(4000)
+//        val mostPlayedShows = traktService.mostPlayedShows("monthly"); delay(4000)
+//        val mostWatcehdShows = traktService.mostWatchedShows("daily"); delay(4000)
+        val anticipatedShows = traktService.mostAnticipatedShows(); delay(4000)
+//        val show = traktService.show(anticipatedShows[4].show.identifier.slug); delay(4000)
+//        val titleAliases = traktService.showTitleAliases(anticipatedShows[8].show.identifier.slug); delay(4000)
+//        val showCertification = traktService.showCertifications(anticipatedShows[4].show.identifier.slug); delay(4000)
+        val showTranslations = traktService.showTranslations(anticipatedShows[2].show.identifier.slug); delay(4000)
 
-        Timber.d("========================RESULT========================\n$person")
+//        Timber.d("========================RESULT========================\n$person")
 //        Timber.d("========================RESULT========================\n$movieCreditsBoth")
 
 //        val single = trending[3]
