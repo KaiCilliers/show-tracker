@@ -39,3 +39,11 @@ class ResponseIdentifiers(
     @Json(name = "tmdb") val tmdb: Int,
     @Json(name = "tvdb") val tvdb: Int?,
 )
+// seasons dont have slugs (kinda a big deal to have slug nullable - i prefer redundancy over this)
+// TODO improve
+class ResponseIdentifiersSeason(
+    @Json(name = "trakt") val trakt: Int,
+    @Json(name = "imdb") val imdb: String?,
+    @Json(name = "tmdb") val tmdb: Int?,
+    @Json(name = "tvdb") val tvdb: Int?,
+)

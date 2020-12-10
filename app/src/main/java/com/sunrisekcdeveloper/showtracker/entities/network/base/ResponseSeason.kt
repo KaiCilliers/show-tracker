@@ -30,5 +30,5 @@ import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifi
  */
 data class ResponseSeason(
     @Json(name = "number") val number: Int,
-    @Json(name = "ids") val identifiers: ResponseIdentifiers
+    @Json(name = "ids") val identifiers: ResponseIdentifiersSeason
 )

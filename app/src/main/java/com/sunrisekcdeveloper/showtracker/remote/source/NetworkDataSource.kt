@@ -18,10 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.remote.source
 
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
+import com.sunrisekcdeveloper.showtracker.entities.network.base.*
 import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
+import retrofit2.Response
 
 interface NetworkDataSource {
     /** TODO MISCELLANEOUS */
@@ -189,7 +189,7 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun movieStats(id: String): ResponseMovieStats
+    suspend fun movieStats(id: String): ResponseStats
 
     /** TODO SHOWS */
 
@@ -231,7 +231,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostPlayedShows(period: String = "weekly"): ResponseWrapperMostPlayedWatchedCollectedShow
+    suspend fun mostPlayedShows(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollectedShow>
 
     /**
      * Most watched movies in specified time period (unique watches)
@@ -242,7 +242,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostWatchedShows(period: String = "weekly"): ResponseWrapperMostPlayedWatchedCollectedShow
+    suspend fun mostWatchedShows(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollectedShow>
 
     /**
      * Most anticipated shows based on number of lists a show appears on
@@ -250,7 +250,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun mostAnticipatedShows(): ResponseWrapperListCountShow
+    suspend fun mostAnticipatedShows(): List<ResponseWrapperListCountShow>
 
     /**
      * Show
@@ -288,6 +288,167 @@ interface NetworkDataSource {
      */
     // TODO might need different return obj due to missing tagline in json
     suspend fun showTranslations(id: String, language: String = ""): List<ResponseTranslation>
+
+    /**
+     * Show people all cast and crew for a show, including the amount of episodes
+     * they appeared in
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showPeople(id: String): ResponseCastCrewPerson
+
+    /**
+     * Show ratings
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showRatings(id: String): ResponseRating
+
+    /**
+     * Related shows
+     * Supports Pagination, Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun relatedShows(id: String): List<ResponseShow>
+
+    /**
+     * Show stats
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showStats(id: String): ResponseStats
+
+    /**
+     * Show next scheduled air episode
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showNextScheduledAirEpisode(id: String): Response<ResponseEpisode>? // null if there is none
+
+    /**
+     * Show most recently aired episode
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showMostRecentlyAiredEpisode(id: String): ResponseEpisode
+
+    /** TODO SEASON */
+
+    /**
+     * Season episodes
+     * Supports Extended Info
+     *
+     * @param id
+     * @param season
+     * @return
+     */
+    suspend fun seasonEpisodes(id: String, season: Int): List<ResponseEpisode>
+
+    /**
+     * Seasons of show
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun seasonsOfShow(id: String): List<ResponseSeason>
+
+    /**
+     * Season people
+     * Supports Extended Info
+     *
+     * @param id
+     * @param season
+     * @return
+     */
+    suspend fun seasonPeople(id: String, season: Int): ResponseCastCrewPerson
+
+    /**
+     * Season ratings
+     *
+     * @param id
+     * @param season
+     * @return
+     */
+    suspend fun seasonRatings(id: String, season: Int): ResponseRating
+
+    /**
+     * Season stats
+     *
+     * @param id
+     * @param season
+     * @return
+     */
+    suspend fun seasonStats(id: String, season: Int): ResponseStats
+
+    /** TODO EPISODE */
+
+    /**
+     * Episode
+     *
+     * @param id
+     * @param season
+     * @param episode
+     * @return
+     */
+    suspend fun episode(id: String, season: Int, episode: Int): ResponseEpisode
+
+    /**
+     * Episode translations
+     *
+     * @param id
+     * @param season
+     * @param episode
+     * @param language Optional two character language code
+     * @return
+     */
+    suspend fun episodeTranslations(
+        id: String,
+        season: Int,
+        episode: Int,
+        language: String = ""
+    ): List<ResponseTranslation>
+
+    /**
+     * Episode people
+     * Supports Extended Info
+     *
+     * @param id
+     * @param season
+     * @param episode
+     * @return
+     */
+    suspend fun episodePeople(id: String, season: Int, episode: Int): ResponseCastCrewPerson
+
+    /**
+     * Episode ratings
+     *
+     * @param id
+     * @param season
+     * @param episode
+     * @return
+     */
+    suspend fun episodeRatings(id: String, season: Int, episode: Int): ResponseRating
+
+    /**
+     * Episode stats
+     *
+     * @param id
+     * @param season
+     * @param episode
+     * @return
+     */
+    suspend fun episodeStats(id: String, season: Int, episode: Int): ResponseStats
 
     /** TODO PEOPLE */
     /**

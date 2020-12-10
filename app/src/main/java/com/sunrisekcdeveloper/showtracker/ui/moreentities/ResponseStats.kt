@@ -20,12 +20,13 @@ package com.sunrisekcdeveloper.showtracker.ui.moreentities
 
 import com.squareup.moshi.Json
 
-data class ResponseMovieStats(
-    @Json(name = "watchers") private val watchers: Int,
-    @Json(name = "plays") private val plays: Int,
-    @Json(name = "collectors") private val collectors: Int,
-    @Json(name = "comments") private val comments: Int,
-    @Json(name = "lists") private val lists: Int,
-    @Json(name = "votes") private val votes: Int,
-    @Json(name = "recommended") private val recommended: Int
+data class ResponseStats(
+    @Json(name = "watchers") val watchers: Int,
+    @Json(name = "plays") val plays: Int,
+    @Json(name = "collectors") val collectors: Int,
+    @Json(name = "collected_episodes") val collectedEpisodes: Int?,
+    @Json(name = "comments") val comments: Int,
+    @Json(name = "lists") val lists: Int,
+    @Json(name = "votes") val votes: Int,
+    @Json(name = "recommended") val recommended: Int?
 )

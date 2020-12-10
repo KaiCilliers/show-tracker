@@ -42,6 +42,7 @@ data class ResponseCastCrewShow(
 
 data class ResponseCastAndPerson(
     @Json(name = "characters") val characters: List<String>,
+    @Json(name = "episode_count") val episodeCount: Int?, // changed to nullable
     @Json(name = "person") val person: ResponsePerson
 )
 data class ResponseCastAndMovie(
