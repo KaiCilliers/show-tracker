@@ -289,6 +289,16 @@ interface NetworkDataSource {
     // TODO might need different return obj due to missing tagline in json
     suspend fun showTranslations(id: String, language: String = ""): List<ResponseTranslation>
 
+    /**
+     * Show people all cast and crew for a show, including the amount of episodes
+     * they appeared in
+     * Supports Extended Info
+     *
+     * @param id
+     * @return
+     */
+    suspend fun showPeople(id: String): ResponseCastCrewPerson
+
     /** TODO PEOPLE */
     /**
      * Person

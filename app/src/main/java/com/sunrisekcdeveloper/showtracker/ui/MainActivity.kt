@@ -125,14 +125,21 @@ class MainActivity : AppCompatActivity() {
 //        val person = traktService.person(moviePeople.cast[8].person.identifiers.slug)
 //        val trendingShows = traktService.trendingShows(); delay(4000)
 //        val popularShows = traktService.popularShows(); delay(4000)
-//        val recommendedShows = traktService.recommendedShows(); delay(4000)
+        val recommendedShows = traktService.recommendedShows(); delay(4000)
 //        val mostPlayedShows = traktService.mostPlayedShows("monthly"); delay(4000)
 //        val mostWatcehdShows = traktService.mostWatchedShows("daily"); delay(4000)
-        val anticipatedShows = traktService.mostAnticipatedShows(); delay(4000)
+//        val anticipatedShows = traktService.mostAnticipatedShows(); delay(4000)
 //        val show = traktService.show(anticipatedShows[4].show.identifier.slug); delay(4000)
 //        val titleAliases = traktService.showTitleAliases(anticipatedShows[8].show.identifier.slug); delay(4000)
 //        val showCertification = traktService.showCertifications(anticipatedShows[4].show.identifier.slug); delay(4000)
-        val showTranslations = traktService.showTranslations(anticipatedShows[2].show.identifier.slug); delay(4000)
+//        val showTranslations = traktService.showTranslations(anticipatedShows[2].show.identifier.slug); delay(4000)
+        val showPeople = traktService.showPeople(recommendedShows[5].show.identifier.slug)
+        val showCreditsCast = traktService.showCredits(showPeople.cast[3].person.identifiers.slug)
+        val showCreditsCrew = showPeople.crew.directing?.get(0)?.person?.identifiers?.slug?.let {
+            traktService.showCredits(
+                it
+            )
+        }
 
 //        Timber.d("========================RESULT========================\n$person")
 //        Timber.d("========================RESULT========================\n$movieCreditsBoth")

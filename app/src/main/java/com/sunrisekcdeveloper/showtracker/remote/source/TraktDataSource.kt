@@ -121,6 +121,9 @@ interface TraktDataSource : NetworkDataSource {
     @GET("shows/{id}/translations/{language}")
     override suspend fun showTranslations(@Path("id") id: String, @Path("language") language: String): List<ResponseTranslation>
 
+    @GET("shows/{id}/people")
+    override suspend fun showPeople(@Path("id") id: String): ResponseCastCrewPerson
+
     /** TODO PERSON */
 
     @GET("people/{id}")
