@@ -18,11 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.remote.source
 
+import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.entities.network.*
 import com.sunrisekcdeveloper.showtracker.entities.network.base.*
 import com.sunrisekcdeveloper.showtracker.entities.network.envelopes.*
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
 
 // TODO remove repeating headers
@@ -199,4 +201,9 @@ interface TraktDataSource : NetworkDataSource {
 
     @GET("people/{id}/shows")
     override suspend fun showCredits(@Path("id") id: String): ResponseCast
+
+    /** IMAGES */
+    @Headers("Fanart-Api: true")
+    @GET("${BuildConfig.FANART_BASE_URL}movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
+    override suspend fun poster(@Path("id") id: String): ResponseImages
 }

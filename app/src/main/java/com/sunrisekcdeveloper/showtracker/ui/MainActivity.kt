@@ -26,14 +26,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
-import com.sunrisekcdeveloper.showtracker.remote.service.FanartService
 import com.sunrisekcdeveloper.showtracker.remote.service.TraktService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Main activity Primary container for fragments that provide app functionality
@@ -44,7 +41,6 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     val traktService by lazy { TraktService.create() }
-    val fanartService by lazy { FanartService.create() }
 
     private val ioScope by lazy { CoroutineScope(Dispatchers.IO) }
 
@@ -79,6 +75,8 @@ class MainActivity : AppCompatActivity() {
      * Go Temporary method to confirm results from remote services
      */
     suspend fun go() {
+        val s = traktService.trendingMovies()
+        traktService.poster("10195")
         /** MISCELLANEOUS */
 
 //        Timber.d("========================MOVIE GENRES========================")
@@ -164,7 +162,7 @@ class MainActivity : AppCompatActivity() {
 //        traktService.networks(); delay(3000)
 
 //        traktService.trendingMovies(); delay(3000)
-        val s = traktService.popularMovies(); delay(3000)
+//        val s = traktService.popularMovies(); delay(3000)
 //        traktService.recommendedMovies(); delay(3000)
 //        traktService.mostPlayedMovies(); delay(3000)
 //        traktService.mostWatchedMovies(); delay(3000)
@@ -174,14 +172,14 @@ class MainActivity : AppCompatActivity() {
 //        traktService.movieAliases(s[1].identifiers.slug); delay(3000)
 //        traktService.movieReleases(s[2].identifiers.slug); delay(3000)
 //        traktService.movieTranslations(s[3].identifiers.slug); delay(3000)
-        val p = traktService.moviePersons(s[4].identifiers.slug); delay(3000)
+//        val p = traktService.moviePersons(s[4].identifiers.slug); delay(3000)
 //        traktService.movieRatings(s[5].identifiers.slug); delay(3000)
 //        traktService.moviesRelatedTo(s[6].identifiers.slug); delay(3000)
 //        traktService.movieStats(s[7].identifiers.slug); delay(3000)
 
 //        traktService.trendingShows(); delay(3000)
-        val ss = traktService.popularShows(); delay(3000)
-        val dd = traktService.recommendedShows(); delay(3000)
+//        val ss = traktService.popularShows(); delay(3000)
+//        val dd = traktService.recommendedShows(); delay(3000)
 //        traktService.mostPlayedShows(); delay(3000)
 //        traktService.mostWatchedShows(); delay(3000)
 //        traktService.mostAnticipatedShows(); delay(3000)
@@ -196,26 +194,26 @@ class MainActivity : AppCompatActivity() {
 //        traktService.showNextScheduledAirEpisode(ss[8].identifiers.slug); delay(3000)
 //        traktService.showMostRecentlyAiredEpisode(ss[9].identifiers.slug); delay(3000)
 
-        val d = dd[2].show?.identifiers?.slug!!
-        traktService.seasonEpisodes(d, 1); delay(3000)
-        traktService.seasonsOfShow(d); delay(3000)
-        traktService.seasonPeople(d, 1); delay(3000)
-        traktService.seasonRatings(d, 1); delay(3000)
-        traktService.seasonStats(d, 1); delay(3000)
-
-        traktService.episode(d, 1, 1); delay(3000)
-        traktService.episodeTranslations(d, 1, 1); delay(3000)
-        traktService.episodePeople(d, 1, 1); delay(3000)
-        traktService.episodeRatings(d, 1, 1); delay(3000)
-        traktService.episodeStats(d, 1, 1); delay(3000)
-
-        val pp = p.cast[0].person?.identifiers?.slug!!
-        val ppp = p.crew.directing?.get(0)?.person?.identifiers?.slug!!
-        traktService.person(pp); delay(3000)
-        traktService.movieCredits(pp); delay(3000)
-        traktService.showCredits(ppp)
-
-        Timber.d("=======================================++DONE")
+//        val d = dd[2].show?.identifiers?.slug!!
+//        traktService.seasonEpisodes(d, 1); delay(3000)
+//        traktService.seasonsOfShow(d); delay(3000)
+//        traktService.seasonPeople(d, 1); delay(3000)
+//        traktService.seasonRatings(d, 1); delay(3000)
+//        traktService.seasonStats(d, 1); delay(3000)
+//
+//        traktService.episode(d, 1, 1); delay(3000)
+//        traktService.episodeTranslations(d, 1, 1); delay(3000)
+//        traktService.episodePeople(d, 1, 1); delay(3000)
+//        traktService.episodeRatings(d, 1, 1); delay(3000)
+//        traktService.episodeStats(d, 1, 1); delay(3000)
+//
+//        val pp = p.cast[0].person?.identifiers?.slug!!
+//        val ppp = p.crew.directing?.get(0)?.person?.identifiers?.slug!!
+//        traktService.person(pp); delay(3000)
+//        traktService.movieCredits(pp); delay(3000)
+//        traktService.showCredits(ppp)
+//
+//        Timber.d("=======================================++DONE")
 
 //        Timber.d("========================RESULT========================\n$person")
 //        Timber.d("========================RESULT========================\n$movieCreditsBoth")

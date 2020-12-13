@@ -477,4 +477,7 @@ interface NetworkDataSource {
      * @return
      */
     suspend fun showCredits(id: String): ResponseCast
+
+    /** IMAGES */
+    suspend fun poster(id: String): ResponseImages
 }

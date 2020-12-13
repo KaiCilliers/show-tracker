@@ -29,6 +29,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 
 interface TraktService {
     companion object {
@@ -42,10 +43,13 @@ interface TraktService {
                     var request = chain.request()
                     val headers = request.headers.newBuilder()
                         .add("Content-type", "application/json")
-                        .add("trakt-api-key", BuildConfig.TRAKT_API_KEY)
-                        .add("trakt-api-version", "2")
-                        .build()
-                    request = request.newBuilder().headers(headers).build()
+
+                    if (request.header("Fanart-Api") == null) {
+                        headers.add("trakt-api-key", BuildConfig.TRAKT_API_KEY)
+                            .add("trakt-api-version", "2")
+                    }
+
+                    request = request.newBuilder().headers(headers.build()).build()
                     return chain.proceed(request)
                 }
             }
