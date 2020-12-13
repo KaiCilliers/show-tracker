@@ -25,7 +25,7 @@
 
         <variable
             name="movie"
-            type="com.sunrisekcdeveloper.showtracker.model.domain.Movie" />
+            type="com.sunrisekcdeveloper.showtracker.model.Movie" />
 
         <variable
             name="clickListener"

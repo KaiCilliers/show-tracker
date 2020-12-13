@@ -24,7 +24,7 @@
     <data>
         <variable
             name="movie"
-            type="com.sunrisekcdeveloper.showtracker.model.domain.DetailedMovie" />
+            type="com.sunrisekcdeveloper.showtracker.model.DetailedMovie" />
     </data>
 <ScrollView
     android:layout_width="match_parent"
