@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
 
-data class ResponseTranslation(
-    @Json(name = "title") private val title: String?,
-    @Json(name = "overview") private val overview: String?,
-    @Json(name = "tagline") private val tagline: String?,
-    @Json(name = "language") private val language: String
+data class ResponseRelease(
+    @Json(name = "country") val country: String,
+    @Json(name = "certification") val certification: String,
+    @Json(name = "release_data") val releaseDate: String?, // network can return null
+    @Json(name = "release_type") val releaseType: String,
+    @Json(name = "note") val extraNote: String? // network defaults to return null
 )

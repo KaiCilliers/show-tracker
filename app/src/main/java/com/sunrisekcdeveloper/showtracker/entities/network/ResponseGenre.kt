@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-data class ResponseShowUserCount(
-    @Json(name = "user_count") val userCount: Int,
-    @Json(name = "show") val show: ResponseShow
+data class ResponseGenre(
+    @Json(name = "name") val name: String,
+    @Json(name = "slug") val slug: String
 )

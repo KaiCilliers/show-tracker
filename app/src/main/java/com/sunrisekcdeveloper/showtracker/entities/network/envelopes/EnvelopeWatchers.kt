@@ -16,17 +16,23 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network.envelopes
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-data class ResponseStats(
+/**
+ * Response Watcher represents a network response which consists of a [ResponseMovie] with the
+ * amount of current [watchers] of the [ResponseMovie]
+ *
+ * TODO update documentation
+ *
+ * @property watchers is the amount of accounts currently watching the [ResponseMovie]
+ * @property movie represents a [ResponseMovie] object
+ */
+data class EnvelopeWatchers(
     @Json(name = "watchers") val watchers: Int,
-    @Json(name = "plays") val plays: Int,
-    @Json(name = "collectors") val collectors: Int,
-    @Json(name = "collected_episodes") val collectedEpisodes: Int?,
-    @Json(name = "comments") val comments: Int,
-    @Json(name = "lists") val lists: Int,
-    @Json(name = "votes") val votes: Int,
-    @Json(name = "recommended") val recommended: Int?
+    @Json(name = "movie") val movie: ResponseMovie?,
+    @Json(name = "show") val show: ResponseShow?
 )

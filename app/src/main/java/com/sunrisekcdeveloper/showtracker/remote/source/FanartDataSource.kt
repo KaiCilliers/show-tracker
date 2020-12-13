@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.remote.source
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.entities.network.ResponseImage
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovieImages
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -27,5 +27,5 @@ import retrofit2.http.Path
 interface FanartDataSource : NetworkImageDataSource{
     @Headers("Content-Type: application/json")
     @GET("movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
-    override suspend fun poster(@Path("id") id: String): ResponseImage
+    override suspend fun poster(@Path("id") id: String): ResponseMovieImages
 }

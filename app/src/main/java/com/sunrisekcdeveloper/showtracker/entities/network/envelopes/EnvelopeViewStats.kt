@@ -16,10 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.remote.source
+package com.sunrisekcdeveloper.showtracker.entities.network.envelopes
 
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovieImages
+import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-interface NetworkImageDataSource {
-    suspend fun poster(id: String): ResponseMovieImages
-}
+data class EnvelopeViewStats(
+    @Json(name = "watcher_count") val watchers: Int,
+    @Json(name = "play_count") val playCount: Int,
+    @Json(name = "collected_count") val collectedCount: Int,
+    @Json(name = "collector_count") val collectorCount: Int?,
+    @Json(name = "show") val show: ResponseShow?,
+    @Json(name = "movie") val movie: ResponseMovie?
+)

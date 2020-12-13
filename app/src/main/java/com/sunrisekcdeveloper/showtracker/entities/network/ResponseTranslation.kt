@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
 
-data class ResponseCertification(
-    @Json(name = "certification") val certification: String,
-    @Json(name = "country") val country: String
+data class ResponseTranslation(
+    @Json(name = "title") val title: String?,
+    @Json(name = "overview") val overview: String?,
+    @Json(name = "tagline") val tagline: String?,
+    @Json(name = "language") val language: String
 )

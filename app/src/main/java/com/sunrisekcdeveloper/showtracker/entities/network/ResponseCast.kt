@@ -16,14 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponsePerson
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-data class ResponseRelease(
-    @Json(name = "country") private val country: String,
-    @Json(name = "certification") private val certification: String,
-    @Json(name = "release_data") private val releaseDate: String?, // network can return null
-    @Json(name = "release_type") private val releaseType: String,
-    @Json(name = "note") private val extraNote: String? // network defaults to return null
+data class ResponseCast(
+    @Json(name = "characters") val characters: List<String>?,
+    @Json(name = "episode_count") val episodeCount: Int?,
+    @Json(name = "series_regular") val seriesRegular: Boolean?,
+    @Json(name = "person") val person: ResponsePerson?,
+    @Json(name = "show") val show: ResponseShow?,
+    @Json(name = "movie") val movie: ResponseMovie?
 )

@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network.base
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifiers
 
-data class ResponseWrapperListCount(
-    @Json(name = "list_count") private val listCount: Int,
-    @Json(name = "movie") private val movie: ResponseMovie
+data class ResponsePerson(
+    @Json(name = "name") val name: String,
+    @Json(name = "ids") val identifiers: ResponseIdentifiers
 )

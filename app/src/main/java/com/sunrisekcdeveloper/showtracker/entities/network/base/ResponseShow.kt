@@ -19,18 +19,17 @@
 package com.sunrisekcdeveloper.showtracker.entities.network.base
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifiers
 
 /**
  * Response Show represents a network object containing information on a single show
  *
  * @property title of the show
  * @property year of the show's release date
- * @property identifier is a collection of identifiers of the season that can be used with other
+ * @property identifiers is a collection of identifiers of the season that can be used with other
  * APIs
  */
 data class ResponseShow(
     @Json(name = "title") val title: String,
     @Json(name = "year") val year: Int,
-    @Json(name = "ids") val identifier: ResponseIdentifiers
+    @Json(name = "ids") val identifiers: ResponseIdentifiers
 )

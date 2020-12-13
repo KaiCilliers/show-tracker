@@ -16,10 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.remote.source
+package com.sunrisekcdeveloper.showtracker.entities.network
 
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovieImages
+import com.squareup.moshi.Json
 
-interface NetworkImageDataSource {
-    suspend fun poster(id: String): ResponseMovieImages
-}
+data class ResponseDistribution(
+    @Json(name = "1") val one: String,
+    @Json(name = "2") val two: String,
+    @Json(name = "3") val three: String,
+    @Json(name = "4") val four: String,
+    @Json(name = "5") val five: String,
+    @Json(name = "6") val six: String,
+    @Json(name = "7") val seven: String,
+    @Json(name = "8") val eight: String,
+    @Json(name = "9") val nine: String,
+    @Json(name = "10") val ten: String
+)

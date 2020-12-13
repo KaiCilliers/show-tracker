@@ -18,9 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.remote.source
 
-import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
+import com.sunrisekcdeveloper.showtracker.entities.network.*
 import com.sunrisekcdeveloper.showtracker.entities.network.base.*
-import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
+import com.sunrisekcdeveloper.showtracker.entities.network.envelopes.*
 import retrofit2.Response
 
 interface NetworkDataSource {
@@ -56,7 +56,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun trendingMovies(): List<ResponseWatcher>
+    suspend fun trendingMovies(): List<EnvelopeWatchers>
 
     /**
      * Popular movies popularity calculated using rating percentage and the number
@@ -76,7 +76,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun recommendedMovies(period: String = "weekly"): List<ResponseWrapperUserCount>
+    suspend fun recommendedMovies(period: String = "weekly"): List<EnvelopeUserCount>
 
     /**
      * Most played movies in specified time period (single account can watch multiple times)
@@ -87,7 +87,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostPlayedMovies(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollected>
+    suspend fun mostPlayedMovies(period: String = "weekly"): List<EnvelopeViewStats>
 
     /**
      * Most watched movies in specified time period (unique watches)
@@ -100,7 +100,7 @@ interface NetworkDataSource {
      */
     // TODO you can create less methods in Repo that takes params which will decide which of
     //  these methods to call (like it'll choose between most played and most watched)
-    suspend fun mostWatchedMovies(period: String): List<ResponseWrapperMostPlayedWatchedCollected>
+    suspend fun mostWatchedMovies(period: String = "weekly"): List<EnvelopeViewStats>
 
     /**
      * Most anticipated based on number of lists movie appears in
@@ -108,7 +108,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun mostAnticipated(): List<ResponseWrapperListCount>
+    suspend fun mostAnticipated(): List<EnvelopeListCount>
 
     /**
      * Box office based on top 10 grossing movies in U.S. box office the weekend past. Updates
@@ -117,7 +117,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun boxOffice(): List<ResponseWrapperRevenue>
+    suspend fun boxOffice(): List<EnvelopeRevenue>
 
     /**
      * Movie with minimal details
@@ -164,7 +164,7 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun moviePersons(id: String): ResponseCastCrewPerson
+    suspend fun moviePersons(id: String): ResponseCastCrew
 
     /**
      * Movie ratings
@@ -200,7 +200,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun trendingShows(): List<ResponseWatchersShow>
+    suspend fun trendingShows(): List<EnvelopeWatchers>
 
     /**
      * Popular shows where popularity is calculated using rating percentage and the
@@ -220,7 +220,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun recommendedShows(period: String = "weekly"): List<ResponseShowUserCount>
+    suspend fun recommendedShows(period: String = "weekly"): List<EnvelopeUserCount>
 
     /**
      * Most played shows in specified time period (single account can watch multiple times)
@@ -231,7 +231,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostPlayedShows(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollectedShow>
+    suspend fun mostPlayedShows(period: String = "weekly"): List<EnvelopeViewStats>
 
     /**
      * Most watched movies in specified time period (unique watches)
@@ -242,7 +242,7 @@ interface NetworkDataSource {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostWatchedShows(period: String = "weekly"): List<ResponseWrapperMostPlayedWatchedCollectedShow>
+    suspend fun mostWatchedShows(period: String = "weekly"): List<EnvelopeViewStats>
 
     /**
      * Most anticipated shows based on number of lists a show appears on
@@ -250,7 +250,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun mostAnticipatedShows(): List<ResponseWrapperListCountShow>
+    suspend fun mostAnticipatedShows(): List<EnvelopeListCount>
 
     /**
      * Show
@@ -297,7 +297,7 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun showPeople(id: String): ResponseCastCrewPerson
+    suspend fun showPeople(id: String): ResponseCastCrew
 
     /**
      * Show ratings
@@ -371,7 +371,7 @@ interface NetworkDataSource {
      * @param season
      * @return
      */
-    suspend fun seasonPeople(id: String, season: Int): ResponseCastCrewPerson
+    suspend fun seasonPeople(id: String, season: Int): ResponseCastCrew
 
     /**
      * Season ratings
@@ -428,7 +428,7 @@ interface NetworkDataSource {
      * @param episode
      * @return
      */
-    suspend fun episodePeople(id: String, season: Int, episode: Int): ResponseCastCrewPerson
+    suspend fun episodePeople(id: String, season: Int, episode: Int): ResponseCastCrew
 
     /**
      * Episode ratings
@@ -467,7 +467,7 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun movieCredits(id: String): ResponseCastCrewMovie
+    suspend fun movieCredits(id: String): ResponseCast
 
     /**
      * Show credits all shows where person is either part of the cast or the crew
@@ -476,5 +476,5 @@ interface NetworkDataSource {
      * @param id
      * @return
      */
-    suspend fun showCredits(id: String): ResponseCastCrewShow
+    suspend fun showCredits(id: String): ResponseCast
 }

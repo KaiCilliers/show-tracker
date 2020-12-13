@@ -16,20 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.entities.network
+package com.sunrisekcdeveloper.showtracker.entities.network.base
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponsePoster
 
 /**
- * Response Watcher represents a network response which consists of a [ResponseMovie] with the
- * amount of current [watchers] of the [ResponseMovie]
+ * Response Image represents a network response which consists of a movie or show name with all of
+ * its associated poster urls
  *
- * @property watchers is the amount of accounts currently watching the [ResponseMovie]
- * @property movie represents a [ResponseMovie] object
+ * @property name is the name of the movie or show
+ * @property posters is a list of [ResponsePoster]
  */
-// TODO rename class
-data class ResponseWatcher(
-    @Json(name = "watchers") val watchers: Int,
-    @Json(name = "movie") val movie: ResponseMovie
+// TODO provide a better name
+data class ResponseMovieImages(
+    @Json(name = "name") val name: String,
+    @Json(name = "movieposter") val posters: List<ResponsePoster>
 )
