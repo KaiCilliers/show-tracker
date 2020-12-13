@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.NestedViewHolder
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
+import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 
 /**
  * Suggestion List ViewHolder represents a list of movies or shows identified by a category header
