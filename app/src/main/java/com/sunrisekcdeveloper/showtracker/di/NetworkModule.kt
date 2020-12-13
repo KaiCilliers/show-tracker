@@ -21,8 +21,8 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.remote.source.NetworkDataSource
-import com.sunrisekcdeveloper.showtracker.remote.source.TraktDataSource
+import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
+import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

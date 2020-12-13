@@ -26,7 +26,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
+import com.sunrisekcdeveloper.showtracker.model.SuggestionListModel
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.HeaderViewHolder
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MovieSummaryViewHolder
 import java.lang.UnsupportedOperationException

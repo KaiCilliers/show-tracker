@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SmallPosterViewHolder
 
 /**
