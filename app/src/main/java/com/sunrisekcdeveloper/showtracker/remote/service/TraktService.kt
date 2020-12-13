@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.remote.service
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.remote.source.NetworkDataSource
 import com.sunrisekcdeveloper.showtracker.remote.source.TraktDataSource
 import okhttp3.Interceptor
@@ -31,7 +32,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 interface TraktService {
     companion object {
-        private const val BASE_URL = "https://api.trakt.tv/"
+        private const val BASE_URL = BuildConfig.TRAKT_BASE_URL
         fun create(): NetworkDataSource {
             val loggerInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -41,7 +42,7 @@ interface TraktService {
                     var request = chain.request()
                     val headers = request.headers.newBuilder()
                         .add("Content-type", "application/json")
-                        .add("trakt-api-key", "62845b4c84daa248ede22b78b90b5b13cc7d7dc39830d2eb408bd1d54ca55db1")
+                        .add("trakt-api-key", BuildConfig.TRAKT_API_KEY)
                         .add("trakt-api-version", "2")
                         .build()
                     request = request.newBuilder().headers(headers).build()

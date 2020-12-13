@@ -124,8 +124,8 @@ class MainActivity : AppCompatActivity() {
 //        val movieCreditsBoth = traktService.movieCredits("bryan-cranston")
 //        val person = traktService.person(moviePeople.cast[8].person.identifiers.slug)
 //        val trendingShows = traktService.trendingShows(); delay(4000)
-        val popularShows = traktService.popularShows(); delay(4000)
-        val recommendedShows = traktService.recommendedShows(); delay(4000)
+//        val popularShows = traktService.popularShows(); delay(4000)
+//        val recommendedShows = traktService.recommendedShows(); delay(4000)
 //        val mostPlayedShows = traktService.mostPlayedShows("monthly"); delay(4000)
 //        val mostWatcehdShows = traktService.mostWatchedShows("daily"); delay(4000)
 //        val anticipatedShows = traktService.mostAnticipatedShows(); delay(4000)
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 //                it
 //            )
 //        }
-        delay(5000)
+//        delay(5000)
 //        val showRatings = traktService.showRatings(recommendedShows[0].show.identifier.slug); delay(4000)
 //        val relatedShows = traktService.relatedShows(recommendedShows[1].show.identifier.slug); delay(4000)
 //        val showStats = traktService.showStats(recommendedShows[2].show.identifier.slug); delay(4000)
@@ -159,10 +159,13 @@ class MainActivity : AppCompatActivity() {
 //        val seasonRatings = traktService.seasonRatings(recommendedShows[8].show.identifier.slug, 1); delay(4000)
 //        val seasongStats = traktService.seasonStats(recommendedShows[9].show.identifier.slug, 1); delay(4000)
 //        val episode = traktService.episode(popularShows[0].identifier.slug, 1, 1); delay(4000)
-        val episodeTranslation = traktService.episodeTranslations(popularShows[1].identifier.slug, 1, 1); delay(4000)
-        val episodePeople = traktService.episodePeople(popularShows[2].identifier.slug, 1, 1); delay(4000)
-        val episodeRatings = traktService.episodeRatings(popularShows[3].identifier.slug, 1, 1); delay(4000)
-        val episodeStats =traktService.episodeStats(popularShows[4].identifier.slug, 1, 1); delay(4000)
+//        val episodeTranslation = traktService.episodeTranslations(popularShows[1].identifier.slug, 1, 1); delay(4000)
+//        val episodePeople = traktService.episodePeople(popularShows[2].identifier.slug, 1, 1); delay(4000)
+//        val episodeRatings = traktService.episodeRatings(popularShows[3].identifier.slug, 1, 1); delay(4000)
+//        val episodeStats =traktService.episodeStats(popularShows[4].identifier.slug, 1, 1); delay(4000)
+
+        val s = traktService.mostAnticipatedShows(); delay(1000)
+        fanartService.poster("10195")
 
 //        Timber.d("========================RESULT========================\n$person")
 //        Timber.d("========================RESULT========================\n$movieCreditsBoth")

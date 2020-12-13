@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.remote.service
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.remote.source.FanartDataSource
 import com.sunrisekcdeveloper.showtracker.remote.source.NetworkImageDataSource
 import okhttp3.OkHttpClient
@@ -29,7 +30,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 interface FanartService {
     companion object {
-        private const val BASE_URL = "https://webservice.fanart.tv/v3/"
+        private const val BASE_URL = BuildConfig.FANART_BASE_URL
         fun create(): NetworkImageDataSource {
             val logger = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
