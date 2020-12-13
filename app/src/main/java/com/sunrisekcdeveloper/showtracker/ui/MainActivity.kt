@@ -28,6 +28,9 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.Trakt
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
+import com.sunrisekcdeveloper.showtracker.di.MainActivityModule
+import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +46,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject @Trakt lateinit var traktService: NetworkDataSource
+    @Inject @MainRepo lateinit var repo: RepositoryContract
 
     private val ioScope by lazy { CoroutineScope(Dispatchers.IO) }
 
@@ -77,8 +81,8 @@ class MainActivity : AppCompatActivity() {
      * Go Temporary method to confirm results from remote services
      */
     suspend fun go() {
-        val s = traktService.trendingMovies()
-        traktService.poster("10195")
+        val s = repo.trendingMovies()
+        repo.popularMovies()
         /** MISCELLANEOUS */
 
 //        Timber.d("========================MOVIE GENRES========================")

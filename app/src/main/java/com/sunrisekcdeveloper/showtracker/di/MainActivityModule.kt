@@ -22,14 +22,34 @@ import android.app.Activity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.Trakt
+import com.sunrisekcdeveloper.showtracker.repository.MainRepository
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityComponent::class)
-class MainActivityModule {
+object MainActivityModule {
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class MainRepo
+
+    @ActivityScoped
+    @MainRepo
+    @Provides
+    fun provideMainRepository(
+        @Trakt networkDataSource: NetworkDataSource
+    ): RepositoryContract {
+        return MainRepository(networkDataSource)
+    }
+
     @Provides
     // TODO Useful injection that can be used later
     //  https://stackoverflow.com/questions/63426685/android-dagger-hilt-inject-navigation-component
