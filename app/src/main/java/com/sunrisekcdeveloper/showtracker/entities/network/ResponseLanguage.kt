@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
 
-data class ResponseNetwork(
-    @Json(name = "name") val name: String
+data class ResponseLanguage(
+    @Json(name = "name") val name: String,
+    @Json(name = "code") val code: String
 )

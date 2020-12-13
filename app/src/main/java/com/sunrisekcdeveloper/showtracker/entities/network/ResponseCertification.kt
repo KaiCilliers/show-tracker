@@ -16,15 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-data class ResponseWrapperMostPlayedWatchedCollectedShow(
-    @Json(name = "watcher_count") val watchers: Int,
-    @Json(name = "play_count") val playCount: Int,
-    @Json(name = "collected_count") val collectedCount: Int,
-    @Json(name = "collector_count") val collectorCount: Int,
-    @Json(name = "show") val show: ResponseShow
+data class ResponseCertification(
+    @Json(name = "certification") val certification: String,
+    @Json(name = "country") val country: String
 )

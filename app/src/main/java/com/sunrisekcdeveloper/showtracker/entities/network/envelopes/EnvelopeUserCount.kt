@@ -16,11 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network.envelopes
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-data class ResponseGenre(
-    @Json(name = "name") private val name: String,
-    @Json(name = "slug") private val slug: String
+data class EnvelopeUserCount(
+    @Json(name = "user_count") val userCount: Int,
+    @Json(name = "movie") val movie: ResponseMovie?,
+    @Json(name = "show") val show: ResponseShow?
 )

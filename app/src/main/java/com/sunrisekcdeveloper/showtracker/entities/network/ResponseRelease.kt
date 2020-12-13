@@ -16,10 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.remote.source
+package com.sunrisekcdeveloper.showtracker.entities.network
 
-import com.sunrisekcdeveloper.showtracker.entities.network.ResponseImage
+import com.squareup.moshi.Json
 
-interface NetworkImageDataSource {
-    suspend fun poster(id: String): ResponseImage
-}
+data class ResponseRelease(
+    @Json(name = "country") val country: String,
+    @Json(name = "certification") val certification: String,
+    @Json(name = "release_data") val releaseDate: String?, // network can return null
+    @Json(name = "release_type") val releaseType: String,
+    @Json(name = "note") val extraNote: String? // network defaults to return null
+)

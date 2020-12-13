@@ -6,6 +6,10 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+def apikeysPropertiesFile = rootProject.file("apikeys.properties")
+def apikeysProperties = new Properties()
+apikeysProperties.load(new FileInputStream(apikeysPropertiesFile))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -18,6 +22,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "TRAKT_API_KEY", apikeysProperties['TRAKT_API_KEY'])
+        buildConfigField("String", "TRAKT_BASE_URL", apikeysProperties['TRAKT_BASE_URL'])
+        buildConfigField("String", "FANART_API_KEY", apikeysProperties['FANART_API_KEY'])
+        buildConfigField("String", "FANART_BASE_URL", apikeysProperties['FANART_BASE_URL'])
     }
     // Always show the result of every unit test when running via
     // command line, even if it passes.

@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network.envelopes
 
 import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 
-data class ResponseWrapperRevenue(
-    @Json(name = "revenue") private val revenue: Int,
-    @Json(name = "movie") private val movie: ResponseMovie
+data class EnvelopeRevenue(
+    @Json(name = "revenue") val revenue: Int,
+    @Json(name = "movie") val movie: ResponseMovie
 )

@@ -18,14 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.remote.source
 
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.entities.network.ResponseWatcher
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseEpisode
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseSeason
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
-import com.sunrisekcdeveloper.showtracker.ui.moreentities.*
+import com.sunrisekcdeveloper.showtracker.BuildConfig
+import com.sunrisekcdeveloper.showtracker.entities.network.*
+import com.sunrisekcdeveloper.showtracker.entities.network.base.*
+import com.sunrisekcdeveloper.showtracker.entities.network.envelopes.*
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
 
 // TODO remove repeating headers
@@ -42,25 +41,25 @@ interface TraktDataSource : NetworkDataSource {
 
     /** TODO MOVIES */
     @GET("movies/trending")
-    override suspend fun trendingMovies(): List<ResponseWatcher>
+    override suspend fun trendingMovies(): List<EnvelopeWatchers>
 
     @GET("movies/popular")
     override suspend fun popularMovies(): List<ResponseMovie>
 
     @GET("movies/recommended/{period}")
-    override suspend fun recommendedMovies(@Path("period") period: String): List<ResponseWrapperUserCount>
+    override suspend fun recommendedMovies(@Path("period") period: String): List<EnvelopeUserCount>
 
     @GET("movies/played/{period}")
-    override suspend fun mostPlayedMovies(@Path("period") period: String): List<ResponseWrapperMostPlayedWatchedCollected>
+    override suspend fun mostPlayedMovies(@Path("period") period: String): List<EnvelopeViewStats>
 
     @GET("movies/watched/{period}")
-    override suspend fun mostWatchedMovies(@Path("period") period: String): List<ResponseWrapperMostPlayedWatchedCollected>
+    override suspend fun mostWatchedMovies(@Path("period") period: String): List<EnvelopeViewStats>
 
     @GET("movies/anticipated")
-    override suspend fun mostAnticipated(): List<ResponseWrapperListCount>
+    override suspend fun mostAnticipated(): List<EnvelopeListCount>
 
     @GET("movies/boxoffice")
-    override suspend fun boxOffice(): List<ResponseWrapperRevenue>
+    override suspend fun boxOffice(): List<EnvelopeRevenue>
 
     @GET("movies/{id}")
     override suspend fun movie(@Path("id") id: String): ResponseMovie
@@ -75,7 +74,7 @@ interface TraktDataSource : NetworkDataSource {
     override suspend fun movieTranslations(@Path("id") id: String, @Path("language") language: String): List<ResponseTranslation>
 
     @GET("movies/{id}/people")
-    override suspend fun moviePersons(@Path("id") id: String): ResponseCastCrewPerson
+    override suspend fun moviePersons(@Path("id") id: String): ResponseCastCrew
 
     @GET("movies/{id}/ratings")
     override suspend fun movieRatings(@Path("id") id: String): ResponseRating
@@ -88,26 +87,23 @@ interface TraktDataSource : NetworkDataSource {
 
     /** TODO SHOWS */
 
-    // TODO OI! START BY OVERRIDING AND MANUALLY testing each show endpoint
-    //  move on to season and episode endpoints and manually test them
-    //  structure these endpoints and refactor the response objects
     @GET("shows/trending")
-    override suspend fun trendingShows(): List<ResponseWatchersShow>
+    override suspend fun trendingShows(): List<EnvelopeWatchers>
 
     @GET("shows/popular")
     override suspend fun popularShows(): List<ResponseShow>
 
     @GET("shows/recommended/{period}")
-    override suspend fun recommendedShows(@Path("period") period: String): List<ResponseShowUserCount>
+    override suspend fun recommendedShows(@Path("period") period: String): List<EnvelopeUserCount>
 
     @GET("shows/played/{period}")
-    override suspend fun mostPlayedShows(@Path("period") period: String): List<ResponseWrapperMostPlayedWatchedCollectedShow>
+    override suspend fun mostPlayedShows(@Path("period") period: String): List<EnvelopeViewStats>
 
     @GET("shows/watched/{period}")
-    override suspend fun mostWatchedShows(@Path("period") period: String): List<ResponseWrapperMostPlayedWatchedCollectedShow>
+    override suspend fun mostWatchedShows(@Path("period") period: String): List<EnvelopeViewStats>
 
     @GET("shows/anticipated")
-    override suspend fun mostAnticipatedShows(): List<ResponseWrapperListCountShow>
+    override suspend fun mostAnticipatedShows(): List<EnvelopeListCount>
 
     @GET("shows/{id}")
     override suspend fun show(@Path("id") id: String): ResponseShow
@@ -123,7 +119,7 @@ interface TraktDataSource : NetworkDataSource {
     override suspend fun showTranslations(@Path("id") id: String, @Path("language") language: String): List<ResponseTranslation>
 
     @GET("shows/{id}/people")
-    override suspend fun showPeople(@Path("id") id: String): ResponseCastCrewPerson
+    override suspend fun showPeople(@Path("id") id: String): ResponseCastCrew
 
     @GET("shows/{id}/ratings")
     override suspend fun showRatings(@Path("id") id: String): ResponseRating
@@ -149,7 +145,7 @@ interface TraktDataSource : NetworkDataSource {
     override suspend fun seasonsOfShow(@Path("id") id: String): List<ResponseSeason>
 
     @GET("shows/{id}/seasons/{season}/people")
-    override suspend fun seasonPeople(@Path("id") id: String, @Path("season") season: Int): ResponseCastCrewPerson
+    override suspend fun seasonPeople(@Path("id") id: String, @Path("season") season: Int): ResponseCastCrew
 
     @GET("shows/{id}/seasons/{season}/ratings")
     override suspend fun seasonRatings(@Path("id") id: String, @Path("season") season: Int): ResponseRating
@@ -179,7 +175,7 @@ interface TraktDataSource : NetworkDataSource {
         @Path("id") id: String,
         @Path("season") season: Int,
         @Path("episode") episode: Int
-    ): ResponseCastCrewPerson
+    ): ResponseCastCrew
 
     @GET("shows/{id}/seasons/{season}/episodes/{episode}/ratings")
     override suspend fun episodeRatings(
@@ -201,8 +197,13 @@ interface TraktDataSource : NetworkDataSource {
     override suspend fun person(@Path("id") id: String): ResponsePerson
 
     @GET("people/{id}/movies")
-    override suspend fun movieCredits(@Path("id") id: String): ResponseCastCrewMovie
+    override suspend fun movieCredits(@Path("id") id: String): ResponseCast
 
     @GET("people/{id}/shows")
-    override suspend fun showCredits(@Path("id") id: String): ResponseCastCrewShow
+    override suspend fun showCredits(@Path("id") id: String): ResponseCast
+
+    /** IMAGES */
+    @Headers("Fanart-Api: true")
+    @GET("${BuildConfig.FANART_BASE_URL}movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
+    override suspend fun poster(@Path("id") id: String): ResponseImages
 }

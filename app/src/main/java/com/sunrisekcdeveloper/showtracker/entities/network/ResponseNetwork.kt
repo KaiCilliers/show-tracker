@@ -16,15 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseMovie
 
-// TODO defs a new name - for all these wrappers - maybe WrapperViews
-data class ResponseWrapperMostPlayedWatchedCollected(
-    @Json(name = "watcher_count") private val watchers: Int,
-    @Json(name = "play_count") private val played: Int,
-    @Json(name = "collected_count") private val collected: Int,
-    @Json(name = "movie") private val movie: ResponseMovie
+data class ResponseNetwork(
+    @Json(name = "name") val name: String
 )

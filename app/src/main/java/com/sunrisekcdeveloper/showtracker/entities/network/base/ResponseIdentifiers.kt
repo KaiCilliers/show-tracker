@@ -39,9 +39,17 @@ class ResponseIdentifiers(
     @Json(name = "tmdb") val tmdb: Int,
     @Json(name = "tvdb") val tvdb: Int?,
 )
-// seasons dont have slugs (kinda a big deal to have slug nullable - i prefer redundancy over this)
-// TODO improve
-class ResponseIdentifiersSeason(
+
+/**
+ * Response identifiers no slug predicting using slugs a lot in project and I want to avoid
+ * null checks - only seasons and episodes have no slugs
+ *
+ * @property trakt
+ * @property imdb
+ * @property tmdb
+ * @property tvdb
+ */
+class ResponseIdentifiersNoSlug(
     @Json(name = "trakt") val trakt: Int,
     @Json(name = "imdb") val imdb: String?,
     @Json(name = "tmdb") val tmdb: Int?,

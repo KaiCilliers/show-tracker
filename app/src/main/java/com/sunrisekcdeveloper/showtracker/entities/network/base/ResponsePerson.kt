@@ -16,13 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseIdentifiers
 
-data class ResponseTranslation(
-    @Json(name = "title") private val title: String?,
-    @Json(name = "overview") private val overview: String?,
-    @Json(name = "tagline") private val tagline: String?,
-    @Json(name = "language") private val language: String
+data class ResponsePerson(
+    @Json(name = "name") val name: String,
+    @Json(name = "ids") val identifiers: ResponseIdentifiers
 )

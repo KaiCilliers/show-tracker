@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.moreentities
+package com.sunrisekcdeveloper.showtracker.entities.network
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.entities.network.base.ResponseShow
 
-data class ResponseWrapperListCountShow(
-    @Json(name = "list_count") val listCount: Int,
-    @Json(name = "show") val show: ResponseShow
+data class ResponseCastCrew(
+    @Json(name = "cast") val cast: List<ResponseCast>,
+    @Json(name = "crew") val crew: ResponseCrew
 )
