@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.util.state
 
+import java.lang.Exception
+
 sealed class ResourceOOP<T>(
     val data: T? = null,
     val message: String? = null
@@ -25,4 +27,10 @@ sealed class ResourceOOP<T>(
     class Success<T>(data: T) : ResourceOOP<T>(data)
     class Loading<T>(data: T? = null) : ResourceOOP<T>(data)
     class Error<T>(message: String, data: T? = null) : ResourceOOP<T>(data, message)
+}
+
+sealed class DataState<out T> {
+    data class Success<out T>(val data: T): DataState<T>()
+    data class Error(val exception: Exception): DataState<Nothing>()
+    object Loading: DataState<Nothing>()
 }

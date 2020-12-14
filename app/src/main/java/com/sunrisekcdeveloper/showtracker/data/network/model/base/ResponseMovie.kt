@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.model.Movie
 
 /**
  * Response Movie represents a network object containing basic information of a movie
@@ -32,4 +33,8 @@ data class ResponseMovie(
         @Json(name = "title") val title: String,
         @Json(name = "year") val year: Int?, // network results can give a null year
         @Json(name = "ids") val identifiers: ResponseIdentifiers
-)
+) {
+        fun asDomain() = Movie(
+                title = this.title
+        )
+}

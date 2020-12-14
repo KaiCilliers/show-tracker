@@ -70,8 +70,14 @@ class HomeFragment : Fragment() {
         )
     }
     private fun observeViewModel() {
+//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
+//            adapter.submitList(it)
+//        }
+//        viewModel.trendingMovies.subscribe(viewLifecycleOwner) {
+//            adapter.submit(listOf(it))
+//        }
         viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submit(it)
         }
     }
 }

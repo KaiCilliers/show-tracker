@@ -19,9 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.repository
 
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 
 interface RepositoryContract {
     suspend fun trendingMovies(): List<EnvelopeWatchers>
     suspend fun popularMovies(): List<ResponseMovie>
+//    suspend fun recommendedMovies(period: String = "weekly"): List<EnvelopeUserCount>
+//    suspend fun mostPlayedMovies(period: String = "weekly"): List<EnvelopeViewStats>
+//    suspend fun mostWatchedMovies(period: String = "weekly"): List<EnvelopeViewStats>
+//    suspend fun mostAnticipatedMovies(): List<EnvelopeListCount>
+//    suspend fun boxOffice(): List<EnvelopeRevenue>
+    suspend fun featuredMovies(): List<FeaturedList>
 }

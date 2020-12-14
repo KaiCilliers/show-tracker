@@ -20,7 +20,8 @@ package com.sunrisekcdeveloper.showtracker.repository
 
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 
 class MainRepository(
     private val networkSource: NetworkDataSource
@@ -28,4 +29,53 @@ class MainRepository(
     override suspend fun trendingMovies(): List<EnvelopeWatchers> = networkSource.trendingMovies()
 
     override suspend fun popularMovies(): List<ResponseMovie> = networkSource.popularMovies()
+
+//    override suspend fun recommendedMovies(period: String): List<EnvelopeUserCount> =
+//        networkSource.recommendedMovies(period)
+//
+//    override suspend fun mostPlayedMovies(period: String): List<EnvelopeViewStats> =
+//        networkSource.mostPlayedMovies(period)
+//
+//    override suspend fun mostWatchedMovies(period: String): List<EnvelopeViewStats> =
+//        networkSource.mostWatchedMovies(period)
+//
+//    override suspend fun mostAnticipatedMovies(): List<EnvelopeListCount> =
+//        networkSource.mostAnticipated()
+//
+//    override suspend fun boxOffice(): List<EnvelopeRevenue> =
+//        networkSource.boxOffice()
+
+    override suspend fun featuredMovies(): List<FeaturedList> {
+        val trending = networkSource.trendingMovies().map { it.movie!! }.map { it.asDomain() }
+        val popular = networkSource.popularMovies().map { it.asDomain() }
+        val recommended = networkSource.recommendedMovies().map { it.movie!! }.map { it.asDomain() }
+        val mostPlayed = networkSource.mostPlayedMovies().map { it.movie!! }.map { it.asDomain() }
+        val mostWatched = networkSource.mostWatchedMovies().map { it.movie!! }.map { it.asDomain() }
+        val mostAnticipated = networkSource.mostAnticipated().map { it.movie!! }.map { it.asDomain() }
+        val boxOffice = networkSource.boxOffice().map { it.movie }.map { it.asDomain() }
+
+        return listOf(
+            FeaturedList(
+                heading = "Trending Movies",
+                results = trending),
+            FeaturedList(
+                heading = "Popular Movies",
+                results = popular),
+            FeaturedList(
+                heading = "Recommended Movies",
+                results = recommended),
+            FeaturedList(
+                heading = "Most Played Movies",
+                results = mostPlayed),
+            FeaturedList(
+                heading = "Most Watched Movies",
+                results = mostWatched),
+            FeaturedList(
+                heading = "Anticipated Movies",
+                results = mostAnticipated),
+            FeaturedList(
+                heading = "Box Office Movies",
+                results = boxOffice)
+        )
+    }
 }
