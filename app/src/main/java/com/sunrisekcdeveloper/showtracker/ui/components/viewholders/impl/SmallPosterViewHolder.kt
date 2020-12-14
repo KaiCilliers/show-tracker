@@ -39,11 +39,11 @@ class SmallPosterViewHolder(
         binding.movie = item
         binding.clickListener = clickAction
 
-        Glide.with(binding.imgvMovieSmallPoster).load(
-            item.image)
-//            .diskCacheStrategy(DiskCacheStrategy.NONE)
-//            .skipMemoryCache(true)
-            .into(binding.imgvMovieSmallPoster)
+//        Glide.with(binding.imgvMovieSmallPoster).load(
+//            item.image)
+////            .diskCacheStrategy(DiskCacheStrategy.NONE)
+////            .skipMemoryCache(true)
+//            .into(binding.imgvMovieSmallPoster)
 
         binding.executePendingBindings()
     }

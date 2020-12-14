@@ -55,6 +55,7 @@
             android:padding="@dimen/padding_2"
             android:layout_marginEnd="@dimen/margin_24"
             android:scaleType="centerCrop"
+            android:src="@drawable/test"
             android:onClick="@{() -> clickListener.onClick(movie)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

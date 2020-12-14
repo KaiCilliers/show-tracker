@@ -42,6 +42,14 @@ object MainActivityModule {
     annotation class MainRepo
 
     @ActivityScoped
+    @Provides
+    fun provideDirectRepo(
+        @Trakt networkDataSource: NetworkDataSource
+    ) : MainRepository {
+        return MainRepository(networkDataSource)
+    }
+
+    @ActivityScoped
     @MainRepo
     @Provides
     fun provideMainRepository(

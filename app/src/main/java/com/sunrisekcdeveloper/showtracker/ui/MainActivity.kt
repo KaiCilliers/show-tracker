@@ -81,8 +81,8 @@ class MainActivity : AppCompatActivity() {
      * Go Temporary method to confirm results from remote services
      */
     suspend fun go() {
-        val s = repo.trendingMovies()
-        repo.popularMovies()
+//        val s = repo.trendingMovies()
+//        repo.popularMovies()
         /** MISCELLANEOUS */
 
 //        Timber.d("========================MOVIE GENRES========================")

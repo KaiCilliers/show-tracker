@@ -22,6 +22,10 @@ import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.flow.flow
+import retrofit2.Response
+import java.lang.Exception
 
 class MainRepository(
     private val networkSource: NetworkDataSource
@@ -44,6 +48,22 @@ class MainRepository(
 //
 //    override suspend fun boxOffice(): List<EnvelopeRevenue> =
 //        networkSource.boxOffice()
+
+    suspend fun test() = flow {
+        emit(Resource.Loading)
+        try {
+            val res = networkSource.test()
+            if (res.isSuccessful) {
+                emit(Resource.Success(res.body() ?: emptyList()))
+            } else {
+                emit(Resource.Error(
+                    Exception("${res.errorBody()}"), res.message()
+                ))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e, "${e.message}"))
+        }
+    }
 
     override suspend fun featuredMovies(): List<FeaturedList> {
         val trending = networkSource.trendingMovies().map { it.movie!! }.map { it.asDomain() }
