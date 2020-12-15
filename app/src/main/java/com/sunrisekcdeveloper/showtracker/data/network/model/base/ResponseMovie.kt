@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.base
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.data.local.MovieEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.model.Movie
 
 /**

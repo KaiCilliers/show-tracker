@@ -19,9 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.local
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
 @Dao
 interface MovieDao : BaseDao<MovieEntity> {

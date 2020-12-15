@@ -16,34 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local
+package com.sunrisekcdeveloper.showtracker.data.local.model.support
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.ShowEntity
 
-@Entity(tableName = "movies_table")
-data class MovieEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "movie_id")
-    val id: String,
-    val title: String,
-    val year: Int,
-    val tagline: String,
-    val overview: String,
-    val released: String,
-    val runtime: Int,
-    val country: String,
-    val trailerUrl: String,
-    val homepageUrl: String,
-    val status: String,
-    val rating: Float,
-    val votes: Int,
-    val commentCount: Int,
-    val updatedAt: String,
-    val language: String,
-    val translationsList: List<String>,
-    val genres: List<String>,
-    val certification: String
+@Entity(tableName = "tbl_genre")
+data class GenreEntity(
+    @Embedded val movie: MovieEntity?,
+    @Embedded val show: ShowEntity?,
+    @ColumnInfo(name = "genre_name")
+    val name: String
 )
-

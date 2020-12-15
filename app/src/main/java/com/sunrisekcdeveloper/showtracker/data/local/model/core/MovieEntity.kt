@@ -16,49 +16,34 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local
+package com.sunrisekcdeveloper.showtracker.data.local.model.core
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "shows_table")
-data class ShowEntity(
+@Entity(tableName = "movies_table")
+data class MovieEntity(
     @PrimaryKey
-    @ColumnInfo(name = "show_id")
+    @ColumnInfo(name = "movie_id")
     val id: String,
     val title: String,
+    val year: Int,
+    val tagline: String,
     val overview: String,
-    @ColumnInfo(name = "first_aired")
-    val firstAired: String,
-    @Embedded
-    @ColumnInfo(name = "airs")
-    val airtime: AirTime,
+    val released: String,
     val runtime: Int,
-    val certification: String,
-    val network: String,
     val country: String,
-    @ColumnInfo(name = "trailer_url")
     val trailerUrl: String,
-    @ColumnInfo(name = "homepage_url")
     val homepageUrl: String,
     val status: String,
     val rating: Float,
     val votes: Int,
-    @ColumnInfo(name = "comment_count")
     val commentCount: Int,
-    @ColumnInfo(name = "updated_at")
     val updatedAt: String,
     val language: String,
-    val translations: ArrayList<String>,
-    val genres: ArrayList<String>,
-    @ColumnInfo(name = "aired_episodes")
-    val airedEpisodes: Int
+    val translationsList: List<String>,
+    val genres: List<String>,
+    val certification: String
 )
-data class AirTime(
-    val day: String,
-    val time: String,
-    @ColumnInfo(name = "time_zone")
-    val timezone: String
-)
+

@@ -16,21 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local
+package com.sunrisekcdeveloper.showtracker.data.local.model.support
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Database(
-    entities = [MovieEntity::class],
-    version = 6,
-    exportSchema = false
+@Entity(tableName = "tbl_country")
+data class CountryEntity(
+    @PrimaryKey
+    @ColumnInfo(name = "country_code")
+    val code: String,
+    @ColumnInfo(name = "country_name")
+    val name: String
 )
-@TypeConverters(Converters::class)
-abstract class TrackerDatabase : RoomDatabase() {
-
-    abstract fun movieDao(): MovieDao
-
-}
