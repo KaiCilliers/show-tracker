@@ -22,22 +22,33 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import kotlinx.coroutines.launch
 
 /**
  * Home ViewModel
  *
  * @constructor Create empty Home view model
  */
-class HomeViewModel @ViewModelInject constructor() : ViewModel() {
+class HomeViewModel @ViewModelInject constructor(
+    @MainRepo val repo: RepositoryContract
+) : ViewModel() {
 
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()
     val featuredListData: LiveData<List<FeaturedList>>
         get() = _featuredListData
 
     init {
-        _featuredListData.value = fakeFeaturedData()
+//        _featuredListData.value = fakeFeaturedData()
+        featuredMovies()
+    }
+
+    private fun featuredMovies() = viewModelScope.launch {
+        _featuredListData.value = repo.featuredMovies()
     }
 
     private fun fakeFeaturedData(): List<FeaturedList> {

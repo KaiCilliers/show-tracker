@@ -29,6 +29,10 @@ import retrofit2.http.Path
 
 // TODO remove repeating headers
 interface TraktDataSource : NetworkDataSource {
+
+    @GET("movies/popular")
+    override suspend fun test(): Response<List<ResponseMovie>>
+
     /** TODO MISCELLANEOUS */
     @GET("genres/{type}")
     override suspend fun genres(@Path("type") type: String): List<ResponseGenre>

@@ -22,15 +22,29 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.model.SuggestionListModel
+import com.sunrisekcdeveloper.showtracker.repository.MainRepository
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 /**
  * Progress ViewModel
  *
  * @constructor Create empty Progress view model
  */
-class ProgressViewModel @ViewModelInject constructor() : ViewModel() {
+class ProgressViewModel @ViewModelInject constructor(
+    private val repo: MainRepository
+) : ViewModel() {
+
+    private val _test = MutableLiveData<Resource<List<ResponseMovie>>>()
+    val test: LiveData<Resource<List<ResponseMovie>>>
+        get() = _test
 
     private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()
     val suggestionListData: LiveData<List<SuggestionListModel>>
@@ -41,8 +55,17 @@ class ProgressViewModel @ViewModelInject constructor() : ViewModel() {
         get() = _movieListData
 
     init {
+        tester()
         _suggestionListData.value = fakeSuggestionData()
         _movieListData.value = fakeMovieData()
+    }
+
+    private fun tester() {
+        viewModelScope.launch {
+            repo.test().onEach {
+                _test.value = it
+            }.launchIn(viewModelScope)
+        }
     }
 
     private fun fakeSuggestionData(): List<SuggestionListModel> {

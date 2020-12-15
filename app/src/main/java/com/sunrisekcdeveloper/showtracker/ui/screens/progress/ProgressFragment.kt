@@ -30,6 +30,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -87,6 +88,24 @@ class ProgressFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewModel.test.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                    Timber.d("LOADING !!!!")
+                }
+                is Resource.Success -> {
+                    Timber.d("SUCCESS !!!")
+                    it.data.forEach { movie ->
+                        Timber.d("$movie")
+                    }
+                }
+                is Resource.Error -> {
+                    Timber.d("ERROR  !!!!")
+                    Timber.d(it.message)
+                    throw it.exception
+                }
+            }
+        }
         viewModel.movieListData.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
