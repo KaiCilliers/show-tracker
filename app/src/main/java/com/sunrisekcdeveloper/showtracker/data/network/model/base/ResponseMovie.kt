@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.data.local.MovieEntity
 import com.sunrisekcdeveloper.showtracker.model.Movie
 
 /**
@@ -36,5 +37,26 @@ data class ResponseMovie(
 ) {
         fun asDomain() = Movie(
                 title = this.title
+        )
+        fun asEntity() = MovieEntity(
+                id = this.identifiers.slug,
+                title = this.title,
+                year = this.year ?: -1,
+                tagline = "",
+                overview = "",
+                released = "",
+                runtime = 0,
+                country = "",
+                trailerUrl = "",
+                homepageUrl = "",
+                status = "",
+                rating = 0f,
+                votes = -1,
+                commentCount = -1,
+                updatedAt = "",
+                language = "",
+                translationsList = arrayListOf(),
+                genres = arrayListOf(),
+                certification = ""
         )
 }

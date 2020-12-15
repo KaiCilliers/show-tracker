@@ -26,6 +26,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 // TODO remove repeating headers
 interface TraktDataSource : NetworkDataSource {
@@ -43,6 +44,9 @@ interface TraktDataSource : NetworkDataSource {
     @GET("networks")
     override suspend fun networks(): List<ResponseNetwork>
 
+    @GET("countries/{type}")
+    override suspend fun countries(@Path("type") type: String): List<ResponseCountry>
+
     /** TODO MOVIES */
     @GET("movies/trending")
     override suspend fun trendingMovies(): List<EnvelopeWatchers>
@@ -50,8 +54,12 @@ interface TraktDataSource : NetworkDataSource {
     @GET("movies/popular")
     override suspend fun popularMovies(): List<ResponseMovie>
 
+    // TODO implement this on all Extended calls
     @GET("movies/recommended/{period}")
-    override suspend fun recommendedMovies(@Path("period") period: String): List<EnvelopeUserCount>
+    override suspend fun recommendedMovies(
+        @Path("period") period: String,
+        @Query("extended") extended: String
+    ): List<EnvelopeUserCount>
 
     @GET("movies/played/{period}")
     override suspend fun mostPlayedMovies(@Path("period") period: String): List<EnvelopeViewStats>
