@@ -283,4 +283,68 @@ object RelationshipExamples {
 //    @Transaction
 //    @Query("SELECT * FROM UserN")
 //    fun getUsersWithPlaylistsAndSongs(): List<UserWithPlaylistsAndSongs>
+
+    /**
+     * TODO
+     *  Advanced use case: Returning a different object which is not
+     *  an entity but contains some of the fields
+     *  1)  Simply specify the entity in the @Relation annotation and
+     *      return your different object
+     */
+    @Entity
+    data class DogA(
+        @PrimaryKey val dogId: Long,
+        val dogOwnerId: Long,
+        val name: String,
+        val cuteness: Int,
+        val barkVolume: Int,
+        val breed: String
+    )
+    @Entity
+    data class OwnerA(
+        @PrimaryKey val ownerId: Long,
+        val name: String
+    )
+    // Normal case of returning a list of owners and their dogs
+    data class OwnerWithDogs(
+        @Embedded val owner: OwnerA,
+        @Relation(
+            parentColumn = "ownerId",
+            entityColumn = "dogOwnerId"
+        )
+        val dogs: List<DogA>
+    )
+    // Advanced use case
+    data class PupA(
+        val name: String,
+        val cuteness: Int = 11
+    )
+    data class OwnerWithPups(
+        @Embedded val owner: OwnerA,
+        @Relation(
+            parentColumn = "ownerId",
+            entity = DogA::class,
+            entityColumn = "dogOwnerId"
+        )
+        val dogs: List<PupA>
+    )
+
+    /**
+     * TODO
+     *  Advanced use case: Returning specific columns from an entity
+     *  1)  Simply specify the required fields in the projection
+     *      parameter in @Relation
+     *  2)  Remember to also specify the entity parameter any time
+     *      you don't return the entity itself
+     */
+    data class OwnerWithDogsB(
+        @Embedded val owner: OwnerA,
+        @Relation(
+            parentColumn = "ownerId",
+            entity = DogA::class,
+            entityColumn = "dogOwnerId",
+            projection = ["name"]
+        )
+        val dogNames: List<String>
+    )
 }
