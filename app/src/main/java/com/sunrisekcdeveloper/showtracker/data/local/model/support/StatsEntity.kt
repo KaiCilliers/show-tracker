@@ -22,11 +22,22 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "fk_genre_media_slug")
-    val mediaSlug: String, // FK
-    @ColumnInfo(name = "genre_name")
-    val name: String
+// TODO default value of -1 instead of making fields nullable?
+@Entity(tableName = "tbl_stats")
+data class StatsEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "stats_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "stats_watcher_count")
+    val watchers: Int,
+    @ColumnInfo(name = "stats_play_count")
+    val plays: Int,
+    @ColumnInfo(name = "stats_comment_count")
+    val comments: Int,
+    @ColumnInfo(name = "stats_list_count")
+    val lists: Int,
+    @ColumnInfo(name = "stats_vote_count")
+    val votes: Int,
+    @ColumnInfo(name = "stats_recommended_count")
+    val recommends: Int
 )

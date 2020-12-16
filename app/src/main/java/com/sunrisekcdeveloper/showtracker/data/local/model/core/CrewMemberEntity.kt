@@ -16,17 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.support
+package com.sunrisekcdeveloper.showtracker.data.local.model.core
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "fk_genre_media_slug")
+@Entity(tableName = "tbl_crew_member")
+data class CrewMemberEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "crew_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_crew_media_slug")
     val mediaSlug: String, // FK
-    @ColumnInfo(name = "genre_name")
-    val name: String
+    @ColumnInfo(name = "fk_crew_person_slug")
+    val personSlug: String, // FK PersonEntity
+    @ColumnInfo(name = "crew_section")
+    val section: String
 )

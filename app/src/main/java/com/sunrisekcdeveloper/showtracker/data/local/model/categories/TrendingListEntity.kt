@@ -16,17 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.support
+package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "fk_genre_media_slug")
+@Entity(tableName = "tbl_trending")
+data class TrendingListEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "trending_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_trending_media_slug")
     val mediaSlug: String, // FK
-    @ColumnInfo(name = "genre_name")
-    val name: String
+    @ColumnInfo(name = "trending_watcher_count")
+    val watchers: Int
 )

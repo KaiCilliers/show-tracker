@@ -22,11 +22,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "fk_genre_media_slug")
+@Entity(tableName = "tbl_title_alias")
+data class TitleAliasEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "alias_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_alias_media_slug")
     val mediaSlug: String, // FK
-    @ColumnInfo(name = "genre_name")
-    val name: String
+    @ColumnInfo(name = "alias_title")
+    val title: String,
+    @ColumnInfo(name = "alias_country")
+    val country: String
 )
