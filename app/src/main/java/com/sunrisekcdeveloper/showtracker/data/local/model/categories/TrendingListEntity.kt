@@ -28,7 +28,7 @@ data class TrendingListEntity(
     @ColumnInfo(name = "trending_id")
     val id: Long = 0L,
     @ColumnInfo(name = "fk_trending_media_slug")
-    val mediaSlug: String, // FK
+    val mediaSlug: String,
     @ColumnInfo(name = "trending_watcher_count")
     val watchers: Int
 )

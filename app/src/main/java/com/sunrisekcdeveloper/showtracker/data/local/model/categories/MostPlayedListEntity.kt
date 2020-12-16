@@ -28,7 +28,7 @@ data class MostPlayedListEntity(
     @ColumnInfo(name = "played_id")
     val id: Long = 0L,
     @ColumnInfo(name = "fk_played_media_slug")
-    val mediaSlug: String, // FK
+    val mediaSlug: String,
     @ColumnInfo(name = "played_watcher_count")
     val watchers: Int,
     @ColumnInfo(name = "played_play_count")

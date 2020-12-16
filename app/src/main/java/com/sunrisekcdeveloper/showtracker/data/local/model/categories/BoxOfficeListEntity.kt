@@ -28,9 +28,7 @@ data class BoxOfficeListEntity(
     @ColumnInfo(name = "box_id")
     val id: Long = 0L,
     @ColumnInfo(name = "fk_box_media_slug")
-    val mediaSlug: String, // FK
-    @ColumnInfo(name = "box_user_count")
-    val users: Int,
+    val mediaSlug: String,
     @ColumnInfo(name = "box_period")
     val period: String
 )

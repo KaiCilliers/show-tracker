@@ -25,8 +25,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "tbl_genre")
 data class GenreEntity(
     @PrimaryKey
-    @ColumnInfo(name = "fk_genre_media_slug")
-    val mediaSlug: String, // FK
+    @ColumnInfo(name = "genre_slug")
+    val slug: String,
     @ColumnInfo(name = "genre_name")
     val name: String
 )

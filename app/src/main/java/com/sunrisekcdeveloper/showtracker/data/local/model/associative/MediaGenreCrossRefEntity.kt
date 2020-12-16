@@ -16,23 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.categories
+package com.sunrisekcdeveloper.showtracker.data.local.model.associative
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_most_watched")
-data class MostWatchedListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "watched_id")
-    val id: Long = 0L,
-    @ColumnInfo(name = "fk_watched_media_slug")
+@Entity(
+    tableName = "tbl_xref_media_genre",
+    primaryKeys = ["fk_xref_media_slug", "fk_xref_genre_slug"]
+)
+data class MediaGenreCrossRefEntity(
+    @ColumnInfo(name = "fk_xref_media_slug")
     val mediaSlug: String,
-    @ColumnInfo(name = "watched_watcher_count")
-    val watchers: Int,
-    @ColumnInfo(name = "watched_play_count")
-    val plays: Int,
-    @ColumnInfo(name = "watched_collected_count")
-    val collectedCount: Int
+    @ColumnInfo(name = "fk_xref_genre_slug")
+    val genreSlug: String
 )

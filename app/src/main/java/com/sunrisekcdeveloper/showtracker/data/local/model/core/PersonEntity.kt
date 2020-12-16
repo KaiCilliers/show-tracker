@@ -16,23 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.categories
+package com.sunrisekcdeveloper.showtracker.data.local.model.core
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_most_watched")
-data class MostWatchedListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "watched_id")
-    val id: Long = 0L,
-    @ColumnInfo(name = "fk_watched_media_slug")
-    val mediaSlug: String,
-    @ColumnInfo(name = "watched_watcher_count")
-    val watchers: Int,
-    @ColumnInfo(name = "watched_play_count")
-    val plays: Int,
-    @ColumnInfo(name = "watched_collected_count")
-    val collectedCount: Int
+@Entity(tableName = "tbl_person")
+data class PersonEntity(
+    @PrimaryKey
+    @ColumnInfo(name = "person_slug")
+    val slug: String,
+    @ColumnInfo(name = "person_name")
+    val name: String
 )
