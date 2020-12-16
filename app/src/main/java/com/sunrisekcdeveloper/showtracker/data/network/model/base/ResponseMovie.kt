@@ -39,24 +39,20 @@ data class ResponseMovie(
                 title = this.title
         )
         fun asEntity() = MovieEntity(
-                id = this.identifiers.slug,
+                slug = this.identifiers.slug,
                 title = this.title,
-                year = this.year ?: -1,
+                year = "$year",
                 tagline = "",
                 overview = "",
                 released = "",
                 runtime = 0,
-                country = "",
                 trailerUrl = "",
                 homepageUrl = "",
                 status = "",
-                rating = 0f,
+                rating = 0,
                 votes = -1,
                 commentCount = -1,
                 updatedAt = "",
-                language = "",
-                translationsList = arrayListOf(),
-                genres = arrayListOf(),
                 certification = ""
         )
 }

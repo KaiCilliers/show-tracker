@@ -16,17 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.support
+package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "genre_slug")
-    val slug: String,
-    @ColumnInfo(name = "genre_name")
-    val name: String
+@Entity(tableName = "tbl_box_office")
+data class BoxOfficeListEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "box_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_box_media_slug")
+    val mediaSlug: String,
+    @ColumnInfo(name = "box_period")
+    val period: String
 )

@@ -22,28 +22,38 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "movies_table")
+@Entity(tableName = "tbl_movie")
 data class MovieEntity(
     @PrimaryKey
-    @ColumnInfo(name = "movie_id")
-    val id: String,
+    @ColumnInfo(name = "movie_slug")
+    val slug: String,
+    @ColumnInfo(name = "movie_title")
     val title: String,
-    val year: Int,
+    @ColumnInfo(name = "movie_year")
+    val year: String,
+    @ColumnInfo(name = "movie_tagline")
     val tagline: String,
+    @ColumnInfo(name = "movie_overview")
     val overview: String,
+    @ColumnInfo(name = "movie_released_date")
     val released: String,
-    val runtime: Int,
-    val country: String,
-    val trailerUrl: String,
-    val homepageUrl: String,
-    val status: String,
-    val rating: Float,
-    val votes: Int,
-    val commentCount: Int,
+    @ColumnInfo(name = "movie_updated_at_date")
     val updatedAt: String,
-    val language: String,
-    val translationsList: List<String>,
-    val genres: List<String>,
+    @ColumnInfo(name = "movie_runtime")
+    val runtime: Int,
+    @ColumnInfo(name = "movie_trailer_url")
+    val trailerUrl: String?,
+    @ColumnInfo(name = "movie_homepage_url")
+    val homepageUrl: String,
+    @ColumnInfo(name = "movie_status")
+    val status: String,
+    @ColumnInfo(name = "movie_vote_count")
+    val votes: Int,
+    @ColumnInfo(name = "movie_rating")
+    val rating: Int,
+    @ColumnInfo(name = "movie_comment_count")
+    val commentCount: Int,
+    @ColumnInfo(name = "movie_certification")
     val certification: String
 )
 

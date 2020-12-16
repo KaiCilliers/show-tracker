@@ -22,11 +22,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "genre_slug")
-    val slug: String,
-    @ColumnInfo(name = "genre_name")
+@Entity(tableName = "tbl_job")
+data class JobEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "job_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_job_crew_id")
+    val crewId: Long, // FK CrewMemberEntity
+    @ColumnInfo(name = "job_name")
     val name: String
 )

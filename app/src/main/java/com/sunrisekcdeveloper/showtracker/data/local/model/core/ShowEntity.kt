@@ -23,42 +23,43 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "shows_table")
+@Entity(tableName = "tbl_show")
 data class ShowEntity(
     @PrimaryKey
-    @ColumnInfo(name = "show_id")
-    val id: String,
+    @ColumnInfo(name = "show_slug")
+    val slug: String,
+    @ColumnInfo(name = "show_title")
     val title: String,
+    @ColumnInfo(name = "show_year")
+    val year: String,
+    @ColumnInfo(name = "show_overview")
     val overview: String,
-    @ColumnInfo(name = "first_aired")
+    @ColumnInfo(name = "show_first_aired_date")
     val firstAired: String,
-    @Embedded
-    @ColumnInfo(name = "airs")
-    val airtime: AirTime,
+    @ColumnInfo(name = "show_usual_air_day")
+    val usualAirDay: String,
+    @ColumnInfo(name = "show_usual_air_time")
+    val usualAirTime: String,
+    @ColumnInfo(name = "show_usual_air_timezone")
+    val usualAirTimezone: String,
+    @ColumnInfo(name = "show_runtime")
     val runtime: Int,
+    @ColumnInfo(name = "show_certification")
     val certification: String,
-    val network: String,
-    val country: String,
-    @ColumnInfo(name = "trailer_url")
-    val trailerUrl: String,
-    @ColumnInfo(name = "homepage_url")
+    @ColumnInfo(name = "show_trailer_url")
+    val trailerUrl: String?,
+    @ColumnInfo(name = "show_homepage_url")
     val homepageUrl: String,
+    @ColumnInfo(name = "show_status")
     val status: String,
-    val rating: Float,
+    @ColumnInfo(name = "show_vote_count")
     val votes: Int,
-    @ColumnInfo(name = "comment_count")
+    @ColumnInfo(name = "show_rating")
+    val rating: Int,
+    @ColumnInfo(name = "show_comment_count")
     val commentCount: Int,
-    @ColumnInfo(name = "updated_at")
+    @ColumnInfo(name = "show_updated_at_date")
     val updatedAt: String,
-    val language: String,
-    val translations: ArrayList<String>,
-    val genres: ArrayList<String>,
-    @ColumnInfo(name = "aired_episodes")
+    @ColumnInfo(name = "show_aired_episodes")
     val airedEpisodes: Int
-)
-data class AirTime(
-    val day: String,
-    val time: String,
-    @ColumnInfo(name = "time_zone")
-    val timezone: String
 )

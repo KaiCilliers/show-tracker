@@ -22,11 +22,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
+@Entity(tableName = "tbl_network")
+data class NetworkEntity(
     @PrimaryKey
-    @ColumnInfo(name = "genre_slug")
-    val slug: String,
-    @ColumnInfo(name = "genre_name")
+    @ColumnInfo(name = "network_name")
     val name: String
 )

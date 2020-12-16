@@ -16,17 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.support
+package com.sunrisekcdeveloper.showtracker.data.local.model.core
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_genre")
-data class GenreEntity(
+@Entity(tableName = "tbl_person")
+data class PersonEntity(
     @PrimaryKey
-    @ColumnInfo(name = "genre_slug")
+    @ColumnInfo(name = "person_slug")
     val slug: String,
-    @ColumnInfo(name = "genre_name")
+    @ColumnInfo(name = "person_name")
     val name: String
 )
