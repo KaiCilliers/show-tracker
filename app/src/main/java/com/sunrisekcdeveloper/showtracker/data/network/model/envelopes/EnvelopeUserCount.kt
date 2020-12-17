@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.envelopes
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.RecommendedListEntity
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseShow
 
@@ -26,4 +27,10 @@ data class EnvelopeUserCount(
     @Json(name = "user_count") val userCount: Int,
     @Json(name = "movie") val movie: ResponseMovie?,
     @Json(name = "show") val show: ResponseShow?
-)
+) {
+    fun asRecommendedMovie(period: String) = RecommendedListEntity(
+        mediaSlug = movie!!.identifiers.slug,
+        users = userCount,
+        period = period
+    )
+}

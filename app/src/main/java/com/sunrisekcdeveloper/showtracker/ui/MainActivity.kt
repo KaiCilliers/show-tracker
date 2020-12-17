@@ -26,6 +26,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.Trakt
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
@@ -85,7 +86,57 @@ class MainActivity : AppCompatActivity() {
      */
     suspend fun go() {
 
+        dao.test()
+        // Trending movies
+        val trendingData = traktService.trendingMovies()
+        val movies = trendingData.map { it.movie!!.asEntity() }
+        val trendings = trendingData.map { it.asTrendingMovieEntity() }
 
+        // Popular Movies
+        val popularData = traktService.popularMovies()
+        val popMov = popularData.map { it.asEntity() }
+        val pops = popularData.map { PopularListEntity.from(it) }
+
+        // All types of recommended movies
+        val recDataDaily = traktService.recommendedMovies("daily")
+        val recDayMov = recDataDaily.map { it.movie!!.asEntity() }
+        val recDaily = recDataDaily.map { it.asRecommendedMovie("daily") }
+
+        val recDataWeekly = traktService.recommendedMovies()
+        val recWeekMov = recDataWeekly.map { it.movie!!.asEntity() }
+        val recWeek = recDataWeekly.map { it.asRecommendedMovie("weekly") }
+
+        val recDataMonthly = traktService.recommendedMovies("monthly")
+        val recMonthMov = recDataMonthly.map { it.movie!!.asEntity() }
+        val recMonth = recDataMonthly.map { it.asRecommendedMovie("monthly") }
+
+        val recDataYearly = traktService.recommendedMovies("yearly")
+        val recYearMov = recDataYearly.map { it.movie!!.asEntity() }
+        val recYear = recDataYearly.map { it.asRecommendedMovie("yearly") }
+
+        Timber.d("GOT ALL THE DATA - DELAY BEFORE INSERTING DATA TO DATABASE")
+        delay(10000)
+        Timber.d("Incoming")
+        delay(5000)
+
+        dao.insertMovie(*popMov.toTypedArray())
+        dao.insertMovie(*recDayMov.toTypedArray())
+        dao.insertMovie(*recWeekMov.toTypedArray())
+        dao.insertMovie(*recMonthMov.toTypedArray())
+        dao.insertMovie(*recYearMov.toTypedArray())
+        dao.insertMovie(*movies.toTypedArray())
+
+        Timber.d("INSERTED MOVIES")
+        delay(6000)
+
+        dao.upsertTrendingMedia(*trendings.toTypedArray())
+        dao.upsertPopularMedia(*pops.toTypedArray())
+        dao.upsertRecommendedMedia(*recWeek.toTypedArray())
+        dao.upsertRecommendedMedia(*recDaily.toTypedArray())
+        dao.upsertRecommendedMedia(*recMonth.toTypedArray())
+        dao.upsertRecommendedMedia(*recYear.toTypedArray())
+
+        Timber.d("DONE")
 
 //        delay(8000)
 //        val daily = traktService.recommendedMovies("daily", "full")

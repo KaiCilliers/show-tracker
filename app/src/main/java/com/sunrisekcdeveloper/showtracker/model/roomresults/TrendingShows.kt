@@ -16,21 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.categories
+package com.sunrisekcdeveloper.showtracker.model.roomresults
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.ShowEntity
 
-@Entity(tableName = "tbl_recommended")
-data class RecommendedListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "rec_id")
-    val id: Long = 0L,
-    @ColumnInfo(name = "fk_rec_media_slug")
-    val mediaSlug: String,
-    @ColumnInfo(name = "rec_user_count")
-    val users: Int,
-    @ColumnInfo(name = "rec_period_count")
-    val period: String
+data class TrendingShows(
+    @Embedded val show: ShowEntity,
+    @Relation(
+        parentColumn = "show_slug",
+        entityColumn = "fk_trending_media_slug"
+    )
+    val data: TrendingListEntity
 )

@@ -21,6 +21,8 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 
 @Entity(tableName = "tbl_popular")
 data class PopularListEntity(
@@ -29,4 +31,10 @@ data class PopularListEntity(
     val id: Long = 0L,
     @ColumnInfo(name = "fk_popular_media_slug")
     val mediaSlug: String
-)
+) {
+    companion object {
+        fun from(movie: ResponseMovie): PopularListEntity {
+            return PopularListEntity(mediaSlug = movie.identifiers.slug)
+        }
+    }
+}
