@@ -18,18 +18,50 @@
 
 package com.sunrisekcdeveloper.showtracker.repository
 
+import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
-import retrofit2.Response
+import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import java.lang.Exception
 
 class MainRepository(
-    private val networkSource: NetworkDataSource
+    private val networkSource: NetworkDataSource,
+    private val dao: MovieDao
 ) : RepositoryContract {
+
+    override suspend fun trendingMoviesNewFlow() = flow {
+        Timber.d("repo - loading emit")
+        emit(Resource.Loading)
+        try {
+            Timber.d("inside try")
+            var db = dao.trendingMovies()
+            Timber.d("check if db results empty")
+            if (db.isEmpty()) {
+                Timber.d("db is empty")
+                val network = networkSource.trendingMovies()
+                val movies = network.map { it.movie!!.asEntity() }
+                val trending = network.map { it.asTrendingMovieEntity() }
+                dao.insertMovie(*movies.toTypedArray())
+                dao.upsertTrendingMedia(*trending.toTypedArray())
+                db = dao.trendingMovies()
+                Timber.d("if - success")
+                emit(Resource.Success(db))
+            } else {
+                Timber.d("else - emit success")
+                emit(Resource.Success(db))
+            }
+        } catch (e: Exception) {
+            Timber.d("emit error")
+            emit(Resource.Error(e, "Failure in Repository"))
+        }
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun trendingMovies(): List<EnvelopeWatchers> = networkSource.trendingMovies()
 
     override suspend fun popularMovies(): List<ResponseMovie> = networkSource.popularMovies()

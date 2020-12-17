@@ -76,8 +76,12 @@ class HomeFragment : Fragment() {
 //        viewModel.trendingMovies.subscribe(viewLifecycleOwner) {
 //            adapter.submit(listOf(it))
 //        }
-        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-            adapter.submit(it)
+//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
+//            adapter.submit(it)
+//        }
+        Timber.d("gona observe this value")
+        viewModel.trendingMovies.subscribe(viewLifecycleOwner) {
+            adapter.submit(listOf(it))
         }
     }
 }

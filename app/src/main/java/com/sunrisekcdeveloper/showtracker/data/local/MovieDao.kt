@@ -23,7 +23,7 @@ import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularLis
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.RecommendedListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMovies
+import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMoviesNew
 
 @Dao
 abstract class MovieDao {
@@ -32,8 +32,8 @@ abstract class MovieDao {
     abstract fun test(): List<String>
     // trending
     @Transaction
-    @Query("SELECT * FROM tbl_movie")
-    abstract fun trendingMovies(): List<TrendingMovies>
+    @Query("SELECT * FROM tbl_trending")
+    abstract fun trendingMovies(): List<TrendingMoviesNew>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertMovie(vararg movie: MovieEntity)

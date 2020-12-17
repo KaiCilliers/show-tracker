@@ -27,7 +27,10 @@ import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Home ViewModel
@@ -38,13 +41,39 @@ class HomeViewModel @ViewModelInject constructor(
     @MainRepo val repo: RepositoryContract
 ) : ViewModel() {
 
+    private val _trendingMovies = MutableLiveData<FeaturedList>()
+    val trendingMovies: LiveData<FeaturedList>
+        get() = _trendingMovies
+
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()
     val featuredListData: LiveData<List<FeaturedList>>
         get() = _featuredListData
 
     init {
 //        _featuredListData.value = fakeFeaturedData()
-        featuredMovies()
+//        featuredMovies()
+        Timber.d("gona call init function")
+        trendingMovies()
+    }
+
+    private fun trendingMovies() = viewModelScope.launch {
+        Timber.d("inside - gona call repo")
+        repo.trendingMoviesNewFlow().collect {
+            Timber.d("inside collect")
+            when(it) {
+                is Resource.Loading -> { Timber.d("loading")}
+                is Resource.Error -> { Timber.d("erorr")
+                    throw it.exception
+                }
+                is Resource.Success -> {
+                    Timber.d("success and setting value")
+                _trendingMovies.value = FeaturedList(
+                    heading = "Trending Local DB",
+                    results = it.data.map { value -> value.movie.asDomain() }
+                )
+                }
+            }
+        }
     }
 
     private fun featuredMovies() = viewModelScope.launch {

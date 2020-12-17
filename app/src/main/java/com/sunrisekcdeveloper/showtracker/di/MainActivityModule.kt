@@ -22,6 +22,7 @@ import android.app.Activity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.Trakt
 import com.sunrisekcdeveloper.showtracker.repository.MainRepository
@@ -44,18 +45,20 @@ object MainActivityModule {
     @ActivityScoped
     @Provides
     fun provideDirectRepo(
-        @Trakt networkDataSource: NetworkDataSource
+        @Trakt networkDataSource: NetworkDataSource,
+        movieDao: MovieDao
     ) : MainRepository {
-        return MainRepository(networkDataSource)
+        return MainRepository(networkDataSource, movieDao)
     }
 
     @ActivityScoped
     @MainRepo
     @Provides
     fun provideMainRepository(
-        @Trakt networkDataSource: NetworkDataSource
+        @Trakt networkDataSource: NetworkDataSource,
+        movieDao: MovieDao
     ): RepositoryContract {
-        return MainRepository(networkDataSource)
+        return MainRepository(networkDataSource, movieDao)
     }
 
     @Provides

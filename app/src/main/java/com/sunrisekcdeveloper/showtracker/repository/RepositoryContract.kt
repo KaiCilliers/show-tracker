@@ -21,8 +21,12 @@ package com.sunrisekcdeveloper.showtracker.repository
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMoviesNew
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface RepositoryContract {
+    suspend fun trendingMoviesNewFlow(): Flow<Resource<List<TrendingMoviesNew>>>
     suspend fun trendingMovies(): List<EnvelopeWatchers>
     suspend fun popularMovies(): List<ResponseMovie>
 //    suspend fun recommendedMovies(period: String = "weekly"): List<EnvelopeUserCount>

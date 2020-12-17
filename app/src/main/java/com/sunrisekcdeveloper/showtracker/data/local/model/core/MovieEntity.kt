@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.core
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.model.Movie
 
 @Entity(tableName = "tbl_movie")
 data class MovieEntity(
@@ -55,5 +56,9 @@ data class MovieEntity(
     val commentCount: Int,
     @ColumnInfo(name = "movie_certification")
     val certification: String
-)
+) {
+    fun asDomain() = Movie(
+        title = title
+    )
+}
 

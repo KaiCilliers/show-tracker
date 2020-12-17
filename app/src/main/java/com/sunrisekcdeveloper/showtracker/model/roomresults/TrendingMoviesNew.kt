@@ -29,5 +29,14 @@ data class TrendingMovies(
         parentColumn = "movie_slug",
         entityColumn = "fk_trending_media_slug"
     )
-    val data: TrendingListEntity
+    val data: TrendingListEntity?
+)
+
+data class TrendingMoviesNew(
+    @Embedded val data: TrendingListEntity,
+    @Relation(
+        parentColumn = "fk_trending_media_slug",
+        entityColumn = "movie_slug"
+    )
+    val movie: MovieEntity
 )
