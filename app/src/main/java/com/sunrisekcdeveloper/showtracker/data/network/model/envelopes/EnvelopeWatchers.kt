@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.envelopes
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseShow
 
@@ -35,4 +36,9 @@ data class EnvelopeWatchers(
     @Json(name = "watchers") val watchers: Int,
     @Json(name = "movie") val movie: ResponseMovie?,
     @Json(name = "show") val show: ResponseShow?
-)
+) {
+    fun asTrendingMovieEntity() = TrendingListEntity(
+        mediaSlug = movie!!.identifiers.slug,
+        watchers = watchers
+    )
+}

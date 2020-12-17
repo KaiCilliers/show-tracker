@@ -16,21 +16,25 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.network.model.envelopes
+package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 
-import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.RecommendedListEntity
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseShow
 
-data class EnvelopeUserCount(
-    @Json(name = "user_count") val userCount: Int,
-    @Json(name = "movie") val movie: ResponseMovie?,
-    @Json(name = "show") val show: ResponseShow?
+@Entity(tableName = "tbl_popular")
+data class PopularListEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "popular_id")
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_popular_media_slug")
+    val mediaSlug: String
 ) {
-    fun asRecommendedMovie(period: String) = RecommendedListEntity(
-        mediaSlug = movie!!.identifiers.slug,
-        users = userCount,
-        period = period
-    )
+    companion object {
+        fun from(movie: ResponseMovie): PopularListEntity {
+            return PopularListEntity(mediaSlug = movie.identifiers.slug)
+        }
+    }
 }

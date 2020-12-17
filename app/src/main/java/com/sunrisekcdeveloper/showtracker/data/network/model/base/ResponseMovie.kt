@@ -19,6 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.model.Movie
 
 /**
  * Response Movie represents a network object containing basic information of a movie
@@ -32,4 +34,25 @@ data class ResponseMovie(
         @Json(name = "title") val title: String,
         @Json(name = "year") val year: Int?, // network results can give a null year
         @Json(name = "ids") val identifiers: ResponseIdentifiers
-)
+) {
+        fun asDomain() = Movie(
+                title = this.title
+        )
+        fun asEntity() = MovieEntity(
+                slug = this.identifiers.slug,
+                title = this.title,
+                year = "$year",
+                tagline = "",
+                overview = "",
+                released = "",
+                runtime = 0,
+                trailerUrl = "",
+                homepageUrl = "",
+                status = "",
+                rating = 0,
+                votes = -1,
+                commentCount = -1,
+                updatedAt = "",
+                certification = ""
+        )
+}

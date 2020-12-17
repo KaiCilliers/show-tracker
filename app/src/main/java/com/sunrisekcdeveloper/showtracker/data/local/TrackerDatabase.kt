@@ -16,21 +16,27 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.network.model.envelopes
+package com.sunrisekcdeveloper.showtracker.data.local
 
-import com.squareup.moshi.Json
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.RecommendedListEntity
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseShow
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-data class EnvelopeUserCount(
-    @Json(name = "user_count") val userCount: Int,
-    @Json(name = "movie") val movie: ResponseMovie?,
-    @Json(name = "show") val show: ResponseShow?
-) {
-    fun asRecommendedMovie(period: String) = RecommendedListEntity(
-        mediaSlug = movie!!.identifiers.slug,
-        users = userCount,
-        period = period
-    )
+@Database(
+    entities = [
+        MovieEntity::class, TrendingListEntity::class,
+        PopularListEntity::class, RecommendedListEntity::class
+    ],
+    version = 8,
+    exportSchema = false
+)
+@TypeConverters(Converters::class)
+abstract class TrackerDatabase : RoomDatabase() {
+
+    abstract fun movieDao(): MovieDao
+
 }

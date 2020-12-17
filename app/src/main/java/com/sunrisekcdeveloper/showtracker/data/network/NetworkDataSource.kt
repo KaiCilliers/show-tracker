@@ -24,6 +24,7 @@ import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import retrofit2.Response
 
 interface NetworkDataSource {
+    suspend fun test(): Response<List<ResponseMovie>>
     /** TODO MISCELLANEOUS */
     /**
      * Genres all possible genres that can be attached to a show or movie
@@ -48,6 +49,14 @@ interface NetworkDataSource {
      */
     suspend fun networks(): List<ResponseNetwork>
 
+    /**
+     * Countries all possible countries with unique codes
+     *
+     * @param type Possible values: movies, shows
+     * @return
+     */
+    suspend fun countries(type: String): List<ResponseCountry>
+
     /** TODO MOVIES */
     /**
      * Trending movies all movies currently being watched sorted with most
@@ -71,12 +80,17 @@ interface NetworkDataSource {
      * Recommended movies in specified time period
      * Supports Pagination, Extended, Filter
      *
+     * TODO implement the optional query parameters to calls that can be Extended
+     *
      * @param period Optional.
      *      Possible values:  daily , weekly , monthly , yearly , all
      *      Default value: weekly
      * @return
      */
-    suspend fun recommendedMovies(period: String = "weekly"): List<EnvelopeUserCount>
+    suspend fun recommendedMovies(
+        period: String = "weekly",
+        extended: String = ""
+    ): List<EnvelopeUserCount>
 
     /**
      * Most played movies in specified time period (single account can watch multiple times)

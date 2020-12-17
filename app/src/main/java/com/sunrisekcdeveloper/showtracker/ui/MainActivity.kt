@@ -25,13 +25,19 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.Trakt
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
+import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -43,6 +49,8 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject @Trakt lateinit var traktService: NetworkDataSource
+    @Inject @MainRepo lateinit var repo: RepositoryContract
+    @Inject lateinit var dao: MovieDao
 
     private val ioScope by lazy { CoroutineScope(Dispatchers.IO) }
 
@@ -77,8 +85,225 @@ class MainActivity : AppCompatActivity() {
      * Go Temporary method to confirm results from remote services
      */
     suspend fun go() {
-        val s = traktService.trendingMovies()
-        traktService.poster("10195")
+//
+//        dao.test()
+//        // Trending movies
+//        val trendingData = traktService.trendingMovies()
+//        val movies = trendingData.map { it.movie!!.asEntity() }
+//        val trendings = trendingData.map { it.asTrendingMovieEntity() }
+//
+//        // Popular Movies
+//        val popularData = traktService.popularMovies()
+//        val popMov = popularData.map { it.asEntity() }
+//        val pops = popularData.map { PopularListEntity.from(it) }
+//
+//        // All types of recommended movies
+//        val recDataDaily = traktService.recommendedMovies("daily")
+//        val recDayMov = recDataDaily.map { it.movie!!.asEntity() }
+//        val recDaily = recDataDaily.map { it.asRecommendedMovie("daily") }
+//
+//        val recDataWeekly = traktService.recommendedMovies()
+//        val recWeekMov = recDataWeekly.map { it.movie!!.asEntity() }
+//        val recWeek = recDataWeekly.map { it.asRecommendedMovie("weekly") }
+//
+//        val recDataMonthly = traktService.recommendedMovies("monthly")
+//        val recMonthMov = recDataMonthly.map { it.movie!!.asEntity() }
+//        val recMonth = recDataMonthly.map { it.asRecommendedMovie("monthly") }
+//
+//        val recDataYearly = traktService.recommendedMovies("yearly")
+//        val recYearMov = recDataYearly.map { it.movie!!.asEntity() }
+//        val recYear = recDataYearly.map { it.asRecommendedMovie("yearly") }
+//
+//        Timber.d("GOT ALL THE DATA - DELAY BEFORE INSERTING DATA TO DATABASE")
+//        delay(10000)
+//        Timber.d("Incoming")
+//        delay(5000)
+//
+//        dao.insertMovie(*popMov.toTypedArray())
+//        dao.insertMovie(*recDayMov.toTypedArray())
+//        dao.insertMovie(*recWeekMov.toTypedArray())
+//        dao.insertMovie(*recMonthMov.toTypedArray())
+//        dao.insertMovie(*recYearMov.toTypedArray())
+//        dao.insertMovie(*movies.toTypedArray())
+//
+//        Timber.d("INSERTED MOVIES")
+//        delay(6000)
+//
+//        dao.upsertTrendingMedia(*trendings.toTypedArray())
+//        dao.upsertPopularMedia(*pops.toTypedArray())
+//        dao.upsertRecommendedMedia(*recWeek.toTypedArray())
+//        dao.upsertRecommendedMedia(*recDaily.toTypedArray())
+//        dao.upsertRecommendedMedia(*recMonth.toTypedArray())
+//        dao.upsertRecommendedMedia(*recYear.toTypedArray())
+//
+//        Timber.d("DONE")
+
+//        delay(8000)
+//        val daily = traktService.recommendedMovies("daily", "full")
+//        val weekly = traktService.recommendedMovies("weekly", "full")
+//        val monthly = traktService.recommendedMovies("monthly", "full")
+//        val yearly = traktService.recommendedMovies("yearly", "full")
+//        val all = traktService.recommendedMovies("all", "full")
+//        delay(8000)
+//
+//        Timber.d("daily=========================================================================================")
+//        daily.forEach {
+//            Timber.d("${it.movie} user_count are ${it.userCount}")
+//        }
+//        Timber.d("weekly=========================================================================================")
+//        weekly.forEach {
+//            Timber.d("${it.movie} user_count are ${it.userCount}")
+//        }
+//        Timber.d("monthy=========================================================================================")
+//        monthly.forEach {
+//            Timber.d("${it.movie} user_count are ${it.userCount}")
+//        }
+//        Timber.d("yearlyy=========================================================================================")
+//        yearly.forEach {
+//            Timber.d("${it.movie} user_count are ${it.userCount}")
+//        }
+//        Timber.d("all=========================================================================================")
+//        all.forEach {
+//            Timber.d("${it.movie} user_count are ${it.userCount}")
+//        }
+
+//        val genreMovie = traktService.genres("movies")
+//        val genreShow = traktService.genres("shows")
+//        delay(8000)
+//        genreMovie.forEach {movie ->
+//            genreShow.forEach { show ->
+//                if (movie.slug == show.slug) {
+//                    Timber.d("Matching slugs")
+//                    if (movie.name == show.name) {
+//                        Timber.d("GOOD match")
+//                    } else {
+//                        Timber.d("BAD match")
+//                    }
+//                }
+//            }
+//        }
+
+//        val movies = traktService.countries("movies")
+//        val shows = traktService.countries("shows")
+//        delay(8000)
+//        movies.forEach { movie ->
+//            shows.forEach { show ->
+//                if (movie.code == show.code) {
+//                    Timber.d("We've got a match!")
+//                    Timber.d("Movie code: ${movie.code} is equal to Show code: ${show.code}")
+//                    if (movie.name == show.name) {
+//                        Timber.d("GOOD: Movie value: ${movie.name} is equal to Show value: ${show.name}")
+//                    } else {
+//                        Timber.d("BAD: Movie value: ${movie.name} is NOT equal to Show value: ${show.name}")
+//                    }
+//                }
+//            }
+//        }
+
+//        dao.findMovie()
+////        dao.clear()
+//        val popular = traktService.popularMovies()
+//        val trending = traktService.trendingMovies()
+//        val anticipated = traktService.mostAnticipated()
+//
+//        Timber.d("FETCHED ALL NETWORK SOURCES")
+//        delay(8000)
+//
+//        val pop = popular.map { it.asEntity() }
+//        dao.insert(*pop.toTypedArray())
+//        Timber.d("INSERTED FIRST SET OF DATA")
+//        delay(15000)
+//        Timber.d("GOING TO NEXT STEP IN 5 seconds")
+//        delay(5000)
+//
+//        val trend = trending.map { it.movie!!.asEntity() }
+//        dao.insert(*trend.toTypedArray())
+//        Timber.d("INSERTED SECOND SET OF DATA")
+//        delay(15000)
+//        Timber.d("GOING TO NEXT STEP IN 5 seconds")
+//        delay(5000)
+//
+//        val ternd2 = trending.map { it.asMovieEntity() }
+//        dao.insertTrendingList(*ternd2.toTypedArray())
+//        Timber.d("INSERTED TRENDING TABLE SET OF DATA")
+//        delay(15000)
+//        Timber.d("GOING TO NEXT STEP IN 5 seconds")
+//        delay(5000)
+//
+//        val ant = anticipated.map { it.movie!!.asEntity() }
+//        dao.insert(*ant.toTypedArray())
+//        Timber.d("INSERTED THIRD SET OF DATA")
+//        delay(15000)
+//        Timber.d("GOING TO NEXT STEP IN 5 seconds")
+//        delay(5000)
+//
+//        val res = dao.trendingMovies()
+//        Timber.d("$res")
+
+
+
+//        dao2.clearDog()
+//        dao2.clearOwner()
+//
+//        dao2.insertOwners(
+//            Owner("one", "James"),
+//            Owner("two", "Peter"),
+//            Owner("three", "Alex"),
+//            Owner("four", "Jack")
+//        )
+//        Timber.d("inserted owners")
+//        delay(10000)
+//        dao2.insertDogs(
+//            Dog(10, "one", "doggo1", 1414),
+//            Dog(11, "four", "doggo2", 1333),
+//            Dog(12, "two", "doggo3", 1661),
+//            Dog(13, "three", "doggo4", 1999)
+//        )
+//        Timber.d("insered doggos")
+//        delay(10000)
+//
+//        val res = dao2.getDogsAndOwners()
+//        Timber.d("$res")
+
+//        dao2.clearMovieTest()
+//        dao2.clearTrendingTest()
+
+//        val pop = popular.map { it.asTest() }
+//        dao2.insertMovies(*pop.toTypedArray())
+//
+//
+//        Timber.d("pop: ${dao2.allMovieTest()}")
+//        delay(10000)
+//
+//        val ant = anticipated.map { it.movie!!.asTest() }
+//        dao2.insertMovies(*ant.toTypedArray())
+//
+//        Timber.d("ant: ${dao2.allMovieTest()}")
+//        delay(10000)
+////
+//        val trend = trending.map { it.asMovieEntityTest() }
+//        val trendMov = trending.map { it.movie!!.asTest() }
+//
+//
+//        delay(10000)
+//
+//        dao2.insertTrending(*trend.toTypedArray())
+//        dao2.insertMovies(*trendMov.toTypedArray())
+//
+//        Timber.d("both")
+//        Timber.d("${dao2.allMovieTest()}")
+//        delay(5000)
+//        Timber.d("${dao2.allTrendingTest()}")
+//        delay(5000)
+//
+//        val resss = dao2.myWay()
+//        Timber.d("/n/n/n\n\n\n\n$resss")
+
+
+
+
+//        val s = repo.trendingMovies()
+//        repo.popularMovies()
         /** MISCELLANEOUS */
 
 //        Timber.d("========================MOVIE GENRES========================")
