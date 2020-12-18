@@ -25,20 +25,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.Trakt
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
-import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
-import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Main activity Primary container for fragments that provide app functionality

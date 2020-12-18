@@ -22,24 +22,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
-import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
-import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMoviesNew
-import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Home ViewModel
