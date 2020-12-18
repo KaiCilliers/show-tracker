@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.repository
+package com.sunrisekcdeveloper.showtracker.data.network
 
-class MainRepository() : RepositoryContract {
-
+interface NetworkDataSourceContract {
 }

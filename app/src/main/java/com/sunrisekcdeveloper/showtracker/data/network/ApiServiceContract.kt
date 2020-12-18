@@ -23,7 +23,7 @@ import com.sunrisekcdeveloper.showtracker.data.network.model.base.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import retrofit2.Response
 
-interface NetworkDataSource {
+interface ApiServiceContract {
     /** TODO MISCELLANEOUS */
     /**
      * Genres all possible genres that can be attached to a show or movie
