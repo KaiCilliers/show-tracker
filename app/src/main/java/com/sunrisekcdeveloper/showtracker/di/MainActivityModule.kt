@@ -43,22 +43,13 @@ object MainActivityModule {
     annotation class MainRepo
 
     @ActivityScoped
-    @Provides
-    fun provideDirectRepo(
-        @Trakt networkDataSource: NetworkDataSource,
-        movieDao: MovieDao
-    ) : MainRepository {
-        return MainRepository(networkDataSource, movieDao)
-    }
-
-    @ActivityScoped
     @MainRepo
     @Provides
     fun provideMainRepository(
         @Trakt networkDataSource: NetworkDataSource,
         movieDao: MovieDao
     ): RepositoryContract {
-        return MainRepository(networkDataSource, movieDao)
+        return MainRepository()
     }
 
     @Provides

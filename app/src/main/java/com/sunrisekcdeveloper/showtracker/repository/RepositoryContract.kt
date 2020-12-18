@@ -26,13 +26,5 @@ import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryContract {
-    suspend fun trendingMoviesNewFlow(): Flow<Resource<List<TrendingMoviesNew>>>
-    suspend fun trendingMovies(): List<EnvelopeWatchers>
-    suspend fun popularMovies(): List<ResponseMovie>
-//    suspend fun recommendedMovies(period: String = "weekly"): List<EnvelopeUserCount>
-//    suspend fun mostPlayedMovies(period: String = "weekly"): List<EnvelopeViewStats>
-//    suspend fun mostWatchedMovies(period: String = "weekly"): List<EnvelopeViewStats>
-//    suspend fun mostAnticipatedMovies(): List<EnvelopeListCount>
-//    suspend fun boxOffice(): List<EnvelopeRevenue>
-    suspend fun featuredMovies(): List<FeaturedList>
+
 }
