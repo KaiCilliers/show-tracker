@@ -46,63 +46,15 @@ import javax.inject.Inject
  *
  * @constructor Create empty Home view model
  */
-class HomeViewModel @ViewModelInject constructor(
-    @MainRepo val repo: RepositoryContract,
-    val dao: MovieDao
-) : ViewModel() {
+class HomeViewModel @ViewModelInject constructor() : ViewModel() {
 
-    private val _trendingMovies = MutableLiveData<Resource<List<TrendingMoviesNew>>>()
-    val trendingMovies: LiveData<Resource<List<TrendingMoviesNew>>>
-        get() = _trendingMovies
-
+    // TODO all this is still test data
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()
     val featuredListData: LiveData<List<FeaturedList>>
         get() = _featuredListData
 
     init {
-//        _featuredListData.value = fakeFeaturedData()
-//        featuredMovies()
-        Timber.d("gona call init function")
-        trendingMovies()
-    }
-
-    private fun trendingMovies() = viewModelScope.launch {
-//        Timber.d("adsakdoakaldaskdoka")
-//        repo.trendingMoviesNewFlow().onEach {
-//            Timber.d("ok?")
-//            _trendingMovies.value = it
-//        }.launchIn(viewModelScope)
-        Timber.d("inside - gona call repo")
-        repo.trendingMoviesNewFlow().collect {
-            Timber.d("inside collect")
-            when(it) {
-                is Resource.Loading -> { Timber.d("loading")}
-                is Resource.Error -> { Timber.d("erorr")
-                    throw it.exception
-                }
-                is Resource.Success -> {
-                    Timber.d("success and setting value")
-                _trendingMovies.value = it
-                    delayed()
-                }
-            }
-        }
-    }
-
-    private var count = 0
-
-    private suspend fun delayed() {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (count == 0) {
-                count++
-                delay(10000)
-                dao.tempClearTopThree()
-            }
-        }
-    }
-
-    private fun featuredMovies() = viewModelScope.launch {
-        _featuredListData.value = repo.featuredMovies()
+        _featuredListData.value = fakeFeaturedData()
     }
 
     private fun fakeFeaturedData(): List<FeaturedList> {

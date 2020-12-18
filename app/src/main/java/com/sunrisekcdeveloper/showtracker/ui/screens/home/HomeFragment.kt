@@ -83,34 +83,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-//            adapter.submitList(it)
-//        }
-//        viewModel.trendingMovies.subscribe(viewLifecycleOwner) {
-//            adapter.submit(listOf(it))
-//        }
-//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-//            adapter.submit(it)
-//        }
-        viewModel.trendingMovies.subscribe(viewLifecycleOwner) { resourceState ->
-            when (resourceState) {
-                is Resource.Success -> {
-                    adapter.submit(
-                        listOf(
-                            FeaturedList(
-                                heading = "Trending Local DB",
-                                results = resourceState.data.map { value -> value.movie.asDomain() }
-                            )
-                        )
-                    )
-                }
-                is Resource.Loading -> {
-                    Timber.d("LOADING")
-                }
-                is Resource.Error -> {
-                    throw resourceState.exception
-                }
-            }
+        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 }
