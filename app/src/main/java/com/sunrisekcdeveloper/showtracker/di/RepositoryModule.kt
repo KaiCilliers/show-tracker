@@ -18,6 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
+import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
 import com.sunrisekcdeveloper.showtracker.repository.MainRepository
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
@@ -38,6 +41,9 @@ object RepositoryModule {
     @ActivityRetainedScoped
     @MainRepo
     @Provides
-    fun provideMainRepository(): RepositoryContract =
-        MainRepository()
+    fun provideMainRepository(
+        dao: MovieDao,
+        @DataSourceTrakt remote: NetworkDataSourceContract
+    ): RepositoryContract =
+        MainRepository(dao, remote)
 }

@@ -46,6 +46,10 @@ class MovieSummaryAdapter : BaseListAdapter<SuggestionListModel, RecyclerView.Vi
         submitList(list)
     }
 
+    override fun submit(item: SuggestionListModel) {
+        TODO("Not yet implemented")
+    }
+
     // Temporal Coupling introduced having to call this function before setting Recycler's adapter
     override fun addOnClickAction(action: ClickActionContract) { clickAction = action }
 

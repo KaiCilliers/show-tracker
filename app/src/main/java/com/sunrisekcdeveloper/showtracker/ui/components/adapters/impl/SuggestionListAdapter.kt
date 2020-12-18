@@ -46,6 +46,12 @@ class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHo
         submitList(list)
     }
 
+    override fun submit(item: FeaturedList) {
+        val newList = listOf(*data.toTypedArray(), item)
+        data = newList
+        submitList(data)
+    }
+
     // Temporal Coupling introduced having to call this function before setting Recycler's adapter
     override fun addOnClickAction(action: ClickActionContract) { clickAction = action }
 

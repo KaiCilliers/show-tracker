@@ -18,5 +18,50 @@
 
 package com.sunrisekcdeveloper.showtracker.data.network
 
-class TraktDataSource(val api: ApiServiceContract) : NetworkDataSourceContract {
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeRevenue
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import retrofit2.Response
+import timber.log.Timber
+import java.lang.Exception
+import javax.inject.Inject
+
+class TraktDataSource @Inject constructor(
+    @TraktApi private val api: ApiServiceContract
+) : NetworkDataSourceContract {
+    override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
+        api.boxOffice()
+    }
+
+    override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = result {
+        api.trendingMovies()
+    }
+
+    override suspend fun fetchPop(): Resource<List<ResponseMovie>> = result {
+        api.popularMovies()
+    }
+
+
+    private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T> {
+        return try {
+            val response = request()
+            if (response.isSuccessful) {
+                val body = response.body()
+                body?.let {
+                    return Resource.Success(it)
+                }
+            }
+            error("${response.code()} ${response.message()}")
+        } catch (e: Exception) {
+            error(e.message ?: e.toString(), e)
+        }
+    }
+
+    private fun <T> error(message: String, e: Exception): Resource<T> {
+        Timber.e(message)
+        return Resource.Error("Network call has failed for the following reason: $message")
+    }
 }

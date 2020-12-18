@@ -47,10 +47,10 @@ interface TraktApiService : ApiServiceContract {
     /** TODO MOVIES */
 
     @GET("movies/trending")
-    override suspend fun trendingMovies(): List<EnvelopeWatchers>
+    override suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
 
     @GET("movies/popular")
-    override suspend fun popularMovies(): List<ResponseMovie>
+    override suspend fun popularMovies(): Response<List<ResponseMovie>>
 
     // TODO implement this on all Extended calls
     @GET("movies/recommended/{period}")
@@ -69,7 +69,7 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun mostAnticipated(): List<EnvelopeListCount>
 
     @GET("movies/boxoffice")
-    override suspend fun boxOffice(): List<EnvelopeRevenue>
+    override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     @GET("movies/{id}")
     override suspend fun movie(@Path("id") id: String): ResponseMovie

@@ -19,27 +19,52 @@
 package com.sunrisekcdeveloper.showtracker.ui.screens.home
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 /**
  * Home ViewModel
  *
  * @constructor Create empty Home view model
  */
-class HomeViewModel @ViewModelInject constructor() : ViewModel() {
+@ExperimentalCoroutinesApi
+class HomeViewModel @ViewModelInject constructor(
+    @MainRepo private val repo: RepositoryContract
+) : ViewModel() {
+
+    val trend = repo.trending().asLiveData()
+    val pop = repo.popular().asLiveData()
+    val box = repo.box().asLiveData()
+
+    val savingGrace = repo.repoSavingGrace()
+        .onStart { emit(Resource.Loading) }
+        .asLiveData()
+
+//    init {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            repo.tempUpdateCache()
+//        }
+//    }
 
     // TODO all this is still test data
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()
     val featuredListData: LiveData<List<FeaturedList>>
         get() = _featuredListData
 
-    init {
-        _featuredListData.value = fakeFeaturedData()
-    }
+//    init {
+//        _featuredListData.value = fakeFeaturedData()
+//    }
 
     private fun fakeFeaturedData(): List<FeaturedList> {
         return listOf(

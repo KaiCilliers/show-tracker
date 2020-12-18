@@ -16,12 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.util.datastate
+package com.sunrisekcdeveloper.showtracker.model.roomresults
 
-import java.lang.Exception
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-sealed class Resource<out T> {
-    data class Success<out T>(val data: T): Resource<T>()
-    data class Error(val message: String): Resource<Nothing>()
-    object Loading: Resource<Nothing>()
-}
+data class TrendingMovies(
+    @Embedded val data: TrendingListEntity,
+    @Relation(
+        parentColumn = "fk_trending_media_slug",
+        entityColumn = "movie_slug"
+    )
+    val movie: MovieEntity
+)

@@ -32,6 +32,13 @@ interface AdapterContract<in T> {
     fun submit(list: List<T>)
 
     /**
+     * Submit
+     *
+     * @param item
+     */
+    fun submit(item: T)
+
+    /**
      * Add on click action defines a click action that a ViewHolder might require, thus not all
      * adapter will require this method
      *

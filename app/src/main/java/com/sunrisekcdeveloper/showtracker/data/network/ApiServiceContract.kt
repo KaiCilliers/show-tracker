@@ -64,7 +64,7 @@ interface ApiServiceContract {
      *
      * @return
      */
-    suspend fun trendingMovies(): List<EnvelopeWatchers>
+    suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
 
     /**
      * Popular movies popularity calculated using rating percentage and the number
@@ -73,7 +73,7 @@ interface ApiServiceContract {
      *
      * @return
      */
-    suspend fun popularMovies(): List<ResponseMovie>
+    suspend fun popularMovies(): Response<List<ResponseMovie>>
 
     /**
      * Recommended movies in specified time period
@@ -130,7 +130,7 @@ interface ApiServiceContract {
      *
      * @return
      */
-    suspend fun boxOffice(): List<EnvelopeRevenue>
+    suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     /**
      * Movie with minimal details

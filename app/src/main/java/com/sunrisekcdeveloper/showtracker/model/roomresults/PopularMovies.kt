@@ -20,22 +20,13 @@ package com.sunrisekcdeveloper.showtracker.model.roomresults
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-data class TrendingMovies(
-    @Embedded val movie: MovieEntity,
+data class PopularMovies(
+    @Embedded val data: PopularListEntity,
     @Relation(
-        parentColumn = "movie_slug",
-        entityColumn = "fk_trending_media_slug"
-    )
-    val data: TrendingListEntity?
-)
-
-data class TrendingMoviesNew(
-    @Embedded val data: TrendingListEntity,
-    @Relation(
-        parentColumn = "fk_trending_media_slug",
+        parentColumn = "fk_popular_media_slug",
         entityColumn = "movie_slug"
     )
     val movie: MovieEntity

@@ -81,6 +81,7 @@ class ProgressFragment : Fragment() {
         upComingAdapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Any) {
                 Timber.d("SPECIAL click: $item")
+                viewModel.deleteSingleMovie()
             }
         })
         binding.rcUpcoming.adapter = upComingAdapter
@@ -88,6 +89,9 @@ class ProgressFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewModel.movies.subscribe(viewLifecycleOwner) {
+            Timber.d("${it.count()}")
+        }
         viewModel.movieListData.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
         }

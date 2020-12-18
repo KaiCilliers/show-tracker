@@ -83,8 +83,27 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.savingGrace.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> { Timber.d("Loading") }
+                is Resource.Success -> { Timber.d("Success: ${it.data}") }
+                is Resource.Error -> { Timber.d("Error: ${it.message}") }
+            }
         }
+//        viewModel.box.subscribe(viewLifecycleOwner) {
+//            Timber.d("$it")
+//            adapter.submit(it)
+//        }
+//        viewModel.pop.subscribe(viewLifecycleOwner) {
+//            Timber.d("$it")
+//            adapter.submit(it)
+//        }
+//        viewModel.trend.subscribe(viewLifecycleOwner) {
+//            Timber.d("$it")
+//            adapter.submit(it)
+//        }
+//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
+//            adapter.submitList(it)
+//        }
     }
 }
