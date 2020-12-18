@@ -38,14 +38,9 @@ import kotlinx.coroutines.launch
  *
  * @constructor Create empty Progress view model
  */
-class ProgressViewModel @ViewModelInject constructor(
-    private val repo: MainRepository
-) : ViewModel() {
+class ProgressViewModel @ViewModelInject constructor() : ViewModel() {
 
-    private val _test = MutableLiveData<Resource<List<ResponseMovie>>>()
-    val test: LiveData<Resource<List<ResponseMovie>>>
-        get() = _test
-
+    // TODO all this code is still test data
     private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()
     val suggestionListData: LiveData<List<SuggestionListModel>>
         get() = _suggestionListData
@@ -55,17 +50,8 @@ class ProgressViewModel @ViewModelInject constructor(
         get() = _movieListData
 
     init {
-        tester()
         _suggestionListData.value = fakeSuggestionData()
         _movieListData.value = fakeMovieData()
-    }
-
-    private fun tester() {
-        viewModelScope.launch {
-            repo.test().onEach {
-                _test.value = it
-            }.launchIn(viewModelScope)
-        }
     }
 
     private fun fakeSuggestionData(): List<SuggestionListModel> {

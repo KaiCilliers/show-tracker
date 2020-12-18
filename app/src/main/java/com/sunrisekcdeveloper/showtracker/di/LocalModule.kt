@@ -25,25 +25,19 @@ import com.sunrisekcdeveloper.showtracker.data.local.TrackerDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Singleton
 
 /**
  * Local module
  *
- * TODO Scope to ApplicationComponent with Singleton annotations
- *  Scoped to activity due to injecting into Activity for testing
- *
  * @constructor Create empty Local module
  */
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(ApplicationComponent::class)
 object LocalModule {
-    @ActivityScoped
+    @Singleton
     @Provides
     fun provideDatabase(
         @ApplicationContext context: Context
@@ -54,7 +48,7 @@ object LocalModule {
         .fallbackToDestructiveMigration()
         .build()
 
-    @ActivityScoped
+    @Singleton
     @Provides
     fun provideMovieDao(db: TrackerDatabase): MovieDao = db.movieDao()
 }

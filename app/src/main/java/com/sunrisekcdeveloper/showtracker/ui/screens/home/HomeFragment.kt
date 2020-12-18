@@ -26,11 +26,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
+import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,19 +47,25 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    @Inject lateinit var adapter: SuggestionListAdapter
+    @Inject
+    lateinit var adapter: SuggestionListAdapter
 
     private lateinit var binding: FragmentHomeBinding
 
     private val viewModel: HomeViewModel by viewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
         return binding.root
     }
+
     private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
@@ -69,19 +81,10 @@ class HomeFragment : Fragment() {
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
     }
+
     private fun observeViewModel() {
-//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-//            adapter.submitList(it)
-//        }
-//        viewModel.trendingMovies.subscribe(viewLifecycleOwner) {
-//            adapter.submit(listOf(it))
-//        }
-//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-//            adapter.submit(it)
-//        }
-        Timber.d("gona observe this value")
-        viewModel.trendingMovies.subscribe(viewLifecycleOwner) {
-            adapter.submit(listOf(it))
+        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 }

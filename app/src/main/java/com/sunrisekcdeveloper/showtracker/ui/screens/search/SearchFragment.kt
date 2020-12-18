@@ -51,7 +51,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
@@ -76,6 +76,7 @@ class SearchFragment : Fragment() {
         )
     }
     private fun observeViewModel() {
+        // TODO replace test data
         viewModel.movieListData.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
         }

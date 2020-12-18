@@ -39,6 +39,8 @@ class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHo
     private var data: List<FeaturedList> = listOf()
     private lateinit var clickAction: ClickActionContract
 
+    // TODO be able to submit a single item at a time then just append and resubmit the entire list
+    //  on this end. Also perhaps have an option to refresh it with a new list?
     override fun submit(list: List<FeaturedList>) {
         this.data = list
         submitList(list)

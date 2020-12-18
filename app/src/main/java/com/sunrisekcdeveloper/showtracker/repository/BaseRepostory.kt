@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.repository
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import retrofit2.Response
 
+// TODO make abstract? Also this is one way of implementing the safe api call
 open class BaseRepostory {
     suspend fun <T> safeApiRequest(req: suspend () -> Response<T>): Resource<T> {
         val response = req.invoke()

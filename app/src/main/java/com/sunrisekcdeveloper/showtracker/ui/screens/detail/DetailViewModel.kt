@@ -31,6 +31,7 @@ import com.sunrisekcdeveloper.showtracker.model.Movie
  */
 class DetailViewModel @ViewModelInject constructor() : ViewModel() {
 
+    // TODO this is still all test data
     private val _movieListData = MutableLiveData<List<Movie>>()
     val movieListData: LiveData<List<Movie>>
         get() = _movieListData

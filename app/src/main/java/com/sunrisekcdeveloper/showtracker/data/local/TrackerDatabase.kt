@@ -34,7 +34,6 @@ import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
     version = 8,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
 abstract class TrackerDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
