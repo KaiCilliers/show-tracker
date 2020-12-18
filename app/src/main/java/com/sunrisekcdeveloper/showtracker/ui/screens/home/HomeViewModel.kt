@@ -23,14 +23,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.di.MainActivityModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMoviesNew
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Home ViewModel
@@ -38,11 +47,12 @@ import timber.log.Timber
  * @constructor Create empty Home view model
  */
 class HomeViewModel @ViewModelInject constructor(
-    @MainRepo val repo: RepositoryContract
+    @MainRepo val repo: RepositoryContract,
+    val dao: MovieDao
 ) : ViewModel() {
 
-    private val _trendingMovies = MutableLiveData<FeaturedList>()
-    val trendingMovies: LiveData<FeaturedList>
+    private val _trendingMovies = MutableLiveData<Resource<List<TrendingMoviesNew>>>()
+    val trendingMovies: LiveData<Resource<List<TrendingMoviesNew>>>
         get() = _trendingMovies
 
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()
@@ -57,6 +67,11 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     private fun trendingMovies() = viewModelScope.launch {
+//        Timber.d("adsakdoakaldaskdoka")
+//        repo.trendingMoviesNewFlow().onEach {
+//            Timber.d("ok?")
+//            _trendingMovies.value = it
+//        }.launchIn(viewModelScope)
         Timber.d("inside - gona call repo")
         repo.trendingMoviesNewFlow().collect {
             Timber.d("inside collect")
@@ -67,11 +82,21 @@ class HomeViewModel @ViewModelInject constructor(
                 }
                 is Resource.Success -> {
                     Timber.d("success and setting value")
-                _trendingMovies.value = FeaturedList(
-                    heading = "Trending Local DB",
-                    results = it.data.map { value -> value.movie.asDomain() }
-                )
+                _trendingMovies.value = it
+                    delayed()
                 }
+            }
+        }
+    }
+
+    private var count = 0
+
+    private suspend fun delayed() {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (count == 0) {
+                count++
+                delay(10000)
+                dao.tempClearTopThree()
             }
         }
     }

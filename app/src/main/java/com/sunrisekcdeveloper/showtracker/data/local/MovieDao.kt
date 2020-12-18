@@ -24,6 +24,7 @@ import com.sunrisekcdeveloper.showtracker.data.local.model.categories.Recommende
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMoviesNew
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class MovieDao {
@@ -33,7 +34,18 @@ abstract class MovieDao {
     // trending
     @Transaction
     @Query("SELECT * FROM tbl_trending")
-    abstract fun trendingMovies(): List<TrendingMoviesNew>
+    abstract fun trendingMovies(): List<TrendingMoviesNew> // todo this shit sould return flow if you want to observe changes in the table...
+
+    @Query("""
+        DELETE FROM tbl_trending
+        WHERE fk_trending_media_slug IN (
+            SELECT fk_trending_media_slug
+            FROM tbl_trending
+            ORDER BY fk_trending_media_slug DESC
+            LIMIT 1
+        )
+    """)
+    abstract fun tempClearTopThree()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertMovie(vararg movie: MovieEntity)

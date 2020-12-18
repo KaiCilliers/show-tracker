@@ -36,28 +36,22 @@ class MainRepository(
 ) : RepositoryContract {
 
     override suspend fun trendingMoviesNewFlow() = flow {
-        Timber.d("repo - loading emit")
+        Timber.d("OKOKOKOKOKOKO")
         emit(Resource.Loading)
         try {
-            Timber.d("inside try")
             var db = dao.trendingMovies()
-            Timber.d("check if db results empty")
             if (db.isEmpty()) {
-                Timber.d("db is empty")
                 val network = networkSource.trendingMovies()
                 val movies = network.map { it.movie!!.asEntity() }
                 val trending = network.map { it.asTrendingMovieEntity() }
                 dao.insertMovie(*movies.toTypedArray())
                 dao.upsertTrendingMedia(*trending.toTypedArray())
                 db = dao.trendingMovies()
-                Timber.d("if - success")
                 emit(Resource.Success(db))
             } else {
-                Timber.d("else - emit success")
                 emit(Resource.Success(db))
             }
         } catch (e: Exception) {
-            Timber.d("emit error")
             emit(Resource.Error(e, "Failure in Repository"))
         }
     }.flowOn(Dispatchers.IO)
