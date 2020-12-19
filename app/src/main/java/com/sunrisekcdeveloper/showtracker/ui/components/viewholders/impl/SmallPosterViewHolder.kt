@@ -18,10 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
 
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
+import com.sunrisekcdeveloper.showtracker.model.Movie
 
 /**
  * Small Poster ViewHolder represents a small poster icon that represents a movie or show
@@ -36,6 +38,13 @@ class SmallPosterViewHolder(
     override fun bind(item: Movie) {
         binding.movie = item
         binding.clickListener = clickAction
+
+//        Glide.with(binding.imgvMovieSmallPoster).load(
+//            item.image)
+////            .diskCacheStrategy(DiskCacheStrategy.NONE)
+////            .skipMemoryCache(true)
+//            .into(binding.imgvMovieSmallPoster)
+
         binding.executePendingBindings()
     }
 }

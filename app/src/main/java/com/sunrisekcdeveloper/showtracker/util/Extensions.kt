@@ -41,3 +41,18 @@ inline fun View.click(crossinline action: () -> Unit) = setOnClickListener { act
  */
 inline fun <T> LiveData<T>.subscribe(owner: LifecycleOwner, crossinline action: (T) -> Unit) =
     observe(owner, Observer { action(it) })
+
+// reference https://proandroiddev.com/functional-data-mappers-4daf495192ed
+inline fun <I, O> mapList(input: List<I>, mapSingle: (I) -> O): List<O> {
+    return input.map { mapSingle(it) }
+}
+
+// Nullable to Non-nullable
+inline fun <I, O> mapNullInputList(input: List<I>?, mapSingle: (I) -> O): List<O> {
+    return input?.map { mapSingle(it) } ?: emptyList()
+}
+
+// Non-nullable to Nullable
+inline fun <I, O> mapNullOutputList(input: List<I>, mapSingle: (I) -> O): List<O>? {
+    return if (input.isEmpty()) null else input.map { mapSingle(it) }
+}

@@ -22,7 +22,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
+import com.sunrisekcdeveloper.showtracker.model.Movie
 
 /**
  * Search ViewModel
@@ -31,6 +31,7 @@ import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
  */
 class SearchViewModel @ViewModelInject constructor() : ViewModel() {
 
+    // TODO all this code is still test data
     private val _movieListData = MutableLiveData<List<Movie>>()
     val movieListData: LiveData<List<Movie>>
         get() = _movieListData

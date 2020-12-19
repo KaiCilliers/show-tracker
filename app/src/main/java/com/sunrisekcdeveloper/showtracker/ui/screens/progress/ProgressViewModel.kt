@@ -19,19 +19,32 @@
 package com.sunrisekcdeveloper.showtracker.ui.screens.progress
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.sunrisekcdeveloper.showtracker.entities.domain.Movie
-import com.sunrisekcdeveloper.showtracker.entities.domain.SuggestionListModel
+import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.model.SuggestionListModel
+import com.sunrisekcdeveloper.showtracker.repository.MainRepository
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 /**
  * Progress ViewModel
  *
  * @constructor Create empty Progress view model
  */
-class ProgressViewModel @ViewModelInject constructor() : ViewModel() {
+class ProgressViewModel @ViewModelInject constructor(
+    @MainRepo private val repo: RepositoryContract
+) : ViewModel() {
 
+    // TODO all this code is still test data
     private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()
     val suggestionListData: LiveData<List<SuggestionListModel>>
         get() = _suggestionListData

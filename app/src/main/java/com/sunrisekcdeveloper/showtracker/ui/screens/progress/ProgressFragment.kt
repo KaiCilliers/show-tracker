@@ -30,6 +30,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

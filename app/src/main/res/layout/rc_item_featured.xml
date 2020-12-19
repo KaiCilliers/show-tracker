@@ -24,7 +24,7 @@
     <data>
         <variable
             name="featuredList"
-            type="com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList" />
+            type="com.sunrisekcdeveloper.showtracker.model.FeaturedList" />
         <variable
             name="clickListener"
             type="com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract" />

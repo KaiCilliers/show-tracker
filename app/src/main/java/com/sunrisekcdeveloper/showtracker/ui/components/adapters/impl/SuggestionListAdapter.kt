@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.entities.domain.FeaturedList
+import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SuggestionListViewHolder
 
 /**
@@ -39,6 +39,8 @@ class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHo
     private var data: List<FeaturedList> = listOf()
     private lateinit var clickAction: ClickActionContract
 
+    // TODO be able to submit a single item at a time then just append and resubmit the entire list
+    //  on this end. Also perhaps have an option to refresh it with a new list?
     override fun submit(list: List<FeaturedList>) {
         this.data = list
         submitList(list)
