@@ -21,14 +21,22 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 
 @Entity(tableName = "tbl_trending")
 data class TrendingListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "trending_id")
-    val id: Long = 0L,
+    @PrimaryKey
     @ColumnInfo(name = "fk_trending_media_slug")
     val mediaSlug: String,
     @ColumnInfo(name = "trending_watcher_count")
     val watchers: Int
-)
+) {
+    companion object {
+        fun from(movie: ResponseMovie, watchers: Int): TrendingListEntity {
+            return TrendingListEntity(
+                mediaSlug = movie.identifiers.slug,
+                watchers = watchers
+            )
+        }
+    }
+}

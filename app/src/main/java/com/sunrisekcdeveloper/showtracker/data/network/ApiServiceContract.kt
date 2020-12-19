@@ -89,7 +89,7 @@ interface ApiServiceContract {
     suspend fun recommendedMovies(
         period: String = "weekly",
         extended: String = ""
-    ): List<EnvelopeUserCount>
+    ): Response<List<EnvelopeUserCount>>
 
     /**
      * Most played movies in specified time period (single account can watch multiple times)
@@ -100,7 +100,7 @@ interface ApiServiceContract {
      *      Default value: weekly
      * @return
      */
-    suspend fun mostPlayedMovies(period: String = "weekly"): List<EnvelopeViewStats>
+    suspend fun mostPlayedMovies(period: String = "weekly"): Response<List<EnvelopeViewStats>>
 
     /**
      * Most watched movies in specified time period (unique watches)
@@ -113,7 +113,7 @@ interface ApiServiceContract {
      */
     // TODO you can create less methods in Repo that takes params which will decide which of
     //  these methods to call (like it'll choose between most played and most watched)
-    suspend fun mostWatchedMovies(period: String = "weekly"): List<EnvelopeViewStats>
+    suspend fun mostWatchedMovies(period: String = "weekly"): Response<List<EnvelopeViewStats>>
 
     /**
      * Most anticipated based on number of lists movie appears in
@@ -121,7 +121,7 @@ interface ApiServiceContract {
      *
      * @return
      */
-    suspend fun mostAnticipated(): List<EnvelopeListCount>
+    suspend fun mostAnticipated(): Response<List<EnvelopeListCount>>
 
     /**
      * Box office based on top 10 grossing movies in U.S. box office the weekend past. Updates

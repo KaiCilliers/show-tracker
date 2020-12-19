@@ -57,16 +57,16 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun recommendedMovies(
         @Path("period") period: String,
         @Query("extended") extended: String
-    ): List<EnvelopeUserCount>
+    ): Response<List<EnvelopeUserCount>>
 
     @GET("movies/played/{period}")
-    override suspend fun mostPlayedMovies(@Path("period") period: String): List<EnvelopeViewStats>
+    override suspend fun mostPlayedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
 
     @GET("movies/watched/{period}")
-    override suspend fun mostWatchedMovies(@Path("period") period: String): List<EnvelopeViewStats>
+    override suspend fun mostWatchedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
 
     @GET("movies/anticipated")
-    override suspend fun mostAnticipated(): List<EnvelopeListCount>
+    override suspend fun mostAnticipated(): Response<List<EnvelopeListCount>>
 
     @GET("movies/boxoffice")
     override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>

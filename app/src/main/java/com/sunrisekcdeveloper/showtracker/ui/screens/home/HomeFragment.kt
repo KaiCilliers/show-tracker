@@ -39,6 +39,7 @@ import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,6 +48,7 @@ import javax.inject.Inject
  * Home Fragment displays suggested movies and shows for the user to add to their watchlist,
  * categorised with appropriate headings
  */
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -60,6 +62,10 @@ class HomeFragment : Fragment() {
     private var trending: List<Movie> = listOf()
     private var popular: List<Movie> = listOf()
     private var boxoffice: List<Movie> = listOf()
+    private var mostPlayed: List<Movie> = listOf()
+    private var mostWatched: List<Movie> = listOf()
+    private var anticipated: List<Movie> = listOf()
+    private var recommended: List<Movie> = listOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,22 +101,20 @@ class HomeFragment : Fragment() {
             listOf(
                 FeaturedList("Trending", trending),
                 FeaturedList("BoxOffice", boxoffice),
-                FeaturedList("Popular", popular)
+                FeaturedList("Popular", popular),
+                FeaturedList("Anticipated", anticipated),
+                FeaturedList("Most Watched", mostWatched),
+                FeaturedList("Most Played", mostPlayed),
+                FeaturedList("Recommended", recommended)
             )
         )
     }
 
     private fun observeViewModel() {
-//        viewModel.featuredData.subscribe(viewLifecycleOwner) {
-//            when (it) {
-//                is Resource.Loading -> { Timber.d("Loading") }
-//                is Resource.Error -> { Timber.d("Erorr") }
-//                is Resource.Success -> {
-//                    Timber.d("Success")
-//                    adapter.submitList(it.data)
-//                }
-//            }
-//        }
+        // TODO i need a single subscription for the list of data
+        //  the list building logic needs to happen in the viewmodel
+        //  that might keep the list data in memory instead of
+        //  fetching it from the db each time the fragment is resumed
         viewModel.trend.subscribe(viewLifecycleOwner) {
             Timber.d("Trending movies: ${it.size}")
             trending = it
@@ -126,20 +130,25 @@ class HomeFragment : Fragment() {
             popular = it
             update()
         }
-//        viewModel.box.subscribe(viewLifecycleOwner) {
-//            Timber.d("$it")
-//            adapter.submit(it)
-//        }
-//        viewModel.pop.subscribe(viewLifecycleOwner) {
-//            Timber.d("$it")
-//            adapter.submit(it)
-//        }
-//        viewModel.trend.subscribe(viewLifecycleOwner) {
-//            Timber.d("$it")
-//            adapter.submit(it)
-//        }
-//        viewModel.featuredListData.subscribe(viewLifecycleOwner) {
-//            adapter.submitList(it)
-//        }
+        viewModel.mostPlayed.subscribe(viewLifecycleOwner) {
+            Timber.d("Most Played movies: ${it.size}")
+            mostPlayed = it
+            update()
+        }
+        viewModel.mostWatched.subscribe(viewLifecycleOwner) {
+            Timber.d("Most Watched movies: ${it.size}")
+            mostWatched = it
+            update()
+        }
+        viewModel.anticipated.subscribe(viewLifecycleOwner) {
+            Timber.d("Anticiapted movies: ${it.size}")
+            anticipated = it
+            update()
+        }
+        viewModel.recommended.subscribe(viewLifecycleOwner) {
+            Timber.d("REcommended movies: ${it.size}")
+            recommended = it
+            update()
+        }
     }
 }

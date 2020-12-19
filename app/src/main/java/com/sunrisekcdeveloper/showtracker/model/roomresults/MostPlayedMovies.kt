@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.data.local.model.categories
+package com.sunrisekcdeveloper.showtracker.model.roomresults
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.MostPlayedListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-@Entity(tableName = "tbl_box_office")
-data class BoxOfficeListEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "fk_box_media_slug")
-    val mediaSlug: String,
-    @ColumnInfo(name = "box_revenue")
-    val revenue: Int
+data class MostPlayedMovies(
+    @Embedded val data: MostPlayedListEntity,
+    @Relation(
+        parentColumn = "fk_played_media_slug",
+        entityColumn = "movie_slug"
+    )
+    val movie: MovieEntity?
 )

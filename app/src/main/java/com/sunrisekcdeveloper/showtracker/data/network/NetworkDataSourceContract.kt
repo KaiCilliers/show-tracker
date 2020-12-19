@@ -19,8 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network
 
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeRevenue
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import retrofit2.Response
 
@@ -28,4 +27,8 @@ interface NetworkDataSourceContract {
     suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
     suspend fun fetchPop(): Resource<List<ResponseMovie>>
+    suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>>
+    suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>>
+    suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>>
+    suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>>
 }

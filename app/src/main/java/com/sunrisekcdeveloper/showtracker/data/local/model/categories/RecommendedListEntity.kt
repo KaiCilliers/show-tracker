@@ -21,16 +21,25 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeUserCount
 
 @Entity(tableName = "tbl_recommended")
 data class RecommendedListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "rec_id")
-    val id: Long = 0L,
+    @PrimaryKey
     @ColumnInfo(name = "fk_rec_media_slug")
     val mediaSlug: String,
     @ColumnInfo(name = "rec_user_count")
     val users: Int,
     @ColumnInfo(name = "rec_period_count")
     val period: String
-)
+) {
+    companion object {
+        fun from(item: EnvelopeUserCount): RecommendedListEntity {
+            return RecommendedListEntity(
+                mediaSlug = item.movie!!.identifiers.slug,
+                users = item.userCount,
+                period = "weekly"
+            )
+        }
+    }
+}
