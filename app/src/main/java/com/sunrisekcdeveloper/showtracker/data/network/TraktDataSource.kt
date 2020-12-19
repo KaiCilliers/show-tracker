@@ -19,8 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.data.network
 
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeRevenue
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
@@ -44,6 +43,21 @@ class TraktDataSource @Inject constructor(
         api.popularMovies()
     }
 
+    override suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>> = result {
+        api.mostPlayedMovies()
+    }
+
+    override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> = result {
+        api.mostWatchedMovies()
+    }
+
+    override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> = result {
+        api.mostAnticipated()
+    }
+
+    override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> = result {
+        api.recommendedMovies()
+    }
 
     // TODO this logic should be at the repo level to include updating cache logic
     //  val wrappedResult = safeApiCall(Dispatchers.IO) { api.getRandomDogBreed() }

@@ -21,14 +21,23 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeListCount
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeViewStats
 
 @Entity(tableName = "tbl_anticipated")
 data class AnticipatedListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "anticipated_id")
-    val id: Long = 0L,
+    @PrimaryKey
     @ColumnInfo(name = "fk_anticipated_media_slug")
-    val mediaSlug: String, // FK
+    val mediaSlug: String,
     @ColumnInfo(name = "anticipated_list_count")
     val lists: Int
-)
+) {
+    companion object {
+        fun from(item: EnvelopeListCount): AnticipatedListEntity {
+            return AnticipatedListEntity(
+                mediaSlug = item.movie!!.identifiers.slug,
+                lists = item.listCount
+            )
+        }
+    }
+}

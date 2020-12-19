@@ -21,12 +21,11 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.categories
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeViewStats
 
 @Entity(tableName = "tbl_most_watched")
 data class MostWatchedListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "watched_id")
-    val id: Long = 0L,
+    @PrimaryKey
     @ColumnInfo(name = "fk_watched_media_slug")
     val mediaSlug: String,
     @ColumnInfo(name = "watched_watcher_count")
@@ -35,4 +34,15 @@ data class MostWatchedListEntity(
     val plays: Int,
     @ColumnInfo(name = "watched_collected_count")
     val collectedCount: Int
-)
+) {
+    companion object {
+        fun from(item: EnvelopeViewStats): MostWatchedListEntity {
+            return MostWatchedListEntity(
+                mediaSlug = item.movie!!.identifiers.slug,
+                watchers = item.watchers,
+                plays = item.playCount,
+                collectedCount = item.collectedCount
+            )
+        }
+    }
+}

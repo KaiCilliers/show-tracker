@@ -21,19 +21,17 @@ package com.sunrisekcdeveloper.showtracker.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.BoxOfficeListEntity
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.RecommendedListEntity
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
 @Database(
     entities = [
         MovieEntity::class, TrendingListEntity::class,
         PopularListEntity::class, RecommendedListEntity::class,
-        BoxOfficeListEntity::class
+        BoxOfficeListEntity::class, AnticipatedListEntity::class,
+        MostPlayedListEntity::class, MostWatchedListEntity::class
     ],
-    version = 10,
+    version = 13,
     exportSchema = false
 )
 abstract class TrackerDatabase : RoomDatabase() {
