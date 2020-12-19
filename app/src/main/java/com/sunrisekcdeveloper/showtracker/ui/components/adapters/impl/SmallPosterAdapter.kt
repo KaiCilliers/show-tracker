@@ -40,10 +40,6 @@ class SmallPosterAdapter : BaseListAdapter<Movie, SmallPosterViewHolder>(Movie.D
         submitList(list)
     }
 
-    override fun submit(item: Movie) {
-        TODO("Not yet implemented")
-    }
-
     // Temporal Coupling introduced having to call this function before setting Recycler's adapter
     override fun addOnClickAction(action: ClickActionContract) { clickAction = action }
 

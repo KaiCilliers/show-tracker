@@ -45,6 +45,19 @@ class TraktDataSource @Inject constructor(
     }
 
 
+    // TODO this logic should be at the repo level to include updating cache logic
+    //  val wrappedResult = safeApiCall(Dispatchers.IO) { api.getRandomDogBreed() }
+    //        when (wrappedResult) {
+    //            is ResultWrapper.Success<*> -> {
+    //                val dogResponse = wrappedResult.value as ApiResponse<String>
+    //                val breedImageUrl = dogResponse.message
+    //                val dog = extractBreedName(breedImageUrl)?.let { Dog(it, breedImageUrl) }
+    //                dog?.run {
+    //                    dogDao.save(this)
+    //                }
+    //            }
+    //        }
+    //        return wrappedResult
     private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T> {
         return try {
             val response = request()

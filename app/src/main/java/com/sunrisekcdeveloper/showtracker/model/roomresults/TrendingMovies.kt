@@ -29,5 +29,5 @@ data class TrendingMovies(
         parentColumn = "fk_trending_media_slug",
         entityColumn = "movie_slug"
     )
-    val movie: MovieEntity
+    val movie: MovieEntity?
 )

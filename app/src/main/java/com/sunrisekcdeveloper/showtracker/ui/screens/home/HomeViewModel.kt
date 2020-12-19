@@ -26,12 +26,10 @@ import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 /**
  * Home ViewModel
@@ -47,15 +45,24 @@ class HomeViewModel @ViewModelInject constructor(
     val pop = repo.popular().asLiveData()
     val box = repo.box().asLiveData()
 
-    val savingGrace = repo.repoSavingGrace()
-        .onStart { emit(Resource.Loading) }
-        .asLiveData()
+//    val featuredData = flow<Resource<List<FeaturedList>>> {
+//        emit(Resource.Success(listOf(
+//            FeaturedList("Trending Movies", trend.value ?: listOf()),
+//            FeaturedList("Popular Movies", pop.value ?: listOf()),
+//            FeaturedList("Boxoffice Movies", box.value ?: listOf())
+//        )))
+//    }.onStart { Resource.Loading }.asLiveData()
 
-//    init {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repo.tempUpdateCache()
+    init {
+//        viewModelScope.launch {
+//            while (true) {
+//                delay(5000)
+//                repo.updateTrending()
+//                repo.updateBox()
+//                repo.updatePopular()
+//            }
 //        }
-//    }
+    }
 
     // TODO all this is still test data
     private val _featuredListData = MutableLiveData<List<FeaturedList>>()

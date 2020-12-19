@@ -26,9 +26,7 @@ import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 
 @Entity(tableName = "tbl_popular")
 data class PopularListEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "popular_id")
-    val id: Long = 0L,
+    @PrimaryKey
     @ColumnInfo(name = "fk_popular_media_slug")
     val mediaSlug: String
 ) {

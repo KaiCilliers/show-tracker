@@ -21,17 +21,15 @@ package com.sunrisekcdeveloper.showtracker.repository
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryContract {
-    fun movies(): Flow<List<MovieEntity>>
-    fun trending(): Flow<FeaturedList>
-    fun popular(): Flow<FeaturedList>
-    fun box(): Flow<FeaturedList>
-
-    fun repoSavingGrace(): Flow<Resource<String>>
-
-    suspend fun deleteSingleMovie()
-    suspend fun tempUpdateCache()
+    fun trending(): Flow<List<Movie>>
+    fun popular(): Flow<List<Movie>>
+    fun box(): Flow<List<Movie>>
+    suspend fun updateTrending()
+    suspend fun updateBox()
+    suspend fun updatePopular()
 }

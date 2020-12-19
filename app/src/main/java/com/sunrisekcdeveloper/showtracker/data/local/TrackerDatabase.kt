@@ -33,7 +33,7 @@ import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
         PopularListEntity::class, RecommendedListEntity::class,
         BoxOfficeListEntity::class
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class TrackerDatabase : RoomDatabase() {

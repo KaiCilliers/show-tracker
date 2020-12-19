@@ -71,6 +71,12 @@ abstract class MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertMovie(vararg item: MovieEntity)
 
+    @Query("SELECT fk_popular_media_slug FROM  tbl_popular")
+    abstract suspend fun fetchPopular(): List<String>
+
+    @Update
+    abstract suspend fun updatePopular(vararg item: PopularListEntity): Int
+
     @Transaction
     @Query("SELECT * FROM tbl_trending")
     abstract fun trendingMoviesFlow(): Flow<List<TrendingMovies>>

@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.screens.home
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.util.subscribe
@@ -54,6 +57,10 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
+    private var trending: List<Movie> = listOf()
+    private var popular: List<Movie> = listOf()
+    private var boxoffice: List<Movie> = listOf()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +70,7 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
+        Timber.e("BOOOOOBS")
         return binding.root
     }
 
@@ -82,13 +90,41 @@ class HomeFragment : Fragment() {
         )
     }
 
+    private fun update() {
+        adapter.submitList(
+            listOf(
+                FeaturedList("Trending", trending),
+                FeaturedList("BoxOffice", boxoffice),
+                FeaturedList("Popular", popular)
+            )
+        )
+    }
+
     private fun observeViewModel() {
-        viewModel.savingGrace.subscribe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> { Timber.d("Loading") }
-                is Resource.Success -> { Timber.d("Success: ${it.data}") }
-                is Resource.Error -> { Timber.d("Error: ${it.message}") }
-            }
+//        viewModel.featuredData.subscribe(viewLifecycleOwner) {
+//            when (it) {
+//                is Resource.Loading -> { Timber.d("Loading") }
+//                is Resource.Error -> { Timber.d("Erorr") }
+//                is Resource.Success -> {
+//                    Timber.d("Success")
+//                    adapter.submitList(it.data)
+//                }
+//            }
+//        }
+        viewModel.trend.subscribe(viewLifecycleOwner) {
+            Timber.d("Trending movies: ${it.size}")
+            trending = it
+            update()
+        }
+        viewModel.box.subscribe(viewLifecycleOwner) {
+            Timber.d("Box movies: ${it.size}")
+            boxoffice = it
+            update()
+        }
+        viewModel.pop.subscribe(viewLifecycleOwner) {
+            Timber.d("Popular movies: ${it.size}")
+            popular = it
+            update()
         }
 //        viewModel.box.subscribe(viewLifecycleOwner) {
 //            Timber.d("$it")

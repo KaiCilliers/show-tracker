@@ -44,12 +44,6 @@ class ProgressViewModel @ViewModelInject constructor(
     @MainRepo private val repo: RepositoryContract
 ) : ViewModel() {
 
-    val movies = repo.movies().asLiveData()
-
-    fun deleteSingleMovie() = viewModelScope.launch {
-        repo.deleteSingleMovie()
-    }
-
     // TODO all this code is still test data
     private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()
     val suggestionListData: LiveData<List<SuggestionListModel>>

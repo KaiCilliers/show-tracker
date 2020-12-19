@@ -29,5 +29,5 @@ data class PopularMovies(
         parentColumn = "fk_popular_media_slug",
         entityColumn = "movie_slug"
     )
-    val movie: MovieEntity
+    val movie: MovieEntity?
 )

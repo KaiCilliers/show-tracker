@@ -29,5 +29,5 @@ data class BoxOfficeMovies(
         parentColumn = "fk_box_media_slug",
         entityColumn = "movie_slug"
     )
-    val movie: MovieEntity
+    val movie: MovieEntity?
 )
