@@ -23,7 +23,7 @@ import com.sunrisekcdeveloper.showtracker.data.network.model.base.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import retrofit2.Response
 
-interface NetworkDataSource {
+interface ApiServiceContract {
     /** TODO MISCELLANEOUS */
     /**
      * Genres all possible genres that can be attached to a show or movie
@@ -64,7 +64,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun trendingMovies(): List<EnvelopeWatchers>
+    suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
 
     /**
      * Popular movies popularity calculated using rating percentage and the number
@@ -73,7 +73,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun popularMovies(): List<ResponseMovie>
+    suspend fun popularMovies(): Response<List<ResponseMovie>>
 
     /**
      * Recommended movies in specified time period
@@ -130,7 +130,7 @@ interface NetworkDataSource {
      *
      * @return
      */
-    suspend fun boxOffice(): List<EnvelopeRevenue>
+    suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     /**
      * Movie with minimal details

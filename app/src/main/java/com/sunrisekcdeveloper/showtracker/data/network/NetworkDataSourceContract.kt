@@ -16,12 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.util.datastate
+package com.sunrisekcdeveloper.showtracker.data.network
 
-import java.lang.Exception
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeRevenue
+import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import retrofit2.Response
 
-sealed class Resource<out T> {
-    data class Success<out T>(val data: T): Resource<T>()
-    data class Error(val message: String): Resource<Nothing>()
-    object Loading: Resource<Nothing>()
+interface NetworkDataSourceContract {
+    suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
+    suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
+    suspend fun fetchPop(): Resource<List<ResponseMovie>>
 }

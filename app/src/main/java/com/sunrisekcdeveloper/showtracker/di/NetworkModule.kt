@@ -21,7 +21,9 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
+import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
+import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
+import com.sunrisekcdeveloper.showtracker.data.network.TraktApiService
 import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
 import dagger.Module
 import dagger.Provides
@@ -46,13 +48,25 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class Trakt
+    annotation class TraktApi
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DataSourceTrakt
+
 
     @Singleton
-    @Trakt
+    @DataSourceTrakt
     @Provides
-    fun provideTraktService(retrofit: Retrofit): NetworkDataSource {
-        return retrofit.create(TraktDataSource::class.java)
+    fun provideTraktDataSource(@TraktApi api: ApiServiceContract) : NetworkDataSourceContract {
+        return TraktDataSource(api)
+    }
+
+    @Singleton
+    @TraktApi
+    @Provides
+    fun provideTraktService(retrofit: Retrofit): ApiServiceContract {
+        return retrofit.create(TraktApiService::class.java)
     }
 
     @Singleton

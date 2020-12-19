@@ -19,17 +19,117 @@
 package com.sunrisekcdeveloper.showtracker.repository
 
 import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSource
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
-import com.sunrisekcdeveloper.showtracker.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.PopularListEntity
+import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import java.lang.Exception
+import javax.inject.Inject
 
-class MainRepository() : RepositoryContract {
+class MainRepository @Inject constructor(
+    private val local: MovieDao,
+    @DataSourceTrakt private val remote: NetworkDataSourceContract
+) : RepositoryContract {
 
+    override fun trending() = local.trendingMoviesFlow()
+        .distinctUntilChanged { old, new ->
+            var same = true
+            (new.indices).forEach { i ->
+                if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
+            }
+            Timber.d("trending table data the same: $same")
+            return@distinctUntilChanged same
+        }
+        .map { item ->
+            val list = arrayListOf<Movie>()
+            if (!item.isNullOrEmpty()) {
+                item.forEach {
+                    it.movie?.let { movie ->
+                        list.add(movie.asDomain())
+                    }
+                }
+            }
+            return@map list
+        }
+        .onEach { updateTrending() }
+
+    override fun popular() = local.popularMoviesFlow()
+        .distinctUntilChanged { old, new ->
+            var same = true
+            (new.indices).forEach { i ->
+                if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
+            }
+            Timber.d("popular table data the same: $same")
+            return@distinctUntilChanged same
+        }
+        .map { item ->
+            val list = arrayListOf<Movie>()
+            if (!item.isNullOrEmpty()) {
+                item.forEach {
+                    it.movie?.let { movie ->
+                        list.add(movie.asDomain())
+                    }
+                }
+            }
+            return@map list
+        }
+        .onEach { updatePopular() }
+
+    override fun box() = local.boxOfficeMoviesFlow()
+        .distinctUntilChanged { old, new ->
+            var same = true
+            (new.indices).forEach { i ->
+                if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
+            }
+            Timber.d("box table data the same: $same")
+            return@distinctUntilChanged same
+        }
+        .map { item ->
+            val list = arrayListOf<Movie>()
+            if (!item.isNullOrEmpty()) {
+                item.forEach {
+                    it.movie?.let { movie ->
+                        list.add(movie.asDomain())
+                    }
+                }
+            }
+            return@map list
+        }
+        .onEach { updateBox() }
+
+    override suspend fun updateTrending() {
+        val remote = remote.fetchTrend()
+        if (remote is Resource.Success) {
+            local.insertMovie(*remote.data.map { it.movie!!.asEntity() }.toTypedArray())
+            local.replaceTrending(*remote.data.map { it.asTrendingMovieEntity() }.toTypedArray())
+            Timber.d("Updated trending")
+        }
+    }
+
+    override suspend fun updateBox() {
+        val remote = remote.fetchBox()
+        if (remote is Resource.Success) {
+            local.insertMovie(*remote.data.map { it.movie.asEntity() }.toTypedArray())
+            local.replaceBox(*remote.data.map { it.asEntity() }.toTypedArray())
+            Timber.d("Updated box")
+        }
+    }
+
+    override suspend fun updatePopular() {
+        val remote = remote.fetchPop()
+        if (remote is Resource.Success) {
+            val exists = local.fetchPopular()
+            local.insertMovie(*remote.data.map { it.asEntity() }.toTypedArray())
+            if (exists.size == 10) {
+                val s = local.updatePopular(*remote.data.map { PopularListEntity.from(it) }.toTypedArray())
+                Timber.d("Updated Popular: $s")
+            } else {
+                local.replacePopular(*remote.data.map { PopularListEntity.from(it) }.toTypedArray())
+                Timber.d("Replaced Popular")
+            }
+        }
+    }
 }

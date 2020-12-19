@@ -19,9 +19,15 @@
 package com.sunrisekcdeveloper.showtracker.data.network.model.envelopes
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.BoxOfficeListEntity
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 
 data class EnvelopeRevenue(
     @Json(name = "revenue") val revenue: Int,
     @Json(name = "movie") val movie: ResponseMovie
-)
+) {
+    fun asEntity() = BoxOfficeListEntity(
+        mediaSlug = movie.identifiers.slug,
+        revenue = revenue
+    )
+}

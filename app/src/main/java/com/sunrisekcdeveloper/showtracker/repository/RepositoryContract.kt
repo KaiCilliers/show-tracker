@@ -18,13 +18,18 @@
 
 package com.sunrisekcdeveloper.showtracker.repository
 
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
-import com.sunrisekcdeveloper.showtracker.model.roomresults.TrendingMoviesNew
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryContract {
-
+    fun trending(): Flow<List<Movie>>
+    fun popular(): Flow<List<Movie>>
+    fun box(): Flow<List<Movie>>
+    suspend fun updateTrending()
+    suspend fun updateBox()
+    suspend fun updatePopular()
 }

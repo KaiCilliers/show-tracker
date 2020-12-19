@@ -28,6 +28,6 @@ open class BaseRepostory {
         return if (response.isSuccessful)
             Resource.Success(response.body()!!)
         else
-            Resource.Error(Exception(response.message()), "${response.errorBody()}")
+            Resource.Error("${response.code()} ${response.message()}")
     }
 }
