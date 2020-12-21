@@ -25,13 +25,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
-import com.sunrisekcdeveloper.showtracker.di.TempMod
-import com.sunrisekcdeveloper.showtracker.di.TempMod.Different
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
 /**
  * Main activity Primary container for fragments that provide app functionality
@@ -43,17 +38,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-//    @Inject
-//    @Different
-//    lateinit var source: NetworkDataSourceContract
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setup()
-//        runBlocking {
-//            go()
-//        }
     }
 
     // TODO this bottom nav bar needs to be gone when navigating to movie details fragment
@@ -62,11 +50,4 @@ class MainActivity : AppCompatActivity() {
         bottomNav?.setupWithNavController(findNavController(R.id.nav_host_fragment_main))
     }
 
-//    private suspend fun go() {
-//        source.search(
-//            "movie",
-//            "iron",
-//            "title"
-//        )
-//    }
 }

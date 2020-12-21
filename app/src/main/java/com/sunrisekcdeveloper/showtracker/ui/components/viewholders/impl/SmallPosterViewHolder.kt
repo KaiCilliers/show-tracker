@@ -82,8 +82,8 @@ class SmallPosterViewHolder(
 //        Timber.e(s)
 
         Glide.with(binding.root.context)
-//            .load("${BuildConfig.FANART_BASE_URL}movies/${item.tmdb}?api_key=${BuildConfig.FANART_API_KEY}")
-            .load(R.drawable.wanted_poster)
+            .load(item.posterUrl)
+            .placeholder(R.drawable.wanted_poster)
             .into(binding.imgvMovieSmallPoster)
 
 //        Glide.with(binding.imgvMovieSmallPoster).load(

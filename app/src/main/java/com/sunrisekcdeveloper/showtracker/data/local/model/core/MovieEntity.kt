@@ -47,6 +47,8 @@ data class MovieEntity(
     val trailerUrl: String?,
     @ColumnInfo(name = "movie_homepage_url")
     val homepageUrl: String,
+    @ColumnInfo(name = "movie_poster_url")
+    var posterUrl: String,
     @ColumnInfo(name = "movie_status")
     val status: String,
     @ColumnInfo(name = "movie_vote_count")
@@ -59,7 +61,8 @@ data class MovieEntity(
     val certification: String
 ) {
     fun asDomain() = Movie(
-        title = title
+        title = title,
+        posterUrl = posterUrl
     )
 }
 
