@@ -88,11 +88,15 @@ class SearchFragment : Fragment() {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
 
-    // Tested the logic added to MainRepo
-    private fun update(block: suspend () -> Unit) {
-        ioScope.launch {
-            block.invoke()
-        }
+    /**
+     * TODO NOTE
+         * It leads to the following useful convention: every function that is declared as extension on
+         * CoroutineScope returns immediately, but performs its actions concurrently with the rest of
+         * the program.
+     * note a solution for me, cause the impl blocks
+     */
+    private fun CoroutineScope.update(block: suspend () -> Unit) = launch {
+        block.invoke()
     }
 
     suspend fun foo() {
@@ -101,8 +105,12 @@ class SearchFragment : Fragment() {
     }
 
     suspend fun movies(): String {
-        val result = withContext(ioScope.coroutineContext) { delay(2000) }
-        update { foo() }
+        val result = withContext(ioScope.coroutineContext) {
+            delay(2000)
+            // blocks :(
+            update { foo() }
+            println("???")
+        }
         return withContext(cpuScope.coroutineContext) {
             delay(3000)
             ":D:D:D:D"
