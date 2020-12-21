@@ -39,9 +39,9 @@ class MainRepository @Inject constructor(
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
 
-
     override suspend fun trendingMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }
+        update { updateTrending() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -112,9 +112,11 @@ class MainRepository @Inject constructor(
             }
         }
 
-//    suspend fun foo() = withContext(ioScope.coroutineContext) {
-//        remote.fetchTrend()
-//    }
+    private fun update(block: suspend () -> Unit) {
+        ioScope.launch {
+            block.invoke()
+        }
+    }
 
     override suspend fun updateTrending() {
         val response = remote.fetchTrend()

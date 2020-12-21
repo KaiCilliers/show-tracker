@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.screens.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -76,6 +77,37 @@ class SearchFragment : Fragment() {
 //        job.cancel()
 //        super.onDestroy()
 //    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        MainScope().launch {
+            println(movies())
+        }
+    }
+
+    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
+
+    // Tested the logic added to MainRepo
+    private fun update(block: suspend () -> Unit) {
+        ioScope.launch {
+            block.invoke()
+        }
+    }
+
+    suspend fun foo() {
+        delay(15000)
+        println("done updating")
+    }
+
+    suspend fun movies(): String {
+        val result = withContext(ioScope.coroutineContext) { delay(2000) }
+        update { foo() }
+        return withContext(cpuScope.coroutineContext) {
+            delay(3000)
+            ":D:D:D:D"
+        }
+    }
 
     private fun setupSearch() {
         CoroutineScope(coroutineContext).launch {
