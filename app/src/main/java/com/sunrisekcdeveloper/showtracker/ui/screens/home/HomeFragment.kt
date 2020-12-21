@@ -18,30 +18,22 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.screens.home
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -77,7 +69,6 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
-        Timber.e("BOOOOOBS")
         return binding.root
     }
 

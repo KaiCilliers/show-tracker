@@ -50,43 +50,63 @@ class MainRepository @Inject constructor(
     }
 
     override suspend fun popularMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.popularMovies() }
+        update { updatePopular() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
-            withContext(ioScope.coroutineContext) {
-                local.popularMovies()
-            }.map { it.movie?.asDomain()!! }
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
         }
     }
 
     override suspend fun boxofficeMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.boxOfficeMovies() }
+        update { updateBox() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
-            withContext(ioScope.coroutineContext) {
-                local.boxOfficeMovies()
-            }.map { it.movie?.asDomain()!! }
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
         }
     }
 
-    override suspend fun mostPlayedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
-        withContext(ioScope.coroutineContext) {
-            local.mostPlayedMovies()
-        }.map { it.movie?.asDomain()!! }
+    override suspend fun mostPlayedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.mostPlayedMovies() }
+        update { updateMostPlayed() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
     }
 
-    override suspend fun mostWatchedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
-        withContext(ioScope.coroutineContext) {
-            local.mostWatchedMovies()
-        }.map { it.movie?.asDomain()!! }
+    override suspend fun mostWatchedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.mostWatchedMovies() }
+        update { updateMostWatched() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
     }
 
-    override suspend fun mostAnticipatedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
-        withContext(ioScope.coroutineContext) {
-            local.mostAnticipatedMovies()
-        }.map { it.movie?.asDomain()!! }
+    override suspend fun mostAnticipatedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.mostAnticipatedMovies() }
+        update { updateAnticipated() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
     }
 
-    override suspend fun recommendedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
-        withContext(ioScope.coroutineContext) {
-            local.recommended()
-        }.map { it.movie?.asDomain()!! }
+    override suspend fun recommendedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.recommended() }
+        update { updateRecommended() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
     }
 
     // https://medium.com/@douglas.iacovelli/how-to-handle-errors-with-retrofit-and-coroutines-33e7492a912
