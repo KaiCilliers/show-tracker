@@ -43,11 +43,11 @@ class HomeViewModel @ViewModelInject constructor(
     val anticipated = liveData { emit(repo.mostAnticipatedMovie()) }
     val recommended = liveData { emit(repo.recommendedMovie()) }
 
-    // continuous
-    val trenidng = liveData {
-        repo.trendingMoviesFlow().collect {
-            emit(it)
-        }
-    }
+//    // continuous
+//    val trenidng = liveData {
+//        repo.trendingMoviesFlow().collect {
+//            emit(it)
+//        }
+//    }
 
 }

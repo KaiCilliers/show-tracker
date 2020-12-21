@@ -26,14 +26,6 @@ import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryContract {
-    fun trendingMoviesFlow(): Flow<List<Movie>>
-    fun popularMoviesFlow(): Flow<List<Movie>>
-    fun boxofficeMoviesFlow(): Flow<List<Movie>>
-    fun mostPlayedMoviesFlow(): Flow<List<Movie>>
-    fun mostWatchedMoviesFlow(): Flow<List<Movie>>
-    fun mostAnticipatedMoviesFlow(): Flow<List<Movie>>
-    fun recommendedMoviesFlow(): Flow<List<Movie>>
-
     suspend fun trendingMovie(): List<Movie>
     suspend fun popularMovie(): List<Movie>
     suspend fun boxofficeMovie(): List<Movie>
