@@ -19,9 +19,29 @@
 package com.sunrisekcdeveloper.showtracker.util
 
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
+    val query = MutableStateFlow("")
+
+    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?) = true
+
+        override fun onQueryTextChange(newText: String?): Boolean{
+            newText?.let {
+                query.value = newText
+            }
+            return true
+        }
+    })
+
+    return query
+}
 
 /**
  * Click simplifies adding an onClickListener to a [View]

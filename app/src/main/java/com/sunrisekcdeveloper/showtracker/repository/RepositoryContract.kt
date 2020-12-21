@@ -34,6 +34,14 @@ interface RepositoryContract {
     fun mostAnticipatedMoviesFlow(): Flow<List<Movie>>
     fun recommendedMoviesFlow(): Flow<List<Movie>>
 
+    suspend fun trendingMovie(): List<Movie>
+    suspend fun popularMovie(): List<Movie>
+    suspend fun boxofficeMovie(): List<Movie>
+    suspend fun mostPlayedMovie(): List<Movie>
+    suspend fun mostWatchedMovie(): List<Movie>
+    suspend fun mostAnticipatedMovie(): List<Movie>
+    suspend fun recommendedMovie(): List<Movie>
+
     suspend fun updateTrending()
     suspend fun updateBox()
     suspend fun updatePopular()

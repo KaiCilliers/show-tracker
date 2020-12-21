@@ -22,8 +22,18 @@ import com.sunrisekcdeveloper.showtracker.data.network.model.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
 import retrofit2.Response
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiServiceContract {
+    /** TODO SEARCH */
+
+    suspend fun search(
+        type: String,
+        searchText: String,
+        field: String = ""
+    ): Response<*>
+
     /** TODO MISCELLANEOUS */
     /**
      * Genres all possible genres that can be attached to a show or movie

@@ -19,16 +19,22 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
+import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
+import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
 import com.sunrisekcdeveloper.showtracker.repository.MainRepository
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Qualifier
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -46,4 +52,21 @@ object RepositoryModule {
         @DataSourceTrakt remote: NetworkDataSourceContract
     ): RepositoryContract =
         MainRepository(dao, remote)
+}
+
+@Module
+@InstallIn(ActivityComponent::class)
+object TempMod {
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class Different
+
+    @ActivityScoped
+    @Different
+    @Provides
+    fun provideTraktDataSource(
+        @TraktApi api: ApiServiceContract
+    ) : NetworkDataSourceContract {
+        return TraktDataSource(api)
+    }
 }

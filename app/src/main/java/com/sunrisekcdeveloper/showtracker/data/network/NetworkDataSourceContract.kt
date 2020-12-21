@@ -24,6 +24,7 @@ import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import retrofit2.Response
 
 interface NetworkDataSourceContract {
+    suspend fun search(type: String, searchText: String, field: String = ""): Resource<*>
     suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
     suspend fun fetchPop(): Resource<List<ResponseMovie>>

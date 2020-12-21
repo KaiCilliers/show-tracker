@@ -24,7 +24,10 @@ import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import okio.IOException
+import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,6 +35,82 @@ class MainRepository @Inject constructor(
     private val local: MovieDao,
     @DataSourceTrakt private val remote: NetworkDataSourceContract
 ) : RepositoryContract {
+
+    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
+
+
+    override suspend fun trendingMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
+    }
+
+    override suspend fun popularMovie(): List<Movie> {
+        return withContext(cpuScope.coroutineContext) {
+            withContext(ioScope.coroutineContext) {
+                local.popularMovies()
+            }.map { it.movie?.asDomain()!! }
+        }
+    }
+
+    override suspend fun boxofficeMovie(): List<Movie> {
+        return withContext(cpuScope.coroutineContext) {
+            withContext(ioScope.coroutineContext) {
+                local.boxOfficeMovies()
+            }.map { it.movie?.asDomain()!! }
+        }
+    }
+
+    override suspend fun mostPlayedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
+        withContext(ioScope.coroutineContext) {
+            local.mostPlayedMovies()
+        }.map { it.movie?.asDomain()!! }
+    }
+
+    override suspend fun mostWatchedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
+        withContext(ioScope.coroutineContext) {
+            local.mostWatchedMovies()
+        }.map { it.movie?.asDomain()!! }
+    }
+
+    override suspend fun mostAnticipatedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
+        withContext(ioScope.coroutineContext) {
+            local.mostAnticipatedMovies()
+        }.map { it.movie?.asDomain()!! }
+    }
+
+    override suspend fun recommendedMovie(): List<Movie> = withContext(cpuScope.coroutineContext) {
+        withContext(ioScope.coroutineContext) {
+            local.recommended()
+        }.map { it.movie?.asDomain()!! }
+    }
+
+    // https://medium.com/@douglas.iacovelli/how-to-handle-errors-with-retrofit-and-coroutines-33e7492a912
+    suspend fun <T> safeApiCall(
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        apiCall: suspend () -> T
+    ): Resource<T> =
+        withContext(dispatcher) {
+            try {
+                Resource.Success(apiCall.invoke())
+            } catch (throwable: Throwable) {
+                when (throwable) {
+                    is IOException -> Resource.Error("")
+                    is HttpException -> {
+                        Resource.Error(
+                            "code = throwable.code()"
+                        )
+                    }
+                    else -> {
+                        Resource.Error("null, null")
+                    }
+                }
+            }
+        }
 
     // TODO all these flows are very similar - refractor
     override fun trendingMoviesFlow() = local.trendingMoviesFlow()
@@ -45,9 +124,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -57,8 +138,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }
-        .onEach { updateTrending() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updateTrending() }.await()
+//        } }
 
     override fun popularMoviesFlow() = local.popularMoviesFlow()
         .distinctUntilChanged { old, new ->
@@ -71,9 +154,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -83,8 +168,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }
-        .onEach { updatePopular() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updatePopular() }.await()
+//        } }
 
     override fun boxofficeMoviesFlow() = local.boxOfficeMoviesFlow()
         .distinctUntilChanged { old, new ->
@@ -97,9 +184,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -109,8 +198,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }
-        .onEach { updateBox() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updateBox() }.await()
+//        } }
 
     override fun mostPlayedMoviesFlow() = local.mostPlayedMoviesFlow()
         .distinctUntilChanged { old, new ->
@@ -123,9 +214,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -135,7 +228,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }.onEach { updateMostPlayed() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updateMostPlayed() }.await()
+//        } }
 
     override fun mostWatchedMoviesFlow() = local.mostWatchedMoviesFlow()
         .distinctUntilChanged { old, new ->
@@ -148,9 +244,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -160,7 +258,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }.onEach { updateMostWatched() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updateMostWatched() }.await()
+//        } }
 
     override fun mostAnticipatedMoviesFlow() = local.mostAnticipatedMoviesFlow()
         .distinctUntilChanged { old, new ->
@@ -173,9 +274,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -185,8 +288,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }
-        .onEach { updateAnticipated() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updateTrending() }.await()
+//        } }
 
     override fun recommendedMoviesFlow() = local.recommendedFlow()
         .distinctUntilChanged { old, new ->
@@ -199,9 +304,11 @@ class MainRepository @Inject constructor(
             } else {
                 same = false
             }
+            Timber.d("The same?: $same")
             return@distinctUntilChanged same
         }
         .map { item ->
+            Timber.d("Called MAP")
             val list = arrayListOf<Movie>()
             if (!item.isNullOrEmpty()) {
                 item.forEach {
@@ -211,8 +318,10 @@ class MainRepository @Inject constructor(
                 }
             }
             return@map list
-        }
-        .onEach { updateRecommended() }
+        }.flowOn(Dispatchers.Default)
+//        .onEach { withContext(Dispatchers.IO) {
+//            async { updateRecommended() }.await()
+//        } }
 
     override suspend fun updateTrending() {
         val response = remote.fetchTrend()
@@ -289,6 +398,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun updateAnticipated() {
         val response = remote.fetchAnticipated()
+        // val response = safeApiCall { remote.fetchAnticipated() }
         if (response is Resource.Success) {
             val exists = local.fetchAnticipated()
             local.insertMovie(*response.data.map { it.movie!!.asEntity() }.toTypedArray())
