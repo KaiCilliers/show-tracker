@@ -194,6 +194,30 @@ abstract class MovieDao {
     abstract fun allMovies(): Flow<List<MovieEntity>>
 
     @Transaction
+    @Query("SELECT * FROM tbl_popular")
+    abstract suspend fun popularMovies(): List<PopularMovies>
+
+    @Transaction
+    @Query("SELECT * FROM tbl_box_office")
+    abstract suspend fun boxOfficeMovies(): List<BoxOfficeMovies>
+
+    @Transaction
+    @Query("SELECT * FROM tbl_anticipated")
+    abstract suspend fun mostAnticipatedMovies(): List<AnticipatedMovies>
+
+    @Transaction
+    @Query("SELECT * FROM tbl_most_watched")
+    abstract suspend fun mostWatchedMovies(): List<MostWatchedMovies>
+
+    @Transaction
+    @Query("SELECT * FROM tbl_most_played")
+    abstract suspend fun mostPlayedMovies(): List<MostPlayedMovies>
+
+    @Transaction
+    @Query("SELECT * FROM tbl_recommended")
+    abstract suspend fun recommended(): List<RecommendedMovies>
+
+    @Transaction
     @Query(
         """
         DELETE FROM tbl_movie

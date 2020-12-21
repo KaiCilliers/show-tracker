@@ -23,16 +23,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.testing.launchFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Search Fragment that provides a search bar that filters through all movies and shows and presents
@@ -47,6 +53,11 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
 
+    private val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    private lateinit var job: Job
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,8 +67,37 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
+//        job = Job()
+//        setupSearch()
         return binding.root
     }
+//
+//    override fun onDestroy() {
+//        job.cancel()
+//        super.onDestroy()
+//    }
+
+    private fun setupSearch() {
+        CoroutineScope(coroutineContext).launch {
+            binding.svFilterAll.getQueryTextChangedStateFlow()
+                .debounce(300)
+                .filter { query ->
+                    if (query.isEmpty()) {
+                        // set result set to empty
+                        return@filter false
+                    } else {
+                        return@filter true
+                    }
+                }
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { result ->
+                    // set result data set
+                    Timber.d("$result")
+                }
+        }
+    }
+
     private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {

@@ -30,6 +30,15 @@ import retrofit2.http.Query
 
 interface TraktApiService : ApiServiceContract {
 
+    /** TODO SEARCH */
+
+    @GET("search/{type}")
+    override suspend fun search(
+        @Path("type") type: String,
+        @Query("query") searchText: String,
+        @Query("field") field: String
+    ): Response<*>
+
     /** TODO MISCELLANEOUS */
 
     @GET("genres/{type}")

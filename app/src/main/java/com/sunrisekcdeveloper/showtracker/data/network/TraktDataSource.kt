@@ -31,6 +31,10 @@ import javax.inject.Inject
 class TraktDataSource @Inject constructor(
     @TraktApi private val api: ApiServiceContract
 ) : NetworkDataSourceContract {
+    override suspend fun search(type: String, searchText: String, field: String) = result {
+        api.search(type, searchText, field)
+    }
+
     override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
         api.boxOffice()
     }
