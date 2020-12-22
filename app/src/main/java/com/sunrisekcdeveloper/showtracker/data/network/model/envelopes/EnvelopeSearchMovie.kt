@@ -16,18 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components
+package com.sunrisekcdeveloper.showtracker.data.network.model.envelopes
 
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 
-/**
- * Click Action Contract that defines the responsibilities of an onClickListener
- */
-interface ClickActionContract {
-    /**
-     * On Click defines the action taken when object is clicked
-     *
-     * @param item can be any type that an onClickListener might require
-     */
-    fun onClick(item: Movie)
-}
+data class EnvelopeSearchMovie(
+    val type: String,
+    val score: Float,
+    val movie: ResponseMovie
+)

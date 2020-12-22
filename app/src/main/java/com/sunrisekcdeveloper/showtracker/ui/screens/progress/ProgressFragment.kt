@@ -28,20 +28,35 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Progress Fragment that displays upcoming movies and shows with the capability to filter
  * based on movie or show
  */
 @AndroidEntryPoint
-class ProgressFragment : Fragment() {
+class ProgressFragment : Fragment(), CoroutineScope {
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
+
+
+    fun foo() {
+        launch {
+
+        }
+    }
 
     @Inject lateinit var adapter: SmallPosterAdapter
 
@@ -62,7 +77,7 @@ class ProgressFragment : Fragment() {
     private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("TITLE: $item")
                 findNavController().navigate(
                     ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
@@ -79,7 +94,7 @@ class ProgressFragment : Fragment() {
         )
         // Temporal Coupling
         upComingAdapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("SPECIAL click: $item")
             }
         })

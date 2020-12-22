@@ -50,8 +50,8 @@
             tools:text="Movie Title"/>
         <ImageView
             android:id="@+id/imgv_movie_small_poster"
-            android:layout_width="@dimen/poster_small_width"
-            android:layout_height="@dimen/poster_small_height"
+            android:layout_width="82dp"
+            android:layout_height="120dp"
             android:padding="@dimen/padding_2"
             android:layout_marginEnd="@dimen/margin_24"
             android:scaleType="centerCrop"

@@ -27,12 +27,17 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Search Fragment that provides a search bar that filters through all movies and shows and presents
@@ -47,6 +52,9 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
 
+    private val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + Job()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,16 +64,35 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
+        setupSearch()
         return binding.root
     }
+
+    @FlowPreview
+    private fun setupSearch() {
+        CoroutineScope(coroutineContext).launch {
+            binding.svFilterAll.getQueryTextChangedStateFlow()
+                .debounce(300)
+                .filter { query ->
+                    return@filter query.isNotEmpty()
+                }
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { result ->
+                    viewModel.search(result)
+                    Timber.d("$result")
+                }
+        }
+    }
+
     private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("Search Filter: $item")
                 findNavController().navigate(
                     SearchFragmentDirections.actionSearchFragmentDestToDetailFragment(
-                        "FROM SEARCH FRAGMENT"
+                        item.slug
                     )
                 )
             }

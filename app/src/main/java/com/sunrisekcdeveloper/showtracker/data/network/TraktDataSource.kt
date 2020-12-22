@@ -18,8 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.data.network
 
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponsePoster
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.data.network.model.full.ResponseFullMovie
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
@@ -31,6 +34,23 @@ import javax.inject.Inject
 class TraktDataSource @Inject constructor(
     @TraktApi private val api: ApiServiceContract
 ) : NetworkDataSourceContract {
+
+    override suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>> = result {
+        api.moviesRelatedTo(slug)
+    }
+
+    override suspend fun detailedMovie(slug: String, extended: String): Resource<ResponseFullMovie> = result {
+        api.movieFull(slug, extended)
+    }
+
+    override suspend fun poster(id: String): Resource<ResponseImages> = result {
+        api.poster(id)
+    }
+
+    override suspend fun search(type: String, searchText: String, field: String) = result {
+        api.search(type, searchText, field)
+    }
+
     override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
         api.boxOffice()
     }

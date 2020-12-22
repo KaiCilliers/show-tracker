@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.data.network.model.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.data.network.model.full.ResponseFullMovie
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -29,6 +30,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TraktApiService : ApiServiceContract {
+
+    /** TODO SEARCH */
+
+    @GET("search/{type}")
+    override suspend fun search(
+        @Path("type") type: String,
+        @Query("query") searchText: String,
+        @Query("field") field: String
+    ): Response<List<EnvelopeSearchMovie>>
 
     /** TODO MISCELLANEOUS */
 
@@ -72,7 +82,16 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     @GET("movies/{id}")
-    override suspend fun movie(@Path("id") id: String): ResponseMovie
+    override suspend fun movie(
+        @Path("id") id: String,
+        @Query("extended") extended: String
+    ): Response<ResponseMovie>
+
+    @GET("movies/{id}")
+    override suspend fun movieFull(
+        @Path("id") id: String,
+        @Query("extended") extended: String
+    ): Response<ResponseFullMovie>
 
     @GET("movies/{id}/aliases")
     override suspend fun movieAliases(@Path("id") id: String): List<ResponseTitleAlias>
@@ -90,7 +109,7 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun movieRatings(@Path("id") id: String): ResponseRating
 
     @GET("movies/{id}/related")
-    override suspend fun moviesRelatedTo(@Path("id") id: String): List<ResponseMovie>
+    override suspend fun moviesRelatedTo(@Path("id") id: String): Response<List<ResponseMovie>>
 
     @GET("movies/{id}/stats")
     override suspend fun movieStats(@Path("id") id: String): ResponseStats
@@ -215,5 +234,5 @@ interface TraktApiService : ApiServiceContract {
     /** IMAGES */
     @Headers("Fanart-Api: true")
     @GET("${BuildConfig.FANART_BASE_URL}movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
-    override suspend fun poster(@Path("id") id: String): ResponseImages
+    override suspend fun poster(@Path("id") id: String): Response<ResponseImages>
 }

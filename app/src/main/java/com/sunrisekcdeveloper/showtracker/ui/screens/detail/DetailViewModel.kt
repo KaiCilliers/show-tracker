@@ -19,77 +19,35 @@
 package com.sunrisekcdeveloper.showtracker.ui.screens.detail
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Detail ViewModel
  *
  * @constructor Create empty Detail view model
  */
-class DetailViewModel @ViewModelInject constructor() : ViewModel() {
+class DetailViewModel @ViewModelInject constructor(
+    @MainRepo val repo: RepositoryContract
+) : ViewModel() {
 
-    // TODO this is still all test data
-    private val _movieListData = MutableLiveData<List<Movie>>()
-    val movieListData: LiveData<List<Movie>>
-        get() = _movieListData
+    private val _detailedMovie = MutableLiveData<DetailedMovie>()
+    val detailedMovie: LiveData<DetailedMovie>
+        get() = _detailedMovie
 
-    init {
-        _movieListData.value = fakeMovieData()
-    }
+    private val _relatedMovies = MutableLiveData<List<Movie>>()
+    val relatedMovies: LiveData<List<Movie>>
+        get() = _relatedMovies
 
-    private fun fakeMovieData(): List<Movie> {
-        return listOf(
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("End"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("End")
-        )
+    fun getMovieDetails(slug: String) = viewModelScope.launch {
+        _detailedMovie.value = repo.movieDetails(slug, "full")
+        Timber.e("Slug value: ${detailedMovie.value?.basics?.slug}")
+        _relatedMovies.value = repo.relatedMovies(detailedMovie.value?.basics?.slug ?: "")
     }
 }

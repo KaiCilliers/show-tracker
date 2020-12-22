@@ -20,19 +20,20 @@ package com.sunrisekcdeveloper.showtracker.repository
 
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryContract {
-    fun trendingMoviesFlow(): Flow<List<Movie>>
-    fun popularMoviesFlow(): Flow<List<Movie>>
-    fun boxofficeMoviesFlow(): Flow<List<Movie>>
-    fun mostPlayedMoviesFlow(): Flow<List<Movie>>
-    fun mostWatchedMoviesFlow(): Flow<List<Movie>>
-    fun mostAnticipatedMoviesFlow(): Flow<List<Movie>>
-    fun recommendedMoviesFlow(): Flow<List<Movie>>
+    suspend fun trendingMovie(): List<Movie>
+    suspend fun popularMovie(): List<Movie>
+    suspend fun boxofficeMovie(): List<Movie>
+    suspend fun mostPlayedMovie(): List<Movie>
+    suspend fun mostWatchedMovie(): List<Movie>
+    suspend fun mostAnticipatedMovie(): List<Movie>
+    suspend fun recommendedMovie(): List<Movie>
 
     suspend fun updateTrending()
     suspend fun updateBox()
@@ -41,4 +42,8 @@ interface RepositoryContract {
     suspend fun updateMostWatched()
     suspend fun updateAnticipated()
     suspend fun updateRecommended()
+
+    suspend fun movieDetails(slug: String, extended: String = ""): DetailedMovie
+    suspend fun relatedMovies(slug: String): List<Movie>
+    suspend fun search(query: String): List<Movie>
 }

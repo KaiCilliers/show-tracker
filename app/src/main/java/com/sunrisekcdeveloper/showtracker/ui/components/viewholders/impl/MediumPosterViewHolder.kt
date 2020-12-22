@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
 
+import com.bumptech.glide.Glide
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
@@ -36,6 +38,13 @@ class MediumPosterViewHolder(
     override fun bind(item: Movie) {
         binding.movie = item
         binding.clickListener = clickAction
+
+        Glide.with(binding.root.context)
+            .load(item.posterUrl)
+            .placeholder(R.drawable.wanted_poster)
+            .error(R.drawable.error_poster)
+            .into(binding.imgvMovieMediumPoster)
+
         binding.executePendingBindings()
     }
 }

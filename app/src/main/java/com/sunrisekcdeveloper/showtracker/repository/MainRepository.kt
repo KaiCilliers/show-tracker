@@ -22,9 +22,13 @@ import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
+import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import okio.IOException
+import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,192 +37,207 @@ class MainRepository @Inject constructor(
     @DataSourceTrakt private val remote: NetworkDataSourceContract
 ) : RepositoryContract {
 
-    // TODO all these flows are very similar - refractor
-    override fun trendingMoviesFlow() = local.trendingMoviesFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("trending table data the same: $same")
-            } else {
-                same = false
-            }
-            return@distinctUntilChanged same
-        }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
-                    }
-                }
-            }
-            return@map list
-        }
-        .onEach { updateTrending() }
+    /**
+     * TODO
+     *  create two flows
+     *  one to make a call for movies
+     *  one to make a call for movie posters
+     *  then zip them together
+     *  You can even do it with Room calls
+     *  https://blog.mindorks.com/kotlin-flow-zip-operator-parallel-multiple-network-calls
+     */
 
-    override fun popularMoviesFlow() = local.popularMoviesFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("popular table data the same: $same")
-            } else {
-                same = false
-            }
-            return@distinctUntilChanged same
-        }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
-                    }
-                }
-            }
-            return@map list
-        }
-        .onEach { updatePopular() }
+    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
 
-    override fun boxofficeMoviesFlow() = local.boxOfficeMoviesFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("box office table data the same: $same")
-            } else {
-                same = false
+    override suspend fun search(query: String): List<Movie> {
+        var list = listOf<Movie>()
+        if (query.isNotBlank()) {
+            val response = withContext(ioScope.coroutineContext) {
+                remote.search("movie", query, "title")
             }
-            return@distinctUntilChanged same
-        }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
+            if (response is Resource.Success) {
+                val res = withContext(cpuScope.coroutineContext) {
+                    return@withContext response.data.map {
+                        update { it.movie.asEntity() }
+                        val movie = it.movie.asDomain()
+                        withContext(ioScope.coroutineContext) {
+                            val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                            if (poster is Resource.Success) {
+                                movie.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                            }
+                        }
+                        movie
                     }
                 }
+                list = res
             }
-            return@map list
         }
-        .onEach { updateBox() }
+        return list
+    }
 
-    override fun mostPlayedMoviesFlow() = local.mostPlayedMoviesFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("most played table data the same: $same")
-            } else {
-                same = false
-            }
-            return@distinctUntilChanged same
-        }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
+    override suspend fun relatedMovies(slug: String): List<Movie> {
+        val response = withContext(ioScope.coroutineContext) { remote.relatedMovies(slug) }
+        var list: List<Movie> = listOf()
+        if (response is Resource.Success) {
+            val res = withContext(cpuScope.coroutineContext) {
+                return@withContext response.data.map {
+                    val movie = it.asDomain()
+                    update { local.insertMovie(it.asEntity()) }
+                    withContext(ioScope.coroutineContext) {
+                        val poster = remote.poster("${it.identifiers.tmdb}")
+                        if (poster is Resource.Success) {
+                            movie.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                        }
                     }
+                    movie
                 }
             }
-            return@map list
-        }.onEach { updateMostPlayed() }
+            list = res
+        }
+        return list
+    }
 
-    override fun mostWatchedMoviesFlow() = local.mostWatchedMoviesFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("most watched table data the same: $same")
-            } else {
-                same = false
+    override suspend fun movieDetails(slug: String, extended: String): DetailedMovie {
+        val response = withContext(ioScope.coroutineContext) { remote.detailedMovie(slug, extended) }
+        var entity: DetailedMovie = DetailedMovie(
+            Movie("", ""), "", "", "", "", "", ""
+        )
+        if (response is Resource.Success) {
+            entity = response.data.asDomain()
+            val poster = remote.poster("${response.data.identifiers.tmdb}")
+            if (poster is Resource.Success) {
+                entity.basics.posterUrl = poster.data.posters?.get(0)?.url ?: ""
             }
-            return@distinctUntilChanged same
         }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
-                    }
-                }
-            }
-            return@map list
-        }.onEach { updateMostWatched() }
+        return entity
+    }
 
-    override fun mostAnticipatedMoviesFlow() = local.mostAnticipatedMoviesFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("anticipated table data the same: $same")
-            } else {
-                same = false
+    override suspend fun trendingMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }
+//        update { updateTrending() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
             }
-            return@distinctUntilChanged same
         }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
-                    }
-                }
-            }
-            return@map list
-        }
-        .onEach { updateAnticipated() }
+    }
 
-    override fun recommendedMoviesFlow() = local.recommendedFlow()
-        .distinctUntilChanged { old, new ->
-            var same = true
-            if (!old.isNullOrEmpty() && !new.isNullOrEmpty()) {
-                (new.indices).forEach { i ->
-                    if (new[i].data.mediaSlug != old[i].data.mediaSlug) same = false
-                }
-                Timber.d("recommended table data the same: $same")
-            } else {
-                same = false
+    override suspend fun popularMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.popularMovies() }
+//        update { updatePopular() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
             }
-            return@distinctUntilChanged same
         }
-        .map { item ->
-            val list = arrayListOf<Movie>()
-            if (!item.isNullOrEmpty()) {
-                item.forEach {
-                    it.movie?.let { movie ->
-                        list.add(movie.asDomain())
+    }
+
+    override suspend fun boxofficeMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.boxOfficeMovies() }
+//        update { updateBox() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
+    }
+
+    override suspend fun mostPlayedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.mostPlayedMovies() }
+//        update { updateMostPlayed() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
+    }
+
+    override suspend fun mostWatchedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.mostWatchedMovies() }
+//        update { updateMostWatched() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
+    }
+
+    override suspend fun mostAnticipatedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.mostAnticipatedMovies() }
+        update { updateAnticipated() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
+    }
+
+    override suspend fun recommendedMovie(): List<Movie> {
+        val result = withContext(ioScope.coroutineContext) { local.recommended() }
+//        update { updateRecommended() } // this will return immediately thus it wont block
+        return withContext(cpuScope.coroutineContext) {
+            result.map { item ->
+                item.movie?.asDomain()!!
+            }
+        }
+    }
+
+    // https://medium.com/@douglas.iacovelli/how-to-handle-errors-with-retrofit-and-coroutines-33e7492a912
+    suspend fun <T> safeApiCall(
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        apiCall: suspend () -> T
+    ): Resource<T> =
+        withContext(dispatcher) {
+            try {
+                Resource.Success(apiCall.invoke())
+            } catch (throwable: Throwable) {
+                when (throwable) {
+                    is IOException -> Resource.Error("")
+                    is HttpException -> {
+                        Resource.Error(
+                            "code = throwable.code()"
+                        )
+                    }
+                    else -> {
+                        Resource.Error("null, null")
                     }
                 }
             }
-            return@map list
         }
-        .onEach { updateRecommended() }
+
+    private fun update(block: suspend () -> Unit) {
+        ioScope.launch {
+            block.invoke()
+        }
+    }
 
     override suspend fun updateTrending() {
         val response = remote.fetchTrend()
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.movie!!.identifiers
+//                        Timber.e("==============${it.movie.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchTrending()
-            local.insertMovie(*response.data.map { it.movie!!.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.movie!!.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 local.updateTrending(*response.data.map { it.asTrendingMovieEntity() }
                     .toTypedArray())
@@ -232,8 +251,29 @@ class MainRepository @Inject constructor(
     override suspend fun updateBox() {
         val response = remote.fetchBox()
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.movie!!.identifiers
+//                        Timber.e("==============${it.movie.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchBox()
-            local.insertMovie(*response.data.map { it.movie.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.movie!!.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 local.updateBox(*response.data.map { it.asEntity() }.toTypedArray())
             } else {
@@ -245,8 +285,29 @@ class MainRepository @Inject constructor(
     override suspend fun updatePopular() {
         val response = remote.fetchPop()
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.identifiers
+//                        Timber.e("==============${it.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchPopular()
-            local.insertMovie(*response.data.map { it.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 val s = local.updatePopular(*response.data.map { PopularListEntity.from(it) }
                     .toTypedArray())
@@ -260,8 +321,29 @@ class MainRepository @Inject constructor(
     override suspend fun updateMostPlayed() {
         val response = remote.fetchMostPlayed()
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.movie!!.identifiers
+//                        Timber.e("==============${it.movie.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchMostPlayed()
-            local.insertMovie(*response.data.map { it.movie!!.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.movie!!.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 local.updateMostPlayed(*response.data.map { MostPlayedListEntity.from(it) }
                     .toTypedArray())
@@ -275,8 +357,29 @@ class MainRepository @Inject constructor(
     override suspend fun updateMostWatched() {
         val response = remote.fetchMostWatched()
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.movie!!.identifiers
+//                        Timber.e("==============${it.movie.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchMostWatched()
-            local.insertMovie(*response.data.map { it.movie!!.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.movie!!.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 local.updateMostWatched(*response.data.map { MostWatchedListEntity.from(it) }
                     .toTypedArray())
@@ -289,9 +392,46 @@ class MainRepository @Inject constructor(
 
     override suspend fun updateAnticipated() {
         val response = remote.fetchAnticipated()
+        // val response = safeApiCall { remote.fetchAnticipated() }
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.movie!!.identifiers
+//                        Timber.e("==============${it.movie.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchAnticipated()
-            local.insertMovie(*response.data.map { it.movie!!.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.movie!!.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        var url = ""
+                        poster.data.posters?.get(0)?.let {
+                            url += it.url + ";"
+                        }
+                        poster.data.background?.get(0)?.let {
+                            url += it.url + ";"
+                        }
+                        poster.data.thumb?.get(0)?.let {
+                            url += it.url + ";"
+                        }
+                        poster.data.logo?.get(0)?.let {
+                            url += it.url
+                        }
+                        Timber.e("URRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+                        Timber.e(url)
+                        entity.posterUrl = url
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 local.updateAnticipated(*response.data.map { AnticipatedListEntity.from(it) }
                     .toTypedArray())
@@ -305,8 +445,29 @@ class MainRepository @Inject constructor(
     override suspend fun updateRecommended() {
         val response = remote.fetchRecommended()
         if (response is Resource.Success) {
+//            coroutineScope {
+//                withContext(Dispatchers.Default) {
+//                    response.data.forEach {
+//                        val ids = it.movie!!.identifiers
+//                        Timber.e("==============${it.movie.title}==============")
+//                        Timber.e("SLUG - ${ids.slug}")
+//                        Timber.e("TRAKT - ${ids.trakt}")
+//                        Timber.e("TMDB - ${ids.tmdb}")
+//                        Timber.e("IMDB - ${ids.imdb}")
+//                    }
+//                }
+//            }
             val exists = local.fetchRecommended()
-            local.insertMovie(*response.data.map { it.movie!!.asEntity() }.toTypedArray())
+            local.insertMovie(*response.data.map {
+                val entity = it.movie!!.asEntity()
+                withContext(Dispatchers.IO) {
+                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
+                    if (poster is Resource.Success) {
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+                    }
+                }
+                entity
+            }.toTypedArray())
             if (exists.size == 10) {
                 local.updateRecommended(*response.data.map { RecommendedListEntity.from(it) }
                     .toTypedArray())

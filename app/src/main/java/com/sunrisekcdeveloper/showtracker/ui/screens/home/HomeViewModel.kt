@@ -23,6 +23,7 @@ import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 
 /**
  * Home ViewModel
@@ -34,11 +35,33 @@ class HomeViewModel @ViewModelInject constructor(
     @MainRepo private val repo: RepositoryContract
 ) : ViewModel() {
 
-    val trend = repo.trendingMoviesFlow().asLiveData()
-    val pop = repo.popularMoviesFlow().asLiveData()
-    val box = repo.boxofficeMoviesFlow().asLiveData()
-    val mostWatched = repo.mostWatchedMoviesFlow().asLiveData()
-    val mostPlayed = repo.mostPlayedMoviesFlow().asLiveData()
-    val anticipated = repo.mostAnticipatedMoviesFlow().asLiveData()
-    val recommended = repo.recommendedMoviesFlow().asLiveData()
+    val trend = liveData { emit(repo.trendingMovie()) }
+    val pop = liveData { emit(repo.popularMovie()) }
+    val box = liveData { emit(repo.boxofficeMovie()) }
+    val mostWatched = liveData { emit(repo.mostWatchedMovie()) }
+    val mostPlayed = liveData { emit(repo.mostPlayedMovie()) }
+    val anticipated = liveData { emit(repo.mostAnticipatedMovie()) }
+    val recommended = liveData { emit(repo.recommendedMovie()) }
+
+    fun anythingReally(value: String) = viewModelScope.launch {
+        // repository suspend call
+    }
+
+    val someVal = liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
+        emit("some initial loading text")
+        emitSource(liveData { emit("dataSource.fetchLiveData() - obviously without the liveData builder") })
+    }
+
+//    val someBetterValue: LiveData<String> =
+//        dataSource.getFlow()
+//            .onStart { emit("loading string") }
+//            .asLiveData()
+
+//    // continuous
+//    val trenidng = liveData {
+//        repo.trendingMoviesFlow().collect {
+//            emit(it)
+//        }
+//    }
+
 }

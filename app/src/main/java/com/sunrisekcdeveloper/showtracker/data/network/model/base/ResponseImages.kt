@@ -29,5 +29,11 @@ import com.squareup.moshi.Json
  */
 data class ResponseImages(
     @Json(name = "name") val name: String,
-    @Json(name = "movieposter") val posters: List<ResponsePoster>
+    @Json(name = "movieposter") val posters: List<ResponsePoster>?,
+    @Json(name = "moviedisc") val disc: List<ResponsePoster>?,
+    @Json(name = "hdmovielogo") val logo: List<ResponsePoster>?,
+    @Json(name = "moviebackground") val background: List<ResponsePoster>?,
+    @Json(name = "moviethumb") val thumb: List<ResponsePoster>?,
+    @Json(name = "hdmovieclearart") val clearArt: List<ResponsePoster>?,
+    @Json(name = "moviebanner") val banner: List<ResponsePoster>?
 )

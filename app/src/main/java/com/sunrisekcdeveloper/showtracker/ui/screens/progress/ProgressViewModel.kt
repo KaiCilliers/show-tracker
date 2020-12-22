@@ -61,33 +61,33 @@ class ProgressViewModel @ViewModelInject constructor(
     private fun fakeSuggestionData(): List<SuggestionListModel> {
         return listOf(
             SuggestionListModel.HeaderItem("Today"),
-            SuggestionListModel.MovieItem(Movie("Finding Nemo")),
-            SuggestionListModel.MovieItem(Movie("Harry Potter")),
-            SuggestionListModel.MovieItem(Movie("Deadpool")),
+            SuggestionListModel.MovieItem(Movie("Finding Nemo", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Harry Potter", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Deadpool", "some slug")),
             SuggestionListModel.HeaderItem("Tomorrow"),
-            SuggestionListModel.MovieItem(Movie("Jurassic Park")),
-            SuggestionListModel.MovieItem(Movie("Forest Gump")),
+            SuggestionListModel.MovieItem(Movie("Jurassic Park", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Forest Gump", "some slug")),
             SuggestionListModel.HeaderItem("Next Week"),
-            SuggestionListModel.MovieItem(Movie("Mall Cop")),
-            SuggestionListModel.MovieItem(Movie("Miss Congeniality")),
-            SuggestionListModel.MovieItem(Movie("Gladiator")),
-            SuggestionListModel.MovieItem(Movie("Finding Dory")),
-            SuggestionListModel.MovieItem(Movie("Shrek")),
-            SuggestionListModel.MovieItem(Movie("Snow White"))
+            SuggestionListModel.MovieItem(Movie("Mall Cop", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Miss Congeniality", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Gladiator", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Finding Dory", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Shrek", "some slug")),
+            SuggestionListModel.MovieItem(Movie("Snow Whit", "some slug"))
         )
     }
 
     private fun fakeMovieData(): List<Movie> {
         return listOf<Movie>(
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory")
+            Movie("Finding Nemo", "myslug"),
+            Movie("Harry Potter", "myslug"),
+            Movie("Deadpool", "myslug"),
+            Movie("Jurassic Park", "myslug"),
+            Movie("Forest Gump", "myslug"),
+            Movie("Mall Cop", "myslug"),
+            Movie("Miss Congeniality", "myslug"),
+            Movie("Gladiator", "myslug"),
+            Movie("Finding Dory", "myslug")
         )
     }
 }
