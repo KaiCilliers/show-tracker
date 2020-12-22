@@ -502,5 +502,5 @@ interface ApiServiceContract {
     suspend fun showCredits(id: String): ResponseCast
 
     /** IMAGES */
-    suspend fun poster(id: String): ResponseImages
+    suspend fun poster(id: String): Response<ResponseImages>
 }

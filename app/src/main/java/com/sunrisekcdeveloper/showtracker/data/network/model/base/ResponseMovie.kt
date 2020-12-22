@@ -48,6 +48,7 @@ data class ResponseMovie(
                 runtime = 0,
                 trailerUrl = "",
                 homepageUrl = "",
+                posterUrl = "",
                 status = "",
                 rating = 0,
                 votes = -1,

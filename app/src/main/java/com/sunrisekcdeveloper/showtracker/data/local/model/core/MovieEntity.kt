@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.core
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.model.Movie
 
 @Entity(tableName = "tbl_movie")
@@ -46,6 +47,9 @@ data class MovieEntity(
     val trailerUrl: String?,
     @ColumnInfo(name = "movie_homepage_url")
     val homepageUrl: String,
+    @ColumnInfo(name = "movie_poster_url")
+    // TODO replace with different implementation
+    var posterUrl: String, // contains multiple urls split by ';'
     @ColumnInfo(name = "movie_status")
     val status: String,
     @ColumnInfo(name = "movie_vote_count")
@@ -58,7 +62,7 @@ data class MovieEntity(
     val certification: String
 ) {
     fun asDomain() = Movie(
-        title = title
+        title = title,
+        posterUrl = posterUrl
     )
 }
-
