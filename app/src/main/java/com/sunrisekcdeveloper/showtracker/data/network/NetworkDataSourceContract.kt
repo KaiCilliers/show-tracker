@@ -37,4 +37,5 @@ interface NetworkDataSourceContract {
     suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>>
     suspend fun poster(id: String): Resource<ResponseImages>
     suspend fun detailedMovie(slug: String, extended: String = ""): Resource<ResponseFullMovie>
+    suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>>
 }

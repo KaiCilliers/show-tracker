@@ -26,6 +26,7 @@ import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Detail ViewModel
@@ -36,73 +37,17 @@ class DetailViewModel @ViewModelInject constructor(
     @MainRepo val repo: RepositoryContract
 ) : ViewModel() {
 
-    // TODO this is still all test data
-    private val _movieListData = MutableLiveData<List<Movie>>()
-    val movieListData: LiveData<List<Movie>>
-        get() = _movieListData
-
-    init {
-        _movieListData.value = fakeMovieData()
-    }
-
     private val _detailedMovie = MutableLiveData<DetailedMovie>()
     val detailedMovie: LiveData<DetailedMovie>
         get() = _detailedMovie
 
+    private val _relatedMovies = MutableLiveData<List<Movie>>()
+    val relatedMovies: LiveData<List<Movie>>
+        get() = _relatedMovies
+
     fun getMovieDetails(slug: String) = viewModelScope.launch {
         _detailedMovie.value = repo.movieDetails(slug, "full")
-    }
-
-    private fun fakeMovieData(): List<Movie> {
-        return listOf(
-            Movie("Finding Nemo", "some slug"),
-            Movie("Harry Potter", "some slug"),
-            Movie("Deadpool", "some slug"),
-            Movie("Jurassic Park", "some slug"),
-            Movie("Forest Gump", "some slug"),
-            Movie("Mall Cop", "some slug"),
-            Movie("Miss Congeniality", "some slug"),
-            Movie("Gladiator", "some slug"),
-            Movie("Finding Dory", "some slug"),
-            Movie("Finding Nemo", "some slug"),
-            Movie("Harry Potter", "some slug"),
-            Movie("Deadpool", "some slug"),
-            Movie("Jurassic Park", "some slug"),
-            Movie("Forest Gump", "some slug"),
-            Movie("Mall Cop", "some slug"),
-            Movie("Miss Congeniality", "some slug"),
-            Movie("Gladiator", "some slug"),
-            Movie("Finding Dory", "some slug"),
-            Movie("Finding Nemo", "some slug"),
-            Movie("Harry Potter", "some slug"),
-            Movie("Deadpool", "some slug"),
-            Movie("Jurassic Park", "some slug"),
-            Movie("Forest Gump", "some slug"),
-            Movie("End", "some slug"),
-            Movie("Finding Nemo", "some slug"),
-            Movie("Harry Potter", "some slug"),
-            Movie("Deadpool", "some slug"),
-            Movie("Jurassic Park", "some slug"),
-            Movie("Forest Gump", "some slug"),
-            Movie("Mall Cop", "some slug"),
-            Movie("Miss Congeniality", "some slug"),
-            Movie("Gladiator", "some slug"),
-            Movie("Finding Dory", "some slug"),
-            Movie("Finding Nemo", "some slug"),
-            Movie("Harry Potter", "some slug"),
-            Movie("Deadpool", "some slug"),
-            Movie("Jurassic Park", "some slug"),
-            Movie("Forest Gump", "some slug"),
-            Movie("Mall Cop", "some slug"),
-            Movie("Miss Congeniality", "some slug"),
-            Movie("Gladiator", "some slug"),
-            Movie("Finding Dory", "some slug"),
-            Movie("Finding Nemo", "some slug"),
-            Movie("Harry Potter", "some slug"),
-            Movie("Deadpool", "some slug"),
-            Movie("Jurassic Park", "some slug"),
-            Movie("Forest Gump", "some slug"),
-            Movie("End", "some slug")
-        )
+        Timber.e("Slug value: ${detailedMovie.value?.basics?.slug}")
+        _relatedMovies.value = repo.relatedMovies(detailedMovie.value?.basics?.slug ?: "")
     }
 }

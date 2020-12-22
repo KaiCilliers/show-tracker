@@ -35,6 +35,9 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -94,7 +97,7 @@ class DetailFragment : Fragment() {
                 .error(R.drawable.error_poster)
                 .into(binding.imgvMoviePoster)
         }
-        viewModel.movieListData.subscribe(viewLifecycleOwner) {
+        viewModel.relatedMovies.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }

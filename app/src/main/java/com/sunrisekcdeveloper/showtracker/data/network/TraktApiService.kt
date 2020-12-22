@@ -109,7 +109,7 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun movieRatings(@Path("id") id: String): ResponseRating
 
     @GET("movies/{id}/related")
-    override suspend fun moviesRelatedTo(@Path("id") id: String): List<ResponseMovie>
+    override suspend fun moviesRelatedTo(@Path("id") id: String): Response<List<ResponseMovie>>
 
     @GET("movies/{id}/stats")
     override suspend fun movieStats(@Path("id") id: String): ResponseStats

@@ -208,7 +208,7 @@ interface ApiServiceContract {
      * @param id
      * @return
      */
-    suspend fun moviesRelatedTo(id: String): List<ResponseMovie>
+    suspend fun moviesRelatedTo(id: String): Response<List<ResponseMovie>>
 
     /**
      * Movie stats

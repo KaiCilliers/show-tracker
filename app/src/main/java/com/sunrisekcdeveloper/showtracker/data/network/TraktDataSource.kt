@@ -35,6 +35,10 @@ class TraktDataSource @Inject constructor(
     @TraktApi private val api: ApiServiceContract
 ) : NetworkDataSourceContract {
 
+    override suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>> = result {
+        api.moviesRelatedTo(slug)
+    }
+
     override suspend fun detailedMovie(slug: String, extended: String): Resource<ResponseFullMovie> = result {
         api.movieFull(slug, extended)
     }

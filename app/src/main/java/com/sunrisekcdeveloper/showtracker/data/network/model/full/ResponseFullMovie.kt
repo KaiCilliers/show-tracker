@@ -42,7 +42,7 @@ data class ResponseFullMovie(
     val language: String,
     @Json(name = "available_translations") val translations: List<String>,
     val genres: List<String>,
-    val certification: String
+    val certification: String?
 ) {
     fun asDomain(): DetailedMovie {
         return DetailedMovie(
@@ -52,7 +52,7 @@ data class ResponseFullMovie(
                 posterUrl = ""
             ),
             releaseDate = released,
-            ageRating = certification,
+            ageRating = "certification",
             runningTime = "$runtime",
             description = overview,
             notableActors = "{ None Yet }",

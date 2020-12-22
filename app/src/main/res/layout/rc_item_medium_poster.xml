@@ -49,6 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Movie Title"/>
         <ImageView
+            android:id="@+id/imgv_movie_medium_poster"
             android:layout_width="82dp"
             android:layout_height="120dp"
             android:padding="2dp"
