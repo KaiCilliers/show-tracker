@@ -45,4 +45,5 @@ interface RepositoryContract {
 
     suspend fun movieDetails(slug: String, extended: String = ""): DetailedMovie
     suspend fun relatedMovies(slug: String): List<Movie>
+    suspend fun search(query: String): List<Movie>
 }

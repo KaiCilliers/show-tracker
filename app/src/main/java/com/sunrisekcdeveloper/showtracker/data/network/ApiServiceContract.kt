@@ -33,7 +33,7 @@ interface ApiServiceContract {
         type: String,
         searchText: String,
         field: String = ""
-    ): Response<*>
+    ): Response<List<EnvelopeSearchMovie>>
 
     /** TODO MISCELLANEOUS */
     /**

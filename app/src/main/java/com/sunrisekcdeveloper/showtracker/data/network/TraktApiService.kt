@@ -38,7 +38,7 @@ interface TraktApiService : ApiServiceContract {
         @Path("type") type: String,
         @Query("query") searchText: String,
         @Query("field") field: String
-    ): Response<*>
+    ): Response<List<EnvelopeSearchMovie>>
 
     /** TODO MISCELLANEOUS */
 

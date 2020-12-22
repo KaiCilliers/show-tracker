@@ -19,17 +19,25 @@
 package com.sunrisekcdeveloper.showtracker.ui.screens.search
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import com.sunrisekcdeveloper.showtracker.util.getQueryTextChangedStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Search ViewModel
  *
  * @constructor Create empty Search view model
  */
-class SearchViewModel @ViewModelInject constructor() : ViewModel() {
+class SearchViewModel @ViewModelInject constructor(
+    @MainRepo val repo: RepositoryContract
+) : ViewModel() {
 
     // TODO all this code is still test data
     private val _movieListData = MutableLiveData<List<Movie>>()
@@ -38,6 +46,10 @@ class SearchViewModel @ViewModelInject constructor() : ViewModel() {
 
     init {
         _movieListData.value = fakeMovieData()
+    }
+
+    fun search(query: String) = viewModelScope.launch {
+        _movieListData.value = repo.search(query)
     }
 
     private fun fakeMovieData(): List<Movie> {

@@ -53,9 +53,7 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModels()
 
     private val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    private lateinit var job: Job
+        get() = Dispatchers.Main + Job()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,25 +64,22 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
+        setupSearch()
         return binding.root
     }
 
+    @FlowPreview
     private fun setupSearch() {
         CoroutineScope(coroutineContext).launch {
             binding.svFilterAll.getQueryTextChangedStateFlow()
                 .debounce(300)
                 .filter { query ->
-                    if (query.isEmpty()) {
-                        // set result set to empty
-                        return@filter false
-                    } else {
-                        return@filter true
-                    }
+                    return@filter query.isNotEmpty()
                 }
                 .distinctUntilChanged()
                 .flowOn(Dispatchers.Default)
                 .collect { result ->
-                    // set result data set
+                    viewModel.search(result)
                     Timber.d("$result")
                 }
         }
@@ -97,7 +92,7 @@ class SearchFragment : Fragment() {
                 Timber.d("Search Filter: $item")
                 findNavController().navigate(
                     SearchFragmentDirections.actionSearchFragmentDestToDetailFragment(
-                        "FROM SEARCH FRAGMENT"
+                        item.slug
                     )
                 )
             }
