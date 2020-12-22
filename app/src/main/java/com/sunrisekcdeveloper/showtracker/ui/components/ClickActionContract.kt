@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components
 
+import com.sunrisekcdeveloper.showtracker.model.Movie
+
 /**
  * Click Action Contract that defines the responsibilities of an onClickListener
  */
@@ -27,5 +29,5 @@ interface ClickActionContract {
      *
      * @param item can be any type that an onClickListener might require
      */
-    fun onClick(item: Any)
+    fun onClick(item: Movie)
 }

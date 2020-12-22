@@ -75,10 +75,10 @@ class HomeFragment : Fragment() {
     private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("Featured: $item")
                 findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentDestToDetailFragment("FROM HOME FRAGMENT")
+                    HomeFragmentDirections.actionHomeFragmentDestToDetailFragment(item.slug)
                 )
             }
         })

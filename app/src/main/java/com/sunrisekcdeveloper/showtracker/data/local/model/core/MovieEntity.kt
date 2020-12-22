@@ -63,6 +63,7 @@ data class MovieEntity(
 ) {
     fun asDomain() = Movie(
         title = title,
+        slug = slug,
         posterUrl = posterUrl
     )
 }

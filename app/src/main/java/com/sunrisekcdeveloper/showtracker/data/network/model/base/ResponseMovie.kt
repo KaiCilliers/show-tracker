@@ -36,7 +36,8 @@ data class ResponseMovie(
         @Json(name = "ids") val identifiers: ResponseIdentifiers
 ) {
         fun asDomain() = Movie(
-                title = this.title
+                title = this.title,
+                slug = this.identifiers.slug
         )
         fun asEntity() = MovieEntity(
                 slug = this.identifiers.slug,

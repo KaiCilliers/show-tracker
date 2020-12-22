@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.data.network.model.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.data.network.model.full.ResponseFullMovie
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -81,7 +82,16 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     @GET("movies/{id}")
-    override suspend fun movie(@Path("id") id: String): ResponseMovie
+    override suspend fun movie(
+        @Path("id") id: String,
+        @Query("extended") extended: String
+    ): Response<ResponseMovie>
+
+    @GET("movies/{id}")
+    override suspend fun movieFull(
+        @Path("id") id: String,
+        @Query("extended") extended: String
+    ): Response<ResponseFullMovie>
 
     @GET("movies/{id}/aliases")
     override suspend fun movieAliases(@Path("id") id: String): List<ResponseTitleAlias>

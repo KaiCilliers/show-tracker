@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
+import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import kotlinx.coroutines.*
@@ -48,6 +49,21 @@ class MainRepository @Inject constructor(
 
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
+
+    override suspend fun movieDetails(slug: String, extended: String): DetailedMovie {
+        val response = withContext(ioScope.coroutineContext) { remote.detailedMovie(slug, extended) }
+        var entity: DetailedMovie = DetailedMovie(
+            Movie("", ""), "", "", "", "", "", ""
+        )
+        if (response is Resource.Success) {
+            entity = response.data.asDomain()
+            val poster = remote.poster("${response.data.identifiers.tmdb}")
+            if (poster is Resource.Success) {
+                entity.basics.posterUrl = poster.data.posters?.get(0)?.url ?: ""
+            }
+        }
+        return entity
+    }
 
     override suspend fun trendingMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }

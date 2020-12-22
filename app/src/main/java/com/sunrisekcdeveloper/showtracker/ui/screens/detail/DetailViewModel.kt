@@ -19,17 +19,22 @@
 package com.sunrisekcdeveloper.showtracker.ui.screens.detail
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
+import kotlinx.coroutines.launch
 
 /**
  * Detail ViewModel
  *
  * @constructor Create empty Detail view model
  */
-class DetailViewModel @ViewModelInject constructor() : ViewModel() {
+class DetailViewModel @ViewModelInject constructor(
+    @MainRepo val repo: RepositoryContract
+) : ViewModel() {
 
     // TODO this is still all test data
     private val _movieListData = MutableLiveData<List<Movie>>()
@@ -40,56 +45,64 @@ class DetailViewModel @ViewModelInject constructor() : ViewModel() {
         _movieListData.value = fakeMovieData()
     }
 
+    private val _detailedMovie = MutableLiveData<DetailedMovie>()
+    val detailedMovie: LiveData<DetailedMovie>
+        get() = _detailedMovie
+
+    fun getMovieDetails(slug: String) = viewModelScope.launch {
+        _detailedMovie.value = repo.movieDetails(slug, "full")
+    }
+
     private fun fakeMovieData(): List<Movie> {
         return listOf(
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("End"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("Mall Cop"),
-            Movie("Miss Congeniality"),
-            Movie("Gladiator"),
-            Movie("Finding Dory"),
-            Movie("Finding Nemo"),
-            Movie("Harry Potter"),
-            Movie("Deadpool"),
-            Movie("Jurassic Park"),
-            Movie("Forest Gump"),
-            Movie("End")
+            Movie("Finding Nemo", "some slug"),
+            Movie("Harry Potter", "some slug"),
+            Movie("Deadpool", "some slug"),
+            Movie("Jurassic Park", "some slug"),
+            Movie("Forest Gump", "some slug"),
+            Movie("Mall Cop", "some slug"),
+            Movie("Miss Congeniality", "some slug"),
+            Movie("Gladiator", "some slug"),
+            Movie("Finding Dory", "some slug"),
+            Movie("Finding Nemo", "some slug"),
+            Movie("Harry Potter", "some slug"),
+            Movie("Deadpool", "some slug"),
+            Movie("Jurassic Park", "some slug"),
+            Movie("Forest Gump", "some slug"),
+            Movie("Mall Cop", "some slug"),
+            Movie("Miss Congeniality", "some slug"),
+            Movie("Gladiator", "some slug"),
+            Movie("Finding Dory", "some slug"),
+            Movie("Finding Nemo", "some slug"),
+            Movie("Harry Potter", "some slug"),
+            Movie("Deadpool", "some slug"),
+            Movie("Jurassic Park", "some slug"),
+            Movie("Forest Gump", "some slug"),
+            Movie("End", "some slug"),
+            Movie("Finding Nemo", "some slug"),
+            Movie("Harry Potter", "some slug"),
+            Movie("Deadpool", "some slug"),
+            Movie("Jurassic Park", "some slug"),
+            Movie("Forest Gump", "some slug"),
+            Movie("Mall Cop", "some slug"),
+            Movie("Miss Congeniality", "some slug"),
+            Movie("Gladiator", "some slug"),
+            Movie("Finding Dory", "some slug"),
+            Movie("Finding Nemo", "some slug"),
+            Movie("Harry Potter", "some slug"),
+            Movie("Deadpool", "some slug"),
+            Movie("Jurassic Park", "some slug"),
+            Movie("Forest Gump", "some slug"),
+            Movie("Mall Cop", "some slug"),
+            Movie("Miss Congeniality", "some slug"),
+            Movie("Gladiator", "some slug"),
+            Movie("Finding Dory", "some slug"),
+            Movie("Finding Nemo", "some slug"),
+            Movie("Harry Potter", "some slug"),
+            Movie("Deadpool", "some slug"),
+            Movie("Jurassic Park", "some slug"),
+            Movie("Forest Gump", "some slug"),
+            Movie("End", "some slug")
         )
     }
 }

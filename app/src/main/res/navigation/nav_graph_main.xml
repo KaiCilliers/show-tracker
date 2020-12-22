@@ -55,9 +55,9 @@
         android:label="DetailFragment"
         tools:layout="@layout/fragment_movie_detail">
         <argument
-            android:name="dummy"
+            android:name="mediaSlug"
             app:argType="string"
-            android:defaultValue="def" />
+            android:defaultValue="defaultvalue" />
         <action
             android:id="@+id/action_detail_fragment_dest_self"
             app:destination="@id/detail_fragment_dest"
