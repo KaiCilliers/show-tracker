@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
@@ -34,6 +35,9 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -64,25 +68,17 @@ class DetailFragment : Fragment() {
         return binding.root
     }
     private fun setupBinding() {
-        binding.movie = DetailedMovie(
-            Movie("The Incredibles"),
-            "1997",
-            "16+",
-            "1h58m",
-            getString(R.string.movie_description_dummy),
-            "Jack Black, Peter Griff.. more",
-            "James Cameron"
-        )
-        Timber.d(arguments?.getString("dummy","2ndDef"))
+        viewModel.getMovieDetails((arguments?.getString("mediaSlug","defua") ?: ""))
+        Timber.d(arguments?.getString("mediaSlug","defua"))
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("DETAIL TITLE: $item")
                 // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
-                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf("FROM SELF"))
+                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf(item.slug))
             }
         })
         binding.rcMoreLikeThis.adapter = adapter
@@ -92,7 +88,16 @@ class DetailFragment : Fragment() {
         binding.rcMoreLikeThis.isNestedScrollingEnabled = false
     }
     private fun observeViewModel() {
-        viewModel.movieListData.subscribe(viewLifecycleOwner) {
+        viewModel.detailedMovie.subscribe(viewLifecycleOwner) {
+            Timber.d("new movie: $it")
+            binding.movie = it
+            Glide.with(this)
+                .load(it.basics.posterUrl)
+                .placeholder(R.drawable.wanted_poster)
+                .error(R.drawable.error_poster)
+                .into(binding.imgvMoviePoster)
+        }
+        viewModel.relatedMovies.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }

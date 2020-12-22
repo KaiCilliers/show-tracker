@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.data.network
 import com.sunrisekcdeveloper.showtracker.data.network.model.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.*
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.data.network.model.full.ResponseFullMovie
 import retrofit2.Response
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -32,7 +33,7 @@ interface ApiServiceContract {
         type: String,
         searchText: String,
         field: String = ""
-    ): Response<*>
+    ): Response<List<EnvelopeSearchMovie>>
 
     /** TODO MISCELLANEOUS */
     /**
@@ -146,10 +147,13 @@ interface ApiServiceContract {
      * Movie with minimal details
      * Supports Extended Info
      *
+     * TODO update documentation
+     *
      * @param id
      * @return
      */
-    suspend fun movie(id: String): ResponseMovie
+    suspend fun movie(id: String, extended: String = ""): Response<ResponseMovie>
+    suspend fun movieFull(id: String, extended: String = ""): Response<ResponseFullMovie>
 
     /**
      * Movie aliases all title aliases for a movie including countries where name is different
@@ -204,7 +208,7 @@ interface ApiServiceContract {
      * @param id
      * @return
      */
-    suspend fun moviesRelatedTo(id: String): List<ResponseMovie>
+    suspend fun moviesRelatedTo(id: String): Response<List<ResponseMovie>>
 
     /**
      * Movie stats

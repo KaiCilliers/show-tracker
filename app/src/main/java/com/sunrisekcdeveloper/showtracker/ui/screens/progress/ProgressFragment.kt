@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
+import com.sunrisekcdeveloper.showtracker.model.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
 import com.sunrisekcdeveloper.showtracker.util.subscribe
@@ -76,7 +77,7 @@ class ProgressFragment : Fragment(), CoroutineScope {
     private fun setupBinding() {
         // Temporal Coupling
         adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("TITLE: $item")
                 findNavController().navigate(
                     ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
@@ -93,7 +94,7 @@ class ProgressFragment : Fragment(), CoroutineScope {
         )
         // Temporal Coupling
         upComingAdapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Any) {
+            override fun onClick(item: Movie) {
                 Timber.d("SPECIAL click: $item")
             }
         })

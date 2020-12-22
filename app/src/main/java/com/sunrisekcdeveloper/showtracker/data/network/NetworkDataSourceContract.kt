@@ -22,11 +22,12 @@ import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponsePoster
 import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.data.network.model.full.ResponseFullMovie
 import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import retrofit2.Response
 
 interface NetworkDataSourceContract {
-    suspend fun search(type: String, searchText: String, field: String = ""): Resource<*>
+    suspend fun search(type: String, searchText: String, field: String = ""): Resource<List<EnvelopeSearchMovie>>
     suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
     suspend fun fetchPop(): Resource<List<ResponseMovie>>
@@ -35,4 +36,6 @@ interface NetworkDataSourceContract {
     suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>>
     suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>>
     suspend fun poster(id: String): Resource<ResponseImages>
+    suspend fun detailedMovie(slug: String, extended: String = ""): Resource<ResponseFullMovie>
+    suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>>
 }
