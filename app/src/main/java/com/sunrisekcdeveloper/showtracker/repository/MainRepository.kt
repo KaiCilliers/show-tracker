@@ -36,6 +36,16 @@ class MainRepository @Inject constructor(
     @DataSourceTrakt private val remote: NetworkDataSourceContract
 ) : RepositoryContract {
 
+    /**
+     * TODO
+     *  create two flows
+     *  one to make a call for movies
+     *  one to make a call for movie posters
+     *  then zip them together
+     *  You can even do it with Room calls
+     *  https://blog.mindorks.com/kotlin-flow-zip-operator-parallel-multiple-network-calls
+     */
+
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
 
