@@ -38,10 +38,7 @@ import com.sunrisekcdeveloper.showtracker.model.Movie
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -81,10 +78,48 @@ class SmallPosterViewHolder(
 
 //        Timber.e(s)
 
-        Glide.with(binding.root.context)
-            .load(item.posterUrl)
-            .placeholder(R.drawable.wanted_poster)
-            .into(binding.imgvMovieSmallPoster)
+        val urls = item.posterUrl.split(";")
+        Timber.e("${item.title}")
+        Timber.e("$urls")
+
+        if (urls.size > 2) {
+            Glide.with(binding.root.context)
+                .load(urls[0])
+                .placeholder(R.drawable.wanted_poster)
+                // try a differenct glid image
+                .error(
+//                   R.drawable.error_poster
+                           Glide.with(binding.root.context)
+                       .load(urls[1])
+                       .error(
+                           Glide.with(binding.root.context)
+                               .load(urls[2])
+                               .error(R.drawable.error_poster)
+                       )
+                )
+                .into(binding.imgvMovieSmallPoster)
+        } else if(urls.size > 1) {
+            Glide.with(binding.root.context)
+                .load(urls[0])
+                .placeholder(R.drawable.wanted_poster)
+                // try a differenct glid image
+                .error(
+//                   R.drawable.error_poster
+                    Glide.with(binding.root.context)
+                        .load(urls[1])
+                        .error(R.drawable.error_poster)
+                )
+                .into(binding.imgvMovieSmallPoster)
+        }else {
+            Glide.with(binding.root.context)
+                .load(urls[0])
+                .placeholder(R.drawable.wanted_poster)
+                // try a differenct glid image
+                .error(R.drawable.error_poster)
+                .into(binding.imgvMovieSmallPoster)
+
+        }
+
 
 //        Glide.with(binding.imgvMovieSmallPoster).load(
 //            item.image)

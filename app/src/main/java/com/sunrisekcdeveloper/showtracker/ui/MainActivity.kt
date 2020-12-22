@@ -25,8 +25,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Main activity Primary container for fragments that provide app functionality
@@ -38,10 +44,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    @Inject
+    @NetworkModule.TraktApi
+    lateinit var api: ApiServiceContract
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setup()
+        MainScope().launch(Dispatchers.IO) {
+            api.poster("298618")
+        }
     }
 
     // TODO this bottom nav bar needs to be gone when navigating to movie details fragment

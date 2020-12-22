@@ -41,7 +41,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun trendingMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }
-        update { updateTrending() } // this will return immediately thus it wont block
+//        update { updateTrending() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -51,7 +51,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun popularMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.popularMovies() }
-        update { updatePopular() } // this will return immediately thus it wont block
+//        update { updatePopular() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -61,7 +61,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun boxofficeMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.boxOfficeMovies() }
-        update { updateBox() } // this will return immediately thus it wont block
+//        update { updateBox() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -71,7 +71,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun mostPlayedMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.mostPlayedMovies() }
-        update { updateMostPlayed() } // this will return immediately thus it wont block
+//        update { updateMostPlayed() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -81,7 +81,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun mostWatchedMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.mostWatchedMovies() }
-        update { updateMostWatched() } // this will return immediately thus it wont block
+//        update { updateMostWatched() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -101,7 +101,7 @@ class MainRepository @Inject constructor(
 
     override suspend fun recommendedMovie(): List<Movie> {
         val result = withContext(ioScope.coroutineContext) { local.recommended() }
-        update { updateRecommended() } // this will return immediately thus it wont block
+//        update { updateRecommended() } // this will return immediately thus it wont block
         return withContext(cpuScope.coroutineContext) {
             result.map { item ->
                 item.movie?.asDomain()!!
@@ -159,7 +159,7 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.movie.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
                     }
                 }
                 entity
@@ -195,7 +195,7 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.movie.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
                     }
                 }
                 entity
@@ -229,7 +229,7 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
                     }
                 }
                 entity
@@ -265,7 +265,7 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.movie.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
                     }
                 }
                 entity
@@ -301,7 +301,7 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.movie.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
                     }
                 }
                 entity
@@ -338,7 +338,22 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.movie.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        var url = ""
+                        poster.data.posters?.get(0)?.let {
+                            url += it.url + ";"
+                        }
+                        poster.data.background?.get(0)?.let {
+                            url += it.url + ";"
+                        }
+                        poster.data.thumb?.get(0)?.let {
+                            url += it.url + ";"
+                        }
+                        poster.data.logo?.get(0)?.let {
+                            url += it.url
+                        }
+                        Timber.e("URRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+                        Timber.e(url)
+                        entity.posterUrl = url
                     }
                 }
                 entity
@@ -374,7 +389,7 @@ class MainRepository @Inject constructor(
                 withContext(Dispatchers.IO) {
                     val poster = remote.poster("${it.movie.identifiers.tmdb}")
                     if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters[0].url
+                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
                     }
                 }
                 entity

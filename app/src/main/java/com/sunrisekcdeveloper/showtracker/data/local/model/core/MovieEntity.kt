@@ -48,7 +48,8 @@ data class MovieEntity(
     @ColumnInfo(name = "movie_homepage_url")
     val homepageUrl: String,
     @ColumnInfo(name = "movie_poster_url")
-    var posterUrl: String,
+    // TODO replace with different implementation
+    var posterUrl: String, // contains multiple urls split by ';'
     @ColumnInfo(name = "movie_status")
     val status: String,
     @ColumnInfo(name = "movie_vote_count")
@@ -65,4 +66,3 @@ data class MovieEntity(
         posterUrl = posterUrl
     )
 }
-
