@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.screens.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -76,6 +77,45 @@ class SearchFragment : Fragment() {
 //        job.cancel()
 //        super.onDestroy()
 //    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        MainScope().launch {
+            println(movies())
+        }
+    }
+
+    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
+
+    /**
+     * TODO NOTE
+         * It leads to the following useful convention: every function that is declared as extension on
+         * CoroutineScope returns immediately, but performs its actions concurrently with the rest of
+         * the program.
+     * note a solution for me, cause the impl blocks
+     */
+    private fun CoroutineScope.update(block: suspend () -> Unit) = launch {
+        block.invoke()
+    }
+
+    suspend fun foo() {
+        delay(15000)
+        println("done updating")
+    }
+
+    suspend fun movies(): String {
+        val result = withContext(ioScope.coroutineContext) {
+            delay(2000)
+            // blocks :(
+            update { foo() }
+            println("???")
+        }
+        return withContext(cpuScope.coroutineContext) {
+            delay(3000)
+            ":D:D:D:D"
+        }
+    }
 
     private fun setupSearch() {
         CoroutineScope(coroutineContext).launch {
