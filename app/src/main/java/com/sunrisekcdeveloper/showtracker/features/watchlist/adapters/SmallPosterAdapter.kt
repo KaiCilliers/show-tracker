@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl
+package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,7 +24,6 @@ import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SmallPosterViewHolder
 
 /**
  * Small Poster Adapter binds [Movie] to [SmallPosterViewHolder]

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,13 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.progress
+package com.sunrisekcdeveloper.showtracker.features.watchlist.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.model.SuggestionListModel
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.models.SuggestionListModel
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 
 /**
@@ -30,8 +33,8 @@ import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
  *
  * @constructor Create empty Progress view model
  */
-class ProgressViewModel @ViewModelInject constructor(
-    @MainRepo private val repo: RepositoryContract
+class WatchlistViewModel @ViewModelInject constructor(
+    @WatchlistRepo private val repo: WatchListRepositoryContract
 ) : ViewModel() {
 
     // TODO all this code is still test data

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
+package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -26,7 +26,6 @@ import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHold
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import kotlinx.coroutines.*
 import timber.log.Timber
 
 /**

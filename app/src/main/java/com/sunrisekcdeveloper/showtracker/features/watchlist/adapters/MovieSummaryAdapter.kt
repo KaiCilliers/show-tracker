@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl
+package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,9 +26,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
-import com.sunrisekcdeveloper.showtracker.model.SuggestionListModel
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.HeaderViewHolder
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.MovieSummaryViewHolder
+import com.sunrisekcdeveloper.showtracker.features.watchlist.models.SuggestionListModel
 import java.lang.UnsupportedOperationException
 
 /**
@@ -38,7 +36,8 @@ import java.lang.UnsupportedOperationException
  * @property clickAction is the action executed when the [RcItemMovieSummaryBinding] object is
  * clicked
  */
-class MovieSummaryAdapter : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(SuggestionListModel.Diff) {
+class MovieSummaryAdapter : BaseListAdapter<SuggestionListModel, RecyclerView.ViewHolder>(
+    SuggestionListModel.Diff) {
 
     private lateinit var clickAction: ClickActionContract
 

@@ -25,7 +25,7 @@ import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedList
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 
 /**
  * Suggestion List Adapter binds [FeaturedList] to [SuggestionListViewHolder] and also

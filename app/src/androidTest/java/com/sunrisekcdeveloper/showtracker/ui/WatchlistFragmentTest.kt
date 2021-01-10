@@ -30,7 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.ui.screens.progress.ProgressFragment
+import com.sunrisekcdeveloper.showtracker.features.watchlist.ui.WatchlistFragment
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -41,13 +41,13 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class ProgressFragmentTest {
+class WatchlistFragmentTest {
 
-    private lateinit var scenario: FragmentScenario<ProgressFragment>
+    private lateinit var scenario: FragmentScenario<WatchlistFragment>
 
     @Before
     fun setup() {
-        scenario = launchFragmentInContainer<ProgressFragment>(null, R.style.Theme_ShowTracker)
+        scenario = launchFragmentInContainer<WatchlistFragment>(null, R.style.Theme_ShowTracker)
     }
 
     @Test fun progressFragment_displayed_in_ui() = runBlockingTest {

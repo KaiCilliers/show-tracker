@@ -34,6 +34,10 @@ import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepository
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistRepository
 import com.sunrisekcdeveloper.showtracker.repository.MainRepository
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
@@ -62,6 +66,10 @@ object RepositoryModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class SearchRepo
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class WatchlistRepo
+
     @ActivityRetainedScoped
     @MainRepo
     @Provides
@@ -88,6 +96,15 @@ object RepositoryModule {
         @NetworkModule.SearchClient remote: SearchDataSourceContract
     ): SearchRepositoryContract =
         SearchRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @WatchlistRepo
+    @Provides
+    fun provideWatchlistRepository(
+        dao: WatchlistDao,
+        @NetworkModule.WatchlistClient remote: WatchlistDataSourceContract
+    ): WatchListRepositoryContract =
+        WatchlistRepository(dao, remote)
 }
 
 @Module

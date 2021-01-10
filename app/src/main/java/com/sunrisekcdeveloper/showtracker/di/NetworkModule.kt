@@ -33,6 +33,10 @@ import com.sunrisekcdeveloper.showtracker.features.search.SearchClient
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchService
 import com.sunrisekcdeveloper.showtracker.features.search.SearchServiceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistClient
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistService
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistServiceContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -78,6 +82,14 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class SearchApi
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class WatchlistClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class WatchlistApi
+
 
     @Singleton
     @DiscoveryClient
@@ -105,6 +117,20 @@ object NetworkModule {
     @Provides
     fun provideSearchApi(retrofit: Retrofit): SearchServiceContract {
         return retrofit.create(SearchService::class.java)
+    }
+
+    @Singleton
+    @WatchlistClient
+    @Provides
+    fun provideWatchlistClient(@WatchlistApi api: WatchlistServiceContract) : WatchlistDataSourceContract {
+        return com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistClient(api)
+    }
+
+    @Singleton
+    @WatchlistApi
+    @Provides
+    fun provideWatchlistApi(retrofit: Retrofit): WatchlistServiceContract {
+        return retrofit.create(WatchlistService::class.java)
     }
 
     @Singleton

@@ -33,7 +33,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.screens.progress.ProgressFragment">
+            tools:context=".features.watchlist.ui.WatchlistFragment">
 
             <EditText
                 android:id="@+id/et_temp"

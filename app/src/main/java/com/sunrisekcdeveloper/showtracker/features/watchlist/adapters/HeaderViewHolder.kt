@@ -16,27 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
+package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 
 /**
- * Movie Summary ViewHolder represents a movie or show item with limited information and a poster
- * preview
+ * Header ViewHolder represents a simple header list item that is used to to categorise a list of
+ * items
  *
  * @property binding is the auto generated binding object that represents the associated item layout
- * @property clickAction is the action executed when the [binding] object is clicked
  */
-class MovieSummaryViewHolder(
-    private val binding: RcItemMovieSummaryBinding,
-    private val clickAction: ClickActionContract
-): BaseViewHolder<Movie>(binding) {
-    override fun bind(item: Movie) {
-        binding.movie = item
-        binding.clickListener = clickAction
-        binding.executePendingBindings()
+class HeaderViewHolder(
+    private val binding: RcItemProgressHeaderBinding
+    ) : BaseViewHolder<String>(binding) {
+    override fun bind(item: String) {
+        binding.content = item
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.model
+package com.sunrisekcdeveloper.showtracker.features.watchlist.models
 
 import androidx.recyclerview.widget.DiffUtil
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
@@ -50,9 +50,9 @@ sealed class SuggestionListModel {
             oldItem: SuggestionListModel,
             newItem: SuggestionListModel
         ): Boolean {
-            return (oldItem is SuggestionListModel.MovieItem && newItem is SuggestionListModel.MovieItem
+            return (oldItem is MovieItem && newItem is MovieItem
                     && oldItem.movie.title == newItem.movie.title) ||
-                    (oldItem is SuggestionListModel.HeaderItem && newItem is SuggestionListModel.HeaderItem
+                    (oldItem is HeaderItem && newItem is HeaderItem
                             && oldItem.name == newItem.name)
         }
 

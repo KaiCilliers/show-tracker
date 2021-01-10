@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.progress
+package com.sunrisekcdeveloper.showtracker.features.watchlist.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,11 +26,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentProgressBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
+import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
+import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +46,7 @@ import kotlin.coroutines.CoroutineContext
  * based on movie or show
  */
 @AndroidEntryPoint
-class ProgressFragment : Fragment(), CoroutineScope {
+class WatchlistFragment : Fragment(), CoroutineScope {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -62,12 +62,12 @@ class ProgressFragment : Fragment(), CoroutineScope {
 
     @Inject lateinit var upComingAdapter: MovieSummaryAdapter
 
-    private val viewModel: ProgressViewModel by viewModels()
+    private val viewModel: WatchlistViewModel by viewModels()
 
-    private lateinit var binding: FragmentProgressBinding
+    private lateinit var binding: FragmentWatchlistBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentProgressBinding.inflate(inflater)
+        binding = FragmentWatchlistBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner // This removes observers when fragment is destroyed
         setupBinding()
         observeViewModel()
@@ -80,7 +80,7 @@ class ProgressFragment : Fragment(), CoroutineScope {
             override fun onClick(item: Movie) {
                 Timber.d("TITLE: $item")
                 findNavController().navigate(
-                    ProgressFragmentDirections.actionProgressFragmentDestToDetailFragment(
+                    WatchlistFragmentDirections.actionProgressFragmentDestToDetailFragment(
                         "FROM PROGRESS FRAGMENT"
                     )
                 )
