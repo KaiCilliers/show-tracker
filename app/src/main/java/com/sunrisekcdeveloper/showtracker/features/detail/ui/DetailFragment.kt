@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.detail
+package com.sunrisekcdeveloper.showtracker.features.detail.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -74,7 +74,11 @@ class DetailFragment : Fragment() {
             override fun onClick(item: Movie) {
                 Timber.d("DETAIL TITLE: $item")
                 // TODO refresh view with new movie data and scroll to top instead of relaunching fragment
-                findNavController().navigate(DetailFragmentDirections.actionDetailFragmentDestSelf(item.slug))
+                findNavController().navigate(
+                    DetailFragmentDirections.actionDetailFragmentDestSelf(
+                        item.slug
+                    )
+                )
             }
         })
         binding.rcMoreLikeThis.adapter = adapter

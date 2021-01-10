@@ -25,6 +25,10 @@ import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.data.network.TraktApiService
 import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailClient
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailService
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailServiceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryService
@@ -90,6 +94,14 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class WatchlistApi
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetailClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetailApi
+
 
     @Singleton
     @DiscoveryClient
@@ -131,6 +143,20 @@ object NetworkModule {
     @Provides
     fun provideWatchlistApi(retrofit: Retrofit): WatchlistServiceContract {
         return retrofit.create(WatchlistService::class.java)
+    }
+
+    @Singleton
+    @DetailClient
+    @Provides
+    fun provideDetailClient(@DetailApi api: DetailServiceContract) : DetailDataSourceContract {
+        return com.sunrisekcdeveloper.showtracker.features.detail.DetailClient(api)
+    }
+
+    @Singleton
+    @DetailApi
+    @Provides
+    fun provideDetailApi(retrofit: Retrofit): DetailServiceContract {
+        return retrofit.create(DetailService::class.java)
     }
 
     @Singleton

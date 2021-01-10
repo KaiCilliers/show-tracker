@@ -35,14 +35,6 @@ class TraktDataSource @Inject constructor(
     @TraktApi private val api: ApiServiceContract
 ) : NetworkDataSourceContract {
 
-    override suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>> = result {
-        api.moviesRelatedTo(slug)
-    }
-
-    override suspend fun detailedMovie(slug: String, extended: String): Resource<ResponseFullMovie> = result {
-        api.movieFull(slug, extended)
-    }
-
     // TODO this logic should be at the repo level to include updating cache logic
     //  val wrappedResult = safeApiCall(Dispatchers.IO) { api.getRandomDogBreed() }
     //        when (wrappedResult) {

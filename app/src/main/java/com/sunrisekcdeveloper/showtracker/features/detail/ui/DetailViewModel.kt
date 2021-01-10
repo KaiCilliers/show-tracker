@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,11 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.detail
+package com.sunrisekcdeveloper.showtracker.features.detail.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetailRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
 import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
@@ -33,7 +36,7 @@ import timber.log.Timber
  * @constructor Create empty Detail view model
  */
 class DetailViewModel @ViewModelInject constructor(
-    @MainRepo val repo: RepositoryContract
+    @DetailRepo val repo: DetailRepositoryContract
 ) : ViewModel() {
 
     private val _detailedMovie = MutableLiveData<DetailedMovie>()

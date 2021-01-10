@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,11 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.repository
+package com.sunrisekcdeveloper.showtracker.features.detail
 
-import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-interface RepositoryContract {
-
+@Dao
+abstract class DetailDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertMovie(vararg item: MovieEntity)
 }

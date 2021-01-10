@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/detail_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.detail.DetailFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.detail.ui.DetailFragment"
         android:label="DetailFragment"
         tools:layout="@layout/fragment_movie_detail">
         <argument

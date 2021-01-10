@@ -22,6 +22,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
@@ -42,5 +43,5 @@ abstract class TrackerDatabase : RoomDatabase() {
     abstract fun discoveryDao(): DiscoveryDao
     abstract fun searchDao(): SearchDao
     abstract fun watchlistDao(): WatchlistDao
-
+    abstract fun detailDao(): DetailDao
 }

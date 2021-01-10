@@ -26,6 +26,10 @@ import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepo
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
@@ -70,6 +74,10 @@ object RepositoryModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class WatchlistRepo
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetailRepo
+
     @ActivityRetainedScoped
     @MainRepo
     @Provides
@@ -105,6 +113,15 @@ object RepositoryModule {
         @NetworkModule.WatchlistClient remote: WatchlistDataSourceContract
     ): WatchListRepositoryContract =
         WatchlistRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @DetailRepo
+    @Provides
+    fun provideDetailRepository(
+        dao: DetailDao,
+        @NetworkModule.DetailClient remote: DetailDataSourceContract
+    ): DetailRepositoryContract =
+        DetailRepository(dao, remote)
 }
 
 @Module

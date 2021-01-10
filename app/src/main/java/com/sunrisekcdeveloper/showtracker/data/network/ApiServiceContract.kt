@@ -120,15 +120,6 @@ interface ApiServiceContract {
     suspend fun movieRatings(id: String): ResponseRating
 
     /**
-     * Movies related to a specific movie
-     * Supports Pagination, Extended Info
-     *
-     * @param id
-     * @return
-     */
-    suspend fun moviesRelatedTo(id: String): Response<List<ResponseMovie>>
-
-    /**
      * Movie stats
      *
      * @param id

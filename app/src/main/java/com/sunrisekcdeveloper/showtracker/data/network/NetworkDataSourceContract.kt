@@ -27,7 +27,5 @@ import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
 import retrofit2.Response
 
 interface NetworkDataSourceContract {
-    suspend fun detailedMovie(slug: String, extended: String = ""): Resource<ResponseFullMovie>
-    suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>>
     suspend fun poster(id: String): Resource<ResponseImages>
 }
