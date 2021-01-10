@@ -56,31 +56,6 @@ interface TraktApiService : ApiServiceContract {
 
     /** TODO MOVIES */
 
-    @GET("movies/trending")
-    override suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
-
-    @GET("movies/popular")
-    override suspend fun popularMovies(): Response<List<ResponseMovie>>
-
-    // TODO implement this on all Extended calls
-    @GET("movies/recommended/{period}")
-    override suspend fun recommendedMovies(
-        @Path("period") period: String,
-        @Query("extended") extended: String
-    ): Response<List<EnvelopeUserCount>>
-
-    @GET("movies/played/{period}")
-    override suspend fun mostPlayedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
-
-    @GET("movies/watched/{period}")
-    override suspend fun mostWatchedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
-
-    @GET("movies/anticipated")
-    override suspend fun mostAnticipated(): Response<List<EnvelopeListCount>>
-
-    @GET("movies/boxoffice")
-    override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
-
     @GET("movies/{id}")
     override suspend fun movie(
         @Path("id") id: String,

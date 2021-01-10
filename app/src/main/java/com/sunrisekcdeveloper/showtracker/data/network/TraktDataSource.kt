@@ -43,40 +43,8 @@ class TraktDataSource @Inject constructor(
         api.movieFull(slug, extended)
     }
 
-    override suspend fun poster(id: String): Resource<ResponseImages> = result {
-        api.poster(id)
-    }
-
     override suspend fun search(type: String, searchText: String, field: String) = result {
         api.search(type, searchText, field)
-    }
-
-    override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
-        api.boxOffice()
-    }
-
-    override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = result {
-        api.trendingMovies()
-    }
-
-    override suspend fun fetchPop(): Resource<List<ResponseMovie>> = result {
-        api.popularMovies()
-    }
-
-    override suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>> = result {
-        api.mostPlayedMovies()
-    }
-
-    override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> = result {
-        api.mostWatchedMovies()
-    }
-
-    override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> = result {
-        api.mostAnticipated()
-    }
-
-    override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> = result {
-        api.recommendedMovies()
     }
 
     // TODO this logic should be at the repo level to include updating cache logic
@@ -110,5 +78,9 @@ class TraktDataSource @Inject constructor(
     private fun <T> error(message: String, e: Exception): Resource<T> {
         Timber.e(message)
         return Resource.Error("Network call has failed for the following reason: $message")
+    }
+
+    override suspend fun poster(id: String): Resource<ResponseImages> = result {
+        api.poster(id)
     }
 }

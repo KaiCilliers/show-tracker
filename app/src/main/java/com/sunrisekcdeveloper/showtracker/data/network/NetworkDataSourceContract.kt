@@ -28,14 +28,7 @@ import retrofit2.Response
 
 interface NetworkDataSourceContract {
     suspend fun search(type: String, searchText: String, field: String = ""): Resource<List<EnvelopeSearchMovie>>
-    suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
-    suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
-    suspend fun fetchPop(): Resource<List<ResponseMovie>>
-    suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>>
-    suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>>
-    suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>>
-    suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>>
-    suspend fun poster(id: String): Resource<ResponseImages>
     suspend fun detailedMovie(slug: String, extended: String = ""): Resource<ResponseFullMovie>
     suspend fun relatedMovies(slug: String): Resource<List<ResponseMovie>>
+    suspend fun poster(id: String): Resource<ResponseImages>
 }
