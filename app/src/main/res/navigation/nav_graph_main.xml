@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/search_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.search.SearchFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.search.ui.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search">
         <action

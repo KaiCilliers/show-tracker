@@ -50,32 +50,6 @@ class MainRepository @Inject constructor(
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
 
-    override suspend fun search(query: String): List<Movie> {
-        var list = listOf<Movie>()
-        if (query.isNotBlank()) {
-            val response = withContext(ioScope.coroutineContext) {
-                remote.search("movie", query, "title")
-            }
-            if (response is Resource.Success) {
-                val res = withContext(cpuScope.coroutineContext) {
-                    return@withContext response.data.map {
-                        update { it.movie.asEntity() }
-                        val movie = it.movie.asDomain()
-                        withContext(ioScope.coroutineContext) {
-                            val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                            if (poster is Resource.Success) {
-                                movie.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                            }
-                        }
-                        movie
-                    }
-                }
-                list = res
-            }
-        }
-        return list
-    }
-
     override suspend fun relatedMovies(slug: String): List<Movie> {
         val response = withContext(ioScope.coroutineContext) { remote.relatedMovies(slug) }
         var list: List<Movie> = listOf()

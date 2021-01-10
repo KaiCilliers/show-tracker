@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.repository
+package com.sunrisekcdeveloper.showtracker.features.search
 
-import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import androidx.room.Dao
 
-interface RepositoryContract {
-    suspend fun movieDetails(slug: String, extended: String = ""): DetailedMovie
-    suspend fun relatedMovies(slug: String): List<Movie>
+@Dao
+abstract class SearchDao {
 }

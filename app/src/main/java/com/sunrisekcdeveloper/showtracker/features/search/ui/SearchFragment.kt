@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.search
+package com.sunrisekcdeveloper.showtracker.features.search.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.features.search.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint

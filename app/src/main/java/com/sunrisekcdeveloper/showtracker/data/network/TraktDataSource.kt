@@ -43,10 +43,6 @@ class TraktDataSource @Inject constructor(
         api.movieFull(slug, extended)
     }
 
-    override suspend fun search(type: String, searchText: String, field: String) = result {
-        api.search(type, searchText, field)
-    }
-
     // TODO this logic should be at the repo level to include updating cache logic
     //  val wrappedResult = safeApiCall(Dispatchers.IO) { api.getRandomDogBreed() }
     //        when (wrappedResult) {

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
+package com.sunrisekcdeveloper.showtracker.features.search.adapters
 
 import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R

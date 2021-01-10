@@ -29,6 +29,10 @@ import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryService
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryServiceContract
+import com.sunrisekcdeveloper.showtracker.features.search.SearchClient
+import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.search.SearchService
+import com.sunrisekcdeveloper.showtracker.features.search.SearchServiceContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,6 +70,14 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryApi
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchApi
+
 
     @Singleton
     @DiscoveryClient
@@ -79,6 +91,20 @@ object NetworkModule {
     @Provides
     fun provideDiscoveryApi(retrofit: Retrofit): DiscoveryServiceContract {
         return retrofit.create(DiscoveryService::class.java)
+    }
+
+    @Singleton
+    @SearchClient
+    @Provides
+    fun provideSearchClient(@SearchApi api: SearchServiceContract) : SearchDataSourceContract {
+        return com.sunrisekcdeveloper.showtracker.features.search.SearchClient(api)
+    }
+
+    @Singleton
+    @SearchApi
+    @Provides
+    fun provideSearchApi(retrofit: Retrofit): SearchServiceContract {
+        return retrofit.create(SearchService::class.java)
     }
 
     @Singleton

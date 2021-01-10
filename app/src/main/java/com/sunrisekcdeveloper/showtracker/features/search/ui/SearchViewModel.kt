@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,12 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.search
+package com.sunrisekcdeveloper.showtracker.features.search.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.launch
 
@@ -31,7 +34,7 @@ import kotlinx.coroutines.launch
  * @constructor Create empty Search view model
  */
 class SearchViewModel @ViewModelInject constructor(
-    @MainRepo val repo: RepositoryContract
+    @SearchRepo val repo: SearchRepositoryContract
 ) : ViewModel() {
 
     // TODO all this code is still test data

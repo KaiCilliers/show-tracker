@@ -27,14 +27,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiServiceContract {
-    /** TODO SEARCH */
-
-    suspend fun search(
-        type: String,
-        searchText: String,
-        field: String = ""
-    ): Response<List<EnvelopeSearchMovie>>
-
     /** TODO MISCELLANEOUS */
     /**
      * Genres all possible genres that can be attached to a show or movie
