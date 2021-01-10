@@ -27,14 +27,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiServiceContract {
-    /** TODO SEARCH */
-
-    suspend fun search(
-        type: String,
-        searchText: String,
-        field: String = ""
-    ): Response<List<EnvelopeSearchMovie>>
-
     /** TODO MISCELLANEOUS */
     /**
      * Genres all possible genres that can be attached to a show or movie
@@ -68,80 +60,6 @@ interface ApiServiceContract {
     suspend fun countries(type: String): List<ResponseCountry>
 
     /** TODO MOVIES */
-    /**
-     * Trending movies all movies currently being watched sorted with most
-     * watched returned first
-     * Supports Pagination, Extended, Filter
-     *
-     * @return
-     */
-    suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
-
-    /**
-     * Popular movies popularity calculated using rating percentage and the number
-     * of ratings
-     * Supports Pagination, Extended, Filter
-     *
-     * @return
-     */
-    suspend fun popularMovies(): Response<List<ResponseMovie>>
-
-    /**
-     * Recommended movies in specified time period
-     * Supports Pagination, Extended, Filter
-     *
-     * TODO implement the optional query parameters to calls that can be Extended
-     *
-     * @param period Optional.
-     *      Possible values:  daily , weekly , monthly , yearly , all
-     *      Default value: weekly
-     * @return
-     */
-    suspend fun recommendedMovies(
-        period: String = "weekly",
-        extended: String = ""
-    ): Response<List<EnvelopeUserCount>>
-
-    /**
-     * Most played movies in specified time period (single account can watch multiple times)
-     * Supports Pagination, Extended, Filter
-     *
-     * @param period Optional.
-     *      Possible values:  daily , weekly , monthly , yearly , all
-     *      Default value: weekly
-     * @return
-     */
-    suspend fun mostPlayedMovies(period: String = "weekly"): Response<List<EnvelopeViewStats>>
-
-    /**
-     * Most watched movies in specified time period (unique watches)
-     * Supports Pagination, Extended, Filter
-     *
-     * @param period Optional.
-     *      Possible values:  daily , weekly , monthly , yearly , all
-     *      Default value: weekly
-     * @return
-     */
-    // TODO you can create less methods in Repo that takes params which will decide which of
-    //  these methods to call (like it'll choose between most played and most watched)
-    suspend fun mostWatchedMovies(period: String = "weekly"): Response<List<EnvelopeViewStats>>
-
-    /**
-     * Most anticipated based on number of lists movie appears in
-     * Supports Pagination, Extended, Filter
-     *
-     * @return
-     */
-    suspend fun mostAnticipated(): Response<List<EnvelopeListCount>>
-
-    /**
-     * Box office based on top 10 grossing movies in U.S. box office the weekend past. Updates
-     * every Monday morning
-     * Supports Extended
-     *
-     * @return
-     */
-    suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     /**
      * Movie with minimal details
@@ -200,15 +118,6 @@ interface ApiServiceContract {
      * @return
      */
     suspend fun movieRatings(id: String): ResponseRating
-
-    /**
-     * Movies related to a specific movie
-     * Supports Pagination, Extended Info
-     *
-     * @param id
-     * @return
-     */
-    suspend fun moviesRelatedTo(id: String): Response<List<ResponseMovie>>
 
     /**
      * Movie stats

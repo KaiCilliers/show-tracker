@@ -30,16 +30,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TraktApiService : ApiServiceContract {
-
-    /** TODO SEARCH */
-
-    @GET("search/{type}")
-    override suspend fun search(
-        @Path("type") type: String,
-        @Query("query") searchText: String,
-        @Query("field") field: String
-    ): Response<List<EnvelopeSearchMovie>>
-
     /** TODO MISCELLANEOUS */
 
     @GET("genres/{type}")
@@ -55,31 +45,6 @@ interface TraktApiService : ApiServiceContract {
     override suspend fun countries(@Path("type") type: String): List<ResponseCountry>
 
     /** TODO MOVIES */
-
-    @GET("movies/trending")
-    override suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
-
-    @GET("movies/popular")
-    override suspend fun popularMovies(): Response<List<ResponseMovie>>
-
-    // TODO implement this on all Extended calls
-    @GET("movies/recommended/{period}")
-    override suspend fun recommendedMovies(
-        @Path("period") period: String,
-        @Query("extended") extended: String
-    ): Response<List<EnvelopeUserCount>>
-
-    @GET("movies/played/{period}")
-    override suspend fun mostPlayedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
-
-    @GET("movies/watched/{period}")
-    override suspend fun mostWatchedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
-
-    @GET("movies/anticipated")
-    override suspend fun mostAnticipated(): Response<List<EnvelopeListCount>>
-
-    @GET("movies/boxoffice")
-    override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
 
     @GET("movies/{id}")
     override suspend fun movie(
@@ -107,9 +72,6 @@ interface TraktApiService : ApiServiceContract {
 
     @GET("movies/{id}/ratings")
     override suspend fun movieRatings(@Path("id") id: String): ResponseRating
-
-    @GET("movies/{id}/related")
-    override suspend fun moviesRelatedTo(@Path("id") id: String): Response<List<ResponseMovie>>
 
     @GET("movies/{id}/stats")
     override suspend fun movieStats(@Path("id") id: String): ResponseStats

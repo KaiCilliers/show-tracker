@@ -22,6 +22,10 @@ import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
 import com.sunrisekcdeveloper.showtracker.data.local.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,4 +55,20 @@ object LocalModule {
     @Singleton
     @Provides
     fun provideMovieDao(db: TrackerDatabase): MovieDao = db.movieDao()
+
+    @Singleton
+    @Provides
+    fun provideDiscoveryDao(db: TrackerDatabase): DiscoveryDao = db.discoveryDao()
+
+    @Singleton
+    @Provides
+    fun provideSearchDao(db: TrackerDatabase): SearchDao = db.searchDao()
+
+    @Singleton
+    @Provides
+    fun provideWatchlistDao(db: TrackerDatabase): WatchlistDao = db.watchlistDao()
+
+    @Singleton
+    @Provides
+    fun provideDetailDao(db: TrackerDatabase): DetailDao = db.detailDao()
 }

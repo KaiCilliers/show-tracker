@@ -24,25 +24,25 @@
 
     <fragment
         android:id="@+id/home_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.home.HomeFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_discovery">
         <action
             android:id="@+id/action_home_fragment_dest_to_detailFragment"
             app:destination="@id/detail_fragment_dest" />
     </fragment>
     <fragment
         android:id="@+id/progress_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.progress.ProgressFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.ui.WatchlistFragment"
         android:label="ProgressFragment"
-        tools:layout="@layout/fragment_progress">
+        tools:layout="@layout/fragment_watchlist">
         <action
             android:id="@+id/action_progress_fragment_dest_to_detailFragment"
             app:destination="@id/detail_fragment_dest" />
     </fragment>
     <fragment
         android:id="@+id/search_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.search.SearchFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.search.ui.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search">
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/detail_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.detail.DetailFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.detail.ui.DetailFragment"
         android:label="DetailFragment"
         tools:layout="@layout/fragment_movie_detail">
         <argument

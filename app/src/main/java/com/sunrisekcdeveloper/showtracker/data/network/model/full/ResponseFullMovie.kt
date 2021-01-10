@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.data.network.model.full
 import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseIdentifiers
 import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 
 data class ResponseFullMovie(
     @Json(name = "title") val title: String,

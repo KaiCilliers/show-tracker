@@ -20,9 +20,12 @@ package com.sunrisekcdeveloper.showtracker.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 
 @Database(
     entities = [
@@ -37,5 +40,8 @@ import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 abstract class TrackerDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
-
+    abstract fun discoveryDao(): DiscoveryDao
+    abstract fun searchDao(): SearchDao
+    abstract fun watchlistDao(): WatchlistDao
+    abstract fun detailDao(): DetailDao
 }

@@ -21,8 +21,7 @@ package com.sunrisekcdeveloper.showtracker.data.local.model.core
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 
 @Entity(tableName = "tbl_movie")
 data class MovieEntity(

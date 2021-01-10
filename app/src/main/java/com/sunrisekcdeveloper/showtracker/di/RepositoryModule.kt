@@ -23,7 +23,25 @@ import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepo
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
+import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
+import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.search.SearchRepository
+import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistRepository
 import com.sunrisekcdeveloper.showtracker.repository.MainRepository
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
@@ -44,6 +62,22 @@ object RepositoryModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class MainRepo
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscoveryRepo
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchRepo
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class WatchlistRepo
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetailRepo
+
     @ActivityRetainedScoped
     @MainRepo
     @Provides
@@ -52,6 +86,42 @@ object RepositoryModule {
         @DataSourceTrakt remote: NetworkDataSourceContract
     ): RepositoryContract =
         MainRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @DiscoveryRepo
+    @Provides
+    fun provideDiscoveryRepository(
+        dao: DiscoveryDao,
+        @DiscoveryClient remote: DiscoveryDataSourceContract
+    ): DiscoveryRepositoryContract =
+        DiscoveryRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @SearchRepo
+    @Provides
+    fun provideSearchRepository(
+        dao: SearchDao,
+        @NetworkModule.SearchClient remote: SearchDataSourceContract
+    ): SearchRepositoryContract =
+        SearchRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @WatchlistRepo
+    @Provides
+    fun provideWatchlistRepository(
+        dao: WatchlistDao,
+        @NetworkModule.WatchlistClient remote: WatchlistDataSourceContract
+    ): WatchListRepositoryContract =
+        WatchlistRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @DetailRepo
+    @Provides
+    fun provideDetailRepository(
+        dao: DetailDao,
+        @NetworkModule.DetailClient remote: DetailDataSourceContract
+    ): DetailRepositoryContract =
+        DetailRepository(dao, remote)
 }
 
 @Module
