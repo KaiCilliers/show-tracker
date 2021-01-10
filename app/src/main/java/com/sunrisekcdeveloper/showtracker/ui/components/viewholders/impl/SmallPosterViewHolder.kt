@@ -18,32 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
 
-import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
-import com.sunrisekcdeveloper.showtracker.data.network.TraktApiService
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemSmallPosterBinding
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
-import com.sunrisekcdeveloper.showtracker.model.Movie
-import dagger.hilt.EntryPoint
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ActivityContext
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import kotlinx.coroutines.*
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Small Poster ViewHolder represents a small poster icon that represents a movie or show

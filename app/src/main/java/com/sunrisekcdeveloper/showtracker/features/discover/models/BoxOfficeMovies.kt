@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.model.roomresults
+package com.sunrisekcdeveloper.showtracker.features.discover.models
 
 import androidx.room.Embedded
 import androidx.room.Relation

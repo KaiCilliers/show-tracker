@@ -27,7 +27,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.util.getQueryTextChangedStateFlow

@@ -20,10 +20,9 @@ package com.sunrisekcdeveloper.showtracker.ui.screens.detail
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.launch
 import timber.log.Timber

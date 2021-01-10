@@ -16,17 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.model.roomresults
+package com.sunrisekcdeveloper.showtracker.features.discover.models
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.AnticipatedListEntity
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-data class TrendingMovies(
-    @Embedded val data: TrendingListEntity,
+data class AnticipatedMovies(
+    @Embedded val data: AnticipatedListEntity,
     @Relation(
-        parentColumn = "fk_trending_media_slug",
+        parentColumn = "fk_anticipated_media_slug",
         entityColumn = "movie_slug"
     )
     val movie: MovieEntity?

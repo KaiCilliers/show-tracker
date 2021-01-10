@@ -25,16 +25,16 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.ui.screens.home.HomeFragment
+import com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-class HomeFragmentTest {
+class DiscoveryFragmentTest {
     @Test fun homefragment_displayed_in_ui() = runBlockingTest {
-        val scenario = launchFragmentInContainer<HomeFragment>(null, R.style.Theme_ShowTracker)
+        val scenario = launchFragmentInContainer<DiscoveryFragment>(null, R.style.Theme_ShowTracker)
         onView(withId(R.id.tv_home)).check(matches(withText("HOME")))
         scenario.recreate()
     }

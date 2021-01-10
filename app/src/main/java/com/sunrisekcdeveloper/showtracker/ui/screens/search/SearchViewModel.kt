@@ -20,15 +20,10 @@ package com.sunrisekcdeveloper.showtracker.ui.screens.search
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
-import com.sunrisekcdeveloper.showtracker.util.getQueryTextChangedStateFlow
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Search ViewModel

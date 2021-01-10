@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.data.network.model.base
 
 import com.squareup.moshi.Json
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 
 /**
  * Response Movie represents a network object containing basic information of a movie
