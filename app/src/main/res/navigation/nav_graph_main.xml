@@ -24,9 +24,9 @@
 
     <fragment
         android:id="@+id/home_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.ui.screens.home.HomeFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_discovery">
         <action
             android:id="@+id/action_home_fragment_dest_to_detailFragment"
             app:destination="@id/detail_fragment_dest" />

@@ -23,6 +23,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
 
 @Database(
     entities = [
@@ -37,5 +38,6 @@ import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 abstract class TrackerDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
+    abstract fun discoveryDao(): DiscoveryDao
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,18 +16,23 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.model.roomresults
+package com.sunrisekcdeveloper.showtracker.features.discover
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
-import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryApi
 
-data class TrendingMovies(
-    @Embedded val data: TrendingListEntity,
-    @Relation(
-        parentColumn = "fk_trending_media_slug",
-        entityColumn = "movie_slug"
-    )
-    val movie: MovieEntity?
-)
+class DiscoveryClient(
+    @DiscoveryApi private val api: DiscoveryServiceContract
+) : DiscoveryDataSourceContract {
+
+}
+
+interface DiscoveryServiceContract {
+}
+
+
+interface DiscoveryService : DiscoveryServiceContract {
+}
+
+interface DiscoveryDataSourceContract {
+}

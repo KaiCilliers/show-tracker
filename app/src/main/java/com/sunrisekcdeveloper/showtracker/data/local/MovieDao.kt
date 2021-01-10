@@ -21,9 +21,8 @@ package com.sunrisekcdeveloper.showtracker.data.local
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.model.roomresults.*
+import com.sunrisekcdeveloper.showtracker.features.discover.models.*
 import kotlinx.coroutines.flow.Flow
-import retrofit2.http.DELETE
 
 @Dao
 // TODO organize
@@ -163,10 +162,6 @@ abstract class MovieDao {
     abstract fun trendingMoviesFlow(): Flow<List<TrendingMovies>>
 
     @Transaction
-    @Query("SELECT * FROM tbl_trending")
-    abstract fun trendingMovies(): List<TrendingMovies>
-
-    @Transaction
     @Query("SELECT * FROM tbl_popular")
     abstract fun popularMoviesFlow(): Flow<List<PopularMovies>>
 
@@ -192,30 +187,6 @@ abstract class MovieDao {
 
     @Query("SELECT * FROM tbl_movie")
     abstract fun allMovies(): Flow<List<MovieEntity>>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_popular")
-    abstract suspend fun popularMovies(): List<PopularMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_box_office")
-    abstract suspend fun boxOfficeMovies(): List<BoxOfficeMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_anticipated")
-    abstract suspend fun mostAnticipatedMovies(): List<AnticipatedMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_most_watched")
-    abstract suspend fun mostWatchedMovies(): List<MostWatchedMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_most_played")
-    abstract suspend fun mostPlayedMovies(): List<MostPlayedMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_recommended")
-    abstract suspend fun recommended(): List<RecommendedMovies>
 
     @Transaction
     @Query(

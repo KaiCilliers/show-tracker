@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl
+package com.sunrisekcdeveloper.showtracker.features.discover.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.model.FeaturedList
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl.SuggestionListViewHolder
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedList
+import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
 
 /**
  * Suggestion List Adapter binds [FeaturedList] to [SuggestionListViewHolder] and also

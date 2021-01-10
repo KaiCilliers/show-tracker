@@ -16,18 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components
+package com.sunrisekcdeveloper.showtracker.features.discover.models
 
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.sunrisekcdeveloper.showtracker.data.local.model.categories.RecommendedListEntity
+import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
 
-/**
- * Click Action Contract that defines the responsibilities of an onClickListener
- */
-interface ClickActionContract {
-    /**
-     * On Click defines the action taken when object is clicked
-     *
-     * @param item can be any type that an onClickListener might require
-     */
-    fun onClick(item: Movie)
-}
+data class RecommendedMovies(
+    @Embedded val data: RecommendedListEntity,
+    @Relation(
+        parentColumn = "fk_rec_media_slug",
+        entityColumn = "movie_slug"
+    )
+    val movie: MovieEntity?
+)

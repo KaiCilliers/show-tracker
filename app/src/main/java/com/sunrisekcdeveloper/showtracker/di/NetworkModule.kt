@@ -25,6 +25,10 @@ import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.data.network.TraktApiService
 import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryClient
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryService
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryServiceContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,6 +58,28 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class DataSourceTrakt
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscoveryClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscoveryApi
+
+
+    @Singleton
+    @DiscoveryClient
+    @Provides
+    fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryDataSourceContract {
+        return com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryClient(api)
+    }
+
+    @Singleton
+    @DiscoveryApi
+    @Provides
+    fun provideDiscoveryApi(retrofit: Retrofit): DiscoveryServiceContract {
+        return retrofit.create(DiscoveryService::class.java)
+    }
 
     @Singleton
     @DataSourceTrakt

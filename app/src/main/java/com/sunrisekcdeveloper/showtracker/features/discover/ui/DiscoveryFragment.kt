@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.home
+package com.sunrisekcdeveloper.showtracker.features.discover.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,11 +26,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentHomeBinding
-import com.sunrisekcdeveloper.showtracker.model.FeaturedList
-import com.sunrisekcdeveloper.showtracker.model.Movie
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
 import com.sunrisekcdeveloper.showtracker.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,14 +43,14 @@ import javax.inject.Inject
  */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class DiscoveryFragment : Fragment() {
 
     @Inject
     lateinit var adapter: SuggestionListAdapter
 
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentDiscoveryBinding
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: DiscoveryViewModel by viewModels()
 
     private var trending: List<Movie> = listOf()
     private var popular: List<Movie> = listOf()
@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater)
+        binding = FragmentDiscoveryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         observeViewModel()
@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
             override fun onClick(item: Movie) {
                 Timber.d("Featured: $item")
                 findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentDestToDetailFragment(item.slug)
+                    DiscoveryFragmentDirections.actionHomeFragmentDestToDetailFragment(item.slug)
                 )
             }
         })

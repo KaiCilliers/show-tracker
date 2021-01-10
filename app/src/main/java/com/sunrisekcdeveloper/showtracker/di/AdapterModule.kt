@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SmallPosterAdapter
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.impl.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

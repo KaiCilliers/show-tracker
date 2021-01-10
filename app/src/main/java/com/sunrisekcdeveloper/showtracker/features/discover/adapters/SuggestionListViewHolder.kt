@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.components.viewholders.impl
+package com.sunrisekcdeveloper.showtracker.features.discover.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.NestedViewHolder
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedList
 
 /**
  * Suggestion List ViewHolder represents a list of movies or shows identified by a category header

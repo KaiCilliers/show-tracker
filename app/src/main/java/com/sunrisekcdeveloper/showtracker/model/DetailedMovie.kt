@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.model
 
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+
 /**
  * Detailed Movie is a domain object with detailed information of a [Movie]
  *

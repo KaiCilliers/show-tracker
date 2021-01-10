@@ -23,7 +23,12 @@ import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
 import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
 import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.repository.MainRepository
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
@@ -44,6 +49,10 @@ object RepositoryModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class MainRepo
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscoveryRepo
+
     @ActivityRetainedScoped
     @MainRepo
     @Provides
@@ -52,6 +61,15 @@ object RepositoryModule {
         @DataSourceTrakt remote: NetworkDataSourceContract
     ): RepositoryContract =
         MainRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @DiscoveryRepo
+    @Provides
+    fun provideDiscoveryRepository(
+        dao: DiscoveryDao,
+        @DiscoveryClient remote: DiscoveryDataSourceContract
+    ): DiscoveryRepositoryContract =
+        DiscoveryRepository(dao, remote)
 }
 
 @Module

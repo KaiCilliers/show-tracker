@@ -23,7 +23,7 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
 import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
-import com.sunrisekcdeveloper.showtracker.model.Movie
+import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 
 /**
  * Medium Poster ViewHolder represents a medium poster icon that represents a movie or show

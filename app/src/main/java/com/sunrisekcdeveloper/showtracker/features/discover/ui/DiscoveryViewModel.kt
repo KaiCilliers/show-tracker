@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,11 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.ui.screens.home
+package com.sunrisekcdeveloper.showtracker.features.discover.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -31,8 +34,8 @@ import kotlinx.coroutines.flow.collect
  * @constructor Create empty Home view model
  */
 @ExperimentalCoroutinesApi
-class HomeViewModel @ViewModelInject constructor(
-    @MainRepo private val repo: RepositoryContract
+class DiscoveryViewModel @ViewModelInject constructor(
+    @DiscoveryRepo private val repo: DiscoveryRepositoryContract
 ) : ViewModel() {
 
     val trend = liveData { emit(repo.trendingMovie()) }
