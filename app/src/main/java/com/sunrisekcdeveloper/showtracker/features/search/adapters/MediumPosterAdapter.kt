@@ -20,10 +20,10 @@ package com.sunrisekcdeveloper.showtracker.features.search.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
+import com.sunrisekcdeveloper.showtracker.commons.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 
 /**
  * Medium Poster Adapter binds [Movie] to [MediumPosterViewHolder]

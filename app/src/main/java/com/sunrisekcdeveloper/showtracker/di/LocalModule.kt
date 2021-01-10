@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
-import com.sunrisekcdeveloper.showtracker.data.local.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.commons.data.local.MovieDao
+import com.sunrisekcdeveloper.showtracker.commons.data.local.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
@@ -51,10 +51,6 @@ object LocalModule {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
-
-    @Singleton
-    @Provides
-    fun provideMovieDao(db: TrackerDatabase): MovieDao = db.movieDao()
 
     @Singleton
     @Provides

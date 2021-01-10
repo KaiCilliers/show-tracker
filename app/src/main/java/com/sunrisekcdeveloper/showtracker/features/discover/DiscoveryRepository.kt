@@ -18,11 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover
 
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.categories.*
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import kotlinx.coroutines.*
 import timber.log.Timber
 

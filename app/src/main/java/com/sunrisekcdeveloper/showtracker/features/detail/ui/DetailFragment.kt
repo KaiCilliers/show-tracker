@@ -30,9 +30,9 @@ import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.features.search.adapters.MediumPosterAdapter
-import com.sunrisekcdeveloper.showtracker.util.subscribe
+import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject

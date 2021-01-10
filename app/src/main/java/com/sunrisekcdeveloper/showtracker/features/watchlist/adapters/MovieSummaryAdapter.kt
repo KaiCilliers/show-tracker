@@ -21,8 +21,8 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.showtracker.ui.components.adapters.BaseListAdapter
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.components.adapters.BaseListAdapter
+import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding

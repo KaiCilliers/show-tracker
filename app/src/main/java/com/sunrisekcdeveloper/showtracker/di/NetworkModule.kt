@@ -21,23 +21,15 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
-import com.sunrisekcdeveloper.showtracker.data.network.TraktApiService
-import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailClient
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailService
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailServiceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryService
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryServiceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchClient
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchService
 import com.sunrisekcdeveloper.showtracker.features.search.SearchServiceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistClient
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistServiceContract
@@ -61,14 +53,6 @@ object NetworkModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class HeaderInterceptor
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class TraktApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DataSourceTrakt
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -157,20 +141,6 @@ object NetworkModule {
     @Provides
     fun provideDetailApi(retrofit: Retrofit): DetailServiceContract {
         return retrofit.create(DetailService::class.java)
-    }
-
-    @Singleton
-    @DataSourceTrakt
-    @Provides
-    fun provideTraktDataSource(@TraktApi api: ApiServiceContract) : NetworkDataSourceContract {
-        return TraktDataSource(api)
-    }
-
-    @Singleton
-    @TraktApi
-    @Provides
-    fun provideTraktService(retrofit: Retrofit): ApiServiceContract {
-        return retrofit.create(TraktApiService::class.java)
     }
 
     @Singleton

@@ -29,7 +29,7 @@
 
         <variable
             name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract" />
+            type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

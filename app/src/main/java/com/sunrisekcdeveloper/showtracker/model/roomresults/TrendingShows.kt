@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.model.roomresults
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
-import com.sunrisekcdeveloper.showtracker.data.local.model.core.ShowEntity
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.core.ShowEntity
 
 data class TrendingShows(
     @Embedded val show: ShowEntity,

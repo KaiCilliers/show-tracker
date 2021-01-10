@@ -18,10 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist
 
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistApi
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import retrofit2.Response
 import timber.log.Timber
 import java.lang.Exception

@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.discover
 
 import androidx.room.*
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
-import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.categories.*
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.models.*
 
 @Dao

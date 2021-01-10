@@ -20,13 +20,10 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.models.SuggestionListModel
-import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 
 /**
  * Progress ViewModel

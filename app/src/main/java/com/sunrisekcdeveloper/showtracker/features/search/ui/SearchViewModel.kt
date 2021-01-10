@@ -20,12 +20,9 @@ package com.sunrisekcdeveloper.showtracker.features.search.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
-import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.launch
 
 /**

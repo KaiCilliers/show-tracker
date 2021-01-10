@@ -18,10 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClient
 import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import kotlinx.coroutines.*
 
 class SearchRepository(

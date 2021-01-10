@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.features.discover.models
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.TrendingListEntity
-import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.categories.TrendingListEntity
+import com.sunrisekcdeveloper.showtracker.commons.data.local.model.core.MovieEntity
 
 data class TrendingMovies(
     @Embedded val data: TrendingListEntity,

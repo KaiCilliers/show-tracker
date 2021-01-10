@@ -19,11 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.features.search
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.data.network.model.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.data.network.model.envelopes.EnvelopeSearchMovie
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
+import com.sunrisekcdeveloper.showtracker.commons.data.network.model.base.ResponseImages
+import com.sunrisekcdeveloper.showtracker.commons.data.network.model.envelopes.EnvelopeSearchMovie
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchApi
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
