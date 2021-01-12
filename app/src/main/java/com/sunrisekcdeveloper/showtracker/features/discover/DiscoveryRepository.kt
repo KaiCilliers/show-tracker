@@ -22,9 +22,10 @@ import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.models.local.categories.*
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.*
 import kotlinx.coroutines.*
 import timber.log.Timber
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 class DiscoveryRepository(
     private val local: DiscoveryDao,
@@ -42,75 +43,66 @@ class DiscoveryRepository(
         }
     }
 
-    override suspend fun trendingMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }
-        update { updateTrending() }
+    private suspend fun <T> featuredItem(
+        dbCall: suspend () -> List<T>,
+        remoteCall: suspend () -> Unit
+    ): List<Movie> {
+        val cache = withContext(ioScope.coroutineContext) { dbCall() }
+        update { remoteCall() }
         return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
+            cache.map { item ->
+                asDomain(item!!)
             }
         }
     }
 
-    override suspend fun popularMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.popularMovies() }
-        update { updatePopular() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
+    private fun asDomain(item: Any): Movie {
+        return when(item) {
+            is TrendingMovies -> item.movie?.asDomain()!!
+            is PopularMovies -> item.movie?.asDomain()!!
+            is BoxOfficeMovies -> item.movie?.asDomain()!!
+            is MostPlayedMovies -> item.movie?.asDomain()!!
+            is MostWatchedMovies -> item.movie?.asDomain()!!
+            is AnticipatedMovies -> item.movie?.asDomain()!!
+            is RecommendedMovies -> item.movie?.asDomain()!!
+            else -> Movie("NOTHING", "NOTHING")
         }
     }
 
-    override suspend fun boxofficeMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.boxOfficeMovies() }
-        update { updateBox() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
+    override suspend fun trendingMovie(): List<Movie> = featuredItem(
+            dbCall = { local.trendingMovies() },
+            remoteCall = { updateTrending() }
+        )
 
-    override suspend fun mostPlayedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.mostPlayedMovies() }
-        update { updateMostPlayed() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
+    override suspend fun popularMovie(): List<Movie> = featuredItem(
+        dbCall = { local.popularMovies() },
+        remoteCall = { updatePopular() }
+    )
 
-    override suspend fun mostWatchedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.mostWatchedMovies() }
-        update { updateMostWatched() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
+    override suspend fun boxofficeMovie(): List<Movie> = featuredItem(
+        dbCall = { local.boxOfficeMovies() },
+        remoteCall = { updateBox() }
+    )
 
-    override suspend fun mostAnticipatedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.mostAnticipatedMovies() }
-        update { updateAnticipated() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
+    override suspend fun mostPlayedMovie(): List<Movie> = featuredItem(
+        dbCall = { local.mostPlayedMovies() },
+        remoteCall = { updateMostPlayed() }
+    )
 
-    override suspend fun recommendedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.recommended() }
-        update { updateRecommended() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
+    override suspend fun mostWatchedMovie(): List<Movie> = featuredItem(
+        dbCall = { local.mostWatchedMovies() },
+        remoteCall = { updateMostWatched() }
+    )
+
+    override suspend fun mostAnticipatedMovie(): List<Movie> = featuredItem(
+        dbCall = { local.mostAnticipatedMovies() },
+        remoteCall = { updateAnticipated() }
+    )
+
+    override suspend fun recommendedMovie(): List<Movie> = featuredItem(
+        dbCall = { local.recommended() },
+        remoteCall = { updateRecommended() }
+    )
 
     override suspend fun updateTrending() {
         val response = remote.fetchTrend()
