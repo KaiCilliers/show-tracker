@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.detail
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import com.sunrisekcdeveloper.showtracker.commons.data.local.model.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 
 @Dao
 abstract class DetailDao {

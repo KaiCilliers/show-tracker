@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.search.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
 import kotlinx.coroutines.launch
 

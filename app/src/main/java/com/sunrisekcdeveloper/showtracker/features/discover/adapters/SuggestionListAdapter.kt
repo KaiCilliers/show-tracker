@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedList
+import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 
 /**

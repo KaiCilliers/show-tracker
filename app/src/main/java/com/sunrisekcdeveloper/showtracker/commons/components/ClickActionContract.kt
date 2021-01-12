@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.commons.components
 
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 /**
  * Click Action Contract that defines the responsibilities of an onClickListener

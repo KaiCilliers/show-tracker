@@ -22,7 +22,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 
 /**

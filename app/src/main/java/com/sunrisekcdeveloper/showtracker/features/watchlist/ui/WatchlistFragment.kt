@@ -28,7 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe

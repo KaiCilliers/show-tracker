@@ -24,7 +24,7 @@
     <data>
         <variable
             name="movie"
-            type="com.sunrisekcdeveloper.showtracker.features.discover.models.Movie" />
+            type="com.sunrisekcdeveloper.showtracker.models.roomresults.Movie" />
         <variable
             name="clickListener"
             type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />

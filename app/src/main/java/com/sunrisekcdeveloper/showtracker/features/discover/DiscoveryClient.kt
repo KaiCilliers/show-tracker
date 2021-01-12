@@ -19,9 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.features.discover
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.commons.data.network.model.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.commons.data.network.model.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.commons.data.network.model.envelopes.*
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryApi
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import retrofit2.Response

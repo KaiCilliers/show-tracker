@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search
 
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClient
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import kotlinx.coroutines.*
 

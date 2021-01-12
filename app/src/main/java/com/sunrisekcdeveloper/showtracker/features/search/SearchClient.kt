@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.search
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.commons.data.network.model.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.commons.data.network.model.envelopes.EnvelopeSearchMovie
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeSearchMovie
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchApi
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import retrofit2.Response

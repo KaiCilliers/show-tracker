@@ -29,9 +29,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.features.search.adapters.MediumPosterAdapter
+import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

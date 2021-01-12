@@ -20,8 +20,7 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sunrisekcdeveloper.showtracker.commons.data.local.MovieDao
-import com.sunrisekcdeveloper.showtracker.commons.data.local.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.commons.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
