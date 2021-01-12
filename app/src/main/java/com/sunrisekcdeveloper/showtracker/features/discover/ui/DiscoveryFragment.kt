@@ -78,7 +78,7 @@ class DiscoveryFragment : Fragment() {
             override fun onClick(item: Movie) {
                 Timber.d("Featured: $item")
                 findNavController().navigate(
-                    DiscoveryFragmentDirections.actionHomeFragmentDestToDetailFragment(item.slug)
+                    DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragment(item.slug)
                 )
             }
         })

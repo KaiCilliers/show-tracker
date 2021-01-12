@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ShowTracker</string>
-    <string name="menu_label_progress">Progress</string>
-    <string name="menu_label_home">Home</string>
+    <string name="menu_label_watchlist">Watchlist</string>
+    <string name="menu_label_discover">Discover</string>
     <string name="menu_label_search">Search</string>
     <string name="hint_search">Search Here</string>
 

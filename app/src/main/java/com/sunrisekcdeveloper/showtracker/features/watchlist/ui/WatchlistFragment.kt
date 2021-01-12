@@ -80,7 +80,7 @@ class WatchlistFragment : Fragment(), CoroutineScope {
             override fun onClick(item: Movie) {
                 Timber.d("TITLE: $item")
                 findNavController().navigate(
-                    WatchlistFragmentDirections.actionProgressFragmentDestToDetailFragment(
+                    WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragment(
                         "FROM PROGRESS FRAGMENT"
                     )
                 )
