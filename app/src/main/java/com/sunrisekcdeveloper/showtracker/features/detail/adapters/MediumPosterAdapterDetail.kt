@@ -31,7 +31,7 @@ import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
  * @property clickAction is the action executed when the [RcItemMediumPosterBinding] object is
  * clicked
  */
-class MediumPosterAdapter : BaseListAdapter<Movie, MediumPosterViewHolder>(Movie.Diff) {
+class MediumPosterAdapterDetail : BaseListAdapter<Movie, MediumPosterViewHolder>(Movie.Diff) {
 
     private lateinit var clickAction: ClickActionContract
 
