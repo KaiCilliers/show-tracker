@@ -20,13 +20,9 @@ package com.sunrisekcdeveloper.showtracker.features.discover.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.MainRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 
 /**
  * Home ViewModel

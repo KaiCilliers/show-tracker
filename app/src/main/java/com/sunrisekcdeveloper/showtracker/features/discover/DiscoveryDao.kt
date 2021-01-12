@@ -19,9 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.features.discover
 
 import androidx.room.*
-import com.sunrisekcdeveloper.showtracker.data.local.model.categories.*
-import com.sunrisekcdeveloper.showtracker.data.local.model.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.models.*
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.local.categories.*
+import com.sunrisekcdeveloper.showtracker.models.roomresults.*
 
 @Dao
 abstract class DiscoveryDao {

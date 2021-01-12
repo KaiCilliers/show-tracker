@@ -18,10 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail
 
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetailClient
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
-import com.sunrisekcdeveloper.showtracker.model.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.models.DetailedMovie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import kotlinx.coroutines.*
 
 class DetailRepository(
@@ -78,7 +79,3 @@ class DetailRepository(
     }
 }
 
-interface DetailRepositoryContract {
-    suspend fun movieDetails(slug: String, extended: String = ""): DetailedMovie
-    suspend fun relatedMovies(slug: String): List<Movie>
-}
