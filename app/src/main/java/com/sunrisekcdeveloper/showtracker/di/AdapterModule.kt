@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
 import com.sunrisekcdeveloper.showtracker.features.search.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
@@ -27,14 +28,22 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
+
     @ActivityScoped
     @Provides
-    fun provideMediumPosterAdapter(): MediumPosterAdapter {
+    fun provideMediumPosterAdapterSearch(): MediumPosterAdapter {
         return MediumPosterAdapter()
+    }
+
+    @ActivityScoped
+    @Provides
+    fun provideMediumPosterAdapterDetail(): MediumPosterAdapterDetail {
+        return MediumPosterAdapterDetail()
     }
 
     @ActivityScoped

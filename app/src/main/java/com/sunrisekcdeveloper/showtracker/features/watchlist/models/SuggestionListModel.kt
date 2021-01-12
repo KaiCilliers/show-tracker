@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.models
 
 import androidx.recyclerview.widget.DiffUtil
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 /**
  * Suggestion List Model is a domain object that represents a single list item that consists of

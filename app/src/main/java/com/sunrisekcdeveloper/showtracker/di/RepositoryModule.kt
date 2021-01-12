@@ -18,49 +18,33 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.data.local.MovieDao
-import com.sunrisekcdeveloper.showtracker.data.network.ApiServiceContract
-import com.sunrisekcdeveloper.showtracker.data.network.NetworkDataSourceContract
-import com.sunrisekcdeveloper.showtracker.data.network.TraktDataSource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DataSourceTrakt
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.TraktApi
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepo
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
-import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepository
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistRepository
-import com.sunrisekcdeveloper.showtracker.repository.MainRepository
-import com.sunrisekcdeveloper.showtracker.repository.RepositoryContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object RepositoryModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class MainRepo
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -77,15 +61,6 @@ object RepositoryModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailRepo
-
-    @ActivityRetainedScoped
-    @MainRepo
-    @Provides
-    fun provideMainRepository(
-        dao: MovieDao,
-        @DataSourceTrakt remote: NetworkDataSourceContract
-    ): RepositoryContract =
-        MainRepository(dao, remote)
 
     @ActivityRetainedScoped
     @DiscoveryRepo
@@ -122,21 +97,4 @@ object RepositoryModule {
         @NetworkModule.DetailClient remote: DetailDataSourceContract
     ): DetailRepositoryContract =
         DetailRepository(dao, remote)
-}
-
-@Module
-@InstallIn(ActivityComponent::class)
-object TempMod {
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class Different
-
-    @ActivityScoped
-    @Different
-    @Provides
-    fun provideTraktDataSource(
-        @TraktApi api: ApiServiceContract
-    ) : NetworkDataSourceContract {
-        return TraktDataSource(api)
-    }
 }

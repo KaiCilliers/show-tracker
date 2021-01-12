@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
+import com.sunrisekcdeveloper.showtracker.commons.components.viewholders.BaseViewHolder
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemProgressHeaderBinding
 
 /**

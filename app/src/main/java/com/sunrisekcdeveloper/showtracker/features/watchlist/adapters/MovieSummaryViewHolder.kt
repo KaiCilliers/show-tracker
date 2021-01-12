@@ -18,10 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.adapters
 
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.components.viewholders.BaseViewHolder
+import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMovieSummaryBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 /**
  * Movie Summary ViewHolder represents a movie or show item with limited information and a poster

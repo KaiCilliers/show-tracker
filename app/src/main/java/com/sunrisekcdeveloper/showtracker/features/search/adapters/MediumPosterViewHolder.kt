@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -20,10 +20,10 @@ package com.sunrisekcdeveloper.showtracker.features.search.adapters
 
 import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.ui.components.viewholders.BaseViewHolder
-import com.sunrisekcdeveloper.showtracker.ui.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.components.viewholders.BaseViewHolder
+import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemMediumPosterBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.models.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 /**
  * Medium Poster ViewHolder represents a medium poster icon that represents a movie or show

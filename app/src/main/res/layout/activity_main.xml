@@ -25,7 +25,7 @@
 
     </data>
 
-    <merge tools:context=".ui.MainActivity">
+    <merge tools:context=".commons.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="match_parent"
