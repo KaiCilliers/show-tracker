@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistClient
+import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -41,6 +41,3 @@ class WatchlistRepository(
     }
 }
 
-interface WatchListRepositoryContract {
-
-}

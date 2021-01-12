@@ -16,13 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist
+package com.sunrisekcdeveloper.showtracker.features.watchlist.client
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistApi
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistApi
 import retrofit2.Response
 import timber.log.Timber
-import java.lang.Exception
 
 class WatchlistClient(
     @WatchlistApi private val api: WatchlistServiceContract
@@ -47,14 +46,3 @@ class WatchlistClient(
     }
 }
 
-interface WatchlistDataSourceContract {
-
-}
-
-interface WatchlistService : WatchlistServiceContract {
-
-}
-
-interface WatchlistServiceContract {
-
-}

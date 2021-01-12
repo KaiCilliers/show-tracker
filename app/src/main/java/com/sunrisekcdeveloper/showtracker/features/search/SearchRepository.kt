@@ -18,9 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClient
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClient
+import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import kotlinx.coroutines.*
 
 class SearchRepository(
@@ -66,6 +67,3 @@ class SearchRepository(
     }
 }
 
-interface SearchRepositoryContract {
-    suspend fun search(query: String): List<Movie>
-}

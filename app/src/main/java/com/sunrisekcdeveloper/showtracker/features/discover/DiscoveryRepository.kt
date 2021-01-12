@@ -18,10 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.models.local.categories.*
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -294,20 +295,3 @@ class DiscoveryRepository(
     }
 }
 
-interface DiscoveryRepositoryContract {
-    suspend fun trendingMovie(): List<Movie>
-    suspend fun popularMovie(): List<Movie>
-    suspend fun boxofficeMovie(): List<Movie>
-    suspend fun mostPlayedMovie(): List<Movie>
-    suspend fun mostWatchedMovie(): List<Movie>
-    suspend fun mostAnticipatedMovie(): List<Movie>
-    suspend fun recommendedMovie(): List<Movie>
-
-    suspend fun updateTrending()
-    suspend fun updateBox()
-    suspend fun updatePopular()
-    suspend fun updateMostPlayed()
-    suspend fun updateMostWatched()
-    suspend fun updateAnticipated()
-    suspend fun updateRecommended()
-}

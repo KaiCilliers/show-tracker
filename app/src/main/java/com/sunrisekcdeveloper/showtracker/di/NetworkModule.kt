@@ -21,18 +21,22 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailService
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailServiceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryService
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryServiceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchService
-import com.sunrisekcdeveloper.showtracker.features.search.SearchServiceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistService
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistServiceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailClient
+import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailService
+import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailServiceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryClient
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryService
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryServiceContract
+import com.sunrisekcdeveloper.showtracker.features.search.client.SearchClient
+import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.search.client.SearchService
+import com.sunrisekcdeveloper.showtracker.features.search.client.SearchServiceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistService
+import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistClient
+import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistServiceContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -91,7 +95,7 @@ object NetworkModule {
     @DiscoveryClient
     @Provides
     fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryDataSourceContract {
-        return com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryClient(api)
+        return DiscoveryClient(api)
     }
 
     @Singleton
@@ -105,7 +109,7 @@ object NetworkModule {
     @SearchClient
     @Provides
     fun provideSearchClient(@SearchApi api: SearchServiceContract) : SearchDataSourceContract {
-        return com.sunrisekcdeveloper.showtracker.features.search.SearchClient(api)
+        return SearchClient(api)
     }
 
     @Singleton
@@ -119,7 +123,7 @@ object NetworkModule {
     @WatchlistClient
     @Provides
     fun provideWatchlistClient(@WatchlistApi api: WatchlistServiceContract) : WatchlistDataSourceContract {
-        return com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistClient(api)
+        return WatchlistClient(api)
     }
 
     @Singleton
@@ -133,7 +137,7 @@ object NetworkModule {
     @DetailClient
     @Provides
     fun provideDetailClient(@DetailApi api: DetailServiceContract) : DetailDataSourceContract {
-        return com.sunrisekcdeveloper.showtracker.features.detail.DetailClient(api)
+        return DetailClient(api)
     }
 
     @Singleton

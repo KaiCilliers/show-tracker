@@ -16,20 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search
+package com.sunrisekcdeveloper.showtracker.features.search.client
 
-import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeSearchMovie
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchApi
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchApi
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Query
 import timber.log.Timber
-import java.lang.Exception
 
 class SearchClient(
     @SearchApi private val api: SearchServiceContract
@@ -62,35 +55,3 @@ class SearchClient(
     }
 }
 
-interface SearchDataSourceContract {
-    suspend fun search(type: String, searchText: String, field: String = ""): Resource<List<EnvelopeSearchMovie>>
-    suspend fun poster(id: String): Resource<ResponseImages>
-}
-
-interface SearchService : SearchServiceContract {
-    /** TODO SEARCH */
-
-    @GET("search/{type}")
-    override suspend fun search(
-        @Path("type") type: String,
-        @Query("query") searchText: String,
-        @Query("field") field: String
-    ): Response<List<EnvelopeSearchMovie>>
-
-    /** IMAGES */
-    @Headers("Fanart-Api: true")
-    @GET("${BuildConfig.FANART_BASE_URL}movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
-    override suspend fun poster(@Path("id") id: String): Response<ResponseImages>
-}
-
-interface SearchServiceContract {
-    /** TODO SEARCH */
-    suspend fun search(
-        type: String,
-        searchText: String,
-        field: String = ""
-    ): Response<List<EnvelopeSearchMovie>>
-
-    /** IMAGES */
-    suspend fun poster(id: String): Response<ResponseImages>
-}
