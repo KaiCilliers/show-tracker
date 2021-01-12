@@ -20,24 +20,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph_main"
-    app:startDestination="@id/search_fragment_dest">
+    app:startDestination="@id/discover_fragment_dest">
 
     <fragment
-        android:id="@+id/home_fragment_dest"
+        android:id="@+id/discover_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment"
-        android:label="HomeFragment"
+        android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discovery">
         <action
-            android:id="@+id/action_home_fragment_dest_to_detailFragment"
+            android:id="@+id/action_discover_fragment_dest_to_detailFragment"
             app:destination="@id/detail_fragment_dest" />
     </fragment>
     <fragment
-        android:id="@+id/progress_fragment_dest"
+        android:id="@+id/watchlist_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.ui.WatchlistFragment"
-        android:label="ProgressFragment"
+        android:label="WatchlistFragment"
         tools:layout="@layout/fragment_watchlist">
         <action
-            android:id="@+id/action_progress_fragment_dest_to_detailFragment"
+            android:id="@+id/action_watchlist_fragment_dest_to_detailFragment"
             app:destination="@id/detail_fragment_dest" />
     </fragment>
     <fragment
