@@ -50,8 +50,3 @@ abstract class DiscoveryDao {
     abstract suspend fun groupedFeatured(): List<FeaturedMovies>
 
 }
-// insert
-// update
-// transaction (clear and insert)
-// fetch all slugs
-// return embedded values

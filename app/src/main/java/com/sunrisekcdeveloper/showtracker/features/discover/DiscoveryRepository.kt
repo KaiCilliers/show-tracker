@@ -43,6 +43,18 @@ class DiscoveryRepository(
     private var cachedFeaturedList: MutableMap<String, FeaturedList>? = null
     private var cacheIsDirty = false
 
+    override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
+        setCacheStatus()
+        return if (cachedFeaturedList == null && cacheIsDirty) {
+            updateCache()
+            Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
+        } else if (!cacheIsDirty){
+            Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
+        } else {
+            Resource.Success(cachedFeaturedList!!.values.toList())
+        }
+    }
+
     private fun updateInMemoryCache(data:  MutableMap<String, List<MovieEntity>>) {
         val featuredMovies = data.mapValues { entry ->
             FeaturedList(
@@ -83,18 +95,6 @@ class DiscoveryRepository(
         Timber.d("hours: $hours")
         if (hours >= 24) {
             cacheIsDirty = true
-        }
-    }
-
-    override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
-        setCacheStatus()
-        return if (cachedFeaturedList == null && cacheIsDirty) {
-            updateCache()
-            Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
-        } else if (!cacheIsDirty){
-            Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
-        } else {
-            Resource.Success(cachedFeaturedList!!.values.toList())
         }
     }
 }
