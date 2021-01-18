@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.models.local.core
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 @Entity(tableName = "tbl_movie")
@@ -60,6 +61,10 @@ data class MovieEntity(
     @ColumnInfo(name = "movie_certification")
     val certification: String
 ) {
+    fun asFeaturedEntity(tag: String) = FeaturedEntity(
+        mediaSlug = slug,
+        tag = tag
+    )
     fun asDomain() = Movie(
         title = title,
         slug = slug,

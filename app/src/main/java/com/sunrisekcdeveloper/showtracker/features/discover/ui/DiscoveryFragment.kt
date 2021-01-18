@@ -97,7 +97,7 @@ class DiscoveryFragment : Fragment() {
                     update(it.data)
                 }
                 is Resource.Error -> {
-                    Timber.d("Error"); update(listOf(FeaturedList("error", listOf())))
+                    Timber.d("Error: $it"); update(listOf(FeaturedList("error", listOf())))
                 }
                 is Resource.Loading -> {
                     Timber.d("Loading")

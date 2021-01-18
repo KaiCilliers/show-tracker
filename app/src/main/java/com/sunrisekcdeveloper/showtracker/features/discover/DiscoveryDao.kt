@@ -35,8 +35,11 @@ abstract class DiscoveryDao {
     @Insert
     abstract suspend fun insertFeatured(vararg movies: FeaturedEntity)
 
-    @Update
-    abstract suspend fun updateFeatured(movie: FeaturedEntity)
+    @Transaction
+    open suspend fun updateFeatured(vararg movie: FeaturedEntity) {
+        clearAllFeatured()
+        insertFeatured(*movie)
+    }
 
     @Query("DELETE FROM tbl_featured")
     abstract suspend fun clearAllFeatured()

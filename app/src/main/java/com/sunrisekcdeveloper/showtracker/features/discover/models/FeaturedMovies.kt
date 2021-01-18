@@ -49,8 +49,8 @@ data class FeaturedMovies(
     }
     // TODO consider the nullable possibility
     fun asMovie() = Movie (
-        title = movie!!.title,
-        slug = movie.slug,
-        posterUrl = movie.posterUrl
+        title = movie?.title ?: "title",
+        slug = movie?.slug ?: "no slug",
+        posterUrl = movie?.posterUrl ?: "no poster"
     )
 }
