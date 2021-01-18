@@ -86,10 +86,6 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // TODO i need a single subscription for the list of data
-        //  the list building logic needs to happen in the viewmodel
-        //  that might keep the list data in memory instead of
-        //  fetching it from the db each time the fragment is resumed
         viewModel.featured.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -104,18 +100,5 @@ class DiscoveryFragment : Fragment() {
                 }
             }
         }
-//        viewModel.featured.subscribe(viewLifecycleOwner) { map ->
-//            val done = arrayListOf<FeaturedList>()
-//            map.forEach {
-//                done.add(
-//                    FeaturedList(
-//                        heading = it.key,
-//                        results = it.value
-//                    )
-//                )
-//            }
-//            update(done)
-//        }
-//    }
     }
 }
