@@ -18,22 +18,25 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover
 
+import com.sunrisekcdeveloper.showtracker.models.roomresults.BoxOfficeMovies
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import com.sunrisekcdeveloper.showtracker.models.roomresults.TrendingMovies
 
 interface DiscoveryRepositoryContract {
-    suspend fun trendingMovie(): List<Movie>
-    suspend fun popularMovie(): List<Movie>
-    suspend fun boxofficeMovie(): List<Movie>
-    suspend fun mostPlayedMovie(): List<Movie>
-    suspend fun mostWatchedMovie(): List<Movie>
-    suspend fun mostAnticipatedMovie(): List<Movie>
-    suspend fun recommendedMovie(): List<Movie>
+    suspend fun featuredMovies(): Map<String, List<Movie>>
+//    suspend fun trendingMovie(): List<Movie>
+//    suspend fun popularMovie(): List<Movie>
+//    suspend fun boxofficeMovie(): List<Movie>
+//    suspend fun mostPlayedMovie(): List<Movie>
+//    suspend fun mostWatchedMovie(): List<Movie>
+//    suspend fun mostAnticipatedMovie(): List<Movie>
+//    suspend fun recommendedMovie(): List<Movie>
 
-    suspend fun updateTrending()
-    suspend fun updateBox()
-    suspend fun updatePopular()
-    suspend fun updateMostPlayed()
-    suspend fun updateMostWatched()
-    suspend fun updateAnticipated()
-    suspend fun updateRecommended()
+//    suspend fun updateTrending(): List<TrendingMovies>
+//    suspend fun updateBox(): List<BoxOfficeMovies>
+//    suspend fun updatePopular()
+//    suspend fun updateMostPlayed()
+//    suspend fun updateMostWatched()
+//    suspend fun updateAnticipated()
+//    suspend fun updateRecommended()
 }

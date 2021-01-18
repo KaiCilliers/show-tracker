@@ -19,171 +19,36 @@
 package com.sunrisekcdeveloper.showtracker.features.discover
 
 import androidx.room.*
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.models.local.categories.*
-import com.sunrisekcdeveloper.showtracker.models.roomresults.*
 
 @Dao
 abstract class DiscoveryDao {
-    // Embedded
-    @Transaction
-    @Query("SELECT * FROM tbl_trending")
-    abstract fun trendingMovies(): List<TrendingMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_popular")
-    abstract suspend fun popularMovies(): List<PopularMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_box_office")
-    abstract suspend fun boxOfficeMovies(): List<BoxOfficeMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_anticipated")
-    abstract suspend fun mostAnticipatedMovies(): List<AnticipatedMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_most_watched")
-    abstract suspend fun mostWatchedMovies(): List<MostWatchedMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_most_played")
-    abstract suspend fun mostPlayedMovies(): List<MostPlayedMovies>
-
-    @Transaction
-    @Query("SELECT * FROM tbl_recommended")
-    abstract suspend fun recommended(): List<RecommendedMovies>
-
-    // GET
-    @Query("SELECT fk_popular_media_slug FROM  tbl_popular")
-    abstract suspend fun fetchPopular(): List<String>
-
-    @Query("SELECT fk_trending_media_slug FROM  tbl_trending")
-    abstract suspend fun fetchTrending(): List<String>
-
-    @Query("SELECT fk_box_media_slug FROM  tbl_box_office")
-    abstract suspend fun fetchBox(): List<String>
-
-    @Query("SELECT fk_played_media_slug FROM  tbl_most_played")
-    abstract suspend fun fetchMostPlayed(): List<String>
-
-    @Query("SELECT fk_watched_media_slug FROM  tbl_most_watched")
-    abstract suspend fun fetchMostWatched(): List<String>
-
-    @Query("SELECT fk_anticipated_media_slug FROM  tbl_anticipated")
-    abstract suspend fun fetchAnticipated(): List<String>
-
-    @Query("SELECT fk_rec_media_slug FROM tbl_recommended")
-    abstract suspend fun fetchRecommended(): List<String>
-
-    // Insert
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertTrending(vararg item: TrendingListEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertPopular(vararg item: PopularListEntity)
+    abstract suspend fun insertMovie(vararg movie: MovieEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertBox(vararg item: BoxOfficeListEntity)
+    @Query("SELECT movie_poster_url FROM tbl_movie WHERE movie_slug = :slug")
+    abstract suspend fun moviePosterUrl(slug: String): String?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertMostPlayed(vararg item: MostPlayedListEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertMostWatched(vararg item: MostWatchedListEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertAnticipated(vararg item: AnticipatedListEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertMovie(vararg item: MovieEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertRecommended(vararg item: RecommendedListEntity)
-
-    // Deletes
-    @Query("DELETE FROM tbl_trending")
-    abstract suspend fun clearTrending()
-
-    @Query("DELETE FROM tbl_popular")
-    abstract suspend fun clearPopular()
-
-    @Query("DELETE FROM tbl_box_office")
-    abstract suspend fun clearBox()
-
-    @Query("DELETE FROM tbl_most_watched")
-    abstract suspend fun clearMostWatched()
-
-    @Query("DELETE FROM tbl_most_played")
-    abstract suspend fun clearMostPlayed()
-
-    @Query("DELETE FROM tbl_anticipated")
-    abstract suspend fun clearAnticipated()
-
-    @Query("DELETE FROM tbl_recommended")
-    abstract suspend fun clearRecommended()
-
-    // Updates
-    @Transaction
-    open suspend fun replaceTrending(vararg item: TrendingListEntity) {
-        clearTrending()
-        insertTrending(*item)
-    }
-
-    @Transaction
-    open suspend fun replacePopular(vararg item: PopularListEntity) {
-        clearPopular()
-        insertPopular(*item)
-    }
-
-    @Transaction
-    open suspend fun replaceBox(vararg item: BoxOfficeListEntity) {
-        clearBox()
-        insertBox(*item)
-    }
-
-    @Transaction
-    open suspend fun replaceMostPlayed(vararg item: MostPlayedListEntity) {
-        clearMostPlayed()
-        insertMostPlayed(*item)
-    }
-
-    @Transaction
-    open suspend fun replaceMostWatched(vararg item: MostWatchedListEntity) {
-        clearMostWatched()
-        insertMostWatched(*item)
-    }
-
-    @Transaction
-    open suspend fun replaceAnticipated(vararg item: AnticipatedListEntity) {
-        clearAnticipated()
-        insertAnticipated(*item)
-    }
-
-    @Transaction
-    open suspend fun replaceRecommended(vararg item: RecommendedListEntity) {
-        clearRecommended()
-        insertRecommended(*item)
-    }
+    @Insert
+    abstract suspend fun insertFeatured(vararg movies: FeaturedEntity)
 
     @Update
-    abstract suspend fun updatePopular(vararg item: PopularListEntity): Int
+    abstract suspend fun updateFeatured(movie: FeaturedEntity)
 
-    @Update
-    abstract suspend fun updateTrending(vararg item: TrendingListEntity): Int
+    @Query("DELETE FROM tbl_featured")
+    abstract suspend fun clearAllFeatured()
 
-    @Update
-    abstract suspend fun updateBox(vararg item: BoxOfficeListEntity): Int
+    @Query("""
+        SELECT * FROM tbl_featured ORDER BY tag
+    """)
+    abstract suspend fun groupedFeatured(): List<FeaturedMovies>
 
-    @Update
-    abstract suspend fun updateMostPlayed(vararg item: MostPlayedListEntity): Int
-
-    @Update
-    abstract suspend fun updateMostWatched(vararg item: MostWatchedListEntity): Int
-
-    @Update
-    abstract suspend fun updateAnticipated(vararg item: AnticipatedListEntity): Int
-
-    @Update
-    abstract suspend fun updateRecommended(vararg item: RecommendedListEntity): Int
 }
+// insert
+// update
+// transaction (clear and insert)
+// fetch all slugs
+// return embedded values

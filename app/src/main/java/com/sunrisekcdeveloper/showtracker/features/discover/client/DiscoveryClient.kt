@@ -19,16 +19,69 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.client
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource.Success
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryApi
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import retrofit2.Response
 import timber.log.Timber
 
 class DiscoveryClient(
     @DiscoveryApi private val api: DiscoveryServiceContract
 ) : DiscoveryDataSourceContract {
+
+    override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> {
+        val box = result { api.boxOffice() }
+        val trending = result { api.trendingMovies() }
+        val popular = result { api.popularMovies() }
+        val mostPlayed = result { api.mostPlayedMovies() }
+        val mostWatched = result { api.mostWatchedMovies() }
+        val mostAnticipated = result { api.mostAnticipated() }
+        val recommended = result { api.recommendedMovies() }
+
+        val result = mutableMapOf<String, List<MovieEntity>>()
+
+        if (box is Success) {
+            result["Box Office"] = box.data.map {
+                it.movie.asEntity()
+            }
+        }
+        if (trending is Success) {
+            result["Trending"] = trending.data.map {
+                it.movie?.asEntity()!!
+            }
+        }
+        if (popular is Success) {
+            result["Popular"] = popular.data.map {
+                it.asEntity()
+            }
+        }
+        if (mostPlayed is Success) {
+            result["Most Played"] = mostPlayed.data.map {
+                it.movie?.asEntity()!!
+            }
+        }
+        if (mostWatched is Success) {
+            result["Most Watched"] = mostWatched.data.map {
+                it.movie?.asEntity()!!
+            }
+        }
+        if (mostAnticipated is Success) {
+            result["Most Anticipated"] = mostAnticipated.data.map {
+                it.movie?.asEntity()!!
+            }
+        }
+        if (recommended is Success) {
+            result["Recommended"] = recommended.data.map {
+                it.movie?.asEntity()!!
+            }
+        }
+        return result
+    }
+
     // TODO this logic should be at the repo level to include updating cache logic
     //  val wrappedResult = safeApiCall(Dispatchers.IO) { api.getRandomDogBreed() }
     //        when (wrappedResult) {
@@ -49,7 +102,7 @@ class DiscoveryClient(
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let {
-                    return Resource.Success(it)
+                    return Success(it)
                 }
             }
             error("${response.code()} ${response.message()}")

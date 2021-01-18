@@ -34,22 +34,24 @@ class DiscoveryViewModel @ViewModelInject constructor(
     @DiscoveryRepo private val repo: DiscoveryRepositoryContract
 ) : ViewModel() {
 
-    val trend = liveData { emit(repo.trendingMovie()) }
-    val pop = liveData { emit(repo.popularMovie()) }
-    val box = liveData { emit(repo.boxofficeMovie()) }
-    val mostWatched = liveData { emit(repo.mostWatchedMovie()) }
-    val mostPlayed = liveData { emit(repo.mostPlayedMovie()) }
-    val anticipated = liveData { emit(repo.mostAnticipatedMovie()) }
-    val recommended = liveData { emit(repo.recommendedMovie()) }
+    val featured = liveData { emit(repo.featuredMovies()) }
 
-    fun anythingReally(value: String) = viewModelScope.launch {
-        // repository suspend call
-    }
+//    val trend = liveData { emit(repo.trendingMovie()) }
+//    val pop = liveData { emit(repo.popularMovie()) }
+//    val box = liveData { emit(repo.boxofficeMovie()) }
+//    val mostWatched = liveData { emit(repo.mostWatchedMovie()) }
+//    val mostPlayed = liveData { emit(repo.mostPlayedMovie()) }
+//    val anticipated = liveData { emit(repo.mostAnticipatedMovie()) }
+//    val recommended = liveData { emit(repo.recommendedMovie()) }
 
-    val someVal = liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
-        emit("some initial loading text")
-        emitSource(liveData { emit("dataSource.fetchLiveData() - obviously without the liveData builder") })
-    }
+//    fun anythingReally(value: String) = viewModelScope.launch {
+//        // repository suspend call
+//    }
+
+//    val someVal = liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
+//        emit("some initial loading text")
+//        emitSource(liveData { emit("dataSource.fetchLiveData() - obviously without the liveData builder") })
+//    }
 
 //    val someBetterValue: LiveData<String> =
 //        dataSource.getFlow()

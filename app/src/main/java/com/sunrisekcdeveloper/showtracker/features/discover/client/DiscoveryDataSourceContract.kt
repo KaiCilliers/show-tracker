@@ -19,9 +19,11 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.client
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 interface DiscoveryDataSourceContract {
     suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
@@ -31,6 +33,8 @@ interface DiscoveryDataSourceContract {
     suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>>
     suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>>
     suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>>
+
+    suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>>
 
     suspend fun poster(id: String): Resource<ResponseImages>
 }
