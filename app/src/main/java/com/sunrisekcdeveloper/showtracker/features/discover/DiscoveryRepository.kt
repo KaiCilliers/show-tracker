@@ -21,11 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.discover
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.*
-import java.lang.Exception
 
 class DiscoveryRepository(
     private val local: DiscoveryDao,
@@ -65,15 +63,13 @@ class DiscoveryRepository(
     }
 
     override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
-        var result: Resource<List<FeaturedList>> = Resource.Error("Something went wrong...")
-        if (cachedFeaturedList == null && cacheIsDirty) {
+        return if (cachedFeaturedList == null && cacheIsDirty) {
             updateCache()
-            result = Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
+            Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
         } else if (!cacheIsDirty){
-            result = Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
+            Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
         } else{
-            result = Resource.Success(cachedFeaturedList!!.values.toList())
+            Resource.Success(cachedFeaturedList!!.values.toList())
         }
-        return result
     }
 }
