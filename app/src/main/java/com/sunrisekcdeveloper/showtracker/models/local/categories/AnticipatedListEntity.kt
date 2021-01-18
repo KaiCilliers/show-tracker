@@ -22,6 +22,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeListCount
+import java.util.*
 
 @Entity(tableName = "tbl_anticipated")
 data class AnticipatedListEntity(
@@ -29,7 +30,9 @@ data class AnticipatedListEntity(
     @ColumnInfo(name = "fk_anticipated_media_slug")
     val mediaSlug: String,
     @ColumnInfo(name = "anticipated_list_count")
-    val lists: Int
+    val lists: Int,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date = Date()
 ) {
     companion object {
         fun from(item: EnvelopeListCount): AnticipatedListEntity {

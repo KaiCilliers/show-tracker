@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.models.local.categories
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "tbl_box_office")
 data class BoxOfficeListEntity(
@@ -28,5 +29,7 @@ data class BoxOfficeListEntity(
     @ColumnInfo(name = "fk_box_media_slug")
     val mediaSlug: String,
     @ColumnInfo(name = "box_revenue")
-    val revenue: Int
+    val revenue: Int,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date = Date()
 )

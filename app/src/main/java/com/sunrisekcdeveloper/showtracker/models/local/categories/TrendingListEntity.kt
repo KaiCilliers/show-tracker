@@ -22,6 +22,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import java.util.Date
 
 @Entity(tableName = "tbl_trending")
 data class TrendingListEntity(
@@ -29,7 +30,9 @@ data class TrendingListEntity(
     @ColumnInfo(name = "fk_trending_media_slug")
     val mediaSlug: String,
     @ColumnInfo(name = "trending_watcher_count")
-    val watchers: Int
+    val watchers: Int,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date = Date()
 ) {
     companion object {
         fun from(movie: ResponseMovie, watchers: Int): TrendingListEntity {
