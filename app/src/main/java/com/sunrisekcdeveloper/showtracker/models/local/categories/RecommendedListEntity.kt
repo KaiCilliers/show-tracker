@@ -22,6 +22,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeUserCount
+import java.util.*
 
 @Entity(tableName = "tbl_recommended")
 data class RecommendedListEntity(
@@ -31,7 +32,9 @@ data class RecommendedListEntity(
     @ColumnInfo(name = "rec_user_count")
     val users: Int,
     @ColumnInfo(name = "rec_period_count")
-    val period: String
+    val period: String,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date = Date()
 ) {
     companion object {
         fun from(item: EnvelopeUserCount): RecommendedListEntity {

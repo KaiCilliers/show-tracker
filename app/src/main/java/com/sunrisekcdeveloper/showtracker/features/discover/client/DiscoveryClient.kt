@@ -19,16 +19,140 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.client
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource.Success
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryApi
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponsePoster
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import timber.log.Timber
 
 class DiscoveryClient(
     @DiscoveryApi private val api: DiscoveryServiceContract
 ) : DiscoveryDataSourceContract {
+
+    // TODO: 18-01-2021 address double bang
+    private suspend fun validPosterUrl(id: String): String {
+        var validIds: String = ""
+        val poster = poster(id)
+        if (poster is Success) {
+            validIds = organisedPosters(poster.data)
+        }
+        return validIds
+    }
+
+    // TODO save all posters that are valid somewhere
+    private suspend fun organisedPosters(images: ResponseImages): String {
+        val validPosterIds = mutableListOf<String>()
+        images.posters?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.logo?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.banner?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.background?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.logo?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.thumb?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        Timber.e("VALID URLs: $validPosterIds")
+        return if (validPosterIds.size == 0) {
+            ""
+        } else {
+            var urls = ""
+            validPosterIds.forEach {
+                if (urls.length == 0) {
+                    urls += it
+                } else {
+                    urls += ";$it"
+                }
+            }
+            urls
+        }
+    }
+
+    // TODO: 18-01-2021 revisit method - rename maybe
+    private fun validatePosterIds(list: List<ResponsePoster>?): List<String> {
+        val validUrls = mutableListOf<String>()
+        list?.forEach {
+            validUrls.add(it.url)
+        }
+        return validUrls
+    }
+
+    // TODO: 18-01-2021 takes too much time to load all images
+    private suspend fun movieEntityOf(movie: ResponseMovie): MovieEntity {
+        val entity = movie.asEntity()
+        try {
+            withContext(Dispatchers.IO) {
+                entity.posterUrl = validPosterUrl("${movie.identifiers.tmdb}")
+            }
+        } catch (e: Exception) {
+            Timber.e("$e")
+        }
+        return entity
+    }
+
+    override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> {
+        val box = result { api.boxOffice() }
+        val trending = result { api.trendingMovies() }
+        val popular = result { api.popularMovies() }
+        val mostPlayed = result { api.mostPlayedMovies() }
+        val mostWatched = result { api.mostWatchedMovies() }
+        val mostAnticipated = result { api.mostAnticipated() }
+        val recommended = result { api.recommendedMovies() }
+
+        val result = mutableMapOf<String, List<MovieEntity>>()
+
+        if (box is Success) {
+            result["Box Office"] = box.data.map {
+                movieEntityOf(it.movie)
+            }
+        }
+        if (trending is Success) {
+            result["Trending"] = trending.data.mapNotNull {
+                it.movie?.let { responseMovie ->
+                    movieEntityOf(responseMovie)
+                }
+            }
+        }
+        if (popular is Success) {
+            result["Popular"] = popular.data.map {
+                it.let { responseMovie ->
+                    movieEntityOf(responseMovie)
+                }
+            }
+        }
+        if (mostPlayed is Success) {
+            result["Most Played"] = mostPlayed.data.mapNotNull {
+                it.movie?.let { responseMovie ->
+                    movieEntityOf(responseMovie)
+                }
+            }
+        }
+        if (mostWatched is Success) {
+            result["Most Watched"] = mostWatched.data.mapNotNull {
+                it.movie?.let { responseMovie ->
+                    movieEntityOf(responseMovie)
+                }
+            }
+        }
+        if (mostAnticipated is Success) {
+            result["Most Anticipated"] = mostAnticipated.data.mapNotNull {
+                it.movie?.let { responseMovie ->
+                    movieEntityOf(responseMovie)
+                }
+            }
+        }
+        if (recommended is Success) {
+            result["Recommended"] = recommended.data.mapNotNull {
+                it.movie?.let { responseMovie ->
+                    movieEntityOf(responseMovie)
+                }
+            }
+        }
+        return result
+    }
+
     // TODO this logic should be at the repo level to include updating cache logic
     //  val wrappedResult = safeApiCall(Dispatchers.IO) { api.getRandomDogBreed() }
     //        when (wrappedResult) {
@@ -43,13 +167,14 @@ class DiscoveryClient(
     //        }
     //        return wrappedResult
     // TODO move to commons or utils
-    private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T> {
-        return try {
+    private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T>
+    = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = request()
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let {
-                    return Resource.Success(it)
+                    return@withContext Success(it)
                 }
             }
             error("${response.code()} ${response.message()}")

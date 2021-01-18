@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,30 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.local.categories
+package com.sunrisekcdeveloper.showtracker.features.discover.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeListCount
 import java.util.*
 
-@Entity(tableName = "tbl_anticipated")
-data class AnticipatedListEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "fk_anticipated_media_slug")
+@Entity(tableName = "tbl_featured")
+data class FeaturedEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
+    @ColumnInfo(name = "fk_featured_media_slug")
     val mediaSlug: String,
-    @ColumnInfo(name = "anticipated_list_count")
-    val lists: Int,
     @ColumnInfo(name = "updated_at")
-    val updatedAt: Date = Date()
-) {
-    companion object {
-        fun from(item: EnvelopeListCount): AnticipatedListEntity {
-            return AnticipatedListEntity(
-                mediaSlug = item.movie!!.identifiers.slug,
-                lists = item.listCount
-            )
-        }
-    }
-}
+    val updatedAt: Date = Date(),
+    val tag: String = "Developer's Choice"
+)
