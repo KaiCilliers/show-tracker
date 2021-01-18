@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.roomresults.*
 import timber.log.Timber
 import java.util.*
@@ -85,18 +86,7 @@ class DiscoveryRepository(
 //        }
 //        Timber.d("All good :)")
         val result = local.groupedFeatured()
-        val tags = hashSetOf<String>()
-        result.forEach { tags.add(it.data.tag) }
-        val list = mutableListOf<FeaturedList>()
-        for(tag in tags) {
-            list.add(
-                FeaturedList(
-                heading = tag,
-                results = result.filter { it.data.tag == tag }.map { it.asMovie() }
-            ))
-        }
-        Timber.d("$list")
-        return Resource.Success(Collections.unmodifiableList(list))
+        return Resource.Success(FeaturedMovies.featuredListOf(result))
     }
 
     //    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)

@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.models
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 data class FeaturedMovies(
@@ -32,6 +33,20 @@ data class FeaturedMovies(
     )
     val movie: MovieEntity?
 ) {
+    companion object {
+        fun featuredListOf(movies: List<FeaturedMovies>): List<FeaturedList> {
+            val tags = hashSetOf<String>()
+            movies.forEach { tags.add(it.data.tag) }
+            val list = mutableListOf<FeaturedList>()
+            tags.forEach { tag ->
+                list.add(FeaturedList(
+                    heading = tag,
+                    results = movies.filter { it.data.tag == tag }.map { it.asMovie() }
+                ))
+            }
+            return list
+        }
+    }
     // TODO consider the nullable possibility
     fun asMovie() = Movie (
         title = movie!!.title,
