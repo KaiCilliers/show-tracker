@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
@@ -89,17 +90,32 @@ class DiscoveryFragment : Fragment() {
         //  the list building logic needs to happen in the viewmodel
         //  that might keep the list data in memory instead of
         //  fetching it from the db each time the fragment is resumed
-        viewModel.featured.subscribe(viewLifecycleOwner) { map ->
-            val done = arrayListOf<FeaturedList>()
-            map.forEach {
-                done.add(
-                    FeaturedList(
-                        heading = it.key,
-                        results = it.value
-                    )
-                )
+        viewModel.featured.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    Timber.d("Success")
+                    update(it.data)
+                }
+                is Resource.Error -> {
+                    Timber.d("Error"); update(listOf(FeaturedList("error", listOf())))
+                }
+                is Resource.Loading -> {
+                    Timber.d("Loading")
+                }
             }
-            update(done)
         }
+//        viewModel.featured.subscribe(viewLifecycleOwner) { map ->
+//            val done = arrayListOf<FeaturedList>()
+//            map.forEach {
+//                done.add(
+//                    FeaturedList(
+//                        heading = it.key,
+//                        results = it.value
+//                    )
+//                )
+//            }
+//            update(done)
+//        }
+//    }
     }
 }

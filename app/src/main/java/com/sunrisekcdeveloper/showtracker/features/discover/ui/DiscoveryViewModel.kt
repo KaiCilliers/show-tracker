@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
 import kotlinx.coroutines.*
@@ -34,7 +35,10 @@ class DiscoveryViewModel @ViewModelInject constructor(
     @DiscoveryRepo private val repo: DiscoveryRepositoryContract
 ) : ViewModel() {
 
-    val featured = liveData { emit(repo.featuredMovies()) }
+    val featured = liveData {
+        emit(Resource.Loading)
+        emit(repo.featuredMovies())
+    }
 
 //    val trend = liveData { emit(repo.trendingMovie()) }
 //    val pop = liveData { emit(repo.popularMovie()) }

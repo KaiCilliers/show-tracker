@@ -19,16 +19,11 @@
 package com.sunrisekcdeveloper.showtracker.features.discover
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource.Success
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
-import com.sunrisekcdeveloper.showtracker.models.local.categories.*
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.*
-import kotlinx.coroutines.*
-import retrofit2.Response
 import timber.log.Timber
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
+import java.util.*
 
 class DiscoveryRepository(
     private val local: DiscoveryDao,
@@ -57,7 +52,7 @@ class DiscoveryRepository(
 //        refreshCache(result)
 //    }
 
-    override suspend fun featuredMovies(): Map<String, List<Movie>> {
+    override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
 //        var featureMovies = mutableMapOf<String, List<Movie>>()
 //        if (cachedFeatured != null && !cacheIsDirty) {
 //            featureMovies = cachedFeatured as MutableMap<String, List<Movie>>
@@ -90,12 +85,18 @@ class DiscoveryRepository(
 //        }
 //        Timber.d("All good :)")
         val result = local.groupedFeatured()
-        val map = result.groupBy({it.data.tag}, {it.movie!!.asDomain()})
-        Timber.d("$map")
-        map.forEach {
-            Timber.d("$it and ${it.value.size}")
+        val tags = hashSetOf<String>()
+        result.forEach { tags.add(it.data.tag) }
+        val list = mutableListOf<FeaturedList>()
+        for(tag in tags) {
+            list.add(
+                FeaturedList(
+                heading = tag,
+                results = result.filter { it.data.tag == tag }.map { it.asMovie() }
+            ))
         }
-        return map
+        Timber.d("$list")
+        return Resource.Success(Collections.unmodifiableList(list))
     }
 
     //    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)

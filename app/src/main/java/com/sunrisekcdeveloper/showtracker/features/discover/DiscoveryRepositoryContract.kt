@@ -18,12 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover
 
-import com.sunrisekcdeveloper.showtracker.models.roomresults.BoxOfficeMovies
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import com.sunrisekcdeveloper.showtracker.models.roomresults.TrendingMovies
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 
 interface DiscoveryRepositoryContract {
-    suspend fun featuredMovies(): Map<String, List<Movie>>
+    suspend fun featuredMovies(): Resource<List<FeaturedList>>
 //    suspend fun trendingMovie(): List<Movie>
 //    suspend fun popularMovie(): List<Movie>
 //    suspend fun boxofficeMovie(): List<Movie>

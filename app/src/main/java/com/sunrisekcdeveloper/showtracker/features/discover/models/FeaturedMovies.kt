@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.models
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 data class FeaturedMovies(
     @Embedded
@@ -30,4 +31,11 @@ data class FeaturedMovies(
         entityColumn = "movie_slug"
     )
     val movie: MovieEntity?
-)
+) {
+    // TODO consider the nullable possibility
+    fun asMovie() = Movie (
+        title = movie!!.title,
+        slug = movie.slug,
+        posterUrl = movie.posterUrl
+    )
+}
