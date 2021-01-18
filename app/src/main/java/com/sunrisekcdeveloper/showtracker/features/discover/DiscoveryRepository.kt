@@ -23,15 +23,25 @@ import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponsePoster
 import com.sunrisekcdeveloper.showtracker.models.roomresults.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DiscoveryRepository(
     private val local: DiscoveryDao,
     @DiscoveryClient private val remote: DiscoveryDataSourceContract
 ) : DiscoveryRepositoryContract {
 
+    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default).coroutineContext
+
     private var cachedFeaturedList: MutableMap<String, FeaturedList>? = null
-    private var cacheIsDirty = true
+    private var cacheIsDirty = false
 
     private fun updateInMemoryCache(data:  MutableMap<String, List<MovieEntity>>) {
         val featuredMovies = data.mapValues { entry ->
@@ -44,7 +54,9 @@ class DiscoveryRepository(
     }
 
     private suspend fun saveMovie(vararg movie: MovieEntity) {
-        local.insertMovie(*movie)
+        ioScope.launch {
+            local.insertMovie(*movie)
+        }
     }
 
     private suspend fun updateLocalCache(data:  MutableMap<String, List<MovieEntity>>) {
@@ -57,18 +69,31 @@ class DiscoveryRepository(
     }
 
     private suspend fun updateCache() {
+        // TODO: 18-01-2021 remove the poster calls in the movieEntityOf call - move it somewhere else :/
         val response = remote.fetchFeaturedMovies()
         updateInMemoryCache(response)
         updateLocalCache(response)
+        cacheIsDirty = false
+    }
+
+    private suspend fun setCacheStatus() {
+        val result = local.groupedFeatured()
+        val hours = (((result[0].data.updatedAt.time - System.currentTimeMillis())
+        / 1000 ) / 3600)
+        Timber.d("hours: $hours")
+        if (hours >= 24) {
+            cacheIsDirty = true
+        }
     }
 
     override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
+        setCacheStatus()
         return if (cachedFeaturedList == null && cacheIsDirty) {
             updateCache()
             Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
         } else if (!cacheIsDirty){
             Resource.Success(FeaturedMovies.featuredListOf(local.groupedFeatured()))
-        } else{
+        } else {
             Resource.Success(cachedFeaturedList!!.values.toList())
         }
     }
