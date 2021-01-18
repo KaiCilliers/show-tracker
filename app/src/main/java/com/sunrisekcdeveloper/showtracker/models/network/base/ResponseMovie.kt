@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.models.network.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
@@ -35,6 +36,11 @@ data class ResponseMovie(
         @Json(name = "year") val year: Int?, // network results can give a null year
         @Json(name = "ids") val identifiers: ResponseIdentifiers
 ) {
+        fun asFeaturedMovieEntity() = FeaturedEntity(
+                mediaSlug = identifiers.slug,
+                tag = "Popular"
+        )
+
         fun asDomain() = Movie(
                 title = this.title,
                 slug = this.identifiers.slug
