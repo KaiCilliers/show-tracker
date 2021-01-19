@@ -24,7 +24,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao

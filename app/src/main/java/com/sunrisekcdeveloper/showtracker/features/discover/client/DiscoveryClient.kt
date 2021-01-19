@@ -33,7 +33,7 @@ import timber.log.Timber
 
 class DiscoveryClient(
     @DiscoveryApi private val api: DiscoveryServiceContract
-) : DiscoveryDataSourceContract {
+) : DiscoveryRemoteDataSourceContract {
 
     // TODO: 18-01-2021 address double bang
     private suspend fun validPosterUrl(id: String): String {

@@ -25,7 +25,7 @@ import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
-interface DiscoveryDataSourceContract {
+interface DiscoveryRemoteDataSourceContract {
     suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
     suspend fun fetchPop(): Resource<List<ResponseMovie>>
