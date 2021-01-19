@@ -27,7 +27,7 @@ android {
 //                                      "$projectDir/schemas".toString()]
 //            }
 //        }
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.sunrisekcdeveloper.showtracker.CustomTestRunner"
 
         buildConfigField("String", "TRAKT_API_KEY", apikeysProperties['TRAKT_API_KEY'])
         buildConfigField("String", "TRAKT_BASE_URL", apikeysProperties['TRAKT_BASE_URL'])
@@ -60,7 +60,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
-
+// Additionally configure kapt to correct error types by setting correctErrorTypes to true.
+kapt {
+    correctErrorTypes true
+}
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -95,6 +98,13 @@ dependencies {
     // Dependency Injection (Hilt)
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    // For instrumentation tests
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    // For local unit tests
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
@@ -106,7 +116,7 @@ dependencies {
 
     // Image Loading (Glide)
     implementation 'com.github.bumptech.glide:glide:4.10.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    kapt 'com.github.bumptech.glide:compiler:4.10.0'
 
     testImplementation 'junit:junit:4.13.1'
 
