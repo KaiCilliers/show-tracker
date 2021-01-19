@@ -27,7 +27,7 @@ android {
 //                                      "$projectDir/schemas".toString()]
 //            }
 //        }
-        testInstrumentationRunner "com.sunrisekcdeveloper.showtracker.CustomTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TRAKT_API_KEY", apikeysProperties['TRAKT_API_KEY'])
         buildConfigField("String", "TRAKT_BASE_URL", apikeysProperties['TRAKT_BASE_URL'])
@@ -88,6 +88,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
+    androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
 
     // Misc (Navigation, RecyclerView, Timber)
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -141,5 +142,7 @@ dependencies {
     // AndroidX and extensions testing with robolectiric
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunner_version"
     testImplementation "androidx.test:core-ktx:$androidXTestCore_version"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
 }
