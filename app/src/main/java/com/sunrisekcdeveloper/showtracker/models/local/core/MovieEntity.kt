@@ -22,6 +22,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseIdentifiers
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 @Entity(tableName = "tbl_movie")
@@ -70,4 +72,35 @@ data class MovieEntity(
         slug = slug,
         posterUrl = posterUrl
     )
+
+    companion object {
+        fun createMovieEntities(amount: Int): List<MovieEntity> {
+            val movies = mutableListOf<MovieEntity>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    MovieEntity(
+                        slug = "slug$count",
+                        title = "title$count",
+                        year = "year$count",
+                        tagline = "tagline$count",
+                        overview = "overview$count",
+                        released = "released$count",
+                        runtime = count,
+                        trailerUrl = "trailerUrl$count",
+                        homepageUrl = "homepageUrl$count",
+                        posterUrl = "posterUrl$count",
+                        status = "status$count",
+                        rating = count,
+                        votes = count,
+                        commentCount = count,
+                        updatedAt = "updatedAt$count",
+                        certification = "certification$count"
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
 }

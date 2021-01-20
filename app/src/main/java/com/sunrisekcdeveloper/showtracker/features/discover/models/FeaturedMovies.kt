@@ -46,6 +46,19 @@ data class FeaturedMovies(
             }
             return list
         }
+        fun createFeaturedMovies(amount: Int): List<FeaturedMovies> {
+            val movies = mutableListOf<FeaturedMovies>()
+            var count = 0
+            repeat(amount) {
+                movies.add(FeaturedMovies(
+                    data = FeaturedEntity(mediaSlug = "slug$count"),
+                    movie = MovieEntity.createMovieEntities(1)[0]
+                )
+                )
+                count++
+            }
+            return movies
+        }
     }
     // TODO consider the nullable possibility
     fun asMovie() = Movie (

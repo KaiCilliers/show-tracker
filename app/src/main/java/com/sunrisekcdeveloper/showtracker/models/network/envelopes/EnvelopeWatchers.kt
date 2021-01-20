@@ -23,6 +23,7 @@ import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntit
 import com.sunrisekcdeveloper.showtracker.models.local.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseShow
+import org.jetbrains.annotations.TestOnly
 
 /**
  * Response Watcher represents a network response which consists of a [ResponseMovie] with the
@@ -46,4 +47,22 @@ data class EnvelopeWatchers(
         mediaSlug = movie!!.identifiers.slug,
         tag = "Trending"
     )
+
+    companion object {
+        fun createEnvelopeWatchers(amount: Int): List<EnvelopeWatchers> {
+            val movies = mutableListOf<EnvelopeWatchers>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    EnvelopeWatchers(
+                        watchers = count,
+                        movie = ResponseMovie.createResponseMovies(1)[0],
+                        show = null
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
 }

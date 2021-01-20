@@ -88,7 +88,7 @@ class DiscoveryRepository(
 
     private suspend fun setCacheStatus() {
         val result = local.featuredMovies()
-        val hours = (((result[0].data.updatedAt.time - System.currentTimeMillis())
+        val hours = (((System.currentTimeMillis() - result[0].data.updatedAt.time)
         / 1000 ) / 3600)
         Timber.d("hours: $hours")
         if (hours >= 24) {

@@ -34,4 +34,23 @@ data class ResponsePoster(
     @Json(name = "url") val url: String,
     @Json(name = "lang") val lang: String,
     @Json(name = "likes") val likes: String
-)
+) {
+    companion object {
+        fun createResponsePoster(amount: Int): List<ResponsePoster> {
+            val movies = mutableListOf<ResponsePoster>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    ResponsePoster(
+                        id = "id$count",
+                        url = "url$count",
+                        lang = "language$count",
+                        likes = "likes$count"
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
+}

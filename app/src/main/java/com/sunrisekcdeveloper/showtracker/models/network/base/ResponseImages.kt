@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.models.network.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponsePoster.Companion.createResponsePoster
 
 /**
  * Response Image represents a network response which consists of a movie or show name with all of
@@ -36,4 +37,27 @@ data class ResponseImages(
     @Json(name = "moviethumb") val thumb: List<ResponsePoster>?,
     @Json(name = "hdmovieclearart") val clearArt: List<ResponsePoster>?,
     @Json(name = "moviebanner") val banner: List<ResponsePoster>?
-)
+) {
+    companion object {
+        fun createResponseImages(amount: Int): List<ResponseImages> {
+            val movies = mutableListOf<ResponseImages>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    ResponseImages(
+                        name = "name$count",
+                        posters = createResponsePoster(10),
+                        disc = createResponsePoster(10),
+                        logo = createResponsePoster(10),
+                        background = createResponsePoster(10),
+                        thumb = createResponsePoster(10),
+                        clearArt = createResponsePoster(10),
+                        banner = createResponsePoster(10)
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
+}
