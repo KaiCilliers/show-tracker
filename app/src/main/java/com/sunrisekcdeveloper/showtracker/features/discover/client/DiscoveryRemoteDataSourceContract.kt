@@ -38,21 +38,21 @@ interface DiscoveryRemoteDataSourceContract {
 
     suspend fun poster(id: String): Resource<ResponseImages>
 
-    class Fake(): DiscoveryRemoteDataSourceContract {
+    class Fake() : DiscoveryRemoteDataSourceContract {
 
         var happyPath = true
 
         override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = if (happyPath) {
-                Resource.Success(EnvelopeRevenue.createEnvelopeRevenues(10))
-            } else {
-                Resource.Error("unhappy path")
-            }
+            Resource.Success(EnvelopeRevenue.createEnvelopeRevenues(10))
+        } else {
+            Resource.Error("unhappy path")
+        }
 
         override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = if (happyPath) {
-                Resource.Success(EnvelopeWatchers.createEnvelopeWatchers(10))
-            } else {
-                Resource.Error("unhappy path")
-            }
+            Resource.Success(EnvelopeWatchers.createEnvelopeWatchers(10))
+        } else {
+            Resource.Error("unhappy path")
+        }
 
         override suspend fun fetchPop(): Resource<List<ResponseMovie>> = if (happyPath) {
             Resource.Success(ResponseMovie.createResponseMovies(10))
@@ -66,31 +66,35 @@ interface DiscoveryRemoteDataSourceContract {
             Resource.Error("unhappy path")
         }
 
-        override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> = if (happyPath) {
-            Resource.Success(EnvelopeViewStats.createEnvelopeViewStats(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
+        override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> =
+            if (happyPath) {
+                Resource.Success(EnvelopeViewStats.createEnvelopeViewStats(10))
+            } else {
+                Resource.Error("unhappy path")
+            }
 
-        override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> = if (happyPath) {
-            Resource.Success(EnvelopeListCount.createEnvelopeListCounts(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
+        override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> =
+            if (happyPath) {
+                Resource.Success(EnvelopeListCount.createEnvelopeListCounts(10))
+            } else {
+                Resource.Error("unhappy path")
+            }
 
-        override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> = if (happyPath) {
-            Resource.Success(EnvelopeUserCount.createEnvelopeUserCounts(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
+        override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> =
+            if (happyPath) {
+                Resource.Success(EnvelopeUserCount.createEnvelopeUserCounts(10))
+            } else {
+                Resource.Error("unhappy path")
+            }
 
-        override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> = if (happyPath) {
-                    mutableMapOf(
-                        "Top Secret" to MovieEntity.createMovieEntities(10),
-                        "Vicious" to MovieEntity.createMovieEntities(10),
-                        "Requires IQ lower than 40" to MovieEntity.createMovieEntities(10),
-                        "Oldies" to MovieEntity.createMovieEntities(10)
-                    )
+        override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> =
+            if (happyPath) {
+                mutableMapOf(
+                    "Top Secret" to MovieEntity.createMovieEntities(10),
+                    "Vicious" to MovieEntity.createMovieEntities(10),
+                    "Requires IQ lower than 40" to MovieEntity.createMovieEntities(10),
+                    "Oldies" to MovieEntity.createMovieEntities(10)
+                )
             } else {
                 emptyMap<String, List<MovieEntity>>().toMutableMap()
             }
