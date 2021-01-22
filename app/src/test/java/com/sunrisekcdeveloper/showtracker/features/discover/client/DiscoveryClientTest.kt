@@ -33,7 +33,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.collection.IsEmptyCollection
-import org.hamcrest.collection.IsMapContaining
 
 @ExperimentalCoroutinesApi
 class DiscoveryClientTest {
