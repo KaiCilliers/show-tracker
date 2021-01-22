@@ -32,4 +32,22 @@ data class EnvelopeListCount(
         mediaSlug = movie!!.identifiers.slug,
         tag = "Anticipated"
     )
+
+    companion object {
+        fun createEnvelopeListCounts(amount: Int): List<EnvelopeListCount> {
+            val movies = mutableListOf<EnvelopeListCount>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    EnvelopeListCount(
+                        listCount = count,
+                        movie = ResponseMovie.createResponseMovies(1)[0],
+                        show = null
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
 }

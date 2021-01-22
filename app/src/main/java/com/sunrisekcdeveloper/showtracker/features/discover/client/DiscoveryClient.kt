@@ -26,70 +26,47 @@ import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponsePoster
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import timber.log.Timber
 
 class DiscoveryClient(
-    @DiscoveryApi private val api: DiscoveryServiceContract
-) : DiscoveryDataSourceContract {
+    @DiscoveryApi private val api: DiscoveryServiceContract,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : DiscoveryRemoteDataSourceContract {
 
-    // TODO: 18-01-2021 address double bang
-    private suspend fun validPosterUrl(id: String): String {
-        var validIds: String = ""
-        val poster = poster(id)
-        if (poster is Success) {
-            validIds = organisedPosters(poster.data)
-        }
-        return validIds
+    override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
+        api.boxOffice()
     }
 
-    // TODO save all posters that are valid somewhere
-    private suspend fun organisedPosters(images: ResponseImages): String {
-        val validPosterIds = mutableListOf<String>()
-        images.posters?.let { validPosterIds.addAll(validatePosterIds(it)) }
-        images.logo?.let { validPosterIds.addAll(validatePosterIds(it)) }
-        images.banner?.let { validPosterIds.addAll(validatePosterIds(it)) }
-        images.background?.let { validPosterIds.addAll(validatePosterIds(it)) }
-        images.logo?.let { validPosterIds.addAll(validatePosterIds(it)) }
-        images.thumb?.let { validPosterIds.addAll(validatePosterIds(it)) }
-        Timber.e("VALID URLs: $validPosterIds")
-        return if (validPosterIds.size == 0) {
-            ""
-        } else {
-            var urls = ""
-            validPosterIds.forEach {
-                if (urls.length == 0) {
-                    urls += it
-                } else {
-                    urls += ";$it"
-                }
-            }
-            urls
-        }
+    override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = result {
+        api.trendingMovies()
     }
 
-    // TODO: 18-01-2021 revisit method - rename maybe
-    private fun validatePosterIds(list: List<ResponsePoster>?): List<String> {
-        val validUrls = mutableListOf<String>()
-        list?.forEach {
-            validUrls.add(it.url)
-        }
-        return validUrls
+    override suspend fun fetchPop(): Resource<List<ResponseMovie>> = result {
+        api.popularMovies()
     }
 
-    // TODO: 18-01-2021 takes too much time to load all images
-    private suspend fun movieEntityOf(movie: ResponseMovie): MovieEntity {
-        val entity = movie.asEntity()
-        try {
-            withContext(Dispatchers.IO) {
-                entity.posterUrl = validPosterUrl("${movie.identifiers.tmdb}")
-            }
-        } catch (e: Exception) {
-            Timber.e("$e")
-        }
-        return entity
+    override suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>> = result {
+        api.mostPlayedMovies()
+    }
+
+    override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> = result {
+        api.mostWatchedMovies()
+    }
+
+    override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> = result {
+        api.mostAnticipated()
+    }
+
+    override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> = result {
+        api.recommendedMovies()
+    }
+
+    override suspend fun poster(id: String): Resource<ResponseImages> = result {
+        api.poster(id)
     }
 
     override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> {
@@ -168,7 +145,7 @@ class DiscoveryClient(
     //        return wrappedResult
     // TODO move to commons or utils
     private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T>
-    = withContext(Dispatchers.IO) {
+            = withContext(dispatcher) {
         return@withContext try {
             val response = request()
             if (response.isSuccessful) {
@@ -182,41 +159,68 @@ class DiscoveryClient(
             error(e.message ?: e.toString(), e)
         }
     }
+
     private fun <T> error(message: String, e: Exception): Resource<T> {
         Timber.e(message)
         return Resource.Error("Network call has failed for the following reason: $message")
     }
 
-    override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
-        api.boxOffice()
+
+    // TODO: 18-01-2021 address double bang
+    private suspend fun validPosterUrl(id: String): String {
+        var validIds: String = ""
+        val poster = poster(id)
+        if (poster is Success) {
+            validIds = organisedPosters(poster.data)
+        }
+        return validIds
     }
 
-    override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = result {
-        api.trendingMovies()
+    // TODO save all posters that are valid somewhere
+    private suspend fun organisedPosters(images: ResponseImages): String {
+        val validPosterIds = mutableListOf<String>()
+        images.posters?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.logo?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.banner?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.background?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.logo?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        images.thumb?.let { validPosterIds.addAll(validatePosterIds(it)) }
+        Timber.e("VALID URLs: $validPosterIds")
+        return if (validPosterIds.size == 0) {
+            ""
+        } else {
+            var urls = ""
+            validPosterIds.forEach {
+                if (urls.length == 0) {
+                    urls += it
+                } else {
+                    urls += ";$it"
+                }
+            }
+            urls
+        }
     }
 
-    override suspend fun fetchPop(): Resource<List<ResponseMovie>> = result {
-        api.popularMovies()
+    // TODO: 18-01-2021 revisit method - rename maybe
+    private fun validatePosterIds(list: List<ResponsePoster>?): List<String> {
+        val validUrls = mutableListOf<String>()
+        list?.forEach {
+            validUrls.add(it.url)
+        }
+        return validUrls
     }
 
-    override suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>> = result {
-        api.mostPlayedMovies()
-    }
-
-    override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> = result {
-        api.mostWatchedMovies()
-    }
-
-    override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> = result {
-        api.mostAnticipated()
-    }
-
-    override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> = result {
-        api.recommendedMovies()
-    }
-
-    override suspend fun poster(id: String): Resource<ResponseImages> = result {
-        api.poster(id)
+    // TODO: 18-01-2021 takes too much time to load all images
+    private suspend fun movieEntityOf(movie: ResponseMovie): MovieEntity {
+        val entity = movie.asEntity()
+        try {
+            withContext(dispatcher) {
+                entity.posterUrl = validPosterUrl("${movie.identifiers.tmdb}")
+            }
+        } catch (e: Exception) {
+            Timber.e("$e")
+        }
+        return entity
     }
 }
 

@@ -39,4 +39,22 @@ data class EnvelopeUserCount(
         users = userCount,
         period = period
     )
+
+    companion object {
+        fun createEnvelopeUserCounts(amount: Int): List<EnvelopeUserCount> {
+            val movies = mutableListOf<EnvelopeUserCount>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    EnvelopeUserCount(
+                        userCount = count,
+                        movie = ResponseMovie.createResponseMovies(1)[0],
+                        show = null
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
 }

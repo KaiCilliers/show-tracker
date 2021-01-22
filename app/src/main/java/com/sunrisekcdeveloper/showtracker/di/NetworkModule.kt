@@ -26,7 +26,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailClient
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailService
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailServiceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryService
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryServiceContract
 import com.sunrisekcdeveloper.showtracker.features.search.client.SearchClient
@@ -94,7 +94,7 @@ object NetworkModule {
     @Singleton
     @DiscoveryClient
     @Provides
-    fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryDataSourceContract {
+    fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryRemoteDataSourceContract {
         return DiscoveryClient(api)
     }
 

@@ -18,10 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.client
 
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.models.network.base.*
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.Retrofit
+import kotlin.math.log
 
 interface DiscoveryServiceContract {
     /**
@@ -101,4 +104,60 @@ interface DiscoveryServiceContract {
 
     /** IMAGES */
     suspend fun poster(id: String): Response<ResponseImages>
+
+    class Fake() : DiscoveryServiceContract {
+
+        var happyPath = true
+
+        override suspend fun trendingMovies(): Response<List<EnvelopeWatchers>> {
+            return if (happyPath) {
+                Response.success(EnvelopeWatchers.createEnvelopeWatchers(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun popularMovies(): Response<List<ResponseMovie>> {
+            return if (happyPath) {
+                Response.success(ResponseMovie.createResponseMovies(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun recommendedMovies(
+            period: String,
+            extended: String
+        ): Response<List<EnvelopeUserCount>> {
+            return if (happyPath) {
+                Response.success(EnvelopeUserCount.createEnvelopeUserCounts(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun mostPlayedMovies(period: String): Response<List<EnvelopeViewStats>> {
+            return if (happyPath) {
+                Response.success(EnvelopeViewStats.createEnvelopeViewStats(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun mostWatchedMovies(period: String): Response<List<EnvelopeViewStats>> {
+            return if (happyPath) {
+                Response.success(EnvelopeViewStats.createEnvelopeViewStats(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun mostAnticipated(): Response<List<EnvelopeListCount>> {
+            return if (happyPath) {
+                Response.success(EnvelopeListCount.createEnvelopeListCounts(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun boxOffice(): Response<List<EnvelopeRevenue>> {
+            return if (happyPath) {
+                Response.success(EnvelopeRevenue.createEnvelopeRevenues(10))
+            } else Response.error(0, null)
+        }
+
+        override suspend fun poster(id: String): Response<ResponseImages> {
+            return if (happyPath) {
+                Response.success(ResponseImages.createResponseImages(1)[0])
+            } else Response.error(0, null)
+        }
+    }
 }

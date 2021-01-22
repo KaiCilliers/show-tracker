@@ -30,4 +30,21 @@ data class EnvelopeRevenue(
         mediaSlug = movie.identifiers.slug,
         revenue = revenue
     )
+
+    companion object {
+        fun createEnvelopeRevenues(amount: Int): List<EnvelopeRevenue> {
+            val movies = mutableListOf<EnvelopeRevenue>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    EnvelopeRevenue(
+                        revenue = count,
+                        movie = ResponseMovie.createResponseMovies(1)[0]
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
 }

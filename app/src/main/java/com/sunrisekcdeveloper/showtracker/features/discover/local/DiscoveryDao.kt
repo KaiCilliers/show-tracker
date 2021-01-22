@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover
+package com.sunrisekcdeveloper.showtracker.features.discover.local
 
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
