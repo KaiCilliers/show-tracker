@@ -9,6 +9,9 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 buildscript {
+    // Specify global library versions
+//    apply from: 'library_versions.gradle'
+
     repositories {
         google()
         jcenter()

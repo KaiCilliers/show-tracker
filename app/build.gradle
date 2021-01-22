@@ -138,6 +138,7 @@ dependencies {
 
     // Mockito - mainly for fragment navigation
     androidTestImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
 
     // AndroidX and extensions testing with robolectiric
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunner_version"

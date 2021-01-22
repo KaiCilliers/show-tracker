@@ -1,2 +1,8 @@
 include ':app'
 rootProject.name = "ShowTracker"
+/*
+ *  You can move modules to files other than the root directory
+ *  You then add an additional line of code that accompanies the include statement
+ *
+ *  project(":module").projectDir = new File(rootDir, "libraries/module") // Set custom path
+ */
