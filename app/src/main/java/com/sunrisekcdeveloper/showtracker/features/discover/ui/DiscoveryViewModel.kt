@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
 import kotlinx.coroutines.*
@@ -33,34 +34,8 @@ import kotlinx.coroutines.*
 class DiscoveryViewModel @ViewModelInject constructor(
     @DiscoveryRepo private val repo: DiscoveryRepositoryContract
 ) : ViewModel() {
-
-    val trend = liveData { emit(repo.trendingMovie()) }
-    val pop = liveData { emit(repo.popularMovie()) }
-    val box = liveData { emit(repo.boxofficeMovie()) }
-    val mostWatched = liveData { emit(repo.mostWatchedMovie()) }
-    val mostPlayed = liveData { emit(repo.mostPlayedMovie()) }
-    val anticipated = liveData { emit(repo.mostAnticipatedMovie()) }
-    val recommended = liveData { emit(repo.recommendedMovie()) }
-
-    fun anythingReally(value: String) = viewModelScope.launch {
-        // repository suspend call
+    val featured = liveData {
+        emit(Resource.Loading)
+        emit(repo.featuredMovies())
     }
-
-    val someVal = liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
-        emit("some initial loading text")
-        emitSource(liveData { emit("dataSource.fetchLiveData() - obviously without the liveData builder") })
-    }
-
-//    val someBetterValue: LiveData<String> =
-//        dataSource.getFlow()
-//            .onStart { emit("loading string") }
-//            .asLiveData()
-
-//    // continuous
-//    val trenidng = liveData {
-//        repo.trendingMoviesFlow().collect {
-//            emit(it)
-//        }
-//    }
-
 }

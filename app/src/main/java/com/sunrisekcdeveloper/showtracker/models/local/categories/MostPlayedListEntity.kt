@@ -22,6 +22,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeViewStats
+import java.util.*
 
 @Entity(tableName = "tbl_most_played")
 data class MostPlayedListEntity(
@@ -33,7 +34,9 @@ data class MostPlayedListEntity(
     @ColumnInfo(name = "played_play_count")
     val plays: Int,
     @ColumnInfo(name = "played_collected_count")
-    val collectedCount: Int
+    val collectedCount: Int,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date = Date()
 ) {
     companion object {
         fun from(item: EnvelopeViewStats): MostPlayedListEntity {

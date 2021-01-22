@@ -22,12 +22,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import java.util.*
 
 @Entity(tableName = "tbl_popular")
 data class PopularListEntity(
     @PrimaryKey
     @ColumnInfo(name = "fk_popular_media_slug")
-    val mediaSlug: String
+    val mediaSlug: String,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date = Date()
 ) {
     companion object {
         fun from(movie: ResponseMovie): PopularListEntity {

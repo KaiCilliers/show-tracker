@@ -18,22 +18,42 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover
 
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 interface DiscoveryRepositoryContract {
-    suspend fun trendingMovie(): List<Movie>
-    suspend fun popularMovie(): List<Movie>
-    suspend fun boxofficeMovie(): List<Movie>
-    suspend fun mostPlayedMovie(): List<Movie>
-    suspend fun mostWatchedMovie(): List<Movie>
-    suspend fun mostAnticipatedMovie(): List<Movie>
-    suspend fun recommendedMovie(): List<Movie>
 
-    suspend fun updateTrending()
-    suspend fun updateBox()
-    suspend fun updatePopular()
-    suspend fun updateMostPlayed()
-    suspend fun updateMostWatched()
-    suspend fun updateAnticipated()
-    suspend fun updateRecommended()
+    suspend fun featuredMovies(): Resource<List<FeaturedList>>
+
+    class Fake(): DiscoveryRepositoryContract {
+
+        val happyPath = true
+
+        private fun createMovie(amount: Int): List<Movie> {
+            val movies = mutableListOf<Movie>()
+            var count = 0
+            repeat(amount) {
+                movies.add(Movie(
+                    title = "title$count",
+                    slug = "slug$count",
+                    posterUrl = "posterUrl$count"
+                ))
+                count++
+            }
+            return movies
+        }
+
+        override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
+            return if (happyPath) {
+                Resource.Success(listOf(
+                    FeaturedList("Group One", createMovie(10)),
+                    FeaturedList("Group Two", createMovie(10)),
+                    FeaturedList("Group Three", createMovie(10))
+                ))
+            } else {
+                Resource.Error("Unhappy path")
+            }
+        }
+    }
 }

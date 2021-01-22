@@ -19,8 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.models.network.base
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import org.jetbrains.annotations.TestOnly
 
 /**
  * Response Movie represents a network object containing basic information of a movie
@@ -31,30 +33,57 @@ import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
  * @constructor Create empty Response movie
  */
 data class ResponseMovie(
-        @Json(name = "title") val title: String,
-        @Json(name = "year") val year: Int?, // network results can give a null year
-        @Json(name = "ids") val identifiers: ResponseIdentifiers
+    @Json(name = "title") val title: String,
+    // TODO convert year to string
+    @Json(name = "year") val year: Int?, // network results can give a null year
+    @Json(name = "ids") val identifiers: ResponseIdentifiers
 ) {
-        fun asDomain() = Movie(
-                title = this.title,
-                slug = this.identifiers.slug
-        )
-        fun asEntity() = MovieEntity(
-                slug = this.identifiers.slug,
-                title = this.title,
-                year = "$year",
-                tagline = "",
-                overview = "",
-                released = "",
-                runtime = 0,
-                trailerUrl = "",
-                homepageUrl = "",
-                posterUrl = "",
-                status = "",
-                rating = 0,
-                votes = -1,
-                commentCount = -1,
-                updatedAt = "",
-                certification = ""
-        )
+    fun asFeaturedMovieEntity() = FeaturedEntity(
+        mediaSlug = identifiers.slug,
+        tag = "Popular"
+    )
+
+    fun asDomain() = Movie(
+        title = this.title,
+        slug = this.identifiers.slug
+    )
+
+    fun asEntity() = MovieEntity(
+        slug = this.identifiers.slug,
+        title = this.title,
+        year = "$year",
+        tagline = "",
+        overview = "",
+        released = "",
+        runtime = 0,
+        trailerUrl = "",
+        homepageUrl = "",
+        posterUrl = "",
+        status = "",
+        rating = 0,
+        votes = -1,
+        commentCount = -1,
+        updatedAt = "",
+        certification = ""
+    )
+
+    companion object {
+        fun createResponseMovies(amount: Int): List<ResponseMovie> {
+            val movies = mutableListOf<ResponseMovie>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    ResponseMovie(
+                        "title",
+                        1996,
+                        ResponseIdentifiers(
+                            count, "$count", "$count", count, count
+                        )
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
 }

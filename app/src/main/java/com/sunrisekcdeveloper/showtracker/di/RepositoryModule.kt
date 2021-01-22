@@ -18,15 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.di.LocalModule.DiscoveryLocal
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryDao
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
 import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.search.SearchRepository
@@ -66,10 +67,10 @@ object RepositoryModule {
     @DiscoveryRepo
     @Provides
     fun provideDiscoveryRepository(
-        dao: DiscoveryDao,
-        @DiscoveryClient remote: DiscoveryDataSourceContract
+        @DiscoveryLocal local: DiscoveryLocalDataSourceContract,
+        @DiscoveryClient remote: DiscoveryRemoteDataSourceContract
     ): DiscoveryRepositoryContract =
-        DiscoveryRepository(dao, remote)
+        DiscoveryRepository(local, remote)
 
     @ActivityRetainedScoped
     @SearchRepo

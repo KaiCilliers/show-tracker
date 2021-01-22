@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.models.network.envelopes
 
 import com.squareup.moshi.Json
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseShow
 
@@ -26,4 +27,27 @@ data class EnvelopeListCount(
     @Json(name = "list_count") val listCount: Int,
     @Json(name = "movie") val movie: ResponseMovie?,
     @Json(name = "show") val show: ResponseShow?
-)
+) {
+    fun asFeaturedMovieEntity() = FeaturedEntity(
+        mediaSlug = movie!!.identifiers.slug,
+        tag = "Anticipated"
+    )
+
+    companion object {
+        fun createEnvelopeListCounts(amount: Int): List<EnvelopeListCount> {
+            val movies = mutableListOf<EnvelopeListCount>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    EnvelopeListCount(
+                        listCount = count,
+                        movie = ResponseMovie.createResponseMovies(1)[0],
+                        show = null
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
+}

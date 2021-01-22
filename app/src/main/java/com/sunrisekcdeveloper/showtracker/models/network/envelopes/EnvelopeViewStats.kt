@@ -29,4 +29,25 @@ data class EnvelopeViewStats(
     @Json(name = "collector_count") val collectorCount: Int?,
     @Json(name = "show") val show: ResponseShow?,
     @Json(name = "movie") val movie: ResponseMovie?
-)
+) {
+    companion object {
+        fun createEnvelopeViewStats(amount:Int): List<EnvelopeViewStats> {
+            val movies = mutableListOf<EnvelopeViewStats>()
+            var count = 0
+            repeat(amount) {
+                movies.add(
+                    EnvelopeViewStats(
+                        watchers = count,
+                        playCount = count,
+                        collectedCount = count,
+                        collectorCount = count,
+                        movie = ResponseMovie.createResponseMovies(1)[0],
+                        show = null
+                    )
+                )
+                count++
+            }
+            return movies
+        }
+    }
+}

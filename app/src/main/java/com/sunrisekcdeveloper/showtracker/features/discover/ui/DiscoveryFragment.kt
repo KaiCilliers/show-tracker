@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
@@ -52,14 +53,6 @@ class DiscoveryFragment : Fragment() {
 
     private val viewModel: DiscoveryViewModel by viewModels()
 
-    private var trending: List<Movie> = listOf()
-    private var popular: List<Movie> = listOf()
-    private var boxoffice: List<Movie> = listOf()
-    private var mostPlayed: List<Movie> = listOf()
-    private var mostWatched: List<Movie> = listOf()
-    private var anticipated: List<Movie> = listOf()
-    private var recommended: List<Movie> = listOf()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,7 +71,7 @@ class DiscoveryFragment : Fragment() {
             override fun onClick(item: Movie) {
                 Timber.d("Featured: $item")
                 findNavController().navigate(
-                    DiscoveryFragmentDirections.actionHomeFragmentDestToDetailFragment(item.slug)
+                    DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragment(item.slug)
                 )
             }
         })
@@ -88,59 +81,24 @@ class DiscoveryFragment : Fragment() {
         )
     }
 
-    private fun update() {
-        adapter.submitList(
-            listOf(
-                FeaturedList("Trending", trending),
-                FeaturedList("BoxOffice", boxoffice),
-                FeaturedList("Popular", popular),
-                FeaturedList("Anticipated", anticipated),
-                FeaturedList("Most Watched", mostWatched),
-                FeaturedList("Most Played", mostPlayed),
-                FeaturedList("Recommended", recommended)
-            )
-        )
+    private fun update(list: List<FeaturedList>) {
+        adapter.submitList(list)
     }
 
     private fun observeViewModel() {
-        // TODO i need a single subscription for the list of data
-        //  the list building logic needs to happen in the viewmodel
-        //  that might keep the list data in memory instead of
-        //  fetching it from the db each time the fragment is resumed
-        viewModel.trend.subscribe(viewLifecycleOwner) {
-            Timber.d("Trending movies: ${it.size}")
-            trending = it
-            update()
-        }
-        viewModel.box.subscribe(viewLifecycleOwner) {
-            Timber.d("Box movies: ${it.size}")
-            boxoffice = it
-            update()
-        }
-        viewModel.pop.subscribe(viewLifecycleOwner) {
-            Timber.d("Popular movies: ${it.size}")
-            popular = it
-            update()
-        }
-        viewModel.mostPlayed.subscribe(viewLifecycleOwner) {
-            Timber.d("Most Played movies: ${it.size}")
-            mostPlayed = it
-            update()
-        }
-        viewModel.mostWatched.subscribe(viewLifecycleOwner) {
-            Timber.d("Most Watched movies: ${it.size}")
-            mostWatched = it
-            update()
-        }
-        viewModel.anticipated.subscribe(viewLifecycleOwner) {
-            Timber.d("Anticiapted movies: ${it.size}")
-            anticipated = it
-            update()
-        }
-        viewModel.recommended.subscribe(viewLifecycleOwner) {
-            Timber.d("REcommended movies: ${it.size}")
-            recommended = it
-            update()
+        viewModel.featured.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    Timber.d("Success")
+                    update(it.data)
+                }
+                is Resource.Error -> {
+                    Timber.d("Error: $it"); update(listOf(FeaturedList("error", listOf())))
+                }
+                is Resource.Loading -> {
+                    Timber.d("Loading")
+                }
+            }
         }
     }
 }

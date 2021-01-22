@@ -20,278 +20,79 @@ package com.sunrisekcdeveloper.showtracker.features.discover
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryDataSourceContract
-import com.sunrisekcdeveloper.showtracker.models.local.categories.*
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import kotlinx.coroutines.*
+import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.roomresults.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class DiscoveryRepository(
-    private val local: DiscoveryDao,
-    @DiscoveryClient private val remote: DiscoveryDataSourceContract
+    private val local: DiscoveryLocalDataSourceContract,
+    @DiscoveryClient private val remote: DiscoveryRemoteDataSourceContract,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DiscoveryRepositoryContract {
 
-    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
-    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
+    // In memory data source
+    private var cachedFeaturedList: MutableMap<String, FeaturedList>? = null
+    // Public to allow edit in testing
+    var cacheIsDirty = false
 
-    // TODO
-    //  move to a base class - in a commons package or utils
-    private fun update(block: suspend () -> Unit) {
-        ioScope.launch {
-            block.invoke()
+    override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
+        setCacheStatus()
+        return if (cachedFeaturedList == null && cacheIsDirty) {
+            updateCache()
+            Resource.Success(FeaturedMovies.featuredListOf(local.featuredMovies()))
+        } else if (!cacheIsDirty){
+            Resource.Success(FeaturedMovies.featuredListOf(local.featuredMovies()))
+        } else {
+            Resource.Success(cachedFeaturedList!!.values.toList())
         }
     }
 
-    override suspend fun trendingMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.trendingMovies() }
-        update { updateTrending() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
+    private fun updateInMemoryCache(data:  MutableMap<String, List<MovieEntity>>) {
+        val featuredMovies = data.mapValues { entry ->
+            FeaturedList(
+                heading = entry.key,
+                results = entry.value.map { it.asDomain() }
+            )
+        }
+        cachedFeaturedList = featuredMovies.toMutableMap()
+    }
+
+    private suspend fun saveMovie(vararg movie: MovieEntity) {
+        scope.launch {
+            local.insertMovie(*movie)
         }
     }
 
-    override suspend fun popularMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.popularMovies() }
-        update { updatePopular() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
+    private suspend fun updateLocalCache(data:  MutableMap<String, List<MovieEntity>>) {
+        local.replaceAllFeaturedMovies(*data.flatMap { entry ->
+            entry.value.map {
+                saveMovie(it)
+                it.asFeaturedEntity(entry.key)
             }
-        }
+        }.toTypedArray())
     }
 
-    override suspend fun boxofficeMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.boxOfficeMovies() }
-        update { updateBox() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
+    private suspend fun updateCache() {
+        // TODO: 18-01-2021 remove the poster calls in the movieEntityOf call - move it somewhere else :/
+        val response = remote.fetchFeaturedMovies()
+        updateInMemoryCache(response)
+        updateLocalCache(response)
+        cacheIsDirty = false
     }
 
-    override suspend fun mostPlayedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.mostPlayedMovies() }
-        update { updateMostPlayed() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
-
-    override suspend fun mostWatchedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.mostWatchedMovies() }
-        update { updateMostWatched() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
-
-    override suspend fun mostAnticipatedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.mostAnticipatedMovies() }
-        update { updateAnticipated() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
-
-    override suspend fun recommendedMovie(): List<Movie> {
-        val result = withContext(ioScope.coroutineContext) { local.recommended() }
-        update { updateRecommended() }
-        return withContext(cpuScope.coroutineContext) {
-            result.map { item ->
-                item.movie?.asDomain()!!
-            }
-        }
-    }
-
-    override suspend fun updateTrending() {
-        val response = remote.fetchTrend()
-        if (response is Resource.Success) {
-            val exists = local.fetchTrending()
-            local.insertMovie(*response.data.map {
-                val entity = it.movie!!.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                local.updateTrending(*response.data.map { it.asTrendingMovieEntity() }
-                    .toTypedArray())
-            } else {
-                local.replaceTrending(*response.data.map { it.asTrendingMovieEntity() }
-                    .toTypedArray())
-            }
-        }
-    }
-
-    override suspend fun updateBox() {
-        val response = remote.fetchBox()
-        if (response is Resource.Success) {
-            val exists = local.fetchBox()
-            local.insertMovie(*response.data.map {
-                val entity = it.movie.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                local.updateBox(*response.data.map { it.asEntity() }.toTypedArray())
-            } else {
-                local.replaceBox(*response.data.map { it.asEntity() }.toTypedArray())
-            }
-        }
-    }
-
-    override suspend fun updatePopular() {
-        val response = remote.fetchPop()
-        if (response is Resource.Success) {
-            val exists = local.fetchPopular()
-            local.insertMovie(*response.data.map {
-                val entity = it.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                val s = local.updatePopular(*response.data.map { PopularListEntity.from(it) }
-                    .toTypedArray())
-            } else {
-                local.replacePopular(*response.data.map { PopularListEntity.from(it) }
-                    .toTypedArray())
-            }
-        }
-    }
-
-    override suspend fun updateMostPlayed() {
-        val response = remote.fetchMostPlayed()
-        if (response is Resource.Success) {
-            val exists = local.fetchMostPlayed()
-            local.insertMovie(*response.data.map {
-                val entity = it.movie!!.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                local.updateMostPlayed(*response.data.map { MostPlayedListEntity.from(it) }
-                    .toTypedArray())
-            } else {
-                local.replaceMostPlayed(*response.data.map { MostPlayedListEntity.from(it) }
-                    .toTypedArray())
-            }
-        }
-    }
-
-    override suspend fun updateMostWatched() {
-        val response = remote.fetchMostWatched()
-        if (response is Resource.Success) {
-            val exists = local.fetchMostWatched()
-            local.insertMovie(*response.data.map {
-                val entity = it.movie!!.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                local.updateMostWatched(*response.data.map { MostWatchedListEntity.from(it) }
-                    .toTypedArray())
-            } else {
-                local.replaceMostWatched(*response.data.map { MostWatchedListEntity.from(it) }
-                    .toTypedArray())
-            }
-        }
-    }
-
-    override suspend fun updateAnticipated() {
-        val response = remote.fetchAnticipated()
-        // val response = safeApiCall { remote.fetchAnticipated() }
-        if (response is Resource.Success) {
-            val exists = local.fetchAnticipated()
-            local.insertMovie(*response.data.map {
-                val entity = it.movie!!.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        var url = ""
-                        poster.data.posters?.get(0)?.let {
-                            url += it.url + ";"
-                        }
-                        poster.data.background?.get(0)?.let {
-                            url += it.url + ";"
-                        }
-                        poster.data.thumb?.get(0)?.let {
-                            url += it.url + ";"
-                        }
-                        poster.data.logo?.get(0)?.let {
-                            url += it.url
-                        }
-                        Timber.e("URRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
-                        Timber.e(url)
-                        entity.posterUrl = url
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                local.updateAnticipated(*response.data.map { AnticipatedListEntity.from(it) }
-                    .toTypedArray())
-            } else {
-                local.replaceAnticipated(*response.data.map { AnticipatedListEntity.from(it) }
-                    .toTypedArray())
-            }
-        }
-    }
-
-    override suspend fun updateRecommended() {
-        val response = remote.fetchRecommended()
-        if (response is Resource.Success) {
-            val exists = local.fetchRecommended()
-            local.insertMovie(*response.data.map {
-                val entity = it.movie!!.asEntity()
-                withContext(Dispatchers.IO) {
-                    val poster = remote.poster("${it.movie.identifiers.tmdb}")
-                    if (poster is Resource.Success) {
-                        entity.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                    }
-                }
-                entity
-            }.toTypedArray())
-            if (exists.size == 10) {
-                local.updateRecommended(*response.data.map { RecommendedListEntity.from(it) }
-                    .toTypedArray())
-            } else {
-                local.replaceRecommended(*response.data.map { RecommendedListEntity.from(it) }
-                    .toTypedArray())
-            }
+    private suspend fun setCacheStatus() {
+        val result = local.featuredMovies()
+        val hours = (((System.currentTimeMillis() - result[0].data.updatedAt.time)
+        / 1000 ) / 3600)
+        Timber.d("hours: $hours")
+        if (hours >= 24) {
+            cacheIsDirty = true
         }
     }
 }
-
