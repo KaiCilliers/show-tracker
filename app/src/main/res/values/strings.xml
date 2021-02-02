@@ -12,4 +12,5 @@
     <string name="series_label">TV Shows</string>
     <string name="movies_label">Movies</string>
     <string name="both_label">Both</string>
+    <string name="showtracker_label">ShowTracker</string>
 </resources>
