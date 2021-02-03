@@ -26,7 +26,6 @@ import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
-import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.models.local.categories.*
 import java.util.Date
@@ -45,7 +44,6 @@ import java.util.Date
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
     abstract fun discoveryDao(): DiscoveryDao
-    abstract fun searchDao(): SearchDao
     abstract fun watchlistDao(): WatchlistDao
     abstract fun detailDao(): DetailDao
 }

@@ -28,10 +28,6 @@ import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemo
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
 import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
-import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchRepository
-import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
@@ -71,15 +67,6 @@ object RepositoryModule {
         @DiscoveryClient remote: DiscoveryRemoteDataSourceContract
     ): DiscoveryRepositoryContract =
         DiscoveryRepository(local, remote)
-
-    @ActivityRetainedScoped
-    @SearchRepo
-    @Provides
-    fun provideSearchRepository(
-        dao: SearchDao,
-        @NetworkModule.SearchClient remote: SearchDataSourceContract
-    ): SearchRepositoryContract =
-        SearchRepository(dao, remote)
 
     @ActivityRetainedScoped
     @WatchlistRepo
