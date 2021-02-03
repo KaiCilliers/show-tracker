@@ -25,7 +25,6 @@ import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSource
 import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import dagger.Module
 import dagger.Provides
@@ -68,10 +67,6 @@ object LocalModule {
     @Singleton
     @Provides
     fun provideDiscoveryDao(db: TrackerDatabase): DiscoveryDao = db.discoveryDao()
-
-    @Singleton
-    @Provides
-    fun provideSearchDao(db: TrackerDatabase): SearchDao = db.searchDao()
 
     @Singleton
     @Provides

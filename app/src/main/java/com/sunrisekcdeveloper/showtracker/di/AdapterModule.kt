@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.commons.components.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
-import com.sunrisekcdeveloper.showtracker.features.search.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter

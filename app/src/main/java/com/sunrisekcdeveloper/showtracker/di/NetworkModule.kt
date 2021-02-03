@@ -29,10 +29,6 @@ import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryClie
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryService
 import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryServiceContract
-import com.sunrisekcdeveloper.showtracker.features.search.client.SearchClient
-import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.client.SearchService
-import com.sunrisekcdeveloper.showtracker.features.search.client.SearchServiceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistClient
@@ -103,20 +99,6 @@ object NetworkModule {
     @Provides
     fun provideDiscoveryApi(retrofit: Retrofit): DiscoveryServiceContract {
         return retrofit.create(DiscoveryService::class.java)
-    }
-
-    @Singleton
-    @SearchClient
-    @Provides
-    fun provideSearchClient(@SearchApi api: SearchServiceContract) : SearchDataSourceContract {
-        return SearchClient(api)
-    }
-
-    @Singleton
-    @SearchApi
-    @Provides
-    fun provideSearchApi(retrofit: Retrofit): SearchServiceContract {
-        return retrofit.create(SearchService::class.java)
     }
 
     @Singleton

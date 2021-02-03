@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright © 2020. The Android Open Source Project
   ~
   ~ @author Kai Cilliers
@@ -22,203 +21,217 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="movie"
             type="com.sunrisekcdeveloper.showtracker.models.DetailedMovie" />
     </data>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <!-- Back Navigation -->
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <!-- Header -->
-        <ImageView
-            android:id="@+id/imgv_movie_poster"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_8"
-            android:src="@drawable/test"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:src="@drawable/test"/>
-        <TextView
-            android:id="@+id/tv_release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_18"
-            android:padding="@dimen/padding_8"
-            android:text="@{movie.releaseDate}"
-            app:layout_constraintTop_toBottomOf="@id/imgv_movie_poster"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_age_rating"
-            tools:text="1996"/>
-        <TextView
-            android:id="@+id/tv_age_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_18"
-            android:padding="@dimen/padding_8"
-            android:text="@{movie.ageRating}"
-            app:layout_constraintTop_toTopOf="@id/tv_release_date"
-            app:layout_constraintStart_toEndOf="@id/tv_release_date"
-            app:layout_constraintEnd_toStartOf="@id/tv_running_time"
-            tools:text="13+"/>
-        <TextView
-            android:id="@+id/tv_running_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_18"
-            android:padding="@dimen/padding_8"
-            android:text="@{movie.runningTime}"
-            app:layout_constraintTop_toTopOf="@id/tv_release_date"
-            app:layout_constraintStart_toEndOf="@id/tv_age_rating"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="2h04m"/>
-
-        <!-- Details -->
-        <!-- Specified as EditText to allow scrolling -->
-        <EditText
-            android:id="@+id/tv_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:inputType="none"
-            android:cursorVisible="true"
-            android:singleLine="false"
-            android:lineSpacingMultiplier="1.2"
-            android:maxLines="6"
-            android:scrollbars="vertical"
-            android:padding="@dimen/padding_8"
-            android:layout_marginStart="@dimen/margin_8"
-            android:layout_marginEnd="@dimen/margin_8"
-            android:text="@{movie.description}"
-            app:layout_constraintTop_toBottomOf="@id/tv_release_date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="@tools:sample/lorem/random"/>
-        <TextView
-            android:id="@+id/tv_starring_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_2"
-            android:layout_marginStart="@dimen/margin_24"
-            app:layout_constraintTop_toBottomOf="@id/tv_description"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Starring:"/>
-        <TextView
-            android:id="@+id/tv_starring_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_2"
-            android:layout_marginStart="@dimen/margin_8"
-            android:layout_marginEnd="@dimen/margin_8"
-            android:maxEms="28"
-            android:text="@{movie.notableActors}"
-            app:layout_constraintTop_toBottomOf="@id/tv_description"
-            app:layout_constraintStart_toEndOf="@id/tv_starring_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Peter Griffen, Monkey D. Luf... more"/>
-        <TextView
-            android:id="@+id/tv_director_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_2"
-            android:layout_marginStart="@dimen/margin_24"
-            app:layout_constraintTop_toBottomOf="@id/tv_starring_label"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Director:"/>
-        <TextView
-            android:id="@+id/tv_director_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_2"
-            android:layout_marginStart="@dimen/margin_8"
-            android:layout_marginEnd="@dimen/margin_8"
-            android:maxEms="28"
-            android:text="@{movie.director}"
-            app:layout_constraintTop_toBottomOf="@id/tv_starring_label"
-            app:layout_constraintStart_toEndOf="@id/tv_director_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Steven Spielberg"/>
-
-        <!-- Actions -->
-        <ImageView
-            android:id="@+id/imgv_watchlist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_24"
-            android:padding="@dimen/padding_8"
-            android:layout_marginTop="@dimen/margin_24"
-            app:layout_constraintTop_toBottomOf="@id/tv_director_label"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/imgv_share"/>
-        <TextView
-            android:id="@+id/tv_add_to_watchlist"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/imgv_watchlist"
-            app:layout_constraintStart_toStartOf="@id/imgv_watchlist"
-            app:layout_constraintEnd_toEndOf="@id/imgv_watchlist"
-            tools:text="Watchlist"/>
-        <ImageView
-            android:id="@+id/imgv_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_share_24"
-            android:padding="@dimen/padding_8"
-            app:layout_constraintTop_toTopOf="@id/imgv_watchlist"
-            app:layout_constraintBottom_toBottomOf="@id/imgv_watchlist"
-            app:layout_constraintStart_toEndOf="@id/imgv_watchlist"
-            app:layout_constraintEnd_toEndOf="parent"/>
-        <TextView
-            android:id="@+id/tv_share"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/imgv_share"
-            app:layout_constraintStart_toStartOf="@id/imgv_share"
-            app:layout_constraintEnd_toEndOf="@id/imgv_share"
-            tools:text="Share"/>
-
-        <!-- Suggestions -->
-        <TextView
-            android:id="@+id/tv_more_like_this"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/more_like_this_label"
-            android:textSize="@dimen/text_24"
-            android:layout_marginTop="@dimen/margin_8"
-            android:layout_marginStart="@dimen/margin_8"
-            android:padding="@dimen/padding_2"
-            app:layout_constraintTop_toBottomOf="@id/tv_add_to_watchlist"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <!-- Wrapped in RelativeLayout to get desired affect fo RC height to wrap all content -->
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_8"
-            android:layout_marginStart="@dimen/margin_8"
-            app:layout_constraintTop_toBottomOf="@id/tv_more_like_this"
-            app:layout_constraintStart_toStartOf="parent">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rc_more_like_this"
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Back Navigation -->
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Header -->
+            <ImageView
+                android:id="@+id/imgv_movie_poster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_8"
+                android:src="@drawable/test"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/test" />
+
+            <TextView
+                android:id="@+id/tv_release_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_8"
-                android:scrollbars="none" />
-        </RelativeLayout>
+                android:text="@{movie.releaseDate}"
+                android:textSize="@dimen/text_18"
+                app:layout_constraintEnd_toStartOf="@id/tv_age_rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgv_movie_poster"
+                tools:text="1996" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/tv_age_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_8"
+                android:text="@{movie.ageRating}"
+                android:textSize="@dimen/text_18"
+                app:layout_constraintEnd_toStartOf="@id/tv_running_time"
+                app:layout_constraintStart_toEndOf="@id/tv_release_date"
+                app:layout_constraintTop_toTopOf="@id/tv_release_date"
+                tools:text="13+" />
+
+            <TextView
+                android:id="@+id/tv_running_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_8"
+                android:text="@{movie.runningTime}"
+                android:textSize="@dimen/text_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_age_rating"
+                app:layout_constraintTop_toTopOf="@id/tv_release_date"
+                tools:text="2h04m" />
+
+            <!-- Details -->
+            <!-- Specified as EditText to allow scrolling -->
+            <EditText
+                android:id="@+id/tv_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:inputType="none"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="6"
+                android:padding="@dimen/padding_8"
+                android:scrollbars="vertical"
+                android:singleLine="false"
+                android:text="@{movie.description}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_release_date"
+                tools:text="@tools:sample/lorem/random" />
+
+            <TextView
+                android:id="@+id/tv_starring_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_24"
+                android:padding="@dimen/padding_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_description"
+                tools:text="Starring:" />
+
+            <TextView
+                android:id="@+id/tv_starring_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:maxEms="28"
+                android:padding="@dimen/padding_2"
+                android:text="@{movie.notableActors}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_starring_label"
+                app:layout_constraintTop_toBottomOf="@id/tv_description"
+                tools:text="Peter Griffen, Monkey D. Luf... more" />
+
+            <TextView
+                android:id="@+id/tv_director_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_24"
+                android:padding="@dimen/padding_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_starring_label"
+                tools:text="Director:" />
+
+            <TextView
+                android:id="@+id/tv_director_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:maxEms="28"
+                android:padding="@dimen/padding_2"
+                android:text="@{movie.director}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_director_label"
+                app:layout_constraintTop_toBottomOf="@id/tv_starring_label"
+                tools:text="Steven Spielberg" />
+
+            <!-- Actions -->
+            <ImageView
+                android:id="@+id/imgv_watchlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_24"
+                android:padding="@dimen/padding_8"
+                android:src="@drawable/ic_baseline_add_24"
+                app:layout_constraintEnd_toStartOf="@id/imgv_share"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_director_label" />
+
+            <TextView
+                android:id="@+id/tv_add_to_watchlist"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/imgv_watchlist"
+                app:layout_constraintStart_toStartOf="@id/imgv_watchlist"
+                app:layout_constraintTop_toBottomOf="@id/imgv_watchlist"
+                tools:text="Watchlist" />
+
+            <ImageView
+                android:id="@+id/imgv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_8"
+                android:src="@drawable/ic_baseline_share_24"
+                app:layout_constraintBottom_toBottomOf="@id/imgv_watchlist"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imgv_watchlist"
+                app:layout_constraintTop_toTopOf="@id/imgv_watchlist" />
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/imgv_share"
+                app:layout_constraintStart_toStartOf="@id/imgv_share"
+                app:layout_constraintTop_toBottomOf="@id/imgv_share"
+                tools:text="Share" />
+
+            <!-- Suggestions -->
+            <TextView
+                android:id="@+id/tv_more_like_this"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginTop="@dimen/margin_8"
+                android:padding="@dimen/padding_2"
+                android:text="@string/more_like_this_label"
+                android:textSize="@dimen/text_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_add_to_watchlist" />
+            <!-- Wrapped in RelativeLayout to get desired affect fo RC height to wrap all content -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginTop="@dimen/margin_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_more_like_this">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rc_more_like_this"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_8"
+                    android:scrollbars="none" />
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
