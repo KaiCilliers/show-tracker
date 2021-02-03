@@ -2,7 +2,7 @@
     <string name="app_name">ShowTracker</string>
     <string name="menu_label_watchlist">Watchlist</string>
     <string name="menu_label_discover">Discover</string>
-    <string name="menu_label_search">Search</string>
+    <string name="menu_label_statistics">Statistics</string>
     <string name="hint_search">Search Here</string>
 
     <!-- TESTING -->
@@ -13,4 +13,6 @@
     <string name="movies_label">Movies</string>
     <string name="both_label">Both</string>
     <string name="showtracker_label">ShowTracker</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

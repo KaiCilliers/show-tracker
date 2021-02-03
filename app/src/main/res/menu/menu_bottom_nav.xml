@@ -30,8 +30,8 @@
         android:icon="@drawable/temp_home"
         android:title="@string/menu_label_discover"/>
     <item
-        android:id="@+id/search_fragment_dest"
+        android:id="@+id/statistics_fragment_dest"
         android:enabled="true"
         android:icon="@drawable/temp_search"
-        android:title="@string/menu_label_search"/>
+        android:title="@string/menu_label_statistics"/>
 </menu>
