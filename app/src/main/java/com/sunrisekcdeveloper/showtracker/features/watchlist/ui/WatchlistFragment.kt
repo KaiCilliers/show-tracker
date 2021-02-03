@@ -54,8 +54,6 @@ class WatchlistFragment : Fragment(), CoroutineScope {
 
     @Inject lateinit var adapter: SuggestionListAdapter
 
-    @Inject lateinit var upComingAdapter: MovieSummaryAdapter
-
     private val viewModel: WatchlistViewModel by viewModels()
 
     private lateinit var binding: FragmentWatchlistBinding
