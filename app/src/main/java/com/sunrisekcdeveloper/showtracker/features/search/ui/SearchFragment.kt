@@ -90,11 +90,11 @@ class SearchFragment : Fragment() {
         adapter.addOnClickAction(object : ClickActionContract {
             override fun onClick(item: Movie) {
                 Timber.d("Search Filter: $item")
-                findNavController().navigate(
-                    SearchFragmentDirections.actionSearchFragmentDestToDetailFragment(
-                        item.slug
-                    )
-                )
+//                findNavController().navigate(
+//                    SearchFragmentDirections.actionSearchFragmentDestToDetailFragment(
+//                        item.slug
+//                    )
+//                )
             }
         })
         binding.rcSearchResults.adapter = adapter
