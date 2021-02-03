@@ -18,5 +18,37 @@
 
 package com.sunrisekcdeveloper.showtracker.features.statistics.ui
 
-class StatisticsViewModel {
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+
+class StatisticsViewModel @ViewModelInject constructor() : ViewModel() {
+
+    val featured = liveData {
+        emit(fakeFeaturedData())
+    }
+
+    private fun fakeFeaturedData(): List<FeaturedList> {
+        return listOf(
+            FeaturedList(heading = "My Horror", results = fakeMovieData()),
+            FeaturedList(heading = "My Comedy", results = fakeMovieData()),
+            FeaturedList(heading = "My Adventure", results = fakeMovieData())
+        )
+    }
+
+    private fun fakeMovieData(): List<Movie> {
+        return listOf<Movie>(
+            Movie("Finding Nemo", "myslug"),
+            Movie("Harry Potter", "myslug"),
+            Movie("Deadpool", "myslug"),
+            Movie("Jurassic Park", "myslug"),
+            Movie("Forest Gump", "myslug"),
+            Movie("Mall Cop", "myslug"),
+            Movie("Miss Congeniality", "myslug"),
+            Movie("Gladiator", "myslug"),
+            Movie("Finding Dory", "myslug")
+        )
+    }
 }

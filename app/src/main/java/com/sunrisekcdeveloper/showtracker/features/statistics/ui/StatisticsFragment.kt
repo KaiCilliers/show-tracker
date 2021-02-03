@@ -24,9 +24,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
+import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentStatisticsBinding
+import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class StatisticsFragment : Fragment() {
+
+    @Inject
+    lateinit var adapter: SuggestionListAdapter
 
     private lateinit var binding: FragmentStatisticsBinding
 
@@ -38,6 +50,26 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStatisticsBinding.inflate(inflater)
+        setup()
+        observeData()
         return binding.root
+    }
+
+    private fun setup() {
+        adapter.addOnClickAction(object : ClickActionContract {
+            override fun onClick(item: Movie) {
+                Timber.d("Featured: $item")
+            }
+        })
+        binding.rcFeaturedCategoriesStatistics.adapter = adapter
+        binding.rcFeaturedCategoriesStatistics.layoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.VERTICAL, false
+        )
+    }
+
+    private fun observeData() {
+        viewModel.featured.subscribe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 }
