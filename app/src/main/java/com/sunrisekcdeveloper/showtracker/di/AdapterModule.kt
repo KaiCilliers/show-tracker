@@ -48,18 +48,6 @@ object AdapterModule {
 
     @ActivityScoped
     @Provides
-    fun provideSmallPosterAdapter(): SmallPosterAdapter {
-        return SmallPosterAdapter()
-    }
-
-    @ActivityScoped
-    @Provides
-    fun provideMovieSummaryAdapter(): MovieSummaryAdapter {
-        return MovieSummaryAdapter()
-    }
-
-    @ActivityScoped
-    @Provides
     fun provideSuggestionListAdapter(): SuggestionListAdapter {
         return SuggestionListAdapter()
     }
