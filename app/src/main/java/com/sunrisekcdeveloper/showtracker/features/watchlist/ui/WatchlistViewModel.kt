@@ -24,6 +24,7 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.models.SuggestionListModel
+import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 
 /**
  * Progress ViewModel
@@ -34,36 +35,17 @@ class WatchlistViewModel @ViewModelInject constructor(
     @WatchlistRepo private val repo: WatchListRepositoryContract
 ) : ViewModel() {
 
-    // TODO all this code is still test data
-    private val _suggestionListData = MutableLiveData<List<SuggestionListModel>>()
-    val suggestionListData: LiveData<List<SuggestionListModel>>
-        get() = _suggestionListData
-
-    private val _movieListData = MutableLiveData<List<Movie>>()
-    val movieListData: LiveData<List<Movie>>
-        get() = _movieListData
-
-    init {
-        _suggestionListData.value = fakeSuggestionData()
-        _movieListData.value = fakeMovieData()
+    val featured = liveData {
+        emit(fakeFeaturedData())
     }
 
-    private fun fakeSuggestionData(): List<SuggestionListModel> {
+    private fun fakeFeaturedData(): List<FeaturedList> {
         return listOf(
-            SuggestionListModel.HeaderItem("Today"),
-            SuggestionListModel.MovieItem(Movie("Finding Nemo", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Harry Potter", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Deadpool", "some slug")),
-            SuggestionListModel.HeaderItem("Tomorrow"),
-            SuggestionListModel.MovieItem(Movie("Jurassic Park", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Forest Gump", "some slug")),
-            SuggestionListModel.HeaderItem("Next Week"),
-            SuggestionListModel.MovieItem(Movie("Mall Cop", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Miss Congeniality", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Gladiator", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Finding Dory", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Shrek", "some slug")),
-            SuggestionListModel.MovieItem(Movie("Snow Whit", "some slug"))
+            FeaturedList(heading = "Recently Added", results = fakeMovieData()),
+            FeaturedList(heading = "In Progress", results = fakeMovieData()),
+            FeaturedList(heading = "Upcoming", results = fakeMovieData()),
+            FeaturedList(heading = "Anticipating", results = fakeMovieData()),
+            FeaturedList(heading = "Completed", results = fakeMovieData())
         )
     }
 

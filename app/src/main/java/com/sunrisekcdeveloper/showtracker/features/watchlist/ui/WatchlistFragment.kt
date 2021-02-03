@@ -32,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
+import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,14 +52,7 @@ class WatchlistFragment : Fragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
-
-    fun foo() {
-        launch {
-
-        }
-    }
-
-    @Inject lateinit var adapter: SmallPosterAdapter
+    @Inject lateinit var adapter: SuggestionListAdapter
 
     @Inject lateinit var upComingAdapter: MovieSummaryAdapter
 
@@ -86,28 +80,17 @@ class WatchlistFragment : Fragment(), CoroutineScope {
                 )
             }
         })
-        binding.rcFilterOptions.adapter = adapter
-        binding.rcFilterOptions.layoutManager = LinearLayoutManager(
+        binding.rcFeaturedCategoriesWatchlist.adapter = adapter
+        binding.rcFeaturedCategoriesWatchlist.layoutManager = LinearLayoutManager(
             requireContext(),
-            LinearLayoutManager.HORIZONTAL,
+            LinearLayoutManager.VERTICAL,
             false
         )
-        // Temporal Coupling
-        upComingAdapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Movie) {
-                Timber.d("SPECIAL click: $item")
-            }
-        })
-        binding.rcUpcoming.adapter = upComingAdapter
-        binding.rcUpcoming.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun observeViewModel() {
-        viewModel.movieListData.subscribe(viewLifecycleOwner) {
+        viewModel.featured.subscribe(viewLifecycleOwner) {
             adapter.submitList(it)
-        }
-        viewModel.suggestionListData.subscribe(viewLifecycleOwner) {
-            upComingAdapter.submitList(it)
         }
     }
 }

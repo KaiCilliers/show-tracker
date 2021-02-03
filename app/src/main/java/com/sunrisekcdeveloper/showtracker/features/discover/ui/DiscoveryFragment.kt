@@ -75,8 +75,8 @@ class DiscoveryFragment : Fragment() {
                 )
             }
         })
-        binding.rcFeaturedCategories.adapter = adapter
-        binding.rcFeaturedCategories.layoutManager = LinearLayoutManager(
+        binding.rcFeaturedCategoriesDiscover.adapter = adapter
+        binding.rcFeaturedCategoriesDiscover.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
     }
