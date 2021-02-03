@@ -18,8 +18,14 @@
 
 package com.sunrisekcdeveloper.showtracker.commons
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -27,6 +33,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 /**
  * Main activity Primary container for fragments that provide app functionality
@@ -46,8 +53,17 @@ class MainActivity : AppCompatActivity() {
 
     // TODO this bottom nav bar needs to be gone when navigating to movie details fragment
     private fun setup() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation_main)
-        bottomNav?.setupWithNavController(findNavController(R.id.nav_host_fragment_main))
+        binding.bottomNavigationMain.setupWithNavController(findNavController(R.id.nav_host_fragment_main))
+        // todo change toolbar text when fragment changes - this impl overrides navigation with navcontroller
+//        val toolbar = supportActionBar
+//        binding.bottomNavigationMain.setOnNavigationItemSelectedListener { menuItem ->
+//            when (menuItem.itemId) {
+//                R.id.watchlist_fragment_dest -> { toolbar?.title = "Watchlist"; true }
+//                R.id.discover_fragment_dest -> { toolbar?.title = "Discover"; true }
+//                R.id.search_fragment_dest -> { toolbar?.title = "Search"; true }
+//                else -> false
+//            }
+//        }
     }
 
 }

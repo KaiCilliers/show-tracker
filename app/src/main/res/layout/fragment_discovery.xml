@@ -24,7 +24,7 @@
     <data></data>
 
     <!-- TODO bottom nav still overlaps fragment, wrapping view in ScrollView is a temp fix -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
@@ -33,40 +33,55 @@
             android:layout_height="0dp"
             android:layout_width="match_parent"
             tools:context=".features.discover.ui.DiscoveryFragment">
-            <!-- TODO these could be that view called badges (I believe) used for filtering -->
-            <TextView
-                android:id="@+id/tv_filter_tv_shows"
-                android:layout_width="wrap_content"
+
+            <SearchView
+                android:id="@+id/sv_search_discover"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textAlignment="center"
-                android:layout_marginTop="@dimen/margin_8"
+                android:layout_margin="@dimen/margin_8"
+                android:queryHint="@string/hint_search"
+                android:iconifiedByDefault="false"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_filter_movies"
-                tools:text="TV Shows"/>
-            <TextView
-                android:id="@+id/tv_filter_movies"
-                android:layout_width="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/rg_filter_discover"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textAlignment="center"
-                android:layout_marginTop="@dimen/margin_8"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_filter_tv_shows"
-                app:layout_constraintEnd_toStartOf="@id/tv_filter_watchlist"
-                tools:text="Movies"/>
-            <TextView
-                android:id="@+id/tv_filter_watchlist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textAlignment="center"
-                android:layout_marginTop="@dimen/margin_8"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_filter_movies"
+                android:layout_margin="@dimen/margin_8"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Watchlist"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sv_search_discover">
+
+                <RadioButton
+                    android:id="@+id/rb_movie_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/movies_label"
+                    style="@style/radio_filter_item_style" />
+
+                <RadioButton
+                    android:id="@+id/rb_both_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:checked="true"
+                    android:text="@string/both_label"
+                    style="@style/radio_filter_item_style" />
+
+                <RadioButton
+                    android:id="@+id/rb_series_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/series_label"
+                    style="@style/radio_filter_item_style" />
+
+            </RadioGroup>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_featured_categories"
@@ -74,22 +89,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_8"
                 android:padding="@dimen/padding_8"
-                app:layout_constraintTop_toBottomOf="@id/tv_filter_tv_shows"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <!-- TODO remove -->
-            <TextView
-                android:id="@+id/tv_home"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="HOME"
-                android:textSize="24sp"
-                android:textAlignment="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rg_filter_discover"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>
