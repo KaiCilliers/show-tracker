@@ -30,7 +30,7 @@ import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
  * @property binding is the auto generated binding object that represents the associated item layout
  * @property clickAction is the action executed when the [binding] object is clicked
  */
-class SuggestionListViewHolder(
+class DiscoverViewHolder(
     private val binding: RcItemFeaturedBinding,
     private val clickAction: ClickActionContract
 ) : NestedViewHolder<FeaturedList>(binding) {

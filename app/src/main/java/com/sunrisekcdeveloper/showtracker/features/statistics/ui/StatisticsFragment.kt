@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentStatisticsBinding
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.adapters.DiscoverListAdapter
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -39,7 +39,7 @@ import javax.inject.Inject
 class StatisticsFragment : Fragment() {
 
     @Inject
-    lateinit var adapter: SuggestionListAdapter
+    lateinit var adapter: DiscoverListAdapter
 
     private lateinit var binding: FragmentStatisticsBinding
 

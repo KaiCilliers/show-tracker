@@ -32,7 +32,7 @@ import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.adapters.DiscoverListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,7 +48,7 @@ import javax.inject.Inject
 class DiscoveryFragment : Fragment() {
 
     @Inject
-    lateinit var adapter: SuggestionListAdapter
+    lateinit var adapter: DiscoverListAdapter
 
     private lateinit var binding: FragmentDiscoveryBinding
 

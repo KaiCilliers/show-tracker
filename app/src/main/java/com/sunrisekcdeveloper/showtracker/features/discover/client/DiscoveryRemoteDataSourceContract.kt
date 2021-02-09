@@ -26,13 +26,9 @@ import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 interface DiscoveryRemoteDataSourceContract {
-    suspend fun fetchBox(): Resource<List<EnvelopeRevenue>>
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
     suspend fun fetchPop(): Resource<List<ResponseMovie>>
-    suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>>
     suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>>
-    suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>>
-    suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>>
 
     suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>>
 
@@ -41,12 +37,6 @@ interface DiscoveryRemoteDataSourceContract {
     class Fake() : DiscoveryRemoteDataSourceContract {
 
         var happyPath = true
-
-        override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = if (happyPath) {
-            Resource.Success(EnvelopeRevenue.createEnvelopeRevenues(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
 
         override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = if (happyPath) {
             Resource.Success(EnvelopeWatchers.createEnvelopeWatchers(10))
@@ -60,29 +50,9 @@ interface DiscoveryRemoteDataSourceContract {
             Resource.Error("unhappy path")
         }
 
-        override suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>> = if (happyPath) {
-            Resource.Success(EnvelopeViewStats.createEnvelopeViewStats(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
-
         override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> =
             if (happyPath) {
                 Resource.Success(EnvelopeViewStats.createEnvelopeViewStats(10))
-            } else {
-                Resource.Error("unhappy path")
-            }
-
-        override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> =
-            if (happyPath) {
-                Resource.Success(EnvelopeListCount.createEnvelopeListCounts(10))
-            } else {
-                Resource.Error("unhappy path")
-            }
-
-        override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> =
-            if (happyPath) {
-                Resource.Success(EnvelopeUserCount.createEnvelopeUserCounts(10))
             } else {
                 Resource.Error("unhappy path")
             }

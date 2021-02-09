@@ -37,10 +37,6 @@ class DiscoveryClient(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : DiscoveryRemoteDataSourceContract {
 
-    override suspend fun fetchBox(): Resource<List<EnvelopeRevenue>> = result {
-        api.boxOffice()
-    }
-
     override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = result {
         api.trendingMovies()
     }
@@ -49,20 +45,8 @@ class DiscoveryClient(
         api.popularMovies()
     }
 
-    override suspend fun fetchMostPlayed(): Resource<List<EnvelopeViewStats>> = result {
-        api.mostPlayedMovies()
-    }
-
     override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> = result {
         api.mostWatchedMovies()
-    }
-
-    override suspend fun fetchAnticipated(): Resource<List<EnvelopeListCount>> = result {
-        api.mostAnticipated()
-    }
-
-    override suspend fun fetchRecommended(): Resource<List<EnvelopeUserCount>> = result {
-        api.recommendedMovies()
     }
 
     override suspend fun poster(id: String): Resource<ResponseImages> = result {
@@ -70,21 +54,12 @@ class DiscoveryClient(
     }
 
     override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> {
-        val box = result { api.boxOffice() }
         val trending = result { api.trendingMovies() }
         val popular = result { api.popularMovies() }
-        val mostPlayed = result { api.mostPlayedMovies() }
         val mostWatched = result { api.mostWatchedMovies() }
-        val mostAnticipated = result { api.mostAnticipated() }
-        val recommended = result { api.recommendedMovies() }
 
         val result = mutableMapOf<String, List<MovieEntity>>()
 
-        if (box is Success) {
-            result["Box Office"] = box.data.map {
-                movieEntityOf(it.movie)
-            }
-        }
         if (trending is Success) {
             result["Trending"] = trending.data.mapNotNull {
                 it.movie?.let { responseMovie ->
@@ -99,29 +74,8 @@ class DiscoveryClient(
                 }
             }
         }
-        if (mostPlayed is Success) {
-            result["Most Played"] = mostPlayed.data.mapNotNull {
-                it.movie?.let { responseMovie ->
-                    movieEntityOf(responseMovie)
-                }
-            }
-        }
         if (mostWatched is Success) {
             result["Most Watched"] = mostWatched.data.mapNotNull {
-                it.movie?.let { responseMovie ->
-                    movieEntityOf(responseMovie)
-                }
-            }
-        }
-        if (mostAnticipated is Success) {
-            result["Most Anticipated"] = mostAnticipated.data.mapNotNull {
-                it.movie?.let { responseMovie ->
-                    movieEntityOf(responseMovie)
-                }
-            }
-        }
-        if (recommended is Success) {
-            result["Recommended"] = recommended.data.mapNotNull {
                 it.movie?.let { responseMovie ->
                     movieEntityOf(responseMovie)
                 }

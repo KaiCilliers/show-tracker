@@ -30,29 +30,20 @@ import retrofit2.http.Query
 
 interface DiscoveryService : DiscoveryServiceContract {
     @GET("movies/trending")
-    override suspend fun trendingMovies(): Response<List<EnvelopeWatchers>>
+    override suspend fun trendingMovies(
+        @Query("extended") extended: String
+    ): Response<List<EnvelopeWatchers>>
 
     @GET("movies/popular")
-    override suspend fun popularMovies(): Response<List<ResponseMovie>>
-
-    // TODO implement this on all Extended calls
-    @GET("movies/recommended/{period}")
-    override suspend fun recommendedMovies(
-        @Path("period") period: String,
+    override suspend fun popularMovies(
         @Query("extended") extended: String
-    ): Response<List<EnvelopeUserCount>>
-
-    @GET("movies/played/{period}")
-    override suspend fun mostPlayedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
+    ): Response<List<ResponseMovie>>
 
     @GET("movies/watched/{period}")
-    override suspend fun mostWatchedMovies(@Path("period") period: String): Response<List<EnvelopeViewStats>>
-
-    @GET("movies/anticipated")
-    override suspend fun mostAnticipated(): Response<List<EnvelopeListCount>>
-
-    @GET("movies/boxoffice")
-    override suspend fun boxOffice(): Response<List<EnvelopeRevenue>>
+    override suspend fun mostWatchedMovies(
+        @Path("period") period: String,
+        @Query("extended") extended: String
+    ): Response<List<EnvelopeViewStats>>
 
     /** IMAGES */
     @Headers("Fanart-Api: true")

@@ -28,13 +28,13 @@ import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 
 /**
- * Suggestion List Adapter binds [FeaturedList] to [SuggestionListViewHolder] and also
+ * Suggestion List Adapter binds [FeaturedList] to [DiscoverViewHolder] and also
  * inflates any child RecyclerView lists with their own adapters
  *
  * @property clickAction is the action executed when the [RcItemFeaturedBinding] object is
  * clicked
  */
-class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHolder>(FeaturedList.Diff) {
+class DiscoverListAdapter : BaseListAdapter<FeaturedList, DiscoverViewHolder>(FeaturedList.Diff) {
 
     private var data: List<FeaturedList> = listOf()
     private lateinit var clickAction: ClickActionContract
@@ -49,14 +49,14 @@ class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHo
     // Temporal Coupling introduced having to call this function before setting Recycler's adapter
     override fun addOnClickAction(action: ClickActionContract) { clickAction = action }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionListViewHolder =
-        SuggestionListViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiscoverViewHolder =
+        DiscoverViewHolder(
             RcItemFeaturedBinding.inflate(
                 LayoutInflater.from(parent.context)
             ), clickAction
         )
 
-    override fun onBindViewHolder(holder: SuggestionListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DiscoverViewHolder, position: Int) {
         holder.bind(getItem(position))
 
         val subLayout = LinearLayoutManager(
@@ -66,10 +66,10 @@ class SuggestionListAdapter : BaseListAdapter<FeaturedList, SuggestionListViewHo
         )
         val subAdapter = SmallPosterAdapter()
         subAdapter.addOnClickAction(clickAction) // Temporal coupling
-        val subRc = holder.nestedList()
+        val subRecyclerView = holder.nestedList()
 
-        subRc.layoutManager = subLayout
-        subRc.adapter = subAdapter
+        subRecyclerView.layoutManager = subLayout
+        subRecyclerView.adapter = subAdapter
         subAdapter.submit(getItem(position).results)
     }
 }
