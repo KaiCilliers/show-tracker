@@ -43,43 +43,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <RadioGroup
-                android:id="@+id/rg_filter_watchlist"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/margin_24"
+                app:layout_constraintTop_toBottomOf="@id/sv_search_watchlist"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sv_search_watchlist">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:chipSpacingHorizontal="@dimen/margin_24"
+                app:singleLine="true"
+                app:selectionRequired="true">
 
-                <RadioButton
-                    android:id="@+id/rb_movie_filter"
-                    style="@style/radio_filter_item_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/movies_label" />
-
-                <RadioButton
-                    android:id="@+id/rb_both_filter"
-                    style="@style/radio_filter_item_style"
-                    android:layout_width="match_parent"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_filter_movie"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:gravity="center"
-                    android:text="@string/both_label" />
+                    android:text="@string/chip_filter_movie"/>
 
-                <RadioButton
-                    android:id="@+id/rb_series_filter"
-                    style="@style/radio_filter_item_style"
-                    android:layout_width="match_parent"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_filter_shows"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/series_label" />
+                    android:checked="true"
+                    android:text="@string/chip_filter_shows"/>
 
-            </RadioGroup>
+            </com.google.android.material.chip.ChipGroup>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_featured_categories_watchlist"
@@ -89,7 +81,7 @@
                 android:padding="@dimen/padding_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rg_filter_watchlist" />
+                app:layout_constraintTop_toBottomOf="@id/cg_filter" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
