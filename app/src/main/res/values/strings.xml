@@ -15,4 +15,6 @@
     <string name="showtracker_label">ShowTracker</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chip_filter_movie">Movie</string>
+    <string name="chip_filter_shows">Shows</string>
 </resources>
