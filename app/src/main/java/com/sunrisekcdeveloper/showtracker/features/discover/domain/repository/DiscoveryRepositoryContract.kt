@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 interface DiscoveryRepositoryContract {

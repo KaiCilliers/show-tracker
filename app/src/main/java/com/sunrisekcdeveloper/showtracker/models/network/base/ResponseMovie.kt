@@ -19,10 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.models.network.base
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import org.jetbrains.annotations.TestOnly
 
 /**
  * Response Movie represents a network object containing basic information of a movie

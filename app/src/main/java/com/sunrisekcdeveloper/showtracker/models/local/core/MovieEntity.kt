@@ -21,9 +21,7 @@ package com.sunrisekcdeveloper.showtracker.models.local.core
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseIdentifiers
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 @Entity(tableName = "tbl_movie")

@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.roomresults
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.model
 
 import androidx.recyclerview.widget.DiffUtil
+import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 /**
  * Featured List is a domain object that represents a collection of [Movie]s associated to a common

@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.ui
+package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import kotlinx.coroutines.*
 
 /**

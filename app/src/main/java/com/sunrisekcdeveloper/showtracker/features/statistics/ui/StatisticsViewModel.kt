@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.statistics.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 class StatisticsViewModel @ViewModelInject constructor() : ViewModel() {

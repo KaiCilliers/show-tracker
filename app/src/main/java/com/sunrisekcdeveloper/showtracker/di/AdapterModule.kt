@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.DiscoverListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

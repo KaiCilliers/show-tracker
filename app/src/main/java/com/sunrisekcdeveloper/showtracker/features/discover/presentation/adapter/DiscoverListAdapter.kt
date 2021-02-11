@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.adapters
+package com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.BaseListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
 
 /**

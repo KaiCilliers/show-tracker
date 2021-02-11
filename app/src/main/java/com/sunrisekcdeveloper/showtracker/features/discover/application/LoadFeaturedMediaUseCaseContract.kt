@@ -16,20 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.models
+package com.sunrisekcdeveloper.showtracker.features.discover.application
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.*
-
-@Entity(tableName = "tbl_featured")
-data class FeaturedEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
-    @ColumnInfo(name = "fk_featured_media_slug")
-    val mediaSlug: String,
-    @ColumnInfo(name = "updated_at")
-    val updatedAt: Date = Date(),
-    val tag: String = "Developer's Choice"
-)
+interface LoadFeaturedMediaUseCaseContract {
+}

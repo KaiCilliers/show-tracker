@@ -31,7 +31,7 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.DiscoverListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

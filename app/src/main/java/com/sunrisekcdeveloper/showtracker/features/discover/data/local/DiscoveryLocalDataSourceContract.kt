@@ -16,14 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.local
+package com.sunrisekcdeveloper.showtracker.features.discover.data.local
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 interface DiscoveryLocalDataSourceContract {
     suspend fun featuredMovies(): List<FeaturedMovies>

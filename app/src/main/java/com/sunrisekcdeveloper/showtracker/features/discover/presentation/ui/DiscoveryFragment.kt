@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.ui
+package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,9 +30,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.DiscoverListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi

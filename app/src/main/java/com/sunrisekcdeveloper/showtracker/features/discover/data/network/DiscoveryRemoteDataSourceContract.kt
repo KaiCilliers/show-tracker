@@ -16,14 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.client
+package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 interface DiscoveryRemoteDataSourceContract {
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>

@@ -19,13 +19,13 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.local
 
 import com.sunrisekcdeveloper.showtracker.CoroutineTestRule
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryLocalDataSource
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryLocalDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.MatcherAssert
-import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.greaterThan
 import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.core.Is.`is`

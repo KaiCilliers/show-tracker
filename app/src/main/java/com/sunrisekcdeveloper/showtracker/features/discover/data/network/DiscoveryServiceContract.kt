@@ -16,15 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.client
+package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
 import com.sunrisekcdeveloper.showtracker.models.network.base.*
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.Retrofit
-import kotlin.math.log
 
 interface DiscoveryServiceContract {
     /**

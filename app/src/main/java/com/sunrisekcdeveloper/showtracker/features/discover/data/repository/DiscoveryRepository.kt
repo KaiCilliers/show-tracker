@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover
+package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryLocalDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.models.roomresults.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

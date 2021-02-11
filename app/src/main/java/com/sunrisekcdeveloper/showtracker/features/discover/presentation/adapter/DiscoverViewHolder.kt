@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.adapters
+package com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
 import com.sunrisekcdeveloper.showtracker.commons.components.viewholders.NestedViewHolder
 import com.sunrisekcdeveloper.showtracker.databinding.RcItemFeaturedBinding
-import com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 
 /**
  * Suggestion List ViewHolder represents a list of movies or shows identified by a category header

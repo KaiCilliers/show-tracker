@@ -19,11 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.models.network.envelopes
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.local.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseShow
-import org.jetbrains.annotations.TestOnly
 
 /**
  * Response Watcher represents a network response which consists of a [ResponseMovie] with the

@@ -24,10 +24,10 @@ import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.repository.DiscoveryRepository
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryLocalDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract

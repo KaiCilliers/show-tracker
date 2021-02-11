@@ -25,10 +25,10 @@ import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourc
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailClient
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailService
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailServiceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryService
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryServiceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryClient
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryService
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryServiceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistClient

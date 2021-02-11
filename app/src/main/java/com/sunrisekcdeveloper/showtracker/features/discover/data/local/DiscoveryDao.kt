@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.local
+package com.sunrisekcdeveloper.showtracker.features.discover.data.local
 
 import androidx.room.*
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 
 @Dao

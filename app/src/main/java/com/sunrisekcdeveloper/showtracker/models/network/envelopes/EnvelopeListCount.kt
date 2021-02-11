@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.models.network.envelopes
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.features.discover.models.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseShow
 
