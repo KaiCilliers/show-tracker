@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.commons.unused
 
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeViewStats
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeWatchers
 import com.sunrisekcdeveloper.showtracker.models.network.*
 import com.sunrisekcdeveloper.showtracker.models.network.base.*
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*

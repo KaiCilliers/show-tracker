@@ -18,24 +18,91 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
+import com.sunrisekcdeveloper.showtracker.commons.util.asFeaturedMovieEntityExtension
+import com.sunrisekcdeveloper.showtracker.commons.util.asMovieEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.toFeaturedList
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryLocalDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import timber.log.Timber
 
 class DiscoveryRepository(
-    private val local: DiscoveryLocalDataSourceContract,
+    private val dao: DiscoveryDao,
     @DiscoveryClient private val remote: DiscoveryRemoteDataSourceContract,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DiscoveryRepositoryContract {
+
+    override suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>> = responseFlow(
+        databaseQuery = { dao.groupedFeaturedFlow().map { it.toFeaturedList() } },
+        networkCall = { remote.fetchFeaturedMoviesResource() },
+        persistData = {
+            scope.launch {
+                dao.updateFeatured(*it.flatMap { entry ->
+                    entry.value.map { responseMovie ->
+                        launch { dao.insertMovie(responseMovie.asMovieEntity()) }
+                        responseMovie.asFeaturedMovieEntityExtension(entry.key)
+                    }
+                }.toTypedArray())
+            }
+//            it.flatMap {
+//                it.value.map {
+//                    scope.launch { dao.insertMovie(it.asMovieEntity()) }
+//                    scope.launch { dao.updateFeatured(it.asFeaturedMovieEntityExtension()) }
+//                }
+//            }
+        }
+    )
+
+    fun <ResponseModel, EntityModel> responseFlow(
+        databaseQuery: suspend () -> Flow<EntityModel>,
+        networkCall: suspend () -> Resource<ResponseModel>,
+        persistData: suspend (ResponseModel) -> Unit) : Flow<Resource<EntityModel>> {
+        return flow {
+            // Loading state
+            Timber.d("LOADING EMIT")
+            emit(Resource.Loading)
+            // Fetch local data
+            Timber.d("Database query")
+            val localdata = databaseQuery().map { Resource.Success(it) }
+
+            Timber.d("network call")
+            val response = networkCall()
+
+            when(response) {
+                is Resource.Success -> {
+                    Timber.d("persisted network data to database")
+                    persistData(response.data)
+                }
+                is Resource.Error -> {
+                    Timber.d("ERROR")
+                    emit(Resource.Error(response.message))
+                    Timber.d("Erorr emission")
+                    emitAll(localdata)
+                }
+                else -> {
+                    Timber.d("Other erorr")
+                    emit(Resource.Error("Something went wrong, please try again later"))
+                    Timber.d("Other eror emission")
+                    emitAll(localdata)
+                }
+            }
+            Timber.d("Database emission")
+            emitAll(localdata)
+        }
+    }
 
     // In memory data source
     private var cachedFeaturedList: MutableMap<String, FeaturedList>? = null
@@ -46,9 +113,9 @@ class DiscoveryRepository(
         setCacheStatus()
         return if (cachedFeaturedList == null && cacheIsDirty) {
             updateCache()
-            Resource.Success(FeaturedMovies.featuredListOf(local.featuredMovies()))
+            Resource.Success(FeaturedMovies.featuredListOf(dao.groupedFeatured()))
         } else if (!cacheIsDirty){
-            Resource.Success(FeaturedMovies.featuredListOf(local.featuredMovies()))
+            Resource.Success(FeaturedMovies.featuredListOf(dao.groupedFeatured()))
         } else {
             Resource.Success(cachedFeaturedList!!.values.toList())
         }
@@ -66,12 +133,12 @@ class DiscoveryRepository(
 
     private suspend fun saveMovie(vararg movie: MovieEntity) {
         scope.launch {
-            local.insertMovie(*movie)
+            dao.insertMovie(*movie)
         }
     }
 
     private suspend fun updateLocalCache(data:  MutableMap<String, List<MovieEntity>>) {
-        local.replaceAllFeaturedMovies(*data.flatMap { entry ->
+        dao.updateFeatured(*data.flatMap { entry ->
             entry.value.map {
                 saveMovie(it)
                 it.asFeaturedEntity(entry.key)
@@ -88,11 +155,11 @@ class DiscoveryRepository(
     }
 
     private suspend fun setCacheStatus() {
-        val result = local.featuredMovies()
+        val result = dao.groupedFeatured()
         val hours = (((System.currentTimeMillis() - result[0].data.updatedAt.time)
         / 1000 ) / 3600)
         Timber.d("hours: $hours")
-        if (hours >= 24) {
+        if (hours >= 0) {
             cacheIsDirty = true
         }
     }

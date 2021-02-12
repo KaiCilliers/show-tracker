@@ -23,8 +23,54 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeViewStats
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeWatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
+// MODELS
+fun List<FeaturedMovies>.toFeaturedList(): List<FeaturedList> {
+    val tags = hashSetOf<String>()
+    this.forEach { tags.add(it.data.tag) }
+    val list = mutableListOf<FeaturedList>()
+    tags.forEach { tag ->
+        list.add(FeaturedList(
+            heading = tag,
+            results = this.filter { it.data.tag == tag }.map { it.asMovie() }
+        ))
+    }
+    return list
+}
+
+fun ResponseMovie.asMovieEntity() = MovieEntity(
+    slug = this.identifiers.slug,
+    title = this.title,
+    year = "$year",
+    tagline = "",
+    overview = "",
+    released = "",
+    runtime = 0,
+    trailerUrl = "",
+    homepageUrl = "",
+    posterUrl = "",
+    status = "",
+    rating = 0,
+    votes = -1,
+    commentCount = -1,
+    updatedAt = "",
+    certification = ""
+)
+
+fun ResponseMovie.asFeaturedMovieEntityExtension(tag: String) = FeaturedEntity(
+    mediaSlug = identifiers.slug,
+    tag = tag
+)
+
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")

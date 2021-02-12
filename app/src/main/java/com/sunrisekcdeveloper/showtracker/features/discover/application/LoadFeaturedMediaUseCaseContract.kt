@@ -18,5 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.application
 
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
+import kotlinx.coroutines.flow.Flow
+
 interface LoadFeaturedMediaUseCaseContract {
+    suspend fun invoke(): Flow<Resource<List<FeaturedList>>>
 }

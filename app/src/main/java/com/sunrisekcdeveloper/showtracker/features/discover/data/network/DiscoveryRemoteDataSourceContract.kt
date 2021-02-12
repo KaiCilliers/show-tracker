@@ -23,6 +23,7 @@ import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import kotlinx.coroutines.flow.Flow
 
 interface DiscoveryRemoteDataSourceContract {
     suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
@@ -30,6 +31,7 @@ interface DiscoveryRemoteDataSourceContract {
     suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>>
 
     suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>>
+    suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<ResponseMovie>>>
 
     suspend fun poster(id: String): Resource<ResponseImages>
 
@@ -67,6 +69,10 @@ interface DiscoveryRemoteDataSourceContract {
             } else {
                 emptyMap<String, List<MovieEntity>>().toMutableMap()
             }
+
+        override suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<ResponseMovie>>> {
+            TODO("Not yet implemented")
+        }
 
         override suspend fun poster(id: String): Resource<ResponseImages> = if (happyPath) {
             Resource.Success(ResponseImages.createResponseImages(1)[0])

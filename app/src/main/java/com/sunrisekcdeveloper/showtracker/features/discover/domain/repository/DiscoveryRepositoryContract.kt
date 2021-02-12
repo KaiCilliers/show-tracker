@@ -21,10 +21,12 @@ package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import kotlinx.coroutines.flow.Flow
 
 interface DiscoveryRepositoryContract {
 
     suspend fun featuredMovies(): Resource<List<FeaturedList>>
+    suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>>
 
     class Fake(): DiscoveryRepositoryContract {
 
@@ -54,6 +56,10 @@ interface DiscoveryRepositoryContract {
             } else {
                 Resource.Error("Unhappy path")
             }
+        }
+
+        override suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>> {
+            TODO("Not yet implemented")
         }
     }
 }

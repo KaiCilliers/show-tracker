@@ -21,8 +21,12 @@ package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.UseCase
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadFeaturedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadFeaturedMediaUseCase
 import kotlinx.coroutines.*
 
 /**
@@ -32,10 +36,14 @@ import kotlinx.coroutines.*
  */
 @ExperimentalCoroutinesApi
 class DiscoveryViewModel @ViewModelInject constructor(
-    @DiscoveryRepo private val repo: DiscoveryRepositoryContract
+    @DiscoveryRepo private val repo: DiscoveryRepositoryContract,
+    @UseCase private val loadFeaturedMediaUseCase: LoadFeaturedMediaUseCaseContract
 ) : ViewModel() {
     val featured = liveData {
         emit(Resource.Loading)
         emit(repo.featuredMovies())
+    }
+    val some = liveData {
+        emitSource(loadFeaturedMediaUseCase.invoke().asLiveData())
     }
 }

@@ -26,9 +26,10 @@ import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponsePoster
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import okhttp3.internal.toImmutableMap
 import retrofit2.Response
 import timber.log.Timber
 
@@ -52,6 +53,36 @@ class DiscoveryClient(
     override suspend fun poster(id: String): Resource<ResponseImages> = result {
         api.poster(id)
     }
+
+    override suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<ResponseMovie>>> =
+        withContext(dispatcher) {
+            val trending = async { result { api.trendingMovies() } }
+            val popular = async { result { api.popularMovies() } }
+            val mostWatched = async { result { api.mostWatchedMovies() } }
+
+            val result = mutableMapOf<String, List<ResponseMovie>>()
+
+            trending.await().let { response ->
+                if (response is Success) {
+                    result["Trending"] = response.data.mapNotNull { it.movie }
+                }
+            }
+            popular.await().let { response ->
+                if (response is Success) {
+                    result["Trending"] = response.data
+                }
+            }
+            mostWatched.await().let { response ->
+                if (response is Success) {
+                    result["Trending"] = response.data.mapNotNull { it.movie }
+                }
+            }
+            return@withContext if (result.isNotEmpty()) {
+                Resource.Success(result.toImmutableMap())
+            } else {
+                Resource.Error("Error fetching network data")
+            }
+        }
 
     override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> {
         val trending = result { api.trendingMovies() }
@@ -98,21 +129,21 @@ class DiscoveryClient(
     //        }
     //        return wrappedResult
     // TODO move to commons or utils
-    private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T>
-            = withContext(dispatcher) {
-        return@withContext try {
-            val response = request()
-            if (response.isSuccessful) {
-                val body = response.body()
-                body?.let {
-                    return@withContext Success(it)
+    private suspend fun <T> result(request: suspend () -> Response<T>): Resource<T> =
+        withContext(dispatcher) {
+            return@withContext try {
+                val response = request()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    body?.let {
+                        return@withContext Success(it)
+                    }
                 }
+                error("${response.code()} ${response.message()}")
+            } catch (e: Exception) {
+                error(e.message ?: e.toString(), e)
             }
-            error("${response.code()} ${response.message()}")
-        } catch (e: Exception) {
-            error(e.message ?: e.toString(), e)
         }
-    }
 
     private fun <T> error(message: String, e: Exception): Resource<T> {
         Timber.e(message)

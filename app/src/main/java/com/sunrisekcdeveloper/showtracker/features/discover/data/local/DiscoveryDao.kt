@@ -22,6 +22,7 @@ import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class DiscoveryDao {
@@ -48,5 +49,10 @@ abstract class DiscoveryDao {
         SELECT * FROM tbl_featured ORDER BY tag
     """)
     abstract suspend fun groupedFeatured(): List<FeaturedMovies>
+
+    @Query("""
+        SELECT * FROM tbl_featured ORDER BY tag
+    """)
+    abstract fun groupedFeaturedFlow(): Flow<List<FeaturedMovies>>
 
 }

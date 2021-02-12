@@ -23,6 +23,8 @@ import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryServiceContract
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeViewStats
+import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeWatchers
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*

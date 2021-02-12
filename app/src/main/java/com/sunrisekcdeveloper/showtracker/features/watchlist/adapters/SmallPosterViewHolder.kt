@@ -62,8 +62,8 @@ class SmallPosterViewHolder(
 //        Timber.e(s)
 
         val urls = item.posterUrl.split(";")
-        Timber.e("${item.title}")
-        Timber.e("$urls")
+//        Timber.e("${item.title}")
+//        Timber.e("$urls")
 
         if (urls.size > 2) {
             Glide.with(binding.root.context)
