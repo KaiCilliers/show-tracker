@@ -47,31 +47,6 @@ fun List<FeaturedMovies>.toFeaturedList(): List<FeaturedList> {
     return list
 }
 
-fun ResponseMovie.asMovieEntity() = MovieEntity(
-    slug = this.identifiers.slug,
-    title = this.title,
-    year = "$year",
-    tagline = "",
-    overview = "",
-    released = "",
-    runtime = 0,
-    trailerUrl = "",
-    homepageUrl = "",
-    posterUrl = "",
-    status = "",
-    rating = 0,
-    votes = -1,
-    commentCount = -1,
-    updatedAt = "",
-    certification = ""
-)
-
-fun ResponseMovie.asFeaturedMovieEntityExtension(tag: String) = FeaturedEntity(
-    mediaSlug = identifiers.slug,
-    tag = tag
-)
-
-
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
 

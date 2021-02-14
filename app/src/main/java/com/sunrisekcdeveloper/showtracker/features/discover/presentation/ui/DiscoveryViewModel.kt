@@ -36,14 +36,9 @@ import kotlinx.coroutines.*
  */
 @ExperimentalCoroutinesApi
 class DiscoveryViewModel @ViewModelInject constructor(
-    @DiscoveryRepo private val repo: DiscoveryRepositoryContract,
     @UseCase private val loadFeaturedMediaUseCase: LoadFeaturedMediaUseCaseContract
 ) : ViewModel() {
     val featured = liveData {
-        emit(Resource.Loading)
-        emit(repo.featuredMovies())
-    }
-    val some = liveData {
         emitSource(loadFeaturedMediaUseCase.invoke().asLiveData())
     }
 }

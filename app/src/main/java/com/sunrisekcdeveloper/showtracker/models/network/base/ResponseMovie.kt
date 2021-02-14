@@ -37,11 +37,6 @@ data class ResponseMovie(
     @Json(name = "year") val year: Int?, // network results can give a null year
     @Json(name = "ids") val identifiers: ResponseIdentifiers
 ) {
-    fun asFeaturedMovieEntity() = FeaturedEntity(
-        mediaSlug = identifiers.slug,
-        tag = "Popular"
-    )
-
     fun asDomain() = Movie(
         title = this.title,
         slug = this.identifiers.slug

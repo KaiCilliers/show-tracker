@@ -26,58 +26,6 @@ import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
 import kotlinx.coroutines.flow.Flow
 
 interface DiscoveryRemoteDataSourceContract {
-    suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>>
-    suspend fun fetchPop(): Resource<List<ResponseMovie>>
-    suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>>
-
-    suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>>
-    suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<ResponseMovie>>>
-
-    suspend fun poster(id: String): Resource<ResponseImages>
-
-    class Fake() : DiscoveryRemoteDataSourceContract {
-
-        var happyPath = true
-
-        override suspend fun fetchTrend(): Resource<List<EnvelopeWatchers>> = if (happyPath) {
-            Resource.Success(EnvelopeWatchers.createEnvelopeWatchers(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
-
-        override suspend fun fetchPop(): Resource<List<ResponseMovie>> = if (happyPath) {
-            Resource.Success(ResponseMovie.createResponseMovies(10))
-        } else {
-            Resource.Error("unhappy path")
-        }
-
-        override suspend fun fetchMostWatched(): Resource<List<EnvelopeViewStats>> =
-            if (happyPath) {
-                Resource.Success(EnvelopeViewStats.createEnvelopeViewStats(10))
-            } else {
-                Resource.Error("unhappy path")
-            }
-
-        override suspend fun fetchFeaturedMovies(): MutableMap<String, List<MovieEntity>> =
-            if (happyPath) {
-                mutableMapOf(
-                    "Top Secret" to MovieEntity.createMovieEntities(10),
-                    "Vicious" to MovieEntity.createMovieEntities(10),
-                    "Requires IQ lower than 40" to MovieEntity.createMovieEntities(10),
-                    "Oldies" to MovieEntity.createMovieEntities(10)
-                )
-            } else {
-                emptyMap<String, List<MovieEntity>>().toMutableMap()
-            }
-
-        override suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<ResponseMovie>>> {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun poster(id: String): Resource<ResponseImages> = if (happyPath) {
-            Resource.Success(ResponseImages.createResponseImages(1)[0])
-        } else {
-            Resource.Error("unhappy path")
-        }
-    }
+    suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<MovieEntity>>>
+    suspend fun allPosters(mediaId: String): Resource<ResponseImages>
 }

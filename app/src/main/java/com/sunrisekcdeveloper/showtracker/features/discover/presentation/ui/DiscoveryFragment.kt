@@ -97,8 +97,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.some.subscribe(viewLifecycleOwner) {
-            Timber.e("$it")
+        viewModel.featured.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     Timber.d("Success")

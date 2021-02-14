@@ -16,13 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
+package com.sunrisekcdeveloper.showtracker.showcase.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import kotlinx.coroutines.flow.Flow
-
-interface DiscoveryRepositoryContract {
-    suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>>
+interface GetUserTransactionUseCaseContract {
 }

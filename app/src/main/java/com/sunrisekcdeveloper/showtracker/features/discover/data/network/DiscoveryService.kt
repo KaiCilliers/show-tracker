@@ -48,5 +48,5 @@ interface DiscoveryService : DiscoveryServiceContract {
     /** IMAGES */
     @Headers("Fanart-Api: true")
     @GET("${BuildConfig.FANART_BASE_URL}movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
-    override suspend fun poster(@Path("id") id: String): Response<ResponseImages>
+    override suspend fun allPosters(@Path("id") id: String): Response<ResponseImages>
 }

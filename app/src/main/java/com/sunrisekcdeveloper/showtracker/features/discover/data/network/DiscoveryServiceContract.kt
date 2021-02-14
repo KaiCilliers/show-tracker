@@ -31,7 +31,7 @@ interface DiscoveryServiceContract {
      * @return
      */
     suspend fun trendingMovies(
-        extended: String = ""
+        extended: String = "true"
     ): Response<List<EnvelopeWatchers>>
 
     /**
@@ -42,7 +42,7 @@ interface DiscoveryServiceContract {
      * @return
      */
     suspend fun popularMovies(
-        extended: String = ""
+        extended: String = "true"
     ): Response<List<ResponseMovie>>
 
     /**
@@ -58,11 +58,11 @@ interface DiscoveryServiceContract {
     //  these methods to call (like it'll choose between most played and most watched)
     suspend fun mostWatchedMovies(
         period: String = "weekly",
-        extended: String = ""
+        extended: String = "true"
     ): Response<List<EnvelopeViewStats>>
 
     /** IMAGES */
-    suspend fun poster(id: String): Response<ResponseImages>
+    suspend fun allPosters(id: String): Response<ResponseImages>
 
     class Fake : DiscoveryServiceContract {
 
@@ -89,7 +89,7 @@ interface DiscoveryServiceContract {
             } else Response.error(0, null)
         }
 
-        override suspend fun poster(id: String): Response<ResponseImages> {
+        override suspend fun allPosters(id: String): Response<ResponseImages> {
             return if (happyPath) {
                 Response.success(ResponseImages.createResponseImages(1)[0])
             } else Response.error(0, null)

@@ -18,26 +18,15 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.asFeaturedMovieEntityExtension
-import com.sunrisekcdeveloper.showtracker.commons.util.asMovieEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.commons.util.toFeaturedList
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import retrofit2.Response
-import timber.log.Timber
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class DiscoveryRepository(
     private val dao: DiscoveryDao,
@@ -46,121 +35,39 @@ class DiscoveryRepository(
 ) : DiscoveryRepositoryContract {
 
     override suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>> = responseFlow(
-        databaseQuery = { dao.groupedFeaturedFlow().map { it.toFeaturedList() } },
+        databaseQuery = { FeaturedMovies.featuredListOf(dao.groupedFeatured()) },
         networkCall = { remote.fetchFeaturedMoviesResource() },
         persistData = {
-            scope.launch {
-                dao.updateFeatured(*it.flatMap { entry ->
-                    entry.value.map { responseMovie ->
-                        launch { dao.insertMovie(responseMovie.asMovieEntity()) }
-                        responseMovie.asFeaturedMovieEntityExtension(entry.key)
-                    }
-                }.toTypedArray())
-            }
-//            it.flatMap {
-//                it.value.map {
-//                    scope.launch { dao.insertMovie(it.asMovieEntity()) }
-//                    scope.launch { dao.updateFeatured(it.asFeaturedMovieEntityExtension()) }
-//                }
-//            }
+            dao.updateFeatured(*it.flatMap { entry ->
+                entry.value.map { movieEntity ->
+                    scope.launch { dao.insertMovie(movieEntity) }
+                    movieEntity.asFeaturedEntity(entry.key)
+                }
+            }.toTypedArray())
         }
     )
 
-    fun <ResponseModel, EntityModel> responseFlow(
-        databaseQuery: suspend () -> Flow<EntityModel>,
-        networkCall: suspend () -> Resource<ResponseModel>,
-        persistData: suspend (ResponseModel) -> Unit) : Flow<Resource<EntityModel>> {
+    private fun <R,E> responseFlow(
+        databaseQuery: suspend () -> E,
+        networkCall: suspend () -> Resource<R>,
+        persistData: suspend (R) -> Unit
+    ) : Flow<Resource<E>> {
         return flow {
-            // Loading state
-            Timber.d("LOADING EMIT")
             emit(Resource.Loading)
-            // Fetch local data
-            Timber.d("Database query")
-            val localdata = databaseQuery().map { Resource.Success(it) }
+            val cache = databaseQuery()
+            emit(Resource.Success(cache))
 
-            Timber.d("network call")
-            val response = networkCall()
-
-            when(response) {
+            when(val response = networkCall()) {
                 is Resource.Success -> {
-                    Timber.d("persisted network data to database")
                     persistData(response.data)
                 }
                 is Resource.Error -> {
-                    Timber.d("ERROR")
-                    emit(Resource.Error(response.message))
-                    Timber.d("Erorr emission")
-                    emitAll(localdata)
+                    emit(Resource.Error("Error when making network call: ${response.message}"))
                 }
                 else -> {
-                    Timber.d("Other erorr")
-                    emit(Resource.Error("Something went wrong, please try again later"))
-                    Timber.d("Other eror emission")
-                    emitAll(localdata)
+                    emit(Resource.Error("Unknown error occurred when making network call"))
                 }
             }
-            Timber.d("Database emission")
-            emitAll(localdata)
-        }
-    }
-
-    // In memory data source
-    private var cachedFeaturedList: MutableMap<String, FeaturedList>? = null
-    // Public to allow edit in testing
-    var cacheIsDirty = false
-
-    override suspend fun featuredMovies(): Resource<List<FeaturedList>> {
-        setCacheStatus()
-        return if (cachedFeaturedList == null && cacheIsDirty) {
-            updateCache()
-            Resource.Success(FeaturedMovies.featuredListOf(dao.groupedFeatured()))
-        } else if (!cacheIsDirty){
-            Resource.Success(FeaturedMovies.featuredListOf(dao.groupedFeatured()))
-        } else {
-            Resource.Success(cachedFeaturedList!!.values.toList())
-        }
-    }
-
-    private fun updateInMemoryCache(data:  MutableMap<String, List<MovieEntity>>) {
-        val featuredMovies = data.mapValues { entry ->
-            FeaturedList(
-                heading = entry.key,
-                results = entry.value.map { it.asDomain() }
-            )
-        }
-        cachedFeaturedList = featuredMovies.toMutableMap()
-    }
-
-    private suspend fun saveMovie(vararg movie: MovieEntity) {
-        scope.launch {
-            dao.insertMovie(*movie)
-        }
-    }
-
-    private suspend fun updateLocalCache(data:  MutableMap<String, List<MovieEntity>>) {
-        dao.updateFeatured(*data.flatMap { entry ->
-            entry.value.map {
-                saveMovie(it)
-                it.asFeaturedEntity(entry.key)
-            }
-        }.toTypedArray())
-    }
-
-    private suspend fun updateCache() {
-        // TODO: 18-01-2021 remove the poster calls in the movieEntityOf call - move it somewhere else :/
-        val response = remote.fetchFeaturedMovies()
-        updateInMemoryCache(response)
-        updateLocalCache(response)
-        cacheIsDirty = false
-    }
-
-    private suspend fun setCacheStatus() {
-        val result = dao.groupedFeatured()
-        val hours = (((System.currentTimeMillis() - result[0].data.updatedAt.time)
-        / 1000 ) / 3600)
-        Timber.d("hours: $hours")
-        if (hours >= 0) {
-            cacheIsDirty = true
         }
     }
 }
