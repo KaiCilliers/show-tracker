@@ -75,13 +75,36 @@
 
             </com.google.android.material.chip.ChipGroup>
 
+            <TextView
+                android:id="@+id/tv_heading_popular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/popular"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cg_filter"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/tv_sub_heading_popular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/most_popular_movies"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_featured_categories_discover"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_8"
                 android:padding="@dimen/padding_8"
-                app:layout_constraintTop_toBottomOf="@id/cg_filter"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
