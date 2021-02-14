@@ -27,7 +27,9 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.UseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadFeaturedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadFeaturedMediaUseCase
+import com.sunrisekcdeveloper.showtracker.tmdb.model.RepositoryTMDB
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 /**
  * Home ViewModel
@@ -40,5 +42,10 @@ class DiscoveryViewModel @ViewModelInject constructor(
 ) : ViewModel() {
     val featured = liveData {
         emitSource(loadFeaturedMediaUseCase.invoke().asLiveData())
+    }
+    val tmdb = liveData {
+        val result = RepositoryTMDB().popularMovies()
+        Timber.d("Gots some stuff TMDB: $result")
+        emit(result)
     }
 }

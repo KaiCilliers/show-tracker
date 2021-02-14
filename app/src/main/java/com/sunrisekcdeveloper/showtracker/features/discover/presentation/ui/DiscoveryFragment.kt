@@ -34,6 +34,8 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.Feature
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
+import com.sunrisekcdeveloper.showtracker.tmdb.model.MoviesAdapterTMDB
+import com.sunrisekcdeveloper.showtracker.tmdb.model.ResponseMovieTMDB
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
@@ -46,6 +48,8 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class DiscoveryFragment : Fragment() {
+
+    private lateinit var adapterTMDB: MoviesAdapterTMDB
 
     @Inject
     lateinit var adapter: DiscoverListAdapter
@@ -77,38 +81,41 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun setupBinding() {
-        // Temporal Coupling
-        adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Movie) {
-                Timber.d("Featured: $item")
-                findNavController().navigate(
-                    DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragment(item.slug)
-                )
-            }
-        })
-        binding.rcFeaturedCategoriesDiscover.adapter = adapter
+        adapterTMDB = MoviesAdapterTMDB(listOf())
         binding.rcFeaturedCategoriesDiscover.layoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.VERTICAL, false
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
+        binding.rcFeaturedCategoriesDiscover.adapter = adapterTMDB
+//        // Temporal Coupling
+//        adapter.addOnClickAction(object : ClickActionContract {
+//            override fun onClick(item: Movie) {
+//                Timber.d("Featured: $item")
+//                findNavController().navigate(
+//                    DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragment(item.slug)
+//                )
+//            }
+//        })
+//        binding.rcFeaturedCategoriesDiscover.adapter = adapter
+//        binding.rcFeaturedCategoriesDiscover.layoutManager = LinearLayoutManager(
+//            requireContext(), LinearLayoutManager.VERTICAL, false
+//        )
     }
 
-    private fun update(list: List<FeaturedList>) {
-        adapter.submitList(list)
+    private fun update(list: List<ResponseMovieTMDB>) {
+//        adapter.submitList(list)
+        adapterTMDB.updateMovies(list)
     }
 
     private fun observeViewModel() {
-        viewModel.featured.subscribe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.tmdb.subscribe(viewLifecycleOwner) {
+            when(it) {
+                is Resource.Loading -> {}
                 is Resource.Success -> {
-                    Timber.d("Success")
-                    update(it.data)
+                    update(it.data.movies)
                 }
-                is Resource.Error -> {
-                    Timber.d("Error: $it"); update(listOf(FeaturedList("error", listOf())))
-                }
-                is Resource.Loading -> {
-                    Timber.d("Loading")
-                }
+                is Resource.Error -> {}
             }
         }
     }
