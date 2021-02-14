@@ -22,16 +22,13 @@ import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.commons.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryDao
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSource
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 /**
@@ -42,16 +39,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object LocalModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryLocal
-
-    @Provides
-    @Singleton
-    @DiscoveryLocal
-    fun provideDiscoveryLocalDataSource(dao: DiscoveryDao): DiscoveryLocalDataSourceContract =
-        DiscoveryLocalDataSource(dao)
 
     @Singleton
     @Provides

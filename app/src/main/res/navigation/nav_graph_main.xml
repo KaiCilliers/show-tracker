@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/discover_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragment"
         android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discovery">
         <action

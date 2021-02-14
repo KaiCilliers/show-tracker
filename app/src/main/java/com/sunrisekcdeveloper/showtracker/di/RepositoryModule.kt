@@ -18,16 +18,17 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.di.LocalModule.DiscoveryLocal
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadFeaturedMediaUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.repository.DiscoveryRepository
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadFeaturedMediaUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
@@ -49,24 +50,32 @@ object RepositoryModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class SearchRepo
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
     annotation class WatchlistRepo
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailRepo
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UseCase
+
     @ActivityRetainedScoped
     @DiscoveryRepo
     @Provides
     fun provideDiscoveryRepository(
-        @DiscoveryLocal local: DiscoveryLocalDataSourceContract,
+        dao: DiscoveryDao,
         @DiscoveryClient remote: DiscoveryRemoteDataSourceContract
     ): DiscoveryRepositoryContract =
-        DiscoveryRepository(local, remote)
+        DiscoveryRepository(dao, remote)
+
+    @ActivityRetainedScoped
+    @UseCase
+    @Provides
+    fun provideTemp(
+        @DiscoveryRepo repo: DiscoveryRepositoryContract
+    ): LoadFeaturedMediaUseCaseContract =
+        LoadFeaturedMediaUseCase(repo)
 
     @ActivityRetainedScoped
     @WatchlistRepo

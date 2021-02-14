@@ -20,15 +20,12 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
-import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
-import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
-import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -48,7 +45,7 @@ object AdapterModule {
 
     @ActivityScoped
     @Provides
-    fun provideSuggestionListAdapter(): SuggestionListAdapter {
-        return SuggestionListAdapter()
+    fun provideSuggestionListAdapter(): DiscoverListAdapter {
+        return DiscoverListAdapter()
     }
 }
