@@ -22,52 +22,21 @@ import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 
 class DiscoveryRepository(
-    private val dao: DiscoveryDao,
     @DiscoveryClient private val remote: DiscoveryRemoteDataSourceContract,
+    private val dao: DiscoveryDao,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DiscoveryRepositoryContract {
+    override suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie> =
+        remote.popularMovies(page)
 
-    override suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>> = responseFlow(
-        databaseQuery = { FeaturedMovies.featuredListOf(dao.groupedFeatured()) },
-        networkCall = { remote.fetchFeaturedMoviesResource() },
-        persistData = {
-            dao.updateFeatured(*it.flatMap { entry ->
-                entry.value.map { movieEntity ->
-                    scope.launch { dao.insertMovie(movieEntity) }
-                    movieEntity.asFeaturedEntity(entry.key)
-                }
-            }.toTypedArray())
-        }
-    )
+    override suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie> =
+        remote.topRatedMovies(page)
 
-    private fun <R,E> responseFlow(
-        databaseQuery: suspend () -> E,
-        networkCall: suspend () -> Resource<R>,
-        persistData: suspend (R) -> Unit
-    ) : Flow<Resource<E>> {
-        return flow {
-            emit(Resource.Loading)
-            val cache = databaseQuery()
-            emit(Resource.Success(cache))
-
-            when(val response = networkCall()) {
-                is Resource.Success -> {
-                    persistData(response.data)
-                }
-                is Resource.Error -> {
-                    emit(Resource.Error("Error when making network call: ${response.message}"))
-                }
-                else -> {
-                    emit(Resource.Error("Unknown error occurred when making network call"))
-                }
-            }
-        }
-    }
+    override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> =
+        remote.upcomingMovies(page)
 }

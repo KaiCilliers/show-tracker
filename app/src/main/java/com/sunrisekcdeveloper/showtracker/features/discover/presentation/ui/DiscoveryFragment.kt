@@ -30,10 +30,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
-import com.sunrisekcdeveloper.showtracker.tmdb.main.MoviesAdapterTMDB
-import com.sunrisekcdeveloper.showtracker.tmdb.main.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
@@ -48,17 +47,17 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DiscoveryFragment : Fragment() {
 
-    private lateinit var adapterTMDB: MoviesAdapterTMDB
+    @Inject
+    lateinit var popularMovieListAdapter: MovieListAdapter
     private lateinit var popularMoviesLayoutManager: LinearLayoutManager
 
-    private lateinit var topRatedMoviesAdapter: MoviesAdapterTMDB
+    @Inject
+    lateinit var topRatedMovieListAdapter: MovieListAdapter
     private lateinit var topRatedMoviesLayoutManager: LinearLayoutManager
 
-    private lateinit var upcomingMoviesAdapter: MoviesAdapterTMDB
-    private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
-
     @Inject
-    lateinit var adapter: DiscoverListAdapter
+    lateinit var upcomingMovieListAdapter: MovieListAdapter
+    private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
 
     private lateinit var binding: FragmentDiscoveryBinding
 
@@ -70,21 +69,10 @@ class DiscoveryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDiscoveryBinding.inflate(inflater)
-        binding.lifecycleOwner = viewLifecycleOwner
         setupBinding()
         setupFilters()
         observeViewModel()
-        MainScope().launch { setupTMDB() }
         return binding.root
-    }
-
-    private suspend fun setupTMDB() {
-        attachPopularMoviesOnScrollListener()
-        attachTopRatedMoviesOnScrollListener()
-        attachUpcomingMoviesOnScrollListener()
-        viewModel.getPopularMovies()
-        viewModel.getTopRatedMovies()
-        viewModel.getUpcomingMovies()
     }
 
     private fun setupFilters() {
@@ -97,20 +85,22 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun showMovieDetails(movie: ResponseMovieTMDB) {
-        findNavController().navigate(DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragmentTMDB(
-            movieBackdrop = movie.backdropPath,
-            moviePoster = movie.posterPath,
-            movieTitle = movie.title,
-            movieRating = movie.rating,
-            movieReleaseDate = movie.releaseDate,
-            movieOverview = movie.overview
-        ))
+        findNavController().navigate(
+            DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragmentTMDB(
+                movieBackdrop = movie.backdropPath,
+                moviePoster = movie.posterPath,
+                movieTitle = movie.title,
+                movieRating = movie.rating,
+                movieReleaseDate = movie.releaseDate,
+                movieOverview = movie.overview
+            )
+        )
     }
 
     private fun setupBinding() {
-        adapterTMDB = MoviesAdapterTMDB(mutableListOf()) { movie -> showMovieDetails(movie) }
-        topRatedMoviesAdapter = MoviesAdapterTMDB(mutableListOf()) { movie -> showMovieDetails(movie) }
-        upcomingMoviesAdapter = MoviesAdapterTMDB(mutableListOf()) { movie -> showMovieDetails(movie) }
+        popularMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        topRatedMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        upcomingMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
 
         popularMoviesLayoutManager = LinearLayoutManager(
             requireContext(),
@@ -129,144 +119,90 @@ class DiscoveryFragment : Fragment() {
         )
 
         binding.rcFeaturedCategoriesDiscover.layoutManager = popularMoviesLayoutManager
-        binding.rcFeaturedCategoriesDiscover.adapter = adapterTMDB
+        binding.rcFeaturedCategoriesDiscover.adapter = popularMovieListAdapter
 
         binding.rcTopRatedMovies.layoutManager = topRatedMoviesLayoutManager
-        binding.rcTopRatedMovies.adapter = topRatedMoviesAdapter
+        binding.rcTopRatedMovies.adapter = topRatedMovieListAdapter
 
         binding.rcUpcomingMovies.layoutManager = upcomingMoviesLayoutManager
-        binding.rcUpcomingMovies.adapter = upcomingMoviesAdapter
-//        // Temporal Coupling
-//        adapter.addOnClickAction(object : ClickActionContract {
-//            override fun onClick(item: Movie) {
-//                Timber.d("Featured: $item")
-//                findNavController().navigate(
-//                    DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragment(item.slug)
-//                )
-//            }
-//        })
-//        binding.rcFeaturedCategoriesDiscover.adapter = adapter
-//        binding.rcFeaturedCategoriesDiscover.layoutManager = LinearLayoutManager(
-//            requireContext(), LinearLayoutManager.VERTICAL, false
-//        )
-    }
+        binding.rcUpcomingMovies.adapter = upcomingMovieListAdapter
 
-    private fun updatePopularMovies(list: List<ResponseMovieTMDB>) {
-//        adapter.submitList(list)
-        adapterTMDB.updateMovies(list)
-    }
-    private fun updateTopRatedMovies(list: List<ResponseMovieTMDB>) {
-        topRatedMoviesAdapter.updateMovies(list)
-    }
-    private fun updateUpcomingMovies(list: List<ResponseMovieTMDB>) {
-        upcomingMoviesAdapter.updateMovies(list)
-    }
-
-    private fun attachPopularMoviesOnScrollListener() {
-        binding.rcFeaturedCategoriesDiscover.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // total number of movies inside adapter - this wil continuously increase the more
-                // we call adapter.appendMovies()
-                val totalItems = popularMoviesLayoutManager.itemCount
-                // current number of child views attached to the RecyclerView that are currently
-                // being recycled over and over again
-                val visibleItemCount = popularMoviesLayoutManager.childCount
-                // position of the leftmost visible item in the list
-                val firstVisibleItem = popularMoviesLayoutManager.findFirstVisibleItemPosition()
-
-                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                    // reattached in viewmodel observer - reason is to prevent too many calls to
-                    // fetch new movies, whether it helps or no is unclear
-//                    binding.rcFeaturedCategoriesDiscover.removeOnScrollListener(this)
-                    MainScope().launch { viewModel.getPopularMovies() }
-                }
-            }
-        })
-    }
-
-    private fun attachTopRatedMoviesOnScrollListener() {
-        binding.rcTopRatedMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // total number of movies inside adapter - this wil continuously increase the more
-                // we call adapter.appendMovies()
-                val totalItems = topRatedMoviesLayoutManager.itemCount
-                // current number of child views attached to the RecyclerView that are currently
-                // being recycled over and over again
-                val visibleItemCount = topRatedMoviesLayoutManager.childCount
-                // position of the leftmost visible item in the list
-                val firstVisibleItem = topRatedMoviesLayoutManager.findFirstVisibleItemPosition()
-
-                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                    // reattached in viewmodel observer - reason is to prevent too many calls to
-                    // fetch new movies, whether it helps or no is unclear
-//                    binding.rcTopRatedMovies.removeOnScrollListener(this)
-                    MainScope().launch { viewModel.getTopRatedMovies() }
-                }
-            }
-        })
-    }
-
-    private fun attachUpcomingMoviesOnScrollListener() {
-        binding.rcUpcomingMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // total number of movies inside adapter - this wil continuously increase the more
-                // we call adapter.appendMovies()
-                val totalItems = upcomingMoviesLayoutManager.itemCount
-                // current number of child views attached to the RecyclerView that are currently
-                // being recycled over and over again
-                val visibleItemCount = upcomingMoviesLayoutManager.childCount
-                // position of the leftmost visible item in the list
-                val firstVisibleItem = upcomingMoviesLayoutManager.findFirstVisibleItemPosition()
-
-                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                    // reattached in viewmodel observer - reason is to prevent too many calls to
-                    // fetch new movies, whether it helps or no is unclear
-//                    binding.rcTopRatedMovies.removeOnScrollListener(this)
-                    MainScope().launch { viewModel.getUpcomingMovies() }
-                }
-            }
-        })
+        attachOnScrollListener(
+            binding.rcFeaturedCategoriesDiscover,
+            popularMoviesLayoutManager
+        ) { viewModel.getPopularMovies() }
+        attachOnScrollListener(
+            binding.rcTopRatedMovies,
+            topRatedMoviesLayoutManager
+        ) { viewModel.getTopRatedMovies() }
+        attachOnScrollListener(
+            binding.rcUpcomingMovies,
+            upcomingMoviesLayoutManager
+        ) { viewModel.getUpcomingMovies() }
     }
 
     private fun observeViewModel() {
-        viewModel.tmdb2.subscribe(viewLifecycleOwner) {
+        viewModel.popularMovies.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    updatePopularMovies(it.data.movies)
-//                    attachPopularMoviesOnScrollListener()
+                    updateList(popularMovieListAdapter, it.data.movies)
                 }
                 is Resource.Error -> {
                 }
             }
         }
-        viewModel.tmdbTopRated.subscribe(viewLifecycleOwner) {
+        viewModel.topRatedMovies.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    updateTopRatedMovies(it.data.movies)
-//                    attachTopRatedMoviesOnScrollListener()
+                    updateList(topRatedMovieListAdapter, it.data.movies)
                 }
                 is Resource.Error -> {
                 }
             }
         }
-        viewModel.tmdbUpcoming.subscribe(viewLifecycleOwner) {
+        viewModel.upcomingMovies.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    updateUpcomingMovies(it.data.movies)
+                    updateList(upcomingMovieListAdapter, it.data.movies)
                 }
                 is Resource.Error -> {
                 }
             }
         }
+    }
+
+    private fun updateList(
+        adapter: MovieListAdapter,
+        list: List<ResponseMovieTMDB>
+    ) = adapter.updateMovies(list)
+
+    private fun attachOnScrollListener(
+        recyclerView: RecyclerView,
+        layoutManager: LinearLayoutManager,
+        fetchNextPage: suspend () -> Unit
+    ) {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                layoutManager.apply {
+                    // total number of movies inside adapter
+                    val totalItems = this.itemCount
+                    // current number of child views attached to the RecyclerView that are currently
+                    // being recycled
+                    val visibleItemCount = this.childCount
+                    // position of the leftmost visible item in the list
+                    val firstVisibleItem = this.findFirstVisibleItemPosition()
+                    // true if the user scrolls past halfway plus a buffered value of visibleItemCount
+                    if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
+                        MainScope().launch { fetchNextPage() }
+                    }
+                }
+            }
+        })
     }
 }

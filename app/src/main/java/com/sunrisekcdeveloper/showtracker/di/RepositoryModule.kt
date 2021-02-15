@@ -23,12 +23,10 @@ import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
 import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadFeaturedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.repository.DiscoveryRepository
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadFeaturedMediaUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
@@ -42,7 +40,7 @@ import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object RepositoryModule {
+object  RepositoryModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -56,10 +54,6 @@ object RepositoryModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailRepo
 
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class UseCase
-
     @ActivityRetainedScoped
     @DiscoveryRepo
     @Provides
@@ -67,15 +61,7 @@ object RepositoryModule {
         dao: DiscoveryDao,
         @DiscoveryClient remote: DiscoveryRemoteDataSourceContract
     ): DiscoveryRepositoryContract =
-        DiscoveryRepository(dao, remote)
-
-    @ActivityRetainedScoped
-    @UseCase
-    @Provides
-    fun provideTemp(
-        @DiscoveryRepo repo: DiscoveryRepositoryContract
-    ): LoadFeaturedMediaUseCaseContract =
-        LoadFeaturedMediaUseCase(repo)
+        DiscoveryRepository(remote, dao)
 
     @ActivityRetainedScoped
     @WatchlistRepo

@@ -19,16 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadFeaturedMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadDiscoveryMediaUseCaseContract
+import com.sunrisekcdeveloper.showtracker.models.FeaturedList
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import kotlinx.coroutines.flow.Flow
 
-class LoadFeaturedMediaUseCase(
+class LoadDiscoveryMediaUseCase(
     @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
-) : LoadFeaturedMediaUseCaseContract {
-    override suspend fun invoke(): Flow<Resource<List<FeaturedList>>> =
-        discoveryRepo.featuredMoviesFlow()
+) : LoadDiscoveryMediaUseCaseContract {
+    override suspend fun invoke(): Flow<Resource<List<FeaturedList>>> {
+        TODO("Not yet implemented")
+    }
 }

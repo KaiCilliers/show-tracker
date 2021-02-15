@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.showcase.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discover.application
 
-interface TransactionRepositoryContract {
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.models.FeaturedList
+import kotlinx.coroutines.flow.Flow
+
+// todo determine if this pattern fits the application
+interface LoadDiscoveryMediaUseCaseContract {
+    suspend fun invoke(): Flow<Resource<List<FeaturedList>>>
 }

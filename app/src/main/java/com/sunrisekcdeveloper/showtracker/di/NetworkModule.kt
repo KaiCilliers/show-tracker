@@ -42,6 +42,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -52,23 +53,11 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class HeaderInterceptor
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryClient
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -133,8 +122,9 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("BuildConfig.TRAKT_BASE_URL")
+            .baseUrl("https://api.themoviedb.org/3/")
             .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(
                 Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
             ))
@@ -143,33 +133,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(
-        @HeaderInterceptor headerInterceptor: Interceptor
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(headerInterceptor)
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
-
-    @Singleton
-    @HeaderInterceptor
-    @Provides
-    fun provideHeaderInterceptor(): Interceptor {
-        return object : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var request = chain.request()
-                val headers = request.headers.newBuilder()
-                    .add("Content-type", "application/json")
-
-                if (request.header("Fanart-Api") == null) {
-                    headers.add("trakt-api-key", "BuildConfig.TRAKT_API_KEY")
-                        .add("trakt-api-version", "2")
-                }
-
-                request = request.newBuilder().headers(headers.build()).build()
-                return chain.proceed(request)
-            }
-        }
-    }
 }

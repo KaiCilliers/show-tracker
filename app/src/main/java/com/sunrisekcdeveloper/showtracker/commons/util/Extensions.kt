@@ -23,13 +23,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeViewStats
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.EnvelopeWatchers
+import com.sunrisekcdeveloper.showtracker.models.FeaturedList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

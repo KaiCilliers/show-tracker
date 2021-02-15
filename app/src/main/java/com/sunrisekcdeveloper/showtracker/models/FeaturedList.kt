@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.domain.model
+package com.sunrisekcdeveloper.showtracker.models
 
 import androidx.recyclerview.widget.DiffUtil
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie

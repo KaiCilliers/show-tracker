@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.showcase.domain.usecase
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.model
 
-interface GetUserTransactionUseCaseContract {
-}
+import com.google.gson.annotations.SerializedName
+
+data class EnvelopePaginatedMovie(
+    @SerializedName("page") val page: Int,
+    @SerializedName("results") val movies: List<ResponseMovieTMDB>,
+    @SerializedName("total_pages") val pages: Int
+)

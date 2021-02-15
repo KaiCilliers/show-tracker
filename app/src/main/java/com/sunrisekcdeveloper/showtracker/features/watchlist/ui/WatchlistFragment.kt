@@ -25,19 +25,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
-import com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import timber.log.Timber
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -50,7 +44,7 @@ class WatchlistFragment : Fragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
-    @Inject lateinit var adapter: DiscoverListAdapter
+//    @Inject lateinit var adapter: DiscoverListAdapter
 
     private val viewModel: WatchlistViewModel by viewModels()
 
@@ -76,17 +70,17 @@ class WatchlistFragment : Fragment(), CoroutineScope {
 
     private fun setupBinding() {
         // Temporal Coupling
-        adapter.addOnClickAction(object : ClickActionContract {
-            override fun onClick(item: Movie) {
-                Timber.d("TITLE: $item")
-                findNavController().navigate(
-                    WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragment(
-                        "FROM PROGRESS FRAGMENT"
-                    )
-                )
-            }
-        })
-        binding.rcFeaturedCategoriesWatchlist.adapter = adapter
+//        adapter.addOnClickAction(object : ClickActionContract {
+//            override fun onClick(item: Movie) {
+//                Timber.d("TITLE: $item")
+//                findNavController().navigate(
+//                    WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragment(
+//                        "FROM PROGRESS FRAGMENT"
+//                    )
+//                )
+//            }
+//        })
+//        binding.rcFeaturedCategoriesWatchlist.adapter = adapter
         binding.rcFeaturedCategoriesWatchlist.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -96,7 +90,7 @@ class WatchlistFragment : Fragment(), CoroutineScope {
 
     private fun observeViewModel() {
         viewModel.featured.subscribe(viewLifecycleOwner) {
-            adapter.submitList(it)
+//            adapter.submitList(it)
         }
     }
 }

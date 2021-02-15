@@ -23,7 +23,7 @@ import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.models.FeaturedList
 
 /**
  * Progress ViewModel

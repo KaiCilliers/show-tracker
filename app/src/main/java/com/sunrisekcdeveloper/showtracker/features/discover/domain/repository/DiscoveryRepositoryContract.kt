@@ -19,10 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 
 interface DiscoveryRepositoryContract {
-    suspend fun featuredMoviesFlow(): Flow<Resource<List<FeaturedList>>>
+    suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie>
+    suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie>
+    suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie>
 }

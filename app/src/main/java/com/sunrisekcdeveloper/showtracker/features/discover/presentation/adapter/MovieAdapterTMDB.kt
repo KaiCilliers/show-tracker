@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.tmdb.main
+package com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -26,11 +26,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 
-class MoviesAdapterTMDB(
+class MovieListAdapter(
     private var movies: MutableList<ResponseMovieTMDB>,
-    private val onMovieClick: (movie: ResponseMovieTMDB) -> Unit
-) : RecyclerView.Adapter<MoviesAdapterTMDB.MovieViewHolder>() {
+    var onMovieClick: (movie: ResponseMovieTMDB) -> Unit = {}
+) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater
             .from(parent.context)

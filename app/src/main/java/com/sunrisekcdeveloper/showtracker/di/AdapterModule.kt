@@ -20,32 +20,28 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
 
 @Module
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
 
-    @ActivityScoped
     @Provides
     fun provideMediumPosterAdapterSearch(): MediumPosterAdapter {
         return MediumPosterAdapter()
     }
 
-    @ActivityScoped
     @Provides
     fun provideMediumPosterAdapterDetail(): MediumPosterAdapterDetail {
         return MediumPosterAdapterDetail()
     }
 
-    @ActivityScoped
     @Provides
-    fun provideSuggestionListAdapter(): DiscoverListAdapter {
-        return DiscoverListAdapter()
+    fun provideMovieListAdapter(): MovieListAdapter {
+        return MovieListAdapter(mutableListOf())
     }
 }
