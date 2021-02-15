@@ -25,14 +25,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.DiscoverListAdapter
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
-import com.sunrisekcdeveloper.showtracker.tmdb.model.MoviesAdapterTMDB
-import com.sunrisekcdeveloper.showtracker.tmdb.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.tmdb.main.MoviesAdapterTMDB
+import com.sunrisekcdeveloper.showtracker.tmdb.main.ResponseMovieTMDB
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
@@ -95,10 +96,21 @@ class DiscoveryFragment : Fragment() {
         }
     }
 
+    private fun showMovieDetails(movie: ResponseMovieTMDB) {
+        findNavController().navigate(DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragmentTMDB(
+            movieBackdrop = movie.backdropPath,
+            moviePoster = movie.posterPath,
+            movieTitle = movie.title,
+            movieRating = movie.rating,
+            movieReleaseDate = movie.releaseDate,
+            movieOverview = movie.overview
+        ))
+    }
+
     private fun setupBinding() {
-        adapterTMDB = MoviesAdapterTMDB(mutableListOf())
-        topRatedMoviesAdapter = MoviesAdapterTMDB(mutableListOf())
-        upcomingMoviesAdapter = MoviesAdapterTMDB(mutableListOf())
+        adapterTMDB = MoviesAdapterTMDB(mutableListOf()) { movie -> showMovieDetails(movie) }
+        topRatedMoviesAdapter = MoviesAdapterTMDB(mutableListOf()) { movie -> showMovieDetails(movie) }
+        upcomingMoviesAdapter = MoviesAdapterTMDB(mutableListOf()) { movie -> showMovieDetails(movie) }
 
         popularMoviesLayoutManager = LinearLayoutManager(
             requireContext(),

@@ -16,14 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.tmdb.model
+package com.sunrisekcdeveloper.showtracker.tmdb.main
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
-import dagger.Provides
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -31,9 +28,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import javax.inject.Singleton
 
 class RepositoryTMDB {
     private val api: TMDBService

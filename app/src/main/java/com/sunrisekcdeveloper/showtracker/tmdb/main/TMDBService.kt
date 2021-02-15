@@ -16,9 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.tmdb.model
+package com.sunrisekcdeveloper.showtracker.tmdb.main
 
-import com.sunrisekcdeveloper.showtracker.BuildConfig
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
