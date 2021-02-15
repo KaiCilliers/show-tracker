@@ -26,16 +26,11 @@
         <variable
             name="movie"
             type="com.sunrisekcdeveloper.showtracker.models.roomresults.Movie" />
-
-        <variable
-            name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{() -> clickListener.onClick(movie)}">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imgv_poster"
