@@ -133,7 +133,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.TRAKT_BASE_URL)
+            .baseUrl("BuildConfig.TRAKT_BASE_URL")
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(
                 Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -163,7 +163,7 @@ object NetworkModule {
                     .add("Content-type", "application/json")
 
                 if (request.header("Fanart-Api") == null) {
-                    headers.add("trakt-api-key", BuildConfig.TRAKT_API_KEY)
+                    headers.add("trakt-api-key", "BuildConfig.TRAKT_API_KEY")
                         .add("trakt-api-version", "2")
                 }
 

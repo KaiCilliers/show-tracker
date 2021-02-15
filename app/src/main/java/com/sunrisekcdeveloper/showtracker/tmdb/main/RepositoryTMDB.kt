@@ -41,11 +41,6 @@ class RepositoryTMDB {
                     val headers = request.headers.newBuilder()
                         .add("Content-type", "application/json")
 
-                    if (request.header("Fanart-Api") == null) {
-                        headers.add("trakt-api-key", BuildConfig.TRAKT_API_KEY)
-                            .add("trakt-api-version", "2")
-                    }
-
                     request = request.newBuilder().headers(headers.build()).build()
                     return chain.proceed(request)
                 }
