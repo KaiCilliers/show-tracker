@@ -28,7 +28,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.R
 
 class MoviesAdapterTMDB(
-    private var movies: List<ResponseMovieTMDB>
+    private var movies: MutableList<ResponseMovieTMDB>
 ) : RecyclerView.Adapter<MoviesAdapterTMDB.MovieViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater
@@ -41,8 +41,11 @@ class MoviesAdapterTMDB(
         holder.bind(movies[position])
     }
     fun updateMovies(movies: List<ResponseMovieTMDB>) {
-        this.movies = movies
-        notifyDataSetChanged()
+        this.movies.addAll(movies)
+        notifyItemRangeInserted(
+            this.movies.size,
+            movies.size - 1
+        )
     }
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val poster: ImageView = itemView.findViewById(R.id.imgv_item_movie_poster)
