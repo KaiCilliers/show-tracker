@@ -21,14 +21,10 @@ package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.UseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadFeaturedMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadFeaturedMediaUseCase
-import com.sunrisekcdeveloper.showtracker.tmdb.model.EnvelopePageMovieTMDB
-import com.sunrisekcdeveloper.showtracker.tmdb.model.RepositoryTMDB
+import com.sunrisekcdeveloper.showtracker.tmdb.main.EnvelopePageMovieTMDB
+import com.sunrisekcdeveloper.showtracker.tmdb.main.RepositoryTMDB
 import kotlinx.coroutines.*
 import timber.log.Timber
 

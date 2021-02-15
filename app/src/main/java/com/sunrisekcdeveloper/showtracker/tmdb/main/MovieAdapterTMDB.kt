@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.tmdb.model
+package com.sunrisekcdeveloper.showtracker.tmdb.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +28,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.R
 
 class MoviesAdapterTMDB(
-    private var movies: MutableList<ResponseMovieTMDB>
+    private var movies: MutableList<ResponseMovieTMDB>,
+    private val onMovieClick: (movie: ResponseMovieTMDB) -> Unit
 ) : RecyclerView.Adapter<MoviesAdapterTMDB.MovieViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater
@@ -55,6 +56,7 @@ class MoviesAdapterTMDB(
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")
                 .transform(CenterCrop())
                 .into(poster)
+            itemView.setOnClickListener { onMovieClick(movie) }
         }
     }
 }

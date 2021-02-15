@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.tmdb.model
+package com.sunrisekcdeveloper.showtracker.tmdb.main
 
 import com.google.gson.annotations.SerializedName
 

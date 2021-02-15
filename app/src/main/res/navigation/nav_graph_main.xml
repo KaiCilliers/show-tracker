@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_discover_fragment_dest_to_detailFragment"
             app:destination="@id/detail_fragment_dest" />
+        <action
+            android:id="@+id/action_discover_fragment_dest_to_detailFragmentTMDB"
+            app:destination="@id/detailFragmentTMDB" />
     </fragment>
     <fragment
         android:id="@+id/watchlist_fragment_dest"
@@ -60,4 +63,28 @@
         android:name="com.sunrisekcdeveloper.showtracker.features.statistics.ui.StatisticsFragment"
         android:label="StatisticsFragment"
         tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/detailFragmentTMDB"
+        android:name="com.sunrisekcdeveloper.showtracker.tmdb.detail.DetailFragmentTMDB"
+        android:label="DetailFragmentTMDB"
+        tools:layout="@layout/fragment_movie_detail_tmdb">
+        <argument
+            android:name="movieBackdrop"
+            app:argType="string" />
+        <argument
+            android:name="moviePoster"
+            app:argType="string" />
+        <argument
+            android:name="movieTitle"
+            app:argType="string" />
+        <argument
+            android:name="movieRating"
+            app:argType="float" />
+        <argument
+            android:name="movieReleaseDate"
+            app:argType="string" />
+        <argument
+            android:name="movieOverview"
+            app:argType="string" />
+    </fragment>
 </navigation>
