@@ -21,9 +21,9 @@ package com.sunrisekcdeveloper.showtracker.di
 import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.commons.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

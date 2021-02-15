@@ -18,35 +18,27 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
-import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface DiscoveryService : DiscoveryServiceContract {
-    @GET("movies/trending")
-    override suspend fun trendingMovies(
-        @Query("extended") extended: String
-    ): Response<List<EnvelopeWatchers>>
-
-    @GET("movies/popular")
+    @GET("movie/popular")
     override suspend fun popularMovies(
-        @Query("extended") extended: String
-    ): Response<List<ResponseMovie>>
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<EnvelopePaginatedMovie>
 
-    @GET("movies/watched/{period}")
-    override suspend fun mostWatchedMovies(
-        @Path("period") period: String,
-        @Query("extended") extended: String
-    ): Response<List<EnvelopeViewStats>>
+    @GET("movie/top_rated")
+    override suspend fun topRatedMovies(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<EnvelopePaginatedMovie>
 
-    /** IMAGES */
-    @Headers("Fanart-Api: true")
-    @GET("${BuildConfig.FANART_BASE_URL}movies/{id}?api_key=${BuildConfig.FANART_API_KEY}")
-    override suspend fun allPosters(@Path("id") id: String): Response<ResponseImages>
+    @GET("movie/upcoming")
+    override suspend fun upcomingMovies(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<EnvelopePaginatedMovie>
 }

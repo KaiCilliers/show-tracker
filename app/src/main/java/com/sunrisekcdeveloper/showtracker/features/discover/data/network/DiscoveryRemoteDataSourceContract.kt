@@ -19,13 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseImages
-import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 
 interface DiscoveryRemoteDataSourceContract {
-    suspend fun fetchFeaturedMoviesResource(): Resource<Map<String, List<MovieEntity>>>
-    suspend fun allPosters(mediaId: String): Resource<ResponseImages>
+    suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie>
+    suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie>
+    suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie>
 }

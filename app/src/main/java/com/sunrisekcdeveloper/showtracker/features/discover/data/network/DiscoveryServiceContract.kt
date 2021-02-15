@@ -18,81 +18,25 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
-import com.sunrisekcdeveloper.showtracker.models.network.base.*
-import com.sunrisekcdeveloper.showtracker.models.network.envelopes.*
+import com.sunrisekcdeveloper.showtracker.BuildConfig
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import retrofit2.Response
 
 interface DiscoveryServiceContract {
-    /**
-     * Trending movies all movies currently being watched sorted with most
-     * watched returned first
-     * Supports Pagination, Extended, Filter
-     *
-     * @return
-     */
-    suspend fun trendingMovies(
-        extended: String = "true"
-    ): Response<List<EnvelopeWatchers>>
 
-    /**
-     * Popular movies popularity calculated using rating percentage and the number
-     * of ratings
-     * Supports Pagination, Extended, Filter
-     *
-     * @return
-     */
     suspend fun popularMovies(
-        extended: String = "true"
-    ): Response<List<ResponseMovie>>
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
+    ): Response<EnvelopePaginatedMovie>
 
-    /**
-     * Most watched movies in specified time period (unique watches)
-     * Supports Pagination, Extended, Filter
-     *
-     * @param period Optional.
-     *      Possible values:  daily , weekly , monthly , yearly , all
-     *      Default value: weekly
-     * @return
-     */
-    // TODO you can create less methods in Repo that takes params which will decide which of
-    //  these methods to call (like it'll choose between most played and most watched)
-    suspend fun mostWatchedMovies(
-        period: String = "weekly",
-        extended: String = "true"
-    ): Response<List<EnvelopeViewStats>>
+    suspend fun topRatedMovies(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
+    ): Response<EnvelopePaginatedMovie>
 
-    /** IMAGES */
-    suspend fun allPosters(id: String): Response<ResponseImages>
+    suspend fun upcomingMovies(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
+    ): Response<EnvelopePaginatedMovie>
 
-    class Fake : DiscoveryServiceContract {
-
-        var happyPath = true
-
-        override suspend fun trendingMovies(extended: String): Response<List<EnvelopeWatchers>> {
-            return if (happyPath) {
-                Response.success(EnvelopeWatchers.createEnvelopeWatchers(10))
-            } else Response.error(0, null)
-        }
-
-        override suspend fun popularMovies(extended: String): Response<List<ResponseMovie>> {
-            return if (happyPath) {
-                Response.success(ResponseMovie.createResponseMovies(10))
-            } else Response.error(0, null)
-        }
-
-        override suspend fun mostWatchedMovies(
-            period: String,
-            extended: String
-        ): Response<List<EnvelopeViewStats>> {
-            return if (happyPath) {
-                Response.success(EnvelopeViewStats.createEnvelopeViewStats(10))
-            } else Response.error(0, null)
-        }
-
-        override suspend fun allPosters(id: String): Response<ResponseImages> {
-            return if (happyPath) {
-                Response.success(ResponseImages.createResponseImages(1)[0])
-            } else Response.error(0, null)
-        }
-    }
 }

@@ -29,10 +29,7 @@ android {
 //        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "TRAKT_API_KEY", apikeysProperties['TRAKT_API_KEY'])
-        buildConfigField("String", "TRAKT_BASE_URL", apikeysProperties['TRAKT_BASE_URL'])
-        buildConfigField("String", "FANART_API_KEY", apikeysProperties['FANART_API_KEY'])
-        buildConfigField("String", "FANART_BASE_URL", apikeysProperties['FANART_BASE_URL'])
+        buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
     }
     // Always show the result of every unit test when running via
     // command line, even if it passes.

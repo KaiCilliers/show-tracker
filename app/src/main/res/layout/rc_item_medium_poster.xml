@@ -25,9 +25,6 @@
         <variable
             name="movie"
             type="com.sunrisekcdeveloper.showtracker.models.roomresults.Movie" />
-        <variable
-            name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,7 +52,6 @@
             android:padding="2dp"
             android:src="@drawable/test"
             android:scaleType="centerCrop"
-            android:onClick="@{() -> clickListener.onClick(movie)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -54,16 +54,6 @@ class MainActivity : AppCompatActivity() {
     // TODO this bottom nav bar needs to be gone when navigating to movie details fragment
     private fun setup() {
         binding.bottomNavigationMain.setupWithNavController(findNavController(R.id.nav_host_fragment_main))
-        // todo change toolbar text when fragment changes - this impl overrides navigation with navcontroller
-//        val toolbar = supportActionBar
-//        binding.bottomNavigationMain.setOnNavigationItemSelectedListener { menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.watchlist_fragment_dest -> { toolbar?.title = "Watchlist"; true }
-//                R.id.discover_fragment_dest -> { toolbar?.title = "Discover"; true }
-//                R.id.search_fragment_dest -> { toolbar?.title = "Search"; true }
-//                else -> false
-//            }
-//        }
     }
 
 }

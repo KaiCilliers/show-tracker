@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.data.local.model
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList
+import com.sunrisekcdeveloper.showtracker.models.FeaturedList
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
 data class FeaturedMovies(

@@ -20,28 +20,26 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailClient
-import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailService
-import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailServiceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailRemoteDataSource
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailService
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailServiceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSource
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryService
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryServiceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistService
-import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistClient
-import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistServiceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -52,23 +50,11 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class HeaderInterceptor
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryClient
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -105,7 +91,7 @@ object NetworkModule {
     @WatchlistClient
     @Provides
     fun provideWatchlistClient(@WatchlistApi api: WatchlistServiceContract) : WatchlistDataSourceContract {
-        return WatchlistClient(api)
+        return WatchlistRemoteDataSource(api)
     }
 
     @Singleton
@@ -119,7 +105,7 @@ object NetworkModule {
     @DetailClient
     @Provides
     fun provideDetailClient(@DetailApi api: DetailServiceContract) : DetailDataSourceContract {
-        return DetailClient(api)
+        return DetailRemoteDataSource(api)
     }
 
     @Singleton
@@ -133,8 +119,9 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.TRAKT_BASE_URL)
+            .baseUrl("https://api.themoviedb.org/3/")
             .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(
                 Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
             ))
@@ -143,33 +130,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(
-        @HeaderInterceptor headerInterceptor: Interceptor
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(headerInterceptor)
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
-
-    @Singleton
-    @HeaderInterceptor
-    @Provides
-    fun provideHeaderInterceptor(): Interceptor {
-        return object : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var request = chain.request()
-                val headers = request.headers.newBuilder()
-                    .add("Content-type", "application/json")
-
-                if (request.header("Fanart-Api") == null) {
-                    headers.add("trakt-api-key", BuildConfig.TRAKT_API_KEY)
-                        .add("trakt-api-version", "2")
-                }
-
-                request = request.newBuilder().headers(headers.build()).build()
-                return chain.proceed(request)
-            }
-        }
-    }
 }

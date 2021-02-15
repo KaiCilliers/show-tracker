@@ -24,10 +24,7 @@
     <data>
         <variable
             name="featuredList"
-            type="com.sunrisekcdeveloper.showtracker.features.discover.domain.model.FeaturedList" />
-        <variable
-            name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />
+            type="com.sunrisekcdeveloper.showtracker.models.FeaturedList" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
