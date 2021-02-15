@@ -29,4 +29,16 @@ interface TMDBService {
         @Query("api_key") apiKey: String = "9b3b6234bb46dbbd68fedc64b4d46e63",
         @Query("page") page: Int
     ): Response<EnvelopePageMovieTMDB>
+
+    @GET("movie/top_rated")
+    suspend fun topRatedMovies(
+        @Query("api_key") apiKey: String = "9b3b6234bb46dbbd68fedc64b4d46e63",
+        @Query("page") page: Int
+    ): Response<EnvelopePageMovieTMDB>
+
+    @GET("movie/upcoming")
+    suspend fun upcomingMovies(
+        @Query("api_key") apiKey: String = "9b3b6234bb46dbbd68fedc64b4d46e63",
+        @Query("page") page: Int
+    ): Response<EnvelopePageMovieTMDB>
 }

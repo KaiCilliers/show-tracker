@@ -76,6 +76,24 @@ class RepositoryTMDB {
         }
     }
 
+    suspend fun topRatedMovies(page: Int = 1): Resource<EnvelopePageMovieTMDB> {
+        val response = result { api.topRatedMovies(page = page) }
+        return when(response) {
+            is Resource.Success -> { Timber.d("$response"); response}
+            is Resource.Error -> { Timber.d("$response"); response }
+            else -> { Timber.d("Oops"); Resource.Error("Oops") }
+        }
+    }
+
+    suspend fun upcomingMovies(page: Int = 1): Resource<EnvelopePageMovieTMDB> {
+        val response = result { api.upcomingMovies(page = page) }
+        return when(response) {
+            is Resource.Success -> { Timber.d("$response"); response}
+            is Resource.Error -> { Timber.d("$response"); response }
+            else -> { Timber.d("Oops"); Resource.Error("Oops") }
+        }
+    }
+
     private suspend fun <T> result(request: suspend () -> retrofit2.Response<T>): Resource<T> =
         withContext(Dispatchers.IO) {
             return@withContext try {
