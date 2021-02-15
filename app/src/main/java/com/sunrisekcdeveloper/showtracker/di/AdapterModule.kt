@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.commons.components.adapters.MediumPosterAdapter
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
 import dagger.Module
 import dagger.Provides
