@@ -148,6 +148,10 @@ class DiscoveryFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     updateList(popularMovieListAdapter, it.data.movies)
+                    attachOnScrollListener(
+                        binding.rcFeaturedCategoriesDiscover,
+                        popularMoviesLayoutManager
+                    ) { viewModel.getPopularMovies() }
                 }
                 is Resource.Error -> {
                 }
@@ -159,6 +163,10 @@ class DiscoveryFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     updateList(topRatedMovieListAdapter, it.data.movies)
+                    attachOnScrollListener(
+                        binding.rcTopRatedMovies,
+                        topRatedMoviesLayoutManager
+                    ) { viewModel.getTopRatedMovies() }
                 }
                 is Resource.Error -> {
                 }
@@ -170,6 +178,10 @@ class DiscoveryFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     updateList(upcomingMovieListAdapter, it.data.movies)
+                    attachOnScrollListener(
+                        binding.rcUpcomingMovies,
+                        upcomingMoviesLayoutManager
+                    ) { viewModel.getUpcomingMovies() }
                 }
                 is Resource.Error -> {
                 }
@@ -180,7 +192,9 @@ class DiscoveryFragment : Fragment() {
     private fun updateList(
         adapter: MovieListAdapter,
         list: List<ResponseMovieTMDB>
-    ) = adapter.updateMovies(list)
+    ) {
+        adapter.updateMovies(list)
+    }
 
     private fun attachOnScrollListener(
         recyclerView: RecyclerView,
@@ -189,18 +203,18 @@ class DiscoveryFragment : Fragment() {
     ) {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                layoutManager.apply {
-                    // total number of movies inside adapter
-                    val totalItems = this.itemCount
-                    // current number of child views attached to the RecyclerView that are currently
-                    // being recycled
-                    val visibleItemCount = this.childCount
-                    // position of the leftmost visible item in the list
-                    val firstVisibleItem = this.findFirstVisibleItemPosition()
-                    // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                    if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                        MainScope().launch { fetchNextPage() }
-                    }
+                // total number of movies inside adapter
+                val totalItems = layoutManager.itemCount
+                // current number of child views attached to the RecyclerView that are currently
+                // being recycled
+                val visibleItemCount = layoutManager.childCount
+                // position of the leftmost visible item in the list
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
+                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
+                    // This is to limit network calls
+                    recyclerView.removeOnScrollListener(this)
+                    MainScope().launch { fetchNextPage() }
                 }
             }
         })
