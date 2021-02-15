@@ -19,18 +19,18 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
-import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.DetailRepository
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.repository.DiscoveryRepository
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
-import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistRepository
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

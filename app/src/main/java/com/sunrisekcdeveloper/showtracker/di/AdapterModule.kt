@@ -19,7 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.commons.components.adapters.MediumPosterAdapter
-import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
 import dagger.Module
 import dagger.Provides
@@ -29,17 +28,6 @@ import dagger.hilt.android.components.ActivityComponent
 @Module
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
-
-    @Provides
-    fun provideMediumPosterAdapterSearch(): MediumPosterAdapter {
-        return MediumPosterAdapter()
-    }
-
-    @Provides
-    fun provideMediumPosterAdapterDetail(): MediumPosterAdapterDetail {
-        return MediumPosterAdapterDetail()
-    }
-
     @Provides
     fun provideMovieListAdapter(): MovieListAdapter {
         return MovieListAdapter(mutableListOf())

@@ -28,46 +28,24 @@
         android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discovery">
         <action
-            android:id="@+id/action_discover_fragment_dest_to_detailFragment"
-            app:destination="@id/detail_fragment_dest" />
-        <action
             android:id="@+id/action_discover_fragment_dest_to_detailFragmentTMDB"
             app:destination="@id/detailFragmentTMDB" />
     </fragment>
     <fragment
         android:id="@+id/watchlist_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.ui.WatchlistFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui.WatchlistFragment"
         android:label="WatchlistFragment"
-        tools:layout="@layout/fragment_watchlist">
-        <action
-            android:id="@+id/action_watchlist_fragment_dest_to_detailFragment"
-            app:destination="@id/detail_fragment_dest" />
-    </fragment>
-    <fragment
-        android:id="@+id/detail_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.ui.DetailFragment"
-        android:label="DetailFragment"
-        tools:layout="@layout/fragment_movie_detail">
-        <argument
-            android:name="mediaSlug"
-            app:argType="string"
-            android:defaultValue="defaultvalue" />
-        <action
-            android:id="@+id/action_detail_fragment_dest_self"
-            app:destination="@id/detail_fragment_dest"
-            app:popUpTo="@id/detail_fragment_dest"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_watchlist"/>
     <fragment
         android:id="@+id/statistics_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.ui.StatisticsFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.presentation.ui.StatisticsFragment"
         android:label="StatisticsFragment"
         tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/detailFragmentTMDB"
-        android:name="com.sunrisekcdeveloper.showtracker.tmdb.detail.DetailFragmentTMDB"
+        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.ui.MovieDetailFragment"
         android:label="DetailFragmentTMDB"
-        tools:layout="@layout/fragment_movie_detail_tmdb">
+        tools:layout="@layout/fragment_movie_detail">
         <argument
             android:name="movieBackdrop"
             app:argType="string" />
