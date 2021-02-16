@@ -19,10 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.application
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.models.FeaturedList
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 
-// todo determine if this pattern fits the application
-interface LoadDiscoveryMediaUseCaseContract {
-    suspend fun invoke(): Flow<Resource<List<FeaturedList>>>
+interface LoadUpcomingMoviesUseCaseContract {
+    suspend operator fun invoke(page: Int): Resource<EnvelopePaginatedMovie>
 }

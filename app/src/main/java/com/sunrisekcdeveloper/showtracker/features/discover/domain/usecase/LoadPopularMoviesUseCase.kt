@@ -19,16 +19,15 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadDiscoveryMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.models.FeaturedList
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import kotlinx.coroutines.flow.Flow
 
-class LoadDiscoveryMediaUseCase(
+class LoadPopularMoviesUseCase(
     @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
-) : LoadDiscoveryMediaUseCaseContract {
-    override suspend fun invoke(): Flow<Resource<List<FeaturedList>>> {
-        TODO("Not yet implemented")
-    }
+) : LoadPopularMoviesUseCaseContract {
+    override suspend fun invoke(page: Int): Resource<EnvelopePaginatedMovie> =
+        discoveryRepo.popularMovies(page)
 }
