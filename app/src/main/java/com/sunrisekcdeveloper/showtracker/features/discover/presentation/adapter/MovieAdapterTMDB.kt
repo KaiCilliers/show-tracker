@@ -25,6 +25,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.google.android.material.card.MaterialCardView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 
@@ -58,6 +59,15 @@ class MovieListAdapter(
                 .transform(CenterCrop())
                 .into(poster)
             itemView.setOnClickListener { onMovieClick(movie) }
+            itemView.setOnLongClickListener {
+                when (itemView) {
+                    is MaterialCardView -> {
+                        itemView.setChecked(!itemView.isChecked)
+                        true
+                    }
+                    else -> { false }
+                }
+            }
         }
     }
 }
