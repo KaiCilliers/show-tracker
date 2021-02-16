@@ -25,13 +25,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.showtracker.commons.util.asRecentlyAddedEntity
+import com.sunrisekcdeveloper.showtracker.commons.util.asResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -39,12 +47,11 @@ import kotlin.coroutines.CoroutineContext
  * based on movie or show
  */
 @AndroidEntryPoint
-class WatchlistFragment : Fragment(), CoroutineScope {
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+class WatchlistFragment : Fragment() {
 
-//    @Inject lateinit var adapter: DiscoverListAdapter
+    @Inject
+    lateinit var recentlyAddedMediaListAdapter: MovieListAdapter
+    private lateinit var recentlyAddedMediaLayoutManager: LinearLayoutManager
 
     private val viewModel: WatchlistViewModel by viewModels()
 
@@ -68,29 +75,48 @@ class WatchlistFragment : Fragment(), CoroutineScope {
         }
     }
 
-    private fun setupBinding() {
-        // Temporal Coupling
-//        adapter.addOnClickAction(object : ClickActionContract {
-//            override fun onClick(item: Movie) {
-//                Timber.d("TITLE: $item")
-//                findNavController().navigate(
-//                    WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragment(
-//                        "FROM PROGRESS FRAGMENT"
-//                    )
-//                )
-//            }
-//        })
-//        binding.rcFeaturedCategoriesWatchlist.adapter = adapter
-        binding.rcFeaturedCategoriesWatchlist.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
+    private fun showMovieDetails(responseMovie: ResponseMovieTMDB) {
+        val movie = responseMovie.asRecentlyAddedEntity()
+        findNavController().navigate(
+            WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragmentTMDB(
+                movieBackdrop = movie.backdropPath,
+                moviePoster = movie.posterPath,
+                movieTitle = movie.title,
+                movieRating = movie.rating,
+                movieReleaseDate = movie.releaseDate,
+                movieOverview = movie.overview
+            )
         )
     }
 
+    private fun setupBinding() {
+        recentlyAddedMediaListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        recentlyAddedMediaLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        binding.rcFeaturedCategoriesWatchlist.layoutManager = recentlyAddedMediaLayoutManager
+        binding.rcFeaturedCategoriesWatchlist.adapter = recentlyAddedMediaListAdapter
+    }
+
+    private fun updateList(
+        adapter: MovieListAdapter,
+        entityList: List<RecentlyAddedMediaEntity>
+    ) {
+        val list = entityList.map { it.asResponseMovieTMDB() }
+        adapter.updateMovies(list)
+    }
+
     private fun observeViewModel() {
-        viewModel.featured.subscribe(viewLifecycleOwner) {
-//            adapter.submitList(it)
+        viewModel.recentlyAddedMovies.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> { }
+                is Resource.Success -> {
+                    updateList(recentlyAddedMediaListAdapter, it.data)
+                }
+                is Resource.Error -> { }
+            }
         }
     }
 }

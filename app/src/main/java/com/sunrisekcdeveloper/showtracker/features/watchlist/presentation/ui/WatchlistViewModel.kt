@@ -20,10 +20,16 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadRecentlyAddedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.models.FeaturedList
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Progress ViewModel
@@ -31,34 +37,18 @@ import com.sunrisekcdeveloper.showtracker.models.FeaturedList
  * @constructor Create empty Progress view model
  */
 class WatchlistViewModel @ViewModelInject constructor(
-    @WatchlistRepo private val repo: WatchListRepositoryContract
+    private val loadRecentlyAddedMediaUseCase: LoadRecentlyAddedMediaUseCaseContract
 ) : ViewModel() {
+    private val _recentlyAddedMovies = MutableLiveData<Resource<List<RecentlyAddedMediaEntity>>>()
+    val recentlyAddedMovies: LiveData<Resource<List<RecentlyAddedMediaEntity>>>
+        get() = _recentlyAddedMovies
 
-    val featured = liveData {
-        emit(fakeFeaturedData())
+    init {
+        getRecentlyAddedMedia()
     }
 
-    private fun fakeFeaturedData(): List<FeaturedList> {
-        return listOf(
-            FeaturedList(heading = "Recently Added", results = fakeMovieData()),
-            FeaturedList(heading = "In Progress", results = fakeMovieData()),
-            FeaturedList(heading = "Upcoming", results = fakeMovieData()),
-            FeaturedList(heading = "Anticipating", results = fakeMovieData()),
-            FeaturedList(heading = "Completed", results = fakeMovieData())
-        )
-    }
-
-    private fun fakeMovieData(): List<Movie> {
-        return listOf<Movie>(
-            Movie("Finding Nemo", "myslug"),
-            Movie("Harry Potter", "myslug"),
-            Movie("Deadpool", "myslug"),
-            Movie("Jurassic Park", "myslug"),
-            Movie("Forest Gump", "myslug"),
-            Movie("Mall Cop", "myslug"),
-            Movie("Miss Congeniality", "myslug"),
-            Movie("Gladiator", "myslug"),
-            Movie("Finding Dory", "myslug")
-        )
+    fun getRecentlyAddedMedia() = viewModelScope.launch {
+        val data = loadRecentlyAddedMediaUseCase()
+        _recentlyAddedMovies.value = data
     }
 }

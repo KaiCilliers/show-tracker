@@ -70,7 +70,7 @@ object  RepositoryModule {
         dao: WatchlistDao,
         @NetworkModule.WatchlistClient remote: WatchlistDataSourceContract
     ): WatchListRepositoryContract =
-        WatchlistRepository(dao, remote)
+        WatchlistRepository(remote, dao)
 
     @ActivityRetainedScoped
     @DetailRepo

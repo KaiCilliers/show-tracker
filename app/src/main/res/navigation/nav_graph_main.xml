@@ -35,7 +35,11 @@
         android:id="@+id/watchlist_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui.WatchlistFragment"
         android:label="WatchlistFragment"
-        tools:layout="@layout/fragment_watchlist"/>
+        tools:layout="@layout/fragment_watchlist">
+        <action
+            android:id="@+id/action_watchlist_fragment_dest_to_detailFragmentTMDB"
+            app:destination="@id/detailFragmentTMDB" />
+    </fragment>
     <fragment
         android:id="@+id/statistics_fragment_dest"
         android:name="com.sunrisekcdeveloper.showtracker.features.statistics.presentation.ui.StatisticsFragment"
