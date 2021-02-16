@@ -22,6 +22,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import kotlinx.coroutines.*
@@ -33,7 +36,9 @@ import kotlinx.coroutines.*
  */
 @ExperimentalCoroutinesApi
 class DiscoveryViewModel @ViewModelInject constructor(
-    @DiscoveryRepo private val repo: DiscoveryRepositoryContract
+    private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
+    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
+    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
 ) : ViewModel() {
 
     var popularMoviesPage = 1
@@ -60,9 +65,9 @@ class DiscoveryViewModel @ViewModelInject constructor(
         }
     }
 
-    suspend fun getPopularMovies() = dispatch(_popularMovies) { repo.popularMovies(++popularMoviesPage) }
-    suspend fun getTopRatedMovies() = dispatch(_topRatedMovies) { repo.topRatedMovies(++topRatedMoviesPage) }
-    suspend fun getUpcomingMovies() = dispatch(_upcomingMovies) { repo.upcomingMovies(++upcomingMoviesPage) }
+    suspend fun getPopularMovies() = dispatch(_popularMovies) { loadPopularMoviesUseCase(++popularMoviesPage) }
+    suspend fun getTopRatedMovies() = dispatch(_topRatedMovies) { loadTopRatedMoviesUseCase(++topRatedMoviesPage) }
+    suspend fun getUpcomingMovies() = dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
 
     private suspend fun dispatch(
         mutableLiveData: MutableLiveData<Resource<EnvelopePaginatedMovie>>,

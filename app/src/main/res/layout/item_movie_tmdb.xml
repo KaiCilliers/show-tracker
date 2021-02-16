@@ -17,11 +17,14 @@
   ~ limitations under the License.
   -->
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="128dp"
     android:layout_height="172dp"
     android:layout_marginEnd="@dimen/margin_8"
+    android:clickable="true"
+    android:focusable="true"
+    android:checkable="true"
     app:cardCornerRadius="4dp">
 
     <ImageView
@@ -30,4 +33,4 @@
         android:layout_height="match_parent"
         android:contentDescription="TODO" />
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
