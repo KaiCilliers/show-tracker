@@ -16,14 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
+package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
-import androidx.room.Dao
-import androidx.room.Query
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
 
-@Dao
-abstract class WatchlistDao {
-    @Query("SELECT * FROM tbl_recently_added")
-    abstract suspend fun recentlyAddedMedia(): List<RecentlyAddedMediaEntity>
+interface LoadRecentlyAddedMediaUseCaseContract {
+    suspend operator fun invoke(): Resource<List<RecentlyAddedMediaEntity>>
 }

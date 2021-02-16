@@ -37,7 +37,16 @@ fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
     backdropPath = backdropPath,
     rating = rating,
     releaseDate = releaseDate
+)fun RecentlyAddedMediaEntity.asResponseMovieTMDB() = ResponseMovieTMDB(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
 )
+
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")

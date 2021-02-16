@@ -18,7 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistClient
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
@@ -28,17 +31,16 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class WatchlistRepository(
-    private val local: WatchlistDao,
-    @WatchlistClient private val remote: WatchlistDataSourceContract
+    @WatchlistClient private val remote: WatchlistDataSourceContract,
+    private val dao: WatchlistDao,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : WatchListRepositoryContract {
-    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
-    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
-
-    // TODO
-    //  move to a base class - in a commons package or utils
-    private fun update(block: suspend () -> Unit) {
-        ioScope.launch {
-            block.invoke()
+    override suspend fun recentlyAddedMedia(): Resource<List<RecentlyAddedMediaEntity>> {
+        val list = dao.recentlyAddedMedia()
+        return if (!list.isNullOrEmpty()) {
+            Resource.Success(list)
+        } else {
+            Resource.Error("No media in recently added table")
         }
     }
 }
