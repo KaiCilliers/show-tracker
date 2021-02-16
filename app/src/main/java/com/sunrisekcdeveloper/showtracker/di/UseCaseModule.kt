@@ -22,10 +22,12 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadPopularMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadTopRatedMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadUpcomingMoviesUseCase
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.SaveMediaToWatchListUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,4 +53,10 @@ object UseCaseModule {
         @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
     ): LoadUpcomingMoviesUseCaseContract =
         LoadUpcomingMoviesUseCase(discoveryRepo)
+
+    @Provides
+    fun provideSaveMediaToWatchListUseCase(
+        @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
+    ) : SaveMediaToWatchListUseCaseContract =
+        SaveMediaToWatchListUseCase(discoveryRepo)
 }

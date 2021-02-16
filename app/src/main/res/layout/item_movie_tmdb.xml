@@ -26,11 +26,23 @@
     android:focusable="true"
     android:checkable="true"
     app:cardCornerRadius="4dp">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imgv_item_movie_poster"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="TODO" />
+        android:layout_height="match_parent"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        android:src="@drawable/ic_action_add_white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -16,15 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discover.application
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 
-interface DiscoveryRepositoryContract {
-    suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun saveMediaToWatchList(media: ResponseMovieTMDB)
+interface SaveMediaToWatchListUseCaseContract {
+    suspend operator fun invoke(media: ResponseMovieTMDB)
 }
