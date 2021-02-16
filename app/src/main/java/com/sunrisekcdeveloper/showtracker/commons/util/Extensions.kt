@@ -23,8 +23,21 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
+// Models
+fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
@@ -32,7 +45,7 @@ fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?) = true
 
-        override fun onQueryTextChange(newText: String?): Boolean{
+        override fun onQueryTextChange(newText: String?): Boolean {
             newText?.let {
                 query.value = newText
             }

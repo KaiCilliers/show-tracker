@@ -25,7 +25,9 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import kotlinx.coroutines.*
 
@@ -38,7 +40,8 @@ import kotlinx.coroutines.*
 class DiscoveryViewModel @ViewModelInject constructor(
     private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
-    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
+    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
+    private val saveMediaToWatchListUseCase: SaveMediaToWatchListUseCaseContract
 ) : ViewModel() {
 
     var popularMoviesPage = 1
@@ -65,9 +68,18 @@ class DiscoveryViewModel @ViewModelInject constructor(
         }
     }
 
-    suspend fun getPopularMovies() = dispatch(_popularMovies) { loadPopularMoviesUseCase(++popularMoviesPage) }
-    suspend fun getTopRatedMovies() = dispatch(_topRatedMovies) { loadTopRatedMoviesUseCase(++topRatedMoviesPage) }
-    suspend fun getUpcomingMovies() = dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
+    fun getPopularMovies() = viewModelScope.launch {
+        dispatch(_popularMovies) { loadPopularMoviesUseCase(++popularMoviesPage) }
+    }
+    fun getTopRatedMovies() = viewModelScope.launch {
+        dispatch(_topRatedMovies) { loadTopRatedMoviesUseCase(++topRatedMoviesPage) }
+    }
+    fun getUpcomingMovies() = viewModelScope.launch {
+        dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
+    }
+    fun addMediaToRecentlyAdded(media: ResponseMovieTMDB) = viewModelScope.launch {
+        saveMediaToWatchListUseCase(media)
+    }
 
     private suspend fun dispatch(
         mutableLiveData: MutableLiveData<Resource<EnvelopePaginatedMovie>>,

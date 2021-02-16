@@ -18,12 +18,14 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
+import com.sunrisekcdeveloper.showtracker.commons.util.asRecentlyAddedEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import kotlinx.coroutines.*
 
 class DiscoveryRepository(
@@ -39,4 +41,8 @@ class DiscoveryRepository(
 
     override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> =
         remote.upcomingMovies(page)
+
+    override suspend fun saveMediaToWatchList(media: ResponseMovieTMDB) {
+        dao.insertRecentlyAddedMedia(media.asRecentlyAddedEntity())
+    }
 }

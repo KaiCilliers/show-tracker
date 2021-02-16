@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -97,10 +98,18 @@ class DiscoveryFragment : Fragment() {
         )
     }
 
+    private fun onAddMediaClicked(movie: ResponseMovieTMDB) {
+        viewModel.addMediaToRecentlyAdded(movie)
+    }
+
     private fun setupBinding() {
         popularMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
         topRatedMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
         upcomingMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+
+        popularMovieListAdapter.onAddClicked = { movie -> onAddMediaClicked(movie) }
+        topRatedMovieListAdapter.onAddClicked = { movie -> onAddMediaClicked(movie) }
+        upcomingMovieListAdapter.onAddClicked = { movie -> onAddMediaClicked(movie) }
 
         popularMoviesLayoutManager = LinearLayoutManager(
             requireContext(),

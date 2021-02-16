@@ -26,6 +26,7 @@ import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.models.local.categories.*
 import java.util.Date
@@ -36,9 +37,9 @@ import java.util.Date
         PopularListEntity::class, RecommendedListEntity::class,
         BoxOfficeListEntity::class, AnticipatedListEntity::class,
         MostPlayedListEntity::class, MostWatchedListEntity::class,
-        FeaturedEntity::class
+        FeaturedEntity::class, RecentlyAddedMediaEntity::class
     ],
-    version = 26,
+    version = 27,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)

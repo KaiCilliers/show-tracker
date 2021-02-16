@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 
-interface DiscoveryRepositoryContract {
-    suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun saveMediaToWatchList(media: ResponseMovieTMDB)
+class SaveMediaToWatchListUseCase(
+    @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
+) : SaveMediaToWatchListUseCaseContract {
+    override suspend fun invoke(media: ResponseMovieTMDB) =
+        discoveryRepo.saveMediaToWatchList(media)
 }

@@ -21,11 +21,15 @@ package com.sunrisekcdeveloper.showtracker.features.discover.data.local
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class DiscoveryDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertRecentlyAddedMedia(vararg media: RecentlyAddedMediaEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertMovie(vararg movie: MovieEntity)

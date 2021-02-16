@@ -26,12 +26,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 
 class MovieListAdapter(
     private var movies: MutableList<ResponseMovieTMDB>,
-    var onMovieClick: (movie: ResponseMovieTMDB) -> Unit = {}
+    var onMovieClick: (movie: ResponseMovieTMDB) -> Unit = {},
+    var onAddClicked: (movie: ResponseMovieTMDB) -> Unit = {}
 ) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater
@@ -52,13 +54,15 @@ class MovieListAdapter(
     }
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val poster: ImageView = itemView.findViewById(R.id.imgv_item_movie_poster)
+        private val fab: FloatingActionButton = itemView.findViewById(R.id.fab_add)
 
         fun bind(movie: ResponseMovieTMDB) {
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")
                 .transform(CenterCrop())
                 .into(poster)
-            itemView.setOnClickListener { onMovieClick(movie) }
+            poster.setOnClickListener { onMovieClick(movie) }
+            fab.setOnClickListener { onAddClicked(movie) }
             itemView.setOnLongClickListener {
                 when (itemView) {
                     is MaterialCardView -> {
