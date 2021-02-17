@@ -28,6 +28,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovie
 import com.sunrisekcdeveloper.showtracker.commons.util.asRecentlyAddedEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.asResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
@@ -37,6 +38,8 @@ import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.Rec
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragmentDirections
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -50,7 +53,7 @@ import kotlin.coroutines.CoroutineContext
 class WatchlistFragment : Fragment() {
 
     @Inject
-    lateinit var recentlyAddedMediaListAdapter: MovieListAdapter
+    lateinit var recentlyAddedMediaListAdapter: WatchlistMediaAdapter
     private lateinit var recentlyAddedMediaLayoutManager: LinearLayoutManager
 
     private val viewModel: WatchlistViewModel by viewModels()
@@ -75,22 +78,21 @@ class WatchlistFragment : Fragment() {
         }
     }
 
-    private fun showMovieDetails(responseMovie: ResponseMovieTMDB) {
-        val movie = responseMovie.asRecentlyAddedEntity()
+    private fun showMovieDetails(media: MediaModel) {
         findNavController().navigate(
             WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragmentTMDB(
-                movieBackdrop = movie.backdropPath,
-                moviePoster = movie.posterPath,
-                movieTitle = movie.title,
-                movieRating = movie.rating,
-                movieReleaseDate = movie.releaseDate,
-                movieOverview = movie.overview
+                movieBackdrop = media.backdropPath,
+                moviePoster = media.posterPath,
+                movieTitle = media.title,
+                movieRating = media.rating,
+                movieReleaseDate = media.releaseDate,
+                movieOverview = media.overview
             )
         )
     }
 
     private fun setupBinding() {
-        recentlyAddedMediaListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        recentlyAddedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
         recentlyAddedMediaLayoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
@@ -101,11 +103,11 @@ class WatchlistFragment : Fragment() {
     }
 
     private fun updateList(
-        adapter: MovieListAdapter,
+        adapter: WatchlistMediaAdapter,
         entityList: List<RecentlyAddedMediaEntity>
     ) {
-        val list = entityList.map { it.asResponseMovieTMDB() }
-        adapter.updateMovies(list)
+        val list = entityList.map { it.asDomainMovie() }
+        adapter.updateList(list)
     }
 
     private fun observeViewModel() {

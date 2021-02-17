@@ -25,10 +25,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 // Models
+fun RecentlyAddedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
 fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
     id = id,
     title = title,
