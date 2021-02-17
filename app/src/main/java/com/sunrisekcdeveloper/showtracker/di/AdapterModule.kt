@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,5 +31,10 @@ object AdapterModule {
     @Provides
     fun provideMovieListAdapter(): MovieListAdapter {
         return MovieListAdapter(mutableListOf())
+    }
+
+    @Provides
+    fun providesWatchListMediaAdapter(): WatchlistMediaAdapter {
+        return WatchlistMediaAdapter(mutableListOf())
     }
 }
