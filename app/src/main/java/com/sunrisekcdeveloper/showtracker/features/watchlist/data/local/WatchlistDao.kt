@@ -20,10 +20,22 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 
 @Dao
 abstract class WatchlistDao {
     @Query("SELECT * FROM tbl_watchlist_recently_added")
     abstract suspend fun recentlyAddedMedia(): List<RecentlyAddedMediaEntity>
+
+    @Query("SELECT * FROM tbl_watchlist_in_progress")
+    abstract suspend fun inProgressMedia(): List<InProgressMediaEntity>
+
+    @Query("SELECT * FROM tbl_watchlist_upcoming")
+    abstract suspend fun upcomingMedia(): List<UpcomingMediaEntity>
+
+    @Query("SELECT * FROM tbl_watchlist_completed")
+    abstract suspend fun completedMedia(): List<CompletedMediaEntity>
+
+    @Query("SELECT * FROM tbl_watchlist_anticipated")
+    abstract suspend fun anticipatedMedia(): List<AnticipatedMediaEntity>
 }

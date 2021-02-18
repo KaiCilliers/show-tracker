@@ -23,12 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchListType
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class DetailViewModel @ViewModelInject constructor(
     private val updateWatchListContentsUseCase: UpdateWatchListContentsUseCaseContract

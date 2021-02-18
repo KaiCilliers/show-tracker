@@ -35,6 +35,7 @@ import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMedi
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -48,13 +49,34 @@ class WatchlistFragment : Fragment() {
     lateinit var recentlyAddedMediaListAdapter: WatchlistMediaAdapter
     private lateinit var recentlyAddedMediaLayoutManager: LinearLayoutManager
 
+    @Inject
+    lateinit var inProgressMediaListAdapter: WatchlistMediaAdapter
+    private lateinit var inProgressMediaLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var upComingMediaListAdapter: WatchlistMediaAdapter
+    private lateinit var upComingMediaLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var completedMediaListAdapter: WatchlistMediaAdapter
+    private lateinit var completedMediaLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var anticipatedMediaListAdapter: WatchlistMediaAdapter
+    private lateinit var anticipatedMediaLayoutManager: LinearLayoutManager
+
     private val viewModel: WatchlistViewModel by viewModels()
 
     private lateinit var binding: FragmentWatchlistBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentWatchlistBinding.inflate(inflater)
-        binding.lifecycleOwner = viewLifecycleOwner // This removes observers when fragment is destroyed
+        binding.lifecycleOwner =
+            viewLifecycleOwner // This removes observers when fragment is destroyed
         setupBinding()
         setupFilters()
         observeViewModel()
@@ -70,7 +92,7 @@ class WatchlistFragment : Fragment() {
         }
     }
 
-    private fun showMovieDetails(media: MediaModel) {
+    private fun showMovieDetails(media: MediaModel, watchListType: String) {
         findNavController().navigate(
             WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragmentTMDB(
                 movieBackdrop = media.backdropPath,
@@ -79,39 +101,135 @@ class WatchlistFragment : Fragment() {
                 movieRating = media.rating,
                 movieReleaseDate = media.releaseDate,
                 movieOverview = media.overview,
-                watchlistType = "recently",
+                watchlistType = watchListType,
                 movieId = media.id
             )
         )
     }
 
     private fun setupBinding() {
-        recentlyAddedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
+        recentlyAddedMediaListAdapter.onMediaClicked =
+            { movie -> showMovieDetails(movie, "recently") }
+        inProgressMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie, "progress") }
+        upComingMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie, "upcoming") }
+        completedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie, "complete") }
+        anticipatedMediaListAdapter.onMediaClicked =
+            { movie -> showMovieDetails(movie, "anticipated") }
+
         recentlyAddedMediaLayoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        binding.rcFeaturedCategoriesWatchlist.layoutManager = recentlyAddedMediaLayoutManager
-        binding.rcFeaturedCategoriesWatchlist.adapter = recentlyAddedMediaListAdapter
+        inProgressMediaLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        upComingMediaLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        completedMediaLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        anticipatedMediaLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
+        binding.rcRecentlyAdded.layoutManager = recentlyAddedMediaLayoutManager
+        binding.rcRecentlyAdded.adapter = recentlyAddedMediaListAdapter
+
+        binding.rcInProgress.layoutManager = inProgressMediaLayoutManager
+        binding.rcInProgress.adapter = inProgressMediaListAdapter
+
+        binding.rcUpcoming.layoutManager = upComingMediaLayoutManager
+        binding.rcUpcoming.adapter = upComingMediaListAdapter
+
+        binding.rcCompleted.layoutManager = completedMediaLayoutManager
+        binding.rcCompleted.adapter = completedMediaListAdapter
+
+        binding.rcAnticipated.layoutManager = anticipatedMediaLayoutManager
+        binding.rcAnticipated.adapter = anticipatedMediaListAdapter
     }
 
     private fun updateList(
         adapter: WatchlistMediaAdapter,
-        entityList: List<RecentlyAddedMediaEntity>
+        list: List<MediaModel>
     ) {
-        val list = entityList.map { it.asDomainMovie() }
         adapter.updateList(list)
     }
 
     private fun observeViewModel() {
-        viewModel.recentlyAddedMovies.subscribe(viewLifecycleOwner) {
+        Timber.d("yes")
+        viewModel.recentlyAddedMedia.subscribe(viewLifecycleOwner) {
             when (it) {
-                is Resource.Loading -> { }
-                is Resource.Success -> {
-                    updateList(recentlyAddedMediaListAdapter, it.data)
+                is Resource.Loading -> {
                 }
-                is Resource.Error -> { }
+                is Resource.Success -> {
+                    updateList(recentlyAddedMediaListAdapter, it.data.map { entity ->
+                        entity.asDomainMovie()
+                    })
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.inProgressMedia.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(inProgressMediaListAdapter, it.data.map { entity ->
+                        entity.asDomainMovie()
+                    })
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.upcomingMedia.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(upComingMediaListAdapter, it.data.map { entity ->
+                        entity.asDomainMovie()
+                    })
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.completedMedia.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(completedMediaListAdapter, it.data.map { entity ->
+                        entity.asDomainMovie()
+                    })
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.anticipatedMedia.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(anticipatedMediaListAdapter, it.data.map { entity ->
+                        entity.asDomainMovie()
+                    })
+                }
+                is Resource.Error -> {
+                }
             }
         }
     }

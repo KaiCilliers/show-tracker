@@ -40,6 +40,42 @@ fun RecentlyAddedMediaEntity.asDomainMovie() = MediaModel(
     rating = rating,
     releaseDate = releaseDate
 )
+fun InProgressMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun UpcomingMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun CompletedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun AnticipatedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
 fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
     id = id,
     title = title,

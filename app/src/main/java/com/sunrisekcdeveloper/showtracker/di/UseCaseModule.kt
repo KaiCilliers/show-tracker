@@ -33,9 +33,9 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadP
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadTopRatedMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadUpcomingMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.SaveMediaToWatchListUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadRecentlyAddedMediaUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.LoadRecentlyAddedMediaUseCase
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -74,6 +74,31 @@ object UseCaseModule {
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
     ) : LoadRecentlyAddedMediaUseCaseContract =
         LoadRecentlyAddedMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadInProgressMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadInProgressMediaUseCaseContract =
+        LoadInProgressMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadUpcomingMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadUpcomingMediaUseCaseContract =
+        LoadUpcomingMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadCompletedMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadCompletedMediaUseCaseContract =
+        LoadCompletedMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadAnticipatedMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadAnticipatedMediaUseCaseContract =
+        LoadAnticipatedMediaUseCase(watchlistRepo)
+
 
     // Detail
     @Provides

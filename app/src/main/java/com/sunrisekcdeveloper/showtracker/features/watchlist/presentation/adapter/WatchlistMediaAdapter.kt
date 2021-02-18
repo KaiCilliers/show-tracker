@@ -33,7 +33,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaM
 class WatchlistMediaAdapter(
     private var media: MutableList<MediaModel>,
     var onMediaClicked: (movie: MediaModel) -> Unit = {}
-): RecyclerView.Adapter<WatchlistMediaAdapter.MediaViewHolder>() {
+) : RecyclerView.Adapter<WatchlistMediaAdapter.MediaViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -47,12 +47,11 @@ class WatchlistMediaAdapter(
         holder.bind(media[position])
     }
 
+    // todo impl DiffUtil
     fun updateList(media: List<MediaModel>) {
+        this.media.clear()
         this.media.addAll(media)
-        notifyItemRangeInserted(
-            this.media.size,
-            media.size - 1
-        )
+        notifyDataSetChanged()
     }
 
     inner class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -72,7 +71,9 @@ class WatchlistMediaAdapter(
                         itemView.setChecked(!itemView.isChecked)
                         true
                     }
-                    else -> { false }
+                    else -> {
+                        false
+                    }
                 }
             }
         }
