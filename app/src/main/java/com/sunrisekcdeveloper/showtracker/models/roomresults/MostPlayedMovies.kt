@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.models.roomresults
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.models.local.categories.MostPlayedListEntity
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 data class MostPlayedMovies(
     @Embedded val data: MostPlayedListEntity,
@@ -29,5 +29,5 @@ data class MostPlayedMovies(
         parentColumn = "fk_played_media_slug",
         entityColumn = "movie_slug"
     )
-    val movie: MovieEntity?
+    val movie: MediaEntity?
 )

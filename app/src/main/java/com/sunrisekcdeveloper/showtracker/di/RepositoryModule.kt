@@ -18,24 +18,19 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.di.LocalModule.DiscoveryLocal
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailDao
-import com.sunrisekcdeveloper.showtracker.features.detail.client.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepository
-import com.sunrisekcdeveloper.showtracker.features.detail.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.client.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepository
-import com.sunrisekcdeveloper.showtracker.features.discover.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.local.DiscoveryLocalDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchDao
-import com.sunrisekcdeveloper.showtracker.features.search.client.SearchDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.search.SearchRepository
-import com.sunrisekcdeveloper.showtracker.features.search.SearchRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistDao
-import com.sunrisekcdeveloper.showtracker.features.watchlist.client.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistRepository
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.DetailRepository
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.data.repository.DiscoveryRepository
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,15 +40,11 @@ import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object RepositoryModule {
+object  RepositoryModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryRepo
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchRepo
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -67,19 +58,10 @@ object RepositoryModule {
     @DiscoveryRepo
     @Provides
     fun provideDiscoveryRepository(
-        @DiscoveryLocal local: DiscoveryLocalDataSourceContract,
+        dao: DiscoveryDao,
         @DiscoveryClient remote: DiscoveryRemoteDataSourceContract
     ): DiscoveryRepositoryContract =
-        DiscoveryRepository(local, remote)
-
-    @ActivityRetainedScoped
-    @SearchRepo
-    @Provides
-    fun provideSearchRepository(
-        dao: SearchDao,
-        @NetworkModule.SearchClient remote: SearchDataSourceContract
-    ): SearchRepositoryContract =
-        SearchRepository(dao, remote)
+        DiscoveryRepository(remote, dao)
 
     @ActivityRetainedScoped
     @WatchlistRepo
@@ -88,7 +70,7 @@ object RepositoryModule {
         dao: WatchlistDao,
         @NetworkModule.WatchlistClient remote: WatchlistDataSourceContract
     ): WatchListRepositoryContract =
-        WatchlistRepository(dao, remote)
+        WatchlistRepository(remote, dao)
 
     @ActivityRetainedScoped
     @DetailRepo
@@ -97,5 +79,5 @@ object RepositoryModule {
         dao: DetailDao,
         @NetworkModule.DetailClient remote: DetailDataSourceContract
     ): DetailRepositoryContract =
-        DetailRepository(dao, remote)
+        DetailRepository(remote, dao)
 }

@@ -25,7 +25,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragment
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith

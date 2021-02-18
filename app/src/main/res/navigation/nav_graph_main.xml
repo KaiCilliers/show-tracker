@@ -20,48 +20,60 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph_main"
-    app:startDestination="@id/discover_fragment_dest">
+    app:startDestination="@id/watchlist_fragment_dest">
 
     <fragment
         android:id="@+id/discover_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discover.ui.DiscoveryFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragment"
         android:label="DiscoverFragment"
         tools:layout="@layout/fragment_discovery">
         <action
-            android:id="@+id/action_discover_fragment_dest_to_detailFragment"
-            app:destination="@id/detail_fragment_dest" />
+            android:id="@+id/action_discover_fragment_dest_to_detailFragmentTMDB"
+            app:destination="@id/detailFragmentTMDB" />
     </fragment>
     <fragment
         android:id="@+id/watchlist_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.ui.WatchlistFragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui.WatchlistFragment"
         android:label="WatchlistFragment"
         tools:layout="@layout/fragment_watchlist">
         <action
-            android:id="@+id/action_watchlist_fragment_dest_to_detailFragment"
-            app:destination="@id/detail_fragment_dest" />
+            android:id="@+id/action_watchlist_fragment_dest_to_detailFragmentTMDB"
+            app:destination="@id/detailFragmentTMDB" />
     </fragment>
     <fragment
-        android:id="@+id/search_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.search.ui.SearchFragment"
-        android:label="SearchFragment"
-        tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/action_search_fragment_dest_to_detailFragment"
-            app:destination="@id/detail_fragment_dest" />
-    </fragment>
+        android:id="@+id/statistics_fragment_dest"
+        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.presentation.ui.StatisticsFragment"
+        android:label="StatisticsFragment"
+        tools:layout="@layout/fragment_statistics" />
     <fragment
-        android:id="@+id/detail_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.ui.DetailFragment"
-        android:label="DetailFragment"
+        android:id="@+id/detailFragmentTMDB"
+        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.ui.MovieDetailFragment"
+        android:label="DetailFragmentTMDB"
         tools:layout="@layout/fragment_movie_detail">
         <argument
-            android:name="mediaSlug"
+            android:name="movieBackdrop"
+            app:argType="string" />
+        <argument
+            android:name="moviePoster"
+            app:argType="string" />
+        <argument
+            android:name="movieTitle"
+            app:argType="string" />
+        <argument
+            android:name="movieRating"
+            app:argType="float" />
+        <argument
+            android:name="movieReleaseDate"
+            app:argType="string" />
+        <argument
+            android:name="movieOverview"
+            app:argType="string" />
+        <argument
+            android:name="watchlistType"
             app:argType="string"
-            android:defaultValue="defaultvalue" />
-        <action
-            android:id="@+id/action_detail_fragment_dest_self"
-            app:destination="@id/detail_fragment_dest"
-            app:popUpTo="@id/detail_fragment_dest"
-            app:popUpToInclusive="true" />
+            android:defaultValue="none" />
+        <argument
+            android:name="movieId"
+            app:argType="long" />
     </fragment>
 </navigation>

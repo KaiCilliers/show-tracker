@@ -25,9 +25,6 @@
         <variable
             name="movie"
             type="com.sunrisekcdeveloper.showtracker.models.roomresults.Movie" />
-        <variable
-            name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,11 +52,18 @@
             android:padding="2dp"
             android:src="@drawable/test"
             android:scaleType="centerCrop"
-            android:onClick="@{() -> clickListener.onClick(movie)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:src="@drawable/test" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/imgv_movie_medium_poster"
+            app:layout_constraintEnd_toEndOf="@+id/tv_temp_movie_title_medium"
+            app:srcCompat="@android:drawable/ic_input_add" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

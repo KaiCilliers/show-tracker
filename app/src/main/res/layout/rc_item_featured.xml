@@ -24,10 +24,7 @@
     <data>
         <variable
             name="featuredList"
-            type="com.sunrisekcdeveloper.showtracker.models.roomresults.FeaturedList" />
-        <variable
-            name="clickListener"
-            type="com.sunrisekcdeveloper.showtracker.commons.components.ClickActionContract" />
+            type="com.sunrisekcdeveloper.showtracker.models.FeaturedList" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,6 +41,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="New Releases" />
+
+        <ImageView
+            android:id="@+id/imgv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_8"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_heading"
+            app:srcCompat="@drawable/ic_baseline_share_24" />
 
         <!--TODO bottom nav bar covers the bottom of the RC list data -->
         <!-- TODO long press for toast with movie title (ideally posters should contain movie title)-->

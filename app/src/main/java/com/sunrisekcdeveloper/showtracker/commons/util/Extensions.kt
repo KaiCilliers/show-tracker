@@ -23,8 +23,134 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
+// Models
+fun RecentlyAddedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun InProgressMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun UpcomingMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun CompletedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun AnticipatedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun ResponseMovieTMDB.asMediaEntity(type: String) = MediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath ?: "",
+    backdropPath = backdropPath ?: "",
+    rating = rating,
+    releaseDate = releaseDate,
+    type = type
+)
+fun MediaEntity.asRecentlyAddedMedia() = RecentlyAddedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asCompletedMediaEntity() = CompletedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asUpcomingMediaEntity() = UpcomingMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asAnticipatedMediaEntity() = AnticipatedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asInProgressMediaEntity() = InProgressMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+
+fun RecentlyAddedMediaEntity.asResponseMovieTMDB() = ResponseMovieTMDB(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
@@ -32,7 +158,7 @@ fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?) = true
 
-        override fun onQueryTextChange(newText: String?): Boolean{
+        override fun onQueryTextChange(newText: String?): Boolean {
             newText?.let {
                 query.value = newText
             }
@@ -61,18 +187,3 @@ inline fun View.click(crossinline action: () -> Unit) = setOnClickListener { act
  */
 inline fun <T> LiveData<T>.subscribe(owner: LifecycleOwner, crossinline action: (T) -> Unit) =
     observe(owner, Observer { action(it) })
-
-// reference https://proandroiddev.com/functional-data-mappers-4daf495192ed
-inline fun <I, O> mapList(input: List<I>, mapSingle: (I) -> O): List<O> {
-    return input.map { mapSingle(it) }
-}
-
-// Nullable to Non-nullable
-inline fun <I, O> mapNullInputList(input: List<I>?, mapSingle: (I) -> O): List<O> {
-    return input?.map { mapSingle(it) } ?: emptyList()
-}
-
-// Non-nullable to Nullable
-inline fun <I, O> mapNullOutputList(input: List<I>, mapSingle: (I) -> O): List<O>? {
-    return if (input.isEmpty()) null else input.map { mapSingle(it) }
-}

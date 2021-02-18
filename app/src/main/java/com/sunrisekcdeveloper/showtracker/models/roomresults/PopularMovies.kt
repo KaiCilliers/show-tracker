@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.models.roomresults
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.models.local.categories.PopularListEntity
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 data class PopularMovies(
     @Embedded val data: PopularListEntity,
@@ -29,5 +29,5 @@ data class PopularMovies(
         parentColumn = "fk_popular_media_slug",
         entityColumn = "movie_slug"
     )
-    val movie: MovieEntity?
+    val movie: MediaEntity?
 )

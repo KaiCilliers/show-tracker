@@ -18,49 +18,23 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.features.detail.adapters.MediumPosterAdapterDetail
-import com.sunrisekcdeveloper.showtracker.features.search.adapters.MediumPosterAdapter
-import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.MovieSummaryAdapter
-import com.sunrisekcdeveloper.showtracker.features.watchlist.adapters.SmallPosterAdapter
-import com.sunrisekcdeveloper.showtracker.features.discover.adapters.SuggestionListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
-import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
-
-    @ActivityScoped
     @Provides
-    fun provideMediumPosterAdapterSearch(): MediumPosterAdapter {
-        return MediumPosterAdapter()
+    fun provideMovieListAdapter(): MovieListAdapter {
+        return MovieListAdapter(mutableListOf())
     }
 
-    @ActivityScoped
     @Provides
-    fun provideMediumPosterAdapterDetail(): MediumPosterAdapterDetail {
-        return MediumPosterAdapterDetail()
-    }
-
-    @ActivityScoped
-    @Provides
-    fun provideSmallPosterAdapter(): SmallPosterAdapter {
-        return SmallPosterAdapter()
-    }
-
-    @ActivityScoped
-    @Provides
-    fun provideMovieSummaryAdapter(): MovieSummaryAdapter {
-        return MovieSummaryAdapter()
-    }
-
-    @ActivityScoped
-    @Provides
-    fun provideSuggestionListAdapter(): SuggestionListAdapter {
-        return SuggestionListAdapter()
+    fun providesWatchListMediaAdapter(): WatchlistMediaAdapter {
+        return WatchlistMediaAdapter(mutableListOf())
     }
 }
