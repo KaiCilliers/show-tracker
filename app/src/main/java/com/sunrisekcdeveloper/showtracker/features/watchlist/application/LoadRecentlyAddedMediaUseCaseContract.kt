@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 
 interface LoadRecentlyAddedMediaUseCaseContract {
     suspend operator fun invoke(): Resource<List<RecentlyAddedMediaEntity>>

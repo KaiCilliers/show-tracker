@@ -68,5 +68,12 @@
         <argument
             android:name="movieOverview"
             app:argType="string" />
+        <argument
+            android:name="watchlistType"
+            app:argType="string"
+            android:defaultValue="none" />
+        <argument
+            android:name="movieId"
+            app:argType="long" />
     </fragment>
 </navigation>

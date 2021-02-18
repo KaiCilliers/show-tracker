@@ -18,8 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetailRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.UpdateWatchListContentsUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
@@ -29,9 +33,9 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadP
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadTopRatedMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadUpcomingMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.SaveMediaToWatchListUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadRecentlyAddedMediaUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.LoadRecentlyAddedMediaUseCase
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,4 +74,36 @@ object UseCaseModule {
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
     ) : LoadRecentlyAddedMediaUseCaseContract =
         LoadRecentlyAddedMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadInProgressMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadInProgressMediaUseCaseContract =
+        LoadInProgressMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadUpcomingMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadUpcomingMediaUseCaseContract =
+        LoadUpcomingMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadCompletedMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadCompletedMediaUseCaseContract =
+        LoadCompletedMediaUseCase(watchlistRepo)
+
+    @Provides
+    fun provideLoadAnticipatedMediaUseCase(
+        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
+    ) : LoadAnticipatedMediaUseCaseContract =
+        LoadAnticipatedMediaUseCase(watchlistRepo)
+
+
+    // Detail
+    @Provides
+    fun providesUpdateWatchListContentsUseCase(
+        @DetailRepo detailRepo: DetailRepositoryContract
+    ) : UpdateWatchListContentsUseCaseContract =
+        UpdateWatchListContentsUseCase(detailRepo)
 }

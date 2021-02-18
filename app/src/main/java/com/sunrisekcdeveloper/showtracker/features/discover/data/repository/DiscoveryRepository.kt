@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
+import com.sunrisekcdeveloper.showtracker.commons.util.asMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.asRecentlyAddedEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
@@ -27,22 +28,40 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.Di
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 class DiscoveryRepository(
     @DiscoveryClient private val remote: DiscoveryRemoteDataSourceContract,
     private val dao: DiscoveryDao,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DiscoveryRepositoryContract {
-    override suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie> =
-        remote.popularMovies(page)
+    override suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie> {
+        val response = remote.popularMovies(page)
+        saveMedia(response)
+        return response
+    }
 
-    override suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie> =
-        remote.topRatedMovies(page)
+    override suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie> {
+        val response = remote.topRatedMovies(page)
+        saveMedia(response)
+        return response
+    }
 
-    override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> =
-        remote.upcomingMovies(page)
+    override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> {
+        val response = remote.upcomingMovies(page)
+        saveMedia(response)
+        return response
+    }
 
     override suspend fun saveMediaToWatchList(media: ResponseMovieTMDB) {
         dao.insertRecentlyAddedMedia(media.asRecentlyAddedEntity())
+    }
+
+    private suspend fun saveMedia(input: Resource<EnvelopePaginatedMovie>) {
+        if (input is Resource.Success) {
+            input.data.movies.forEach {
+                dao.insertMedia(it.asMediaEntity("movie"))
+            }
+        }
     }
 }

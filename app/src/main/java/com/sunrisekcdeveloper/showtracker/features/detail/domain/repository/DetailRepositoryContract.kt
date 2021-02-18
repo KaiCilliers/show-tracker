@@ -18,10 +18,22 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.models.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 interface DetailRepositoryContract {
-    suspend fun movieDetails(slug: String, extended: String = ""): DetailedMovie
-    suspend fun relatedMovies(slug: String): List<Movie>
+
+    suspend fun media(id: Long): MediaEntity
+
+    suspend fun removeMediaFromRecentlyAdded(id: Long)
+    suspend fun removeMediaFromUpcoming(id: Long)
+    suspend fun removeMediaFromCompleted(id: Long)
+    suspend fun removeMediaFromAnticipated(id: Long)
+    suspend fun removeMediaFromInProgress(id: Long)
+
+    suspend fun addMediaToRecentlyAdded(media: RecentlyAddedMediaEntity)
+    suspend fun addMediaToUpcoming(media: UpcomingMediaEntity)
+    suspend fun addMediaToCompleted(media: CompletedMediaEntity)
+    suspend fun addMediaToAnticipated(media: AnticipatedMediaEntity)
+    suspend fun addMediaToInProgress(media: InProgressMediaEntity)
 }

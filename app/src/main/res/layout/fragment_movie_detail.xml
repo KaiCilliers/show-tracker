@@ -16,7 +16,9 @@
   ~ limitations under the License.
   -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -87,18 +89,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="movie_rating,movie_release_date" />
-
-            <TextView
-                android:id="@+id/movie_overview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_poster_title_barrier" />
+                app:constraint_referenced_ids="movie_rating,movie_release_date"
+                tools:layout_editor_absoluteY="403dp" />
 
             <RatingBar
                 android:id="@+id/movie_rating"
@@ -109,6 +101,81 @@
                 app:layout_constraintEnd_toEndOf="@+id/movie_poster_card"
                 app:layout_constraintStart_toStartOf="@+id/movie_poster_card"
                 app:layout_constraintTop_toBottomOf="@+id/movie_poster_card" />
+
+            <HorizontalScrollView
+                android:id="@+id/hsv_chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_poster_title_barrier">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_choice_save_in_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:checkedChip="@id/chip_choice_none"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_choice_none"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/none" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_choice_recently_added"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recently_added" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_choice_in_progress"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/in_progress" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_choice_upcoming"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/upcoming" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_choice_completed"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/completed" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_choice_anticipated"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/anticipated" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/movie_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hsv_chip_group" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

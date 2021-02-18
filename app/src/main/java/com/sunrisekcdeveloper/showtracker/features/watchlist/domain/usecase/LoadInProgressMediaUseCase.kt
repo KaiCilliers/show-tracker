@@ -18,15 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
+import com.sunrisekcdeveloper.showtracker.commons.models.local.InProgressMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
-import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadRecentlyAddedMediaUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadInProgressMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 
-class LoadRecentlyAddedMediaUseCase(
-    @WatchlistRepo private val watchlistRepo: WatchListRepositoryContract
-) : LoadRecentlyAddedMediaUseCaseContract {
-    override suspend fun invoke(): Resource<List<RecentlyAddedMediaEntity>> =
-        watchlistRepo.recentlyAddedMedia()
+class LoadInProgressMediaUseCase(
+    @WatchlistRepo private val watchListRepo: WatchListRepositoryContract
+) : LoadInProgressMediaUseCaseContract {
+    override suspend fun invoke(): Resource<List<InProgressMediaEntity>> =
+        watchListRepo.inProgressMedia()
 }

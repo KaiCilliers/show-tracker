@@ -18,66 +18,53 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetailClient
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.models.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import kotlinx.coroutines.*
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 class DetailRepository(
-    private val local: DetailDao,
-    @DetailClient private val remote: DetailDataSourceContract
+    @DetailClient private val remote: DetailDataSourceContract,
+    private val dao: DetailDao
 ) : DetailRepositoryContract {
 
-    private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
-    private val cpuScope = CoroutineScope(Job() + Dispatchers.Default)
+    override suspend fun media(id: Long): MediaEntity = dao.media(id)
 
-    // TODO
-    //  move to a base class - in a commons package or utils
-    private fun update(block: suspend () -> Unit) {
-        ioScope.launch {
-            block.invoke()
-        }
+    override suspend fun removeMediaFromRecentlyAdded(id: Long) {
+        dao.removeRecentlyAddedMedia(id)
     }
 
-    override suspend fun relatedMovies(slug: String): List<Movie> {
-        val response = withContext(ioScope.coroutineContext) { remote.relatedMovies(slug) }
-        var list: List<Movie> = listOf()
-        if (response is Resource.Success) {
-            val res = withContext(cpuScope.coroutineContext) {
-                return@withContext response.data.map {
-                    val movie = it.asDomain()
-                    update { local.insertMovie(it.asEntity()) }
-                    withContext(ioScope.coroutineContext) {
-                        val poster = remote.poster("${it.identifiers.tmdb}")
-                        if (poster is Resource.Success) {
-                            movie.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-                        }
-                    }
-                    movie
-                }
-            }
-            list = res
-        }
-        return list
+    override suspend fun removeMediaFromUpcoming(id: Long) {
+        dao.removeUpcomingMedia(id)
     }
 
-    override suspend fun movieDetails(slug: String, extended: String): DetailedMovie {
-        val response = withContext(ioScope.coroutineContext) { remote.detailedMovie(slug, extended) }
-        var entity: DetailedMovie = DetailedMovie(
-            Movie("", ""), "", "", "", "", "", ""
-        )
-        if (response is Resource.Success) {
-            entity = response.data.asDomain()
-            val poster = remote.poster("${response.data.identifiers.tmdb}")
-            if (poster is Resource.Success) {
-                entity.basics.posterUrl = poster.data.posters?.get(0)?.url ?: ""
-            }
-        }
-        return entity
+    override suspend fun removeMediaFromCompleted(id: Long) {
+        dao.removeCompletedMedia(id)
     }
+
+    override suspend fun removeMediaFromAnticipated(id: Long) {
+        dao.removeAnticipatedMedia(id)
+    }
+
+    override suspend fun removeMediaFromInProgress(id: Long) {
+        dao.removeInProgressMedia(id)
+    }
+
+    override suspend fun addMediaToRecentlyAdded(media: RecentlyAddedMediaEntity) =
+        dao.insertRecentlyAddedMedia(media)
+
+    override suspend fun addMediaToUpcoming(media: UpcomingMediaEntity) =
+        dao.insertUpcomingMedia(media)
+
+    override suspend fun addMediaToCompleted(media: CompletedMediaEntity) =
+        dao.insertCompletedMedia(media)
+
+    override suspend fun addMediaToAnticipated(media: AnticipatedMediaEntity) =
+        dao.insertAnticipatedMedia(media)
+
+    override suspend fun addMediaToInProgress(media: InProgressMediaEntity) =
+        dao.insertInProgressMedia(media)
 }
 

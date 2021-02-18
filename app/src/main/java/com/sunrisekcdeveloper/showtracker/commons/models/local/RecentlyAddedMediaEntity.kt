@@ -16,15 +16,23 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
+package com.sunrisekcdeveloper.showtracker.commons.models.local
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-interface WatchListRepositoryContract {
-    suspend fun recentlyAddedMedia(): Resource<List<RecentlyAddedMediaEntity>>
-    suspend fun inProgressMedia(): Resource<List<InProgressMediaEntity>>
-    suspend fun upcomingMedia(): Resource<List<UpcomingMediaEntity>>
-    suspend fun completedMedia(): Resource<List<CompletedMediaEntity>>
-    suspend fun anticipatedMedia(): Resource<List<AnticipatedMediaEntity>>
-}
+@Entity(tableName = "tbl_watchlist_recently_added")
+data class RecentlyAddedMediaEntity(
+    @PrimaryKey
+    val id: Long,
+    val title: String,
+    val overview: String,
+    @ColumnInfo(name = "poster_path")
+    val posterPath: String,
+    @ColumnInfo(name = "backdrop_path")
+    val backdropPath: String,
+    val rating: Float,
+    @ColumnInfo(name = "release_date")
+    val releaseDate: String
+)

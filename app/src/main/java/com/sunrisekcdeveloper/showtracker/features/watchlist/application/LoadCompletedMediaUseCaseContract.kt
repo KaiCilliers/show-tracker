@@ -16,15 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.commons.models.local.CompletedMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 
-interface WatchListRepositoryContract {
-    suspend fun recentlyAddedMedia(): Resource<List<RecentlyAddedMediaEntity>>
-    suspend fun inProgressMedia(): Resource<List<InProgressMediaEntity>>
-    suspend fun upcomingMedia(): Resource<List<UpcomingMediaEntity>>
-    suspend fun completedMedia(): Resource<List<CompletedMediaEntity>>
-    suspend fun anticipatedMedia(): Resource<List<AnticipatedMediaEntity>>
+interface LoadCompletedMediaUseCaseContract {
+    suspend operator fun invoke(): Resource<List<CompletedMediaEntity>>
 }

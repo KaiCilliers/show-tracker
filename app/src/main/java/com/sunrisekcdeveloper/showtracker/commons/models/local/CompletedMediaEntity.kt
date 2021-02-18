@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.data.local.model
+package com.sunrisekcdeveloper.showtracker.commons.models.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_recently_added")
-data class RecentlyAddedMediaEntity(
+@Entity(tableName = "tbl_watchlist_completed")
+data class CompletedMediaEntity(
     @PrimaryKey
     val id: Long,
     val title: String,

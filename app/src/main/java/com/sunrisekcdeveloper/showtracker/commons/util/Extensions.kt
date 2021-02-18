@@ -23,14 +23,51 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 // Models
 fun RecentlyAddedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun InProgressMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun UpcomingMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun CompletedMediaEntity.asDomainMovie() = MediaModel(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun AnticipatedMediaEntity.asDomainMovie() = MediaModel(
     id = id,
     title = title,
     overview = overview,
@@ -47,7 +84,64 @@ fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
     backdropPath = backdropPath,
     rating = rating,
     releaseDate = releaseDate
-)fun RecentlyAddedMediaEntity.asResponseMovieTMDB() = ResponseMovieTMDB(
+)
+fun ResponseMovieTMDB.asMediaEntity(type: String) = MediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath ?: "",
+    backdropPath = backdropPath ?: "",
+    rating = rating,
+    releaseDate = releaseDate,
+    type = type
+)
+fun MediaEntity.asRecentlyAddedMedia() = RecentlyAddedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asCompletedMediaEntity() = CompletedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asUpcomingMediaEntity() = UpcomingMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asAnticipatedMediaEntity() = AnticipatedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asInProgressMediaEntity() = InProgressMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+
+fun RecentlyAddedMediaEntity.asResponseMovieTMDB() = ResponseMovieTMDB(
     id = id,
     title = title,
     overview = overview,

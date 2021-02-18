@@ -93,7 +93,8 @@ class DiscoveryFragment : Fragment() {
                 movieTitle = movie.title,
                 movieRating = movie.rating,
                 movieReleaseDate = movie.releaseDate,
-                movieOverview = movie.overview
+                movieOverview = movie.overview,
+                movieId = movie.id
             )
         )
     }
