@@ -26,4 +26,10 @@
     <string name="showtracker_label">ShowTracker</string>
     <string name="recently_added_heading">Recently Added</string>
     <string name="recently_added_sub_heading">Movies and Shows that you recently added to your watchlist</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="remove">Remove</string>
+    <string name="in_progress">In Progress</string>
+    <string name="completed">Completed</string>
+    <string name="anticipated">Anticipated</string>
+    <string name="none">None</string>
 </resources>
