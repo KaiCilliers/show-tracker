@@ -118,7 +118,7 @@ class MovieDetailFragment : Fragment() {
         } else if (list == "upcoming") {
             binding.chipChoiceUpcoming.isChecked = true
             selectedChip = binding.chipChoiceUpcoming
-        } else if (list == "completed") {
+        } else if (list == "complete") {
             binding.chipChoiceCompleted.isChecked = true
             selectedChip = binding.chipChoiceCompleted
         } else if (list == "anticipated") {

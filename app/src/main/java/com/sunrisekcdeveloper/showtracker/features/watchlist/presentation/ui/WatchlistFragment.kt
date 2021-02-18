@@ -22,11 +22,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovie
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
@@ -165,18 +167,47 @@ class WatchlistFragment : Fragment() {
         adapter.updateList(list)
     }
 
+    private fun hideListCategory(
+        header: TextView,
+        subHeader: TextView,
+        list: RecyclerView
+    ) {
+        header.visibility = View.GONE
+        subHeader.visibility = View.GONE
+        list.visibility = View.GONE
+    }
+
+    private fun showListCategory(
+        header: TextView,
+        subHeader: TextView,
+        list: RecyclerView
+    ) {
+        header.visibility = View.VISIBLE
+        subHeader.visibility = View.VISIBLE
+        list.visibility = View.VISIBLE
+    }
+
     private fun observeViewModel() {
-        Timber.d("yes")
         viewModel.recentlyAddedMedia.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    showListCategory(
+                        binding.tvHeadingRecentlyAdded,
+                        binding.tvSubHeadingRecentlyAdded,
+                        binding.rcRecentlyAdded
+                    )
                     updateList(recentlyAddedMediaListAdapter, it.data.map { entity ->
                         entity.asDomainMovie()
                     })
                 }
                 is Resource.Error -> {
+                    hideListCategory(
+                        binding.tvHeadingRecentlyAdded,
+                        binding.tvSubHeadingRecentlyAdded,
+                        binding.rcRecentlyAdded
+                    )
                 }
             }
         }
@@ -185,11 +216,21 @@ class WatchlistFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    showListCategory(
+                        binding.tvHeadingInProgress,
+                        binding.tvSubHeadingInProgress,
+                        binding.rcInProgress
+                    )
                     updateList(inProgressMediaListAdapter, it.data.map { entity ->
                         entity.asDomainMovie()
                     })
                 }
                 is Resource.Error -> {
+                    hideListCategory(
+                        binding.tvHeadingInProgress,
+                        binding.tvSubHeadingInProgress,
+                        binding.rcInProgress
+                    )
                 }
             }
         }
@@ -198,11 +239,21 @@ class WatchlistFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    showListCategory(
+                        binding.tvHeadingUpcoming,
+                        binding.tvSubHeadingUpcoming,
+                        binding.rcUpcoming
+                    )
                     updateList(upComingMediaListAdapter, it.data.map { entity ->
                         entity.asDomainMovie()
                     })
                 }
                 is Resource.Error -> {
+                    hideListCategory(
+                        binding.tvHeadingUpcoming,
+                        binding.tvSubHeadingUpcoming,
+                        binding.rcUpcoming
+                    )
                 }
             }
         }
@@ -211,11 +262,21 @@ class WatchlistFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    showListCategory(
+                        binding.tvHeadingCompleted,
+                        binding.tvSubHeadingCompleted,
+                        binding.rcCompleted
+                    )
                     updateList(completedMediaListAdapter, it.data.map { entity ->
                         entity.asDomainMovie()
                     })
                 }
                 is Resource.Error -> {
+                    hideListCategory(
+                        binding.tvHeadingCompleted,
+                        binding.tvSubHeadingCompleted,
+                        binding.rcCompleted
+                    )
                 }
             }
         }
@@ -224,11 +285,21 @@ class WatchlistFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    showListCategory(
+                        binding.tvHeadingAnticipated,
+                        binding.tvSubHeadingAnticipated,
+                        binding.rcAnticipated
+                    )
                     updateList(anticipatedMediaListAdapter, it.data.map { entity ->
                         entity.asDomainMovie()
                     })
                 }
                 is Resource.Error -> {
+                    hideListCategory(
+                        binding.tvHeadingAnticipated,
+                        binding.tvSubHeadingAnticipated,
+                        binding.rcAnticipated
+                    )
                 }
             }
         }
