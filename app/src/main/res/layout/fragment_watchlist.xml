@@ -122,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TODO"
+                android:text="@string/in_progress_sub_heading"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_in_progress"
                 app:layout_constraintStart_toStartOf="parent"/>
             <androidx.recyclerview.widget.RecyclerView
@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TODO"
+                android:text="@string/upcoming_sub_heading"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming"
                 app:layout_constraintStart_toStartOf="parent"/>
             <androidx.recyclerview.widget.RecyclerView
@@ -184,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TODO"
+                android:text="@string/completed_sub_heading"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_completed"
                 app:layout_constraintStart_toStartOf="parent"/>
             <androidx.recyclerview.widget.RecyclerView
@@ -215,7 +215,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TODO"
+                android:text="@string/anticipated_sub_heading"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_anticipated"
                 app:layout_constraintStart_toStartOf="parent"/>
             <androidx.recyclerview.widget.RecyclerView
