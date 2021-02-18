@@ -16,18 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.roomresults
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.models.local.categories.MostWatchedListEntity
-import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
-
-data class MostWatchedMovies(
-    @Embedded val data: MostWatchedListEntity,
-    @Relation(
-        parentColumn = "fk_watched_media_slug",
-        entityColumn = "movie_slug"
-    )
-    val movie: MediaEntity?
-)
+enum class WatchListType {
+    NONE, RECENTLY_ADDED, UPCOMING, ANTICIPATED, COMPLETED, IN_PROGRESS
+}

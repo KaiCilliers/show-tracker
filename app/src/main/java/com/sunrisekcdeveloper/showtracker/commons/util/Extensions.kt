@@ -23,9 +23,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -40,6 +41,61 @@ fun RecentlyAddedMediaEntity.asDomainMovie() = MediaModel(
     releaseDate = releaseDate
 )
 fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun ResponseMovieTMDB.asMediaEntity(type: String) = MediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath ?: "",
+    backdropPath = backdropPath ?: "",
+    rating = rating,
+    releaseDate = releaseDate,
+    type = type
+)
+fun MediaEntity.asRecentlyAddedMedia() = RecentlyAddedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asCompletedMediaEntity() = CompletedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asUpcomingMediaEntity() = UpcomingMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asAnticipatedMediaEntity() = AnticipatedMediaEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = releaseDate
+)
+fun MediaEntity.asInProgressMediaEntity() = InProgressMediaEntity(
     id = id,
     title = title,
     overview = overview,

@@ -26,16 +26,16 @@ import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import java.util.Date
 
 @Database(
     entities = [
         RecentlyAddedMediaEntity::class, AnticipatedMediaEntity::class,
         CompletedMediaEntity::class, InProgressMediaEntity::class,
-        UpcomingMediaEntity::class, MovieEntity::class
+        UpcomingMediaEntity::class, MediaEntity::class
     ],
-    version = 28,
+    version = 29,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)

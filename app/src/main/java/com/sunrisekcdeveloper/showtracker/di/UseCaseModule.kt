@@ -18,8 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetailRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.UpdateWatchListContentsUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
@@ -70,4 +74,11 @@ object UseCaseModule {
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
     ) : LoadRecentlyAddedMediaUseCaseContract =
         LoadRecentlyAddedMediaUseCase(watchlistRepo)
+
+    // Detail
+    @Provides
+    fun providesUpdateWatchListContentsUseCase(
+        @DetailRepo detailRepo: DetailRepositoryContract
+    ) : UpdateWatchListContentsUseCaseContract =
+        UpdateWatchListContentsUseCase(detailRepo)
 }

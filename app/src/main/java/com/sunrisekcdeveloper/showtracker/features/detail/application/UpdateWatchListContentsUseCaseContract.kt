@@ -16,18 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.roomresults
+package com.sunrisekcdeveloper.showtracker.features.detail.application
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.models.local.categories.MostWatchedListEntity
-import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchListType
 
-data class MostWatchedMovies(
-    @Embedded val data: MostWatchedListEntity,
-    @Relation(
-        parentColumn = "fk_watched_media_slug",
-        entityColumn = "movie_slug"
-    )
-    val movie: MediaEntity?
-)
+interface UpdateWatchListContentsUseCaseContract {
+    suspend operator fun invoke(id: Long, from: WatchListType, to: WatchListType)
+}

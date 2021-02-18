@@ -79,7 +79,8 @@ class WatchlistFragment : Fragment() {
                 movieRating = media.rating,
                 movieReleaseDate = media.releaseDate,
                 movieOverview = media.overview,
-                watchlistType = "recently"
+                watchlistType = "recently",
+                movieId = media.id
             )
         )
     }
