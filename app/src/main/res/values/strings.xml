@@ -32,4 +32,8 @@
     <string name="completed">Completed</string>
     <string name="anticipated">Anticipated</string>
     <string name="none">None</string>
+    <string name="in_progress_sub_heading">Movies and Shows that you are in the progress of watching</string>
+    <string name="upcoming_sub_heading">Shows that are sceduled for release soon</string>
+    <string name="completed_sub_heading">Movies and Shows that you have already finished watching</string>
+    <string name="anticipated_sub_heading">Movies scheduled for release that you intend to watch</string>
 </resources>
