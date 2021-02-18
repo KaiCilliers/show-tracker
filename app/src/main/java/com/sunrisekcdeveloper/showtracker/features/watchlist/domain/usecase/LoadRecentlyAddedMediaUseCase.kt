@@ -19,10 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadRecentlyAddedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 

@@ -21,15 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadRecentlyAddedMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.models.FeaturedList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Progress ViewModel

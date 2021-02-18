@@ -19,8 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 
 interface WatchListRepositoryContract {
     suspend fun recentlyAddedMedia(): Resource<List<RecentlyAddedMediaEntity>>

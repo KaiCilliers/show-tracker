@@ -22,24 +22,20 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
-import com.sunrisekcdeveloper.showtracker.models.local.categories.*
+import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import java.util.Date
 
 @Database(
     entities = [
-        MovieEntity::class, TrendingListEntity::class,
-        PopularListEntity::class, RecommendedListEntity::class,
-        BoxOfficeListEntity::class, AnticipatedListEntity::class,
-        MostPlayedListEntity::class, MostWatchedListEntity::class,
-        FeaturedEntity::class, RecentlyAddedMediaEntity::class
+        RecentlyAddedMediaEntity::class, AnticipatedMediaEntity::class,
+        CompletedMediaEntity::class, InProgressMediaEntity::class,
+        UpcomingMediaEntity::class, MovieEntity::class
     ],
-    version = 27,
+    version = 28,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)

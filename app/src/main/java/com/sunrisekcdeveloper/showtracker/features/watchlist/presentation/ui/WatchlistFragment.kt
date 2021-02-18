@@ -27,23 +27,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovie
-import com.sunrisekcdeveloper.showtracker.commons.util.asRecentlyAddedEntity
-import com.sunrisekcdeveloper.showtracker.commons.util.asResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragmentDirections
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Progress Fragment that displays upcoming movies and shows with the capability to filter

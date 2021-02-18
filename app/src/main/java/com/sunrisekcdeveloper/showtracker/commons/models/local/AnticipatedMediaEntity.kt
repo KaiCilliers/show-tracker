@@ -16,14 +16,23 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
+package com.sunrisekcdeveloper.showtracker.commons.models.local
 
-import androidx.room.Dao
-import androidx.room.Query
-import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Dao
-abstract class WatchlistDao {
-    @Query("SELECT * FROM tbl_watchlist_recently_added")
-    abstract suspend fun recentlyAddedMedia(): List<RecentlyAddedMediaEntity>
-}
+@Entity(tableName = "tbl_watchlist_anticipated")
+data class AnticipatedMediaEntity(
+    @PrimaryKey
+    val id: Long,
+    val title: String,
+    val overview: String,
+    @ColumnInfo(name = "poster_path")
+    val posterPath: String,
+    @ColumnInfo(name = "backdrop_path")
+    val backdropPath: String,
+    val rating: Float,
+    @ColumnInfo(name = "release_date")
+    val releaseDate: String
+)

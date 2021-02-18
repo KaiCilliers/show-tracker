@@ -20,15 +20,12 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistClient
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class WatchlistRepository(
     @WatchlistClient private val remote: WatchlistDataSourceContract,

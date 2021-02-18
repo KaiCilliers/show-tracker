@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.data.local
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedMovies
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -33,30 +33,5 @@ abstract class DiscoveryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertMovie(vararg movie: MovieEntity)
-
-    @Query("SELECT movie_poster_url FROM tbl_movie WHERE movie_slug = :slug")
-    abstract suspend fun moviePosterUrl(slug: String): String?
-
-    @Insert
-    abstract suspend fun insertFeatured(vararg movies: FeaturedEntity)
-
-    @Transaction
-    open suspend fun updateFeatured(vararg movie: FeaturedEntity) {
-        clearAllFeatured()
-        insertFeatured(*movie)
-    }
-
-    @Query("DELETE FROM tbl_featured")
-    abstract suspend fun clearAllFeatured()
-
-    @Query("""
-        SELECT * FROM tbl_featured ORDER BY tag
-    """)
-    abstract suspend fun groupedFeatured(): List<FeaturedMovies>
-
-    @Query("""
-        SELECT * FROM tbl_featured ORDER BY tag
-    """)
-    abstract fun groupedFeaturedFlow(): Flow<List<FeaturedMovies>>
 
 }

@@ -23,7 +23,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +47,9 @@ fun ResponseMovieTMDB.asRecentlyAddedEntity() = RecentlyAddedMediaEntity(
     backdropPath = backdropPath,
     rating = rating,
     releaseDate = releaseDate
-)fun RecentlyAddedMediaEntity.asResponseMovieTMDB() = ResponseMovieTMDB(
+)
+
+fun RecentlyAddedMediaEntity.asResponseMovieTMDB() = ResponseMovieTMDB(
     id = id,
     title = title,
     overview = overview,
