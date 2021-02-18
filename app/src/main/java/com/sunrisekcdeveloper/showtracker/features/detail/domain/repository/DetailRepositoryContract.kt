@@ -18,10 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.models.DetailedMovie
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
-
 interface DetailRepositoryContract {
-    suspend fun movieDetails(slug: String, extended: String = ""): DetailedMovie
-    suspend fun relatedMovies(slug: String): List<Movie>
+
 }

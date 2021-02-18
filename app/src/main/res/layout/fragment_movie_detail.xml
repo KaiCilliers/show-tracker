@@ -15,9 +15,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,7 +35,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/backdrop_guideline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/movie_poster_card"
@@ -113,52 +114,52 @@
                     android:id="@+id/cg_choice_save_in_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleLine="true"
-                    app:singleSelection="true"
+                    app:checkedChip="@id/chip_choice_none"
                     app:selectionRequired="true"
-                    app:checkedChip="@id/chip_choice_none">
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_choice_none"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/none"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        android:text="@string/none" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_choice_recently_added"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/recently_added"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        android:text="@string/recently_added" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_choice_in_progress"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/in_progress"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        android:text="@string/in_progress" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_choice_upcoming"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/upcoming"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        android:text="@string/upcoming" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_choice_completed"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/completed"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        android:text="@string/completed" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_choice_anticipated"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/anticipated"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        android:text="@string/anticipated" />
 
                 </com.google.android.material.chip.ChipGroup>
 

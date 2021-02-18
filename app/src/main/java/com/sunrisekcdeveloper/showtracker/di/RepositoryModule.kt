@@ -79,5 +79,5 @@ object  RepositoryModule {
         dao: DetailDao,
         @NetworkModule.DetailClient remote: DetailDataSourceContract
     ): DetailRepositoryContract =
-        DetailRepository(dao, remote)
+        DetailRepository(remote, dao)
 }

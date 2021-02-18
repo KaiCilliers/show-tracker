@@ -64,6 +64,25 @@ class MovieDetailFragment : Fragment() {
         binding.movieRating.rating = arguments.movieRating / 2f
         binding.movieReleaseDate.text = arguments.movieReleaseDate
         binding.movieOverview.text = arguments.movieOverview
+
+        determineList()       
+    }
+
+    private fun determineList() {
+        val list = arguments.watchlistType
+        if (list == "recently") {
+            binding.chipChoiceRecentlyAdded.isChecked = true
+        } else if (list == "progress") {
+            binding.chipChoiceInProgress.isChecked = true
+        } else if (list == "upcoming") {
+            binding.chipChoiceUpcoming.isChecked = true
+        } else if (list == "completed") {
+            binding.chipChoiceCompleted.isChecked = true
+        } else if (list == "anticipated") {
+            binding.chipChoiceAnticipated.isChecked = true
+        } else {
+            binding.chipChoiceNone.isChecked = true
+        }
     }
 
 }
