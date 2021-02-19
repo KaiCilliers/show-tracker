@@ -20,13 +20,14 @@ package com.sunrisekcdeveloper.showtracker.features.discover.data.local
 
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 @Dao
 abstract class DiscoveryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertRecentlyAddedMedia(vararg media: RecentlyAddedMediaEntity)
+    abstract suspend fun insertWatchListEntity(vararg media: WatchListEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertMedia(vararg movie: MediaEntity)

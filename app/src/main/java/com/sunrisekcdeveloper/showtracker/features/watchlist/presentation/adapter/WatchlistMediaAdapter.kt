@@ -29,10 +29,11 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 class WatchlistMediaAdapter(
-    private var media: MutableList<MediaModel>,
-    var onMediaClicked: (movie: MediaModel) -> Unit = {}
+    private var media: MutableList<MediaModelSealed>,
+    var onMediaClicked: (movie: MediaModelSealed) -> Unit = {}
 ) : RecyclerView.Adapter<WatchlistMediaAdapter.MediaViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val view = LayoutInflater
@@ -48,8 +49,10 @@ class WatchlistMediaAdapter(
     }
 
     // todo impl DiffUtil
-    fun updateList(media: List<MediaModel>) {
-        this.media.clear()
+    //  also find different way to fix bug (watchlist data needs to be updated when back is pressed from detail fragment)
+    //  possible solution is Flow results from database - since we are fetching data from single table
+    fun updateList(media: List<MediaModelSealed>) {
+        if (this.media.size > 0) this.media.clear() // prevents duplicate list contents
         this.media.addAll(media)
         notifyDataSetChanged()
     }
@@ -58,7 +61,7 @@ class WatchlistMediaAdapter(
         private val poster: ImageView = itemView.findViewById(R.id.imgv_item_movie_poster)
         private val fab: FloatingActionButton = itemView.findViewById(R.id.fab_add)
 
-        fun bind(item: MediaModel) {
+        fun bind(item: MediaModelSealed) {
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${item.posterPath}")
                 .transform(CenterCrop())
@@ -68,7 +71,7 @@ class WatchlistMediaAdapter(
             itemView.setOnLongClickListener {
                 when (itemView) {
                     is MaterialCardView -> {
-                        itemView.setChecked(!itemView.isChecked)
+                        itemView.isChecked = !itemView.isChecked
                         true
                     }
                     else -> {

@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.application
 
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 interface SaveMediaToWatchListUseCaseContract {
-    suspend operator fun invoke(media: ResponseMovieTMDB)
+    suspend operator fun invoke(media: MediaModelSealed)
 }

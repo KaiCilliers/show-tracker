@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovieSealed
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
@@ -29,6 +30,7 @@ import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMedi
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import kotlinx.coroutines.*
 
 /**
@@ -78,7 +80,7 @@ class DiscoveryViewModel @ViewModelInject constructor(
         dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
     }
     fun addMediaToRecentlyAdded(media: ResponseMovieTMDB) = viewModelScope.launch {
-        saveMediaToWatchListUseCase(media)
+        saveMediaToWatchListUseCase(media.asDomainMovieSealed(WatchListType.RECENTLY_ADDED))
     }
 
     private suspend fun dispatch(

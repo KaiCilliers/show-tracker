@@ -16,11 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.application
+package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.CompletedMediaEntity
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-
-interface LoadCompletedMediaUseCaseContract {
-    suspend operator fun invoke(): Resource<List<CompletedMediaEntity>>
+enum class WatchListType {
+    RECENTLY_ADDED, IN_PROGRESS, UPCOMING, COMPLETED, ANTICIPATED, NONE
 }

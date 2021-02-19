@@ -22,22 +22,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovie
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
-import com.sunrisekcdeveloper.showtracker.commons.models.local.RecentlyAddedMediaEntity
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -94,7 +90,7 @@ class WatchlistFragment : Fragment() {
         }
     }
 
-    private fun showMovieDetails(media: MediaModel, watchListType: String) {
+    private fun showMovieDetails(media: MediaModelSealed) {
         findNavController().navigate(
             WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragmentTMDB(
                 movieBackdrop = media.backdropPath,
@@ -103,20 +99,18 @@ class WatchlistFragment : Fragment() {
                 movieRating = media.rating,
                 movieReleaseDate = media.releaseDate,
                 movieOverview = media.overview,
-                watchlistType = watchListType,
+                watchlistType = media.watchListType.name,
                 movieId = media.id
             )
         )
     }
 
     private fun setupBinding() {
-        recentlyAddedMediaListAdapter.onMediaClicked =
-            { movie -> showMovieDetails(movie, "recently") }
-        inProgressMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie, "progress") }
-        upComingMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie, "upcoming") }
-        completedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie, "complete") }
-        anticipatedMediaListAdapter.onMediaClicked =
-            { movie -> showMovieDetails(movie, "anticipated") }
+        recentlyAddedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
+        inProgressMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
+        upComingMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
+        completedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
+        anticipatedMediaListAdapter.onMediaClicked = { movie -> showMovieDetails(movie) }
 
         recentlyAddedMediaLayoutManager = LinearLayoutManager(
             requireContext(),
@@ -162,144 +156,37 @@ class WatchlistFragment : Fragment() {
 
     private fun updateList(
         adapter: WatchlistMediaAdapter,
-        list: List<MediaModel>
+        list: List<MediaModelSealed>
     ) {
         adapter.updateList(list)
     }
 
-    private fun hideListCategory(
-        header: TextView,
-        subHeader: TextView,
-        list: RecyclerView
-    ) {
-        header.visibility = View.GONE
-        subHeader.visibility = View.GONE
-        list.visibility = View.GONE
-    }
-
-    private fun showListCategory(
-        header: TextView,
-        subHeader: TextView,
-        list: RecyclerView
-    ) {
-        header.visibility = View.VISIBLE
-        subHeader.visibility = View.VISIBLE
-        list.visibility = View.VISIBLE
-    }
-
     private fun observeViewModel() {
-        viewModel.recentlyAddedMedia.subscribe(viewLifecycleOwner) {
+        viewModel.watchListMedia.subscribe(viewLifecycleOwner) {
             when (it) {
-                is Resource.Loading -> {
-                }
+                is Resource.Loading -> { }
+                is Resource.Error -> { }
                 is Resource.Success -> {
-                    showListCategory(
-                        binding.tvHeadingRecentlyAdded,
-                        binding.tvSubHeadingRecentlyAdded,
-                        binding.rcRecentlyAdded
-                    )
-                    updateList(recentlyAddedMediaListAdapter, it.data.map { entity ->
-                        entity.asDomainMovie()
-                    })
-                }
-                is Resource.Error -> {
-                    hideListCategory(
-                        binding.tvHeadingRecentlyAdded,
-                        binding.tvSubHeadingRecentlyAdded,
-                        binding.rcRecentlyAdded
-                    )
-                }
-            }
-        }
-        viewModel.inProgressMedia.subscribe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    showListCategory(
-                        binding.tvHeadingInProgress,
-                        binding.tvSubHeadingInProgress,
-                        binding.rcInProgress
-                    )
-                    updateList(inProgressMediaListAdapter, it.data.map { entity ->
-                        entity.asDomainMovie()
-                    })
-                }
-                is Resource.Error -> {
-                    hideListCategory(
-                        binding.tvHeadingInProgress,
-                        binding.tvSubHeadingInProgress,
-                        binding.rcInProgress
-                    )
-                }
-            }
-        }
-        viewModel.upcomingMedia.subscribe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    showListCategory(
-                        binding.tvHeadingUpcoming,
-                        binding.tvSubHeadingUpcoming,
-                        binding.rcUpcoming
-                    )
-                    updateList(upComingMediaListAdapter, it.data.map { entity ->
-                        entity.asDomainMovie()
-                    })
-                }
-                is Resource.Error -> {
-                    hideListCategory(
-                        binding.tvHeadingUpcoming,
-                        binding.tvSubHeadingUpcoming,
-                        binding.rcUpcoming
-                    )
-                }
-            }
-        }
-        viewModel.completedMedia.subscribe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    showListCategory(
-                        binding.tvHeadingCompleted,
-                        binding.tvSubHeadingCompleted,
-                        binding.rcCompleted
-                    )
-                    updateList(completedMediaListAdapter, it.data.map { entity ->
-                        entity.asDomainMovie()
-                    })
-                }
-                is Resource.Error -> {
-                    hideListCategory(
-                        binding.tvHeadingCompleted,
-                        binding.tvSubHeadingCompleted,
-                        binding.rcCompleted
-                    )
-                }
-            }
-        }
-        viewModel.anticipatedMedia.subscribe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    showListCategory(
-                        binding.tvHeadingAnticipated,
-                        binding.tvSubHeadingAnticipated,
-                        binding.rcAnticipated
-                    )
-                    updateList(anticipatedMediaListAdapter, it.data.map { entity ->
-                        entity.asDomainMovie()
-                    })
-                }
-                is Resource.Error -> {
-                    hideListCategory(
-                        binding.tvHeadingAnticipated,
-                        binding.tvSubHeadingAnticipated,
-                        binding.rcAnticipated
-                    )
+                    it.data.forEach { (key, value) ->
+                        when (key) {
+                            WatchListType.RECENTLY_ADDED -> {
+                                updateList(recentlyAddedMediaListAdapter, value)
+                            }
+                            WatchListType.IN_PROGRESS -> {
+                                updateList(inProgressMediaListAdapter, value)
+                            }
+                            WatchListType.UPCOMING -> {
+                                updateList(upComingMediaListAdapter, value)
+                            }
+                            WatchListType.COMPLETED -> {
+                                updateList(completedMediaListAdapter, value)
+                            }
+                            WatchListType.ANTICIPATED -> {
+                                updateList(anticipatedMediaListAdapter, value)
+                            }
+                            WatchListType.NONE -> { }
+                        }
+                    }
                 }
             }
         }

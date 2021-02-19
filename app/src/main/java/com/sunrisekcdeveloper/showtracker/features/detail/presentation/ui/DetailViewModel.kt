@@ -22,13 +22,13 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import kotlinx.coroutines.launch
 
 class DetailViewModel @ViewModelInject constructor(
     private val updateWatchListContentsUseCase: UpdateWatchListContentsUseCaseContract
 ) : ViewModel() {
-    fun updateWatchList(id: Long, from: WatchListType, to: WatchListType) = viewModelScope.launch {
-        updateWatchListContentsUseCase(id, from, to)
+    fun updateWatchList(mediaId: Long, newType: WatchListType) = viewModelScope.launch {
+        updateWatchListContentsUseCase(mediaId, newType)
     }
 }

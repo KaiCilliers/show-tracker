@@ -20,11 +20,9 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 interface WatchListRepositoryContract {
-    suspend fun recentlyAddedMedia(): Resource<List<RecentlyAddedMediaEntity>>
-    suspend fun inProgressMedia(): Resource<List<InProgressMediaEntity>>
-    suspend fun upcomingMedia(): Resource<List<UpcomingMediaEntity>>
-    suspend fun completedMedia(): Resource<List<CompletedMediaEntity>>
-    suspend fun anticipatedMedia(): Resource<List<AnticipatedMediaEntity>>
+    suspend fun watchListMedia(): Resource<List<MediaModelSealed>>
 }
