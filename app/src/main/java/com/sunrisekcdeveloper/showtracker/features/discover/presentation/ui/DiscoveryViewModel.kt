@@ -20,17 +20,12 @@ package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovieSealed
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.*
 
 /**
@@ -50,16 +45,16 @@ class DiscoveryViewModel @ViewModelInject constructor(
     var topRatedMoviesPage = 1
     var upcomingMoviesPage = 1
 
-    private val _popularMovies = MutableLiveData<Resource<EnvelopePaginatedMovie>>()
-    val popularMovies: LiveData<Resource<EnvelopePaginatedMovie>>
+    private val _popularMovies = MutableLiveData<Resource<List<MediaModelSealed>>>()
+    val popularMovies: LiveData<Resource<List<MediaModelSealed>>>
         get() = _popularMovies
 
-    private val _topRatedMovies = MutableLiveData<Resource<EnvelopePaginatedMovie>>()
-    val topRatedMovies: LiveData<Resource<EnvelopePaginatedMovie>>
+    private val _topRatedMovies = MutableLiveData<Resource<List<MediaModelSealed>>>()
+    val topRatedMovies: LiveData<Resource<List<MediaModelSealed>>>
         get() = _topRatedMovies
 
-    private val _upcomingMovies = MutableLiveData<Resource<EnvelopePaginatedMovie>>()
-    val upcomingMovies: LiveData<Resource<EnvelopePaginatedMovie>>
+    private val _upcomingMovies = MutableLiveData<Resource<List<MediaModelSealed>>>()
+    val upcomingMovies: LiveData<Resource<List<MediaModelSealed>>>
         get() = _upcomingMovies
 
     init {
@@ -79,13 +74,14 @@ class DiscoveryViewModel @ViewModelInject constructor(
     fun getUpcomingMovies() = viewModelScope.launch {
         dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
     }
-    fun addMediaToRecentlyAdded(media: ResponseMovieTMDB) = viewModelScope.launch {
-        saveMediaToWatchListUseCase(media.asDomainMovieSealed(WatchListType.RECENTLY_ADDED))
+
+    fun addMediaToRecentlyAdded(media: MediaModelSealed) = viewModelScope.launch {
+        saveMediaToWatchListUseCase(media)
     }
 
     private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<EnvelopePaginatedMovie>>,
-        call: suspend () -> Resource<EnvelopePaginatedMovie>
+        mutableLiveData: MutableLiveData<Resource<List<MediaModelSealed>>>,
+        call: suspend () -> Resource<List<MediaModelSealed>>
     ) {
         val data = withContext(Dispatchers.IO) { call() }
         withContext(Dispatchers.Main) { mutableLiveData.value = data }

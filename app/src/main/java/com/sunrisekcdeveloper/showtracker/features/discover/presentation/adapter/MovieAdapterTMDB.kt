@@ -29,11 +29,12 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 class MovieListAdapter(
-    private var movies: MutableList<ResponseMovieTMDB>,
-    var onMovieClick: (movie: ResponseMovieTMDB) -> Unit = {},
-    var onAddClicked: (movie: ResponseMovieTMDB) -> Unit = {}
+    private var movies: MutableList<MediaModelSealed>,
+    var onMovieClick: (movie: MediaModelSealed) -> Unit = {},
+    var onAddClicked: (movie: MediaModelSealed) -> Unit = {}
 ) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater
@@ -45,7 +46,7 @@ class MovieListAdapter(
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(movies[position])
     }
-    fun updateMovies(movies: List<ResponseMovieTMDB>) {
+    fun updateMovies(movies: List<MediaModelSealed>) {
         this.movies.addAll(movies)
         notifyItemRangeInserted(
             this.movies.size,
@@ -56,7 +57,7 @@ class MovieListAdapter(
         private val poster: ImageView = itemView.findViewById(R.id.imgv_item_movie_poster)
         private val fab: FloatingActionButton = itemView.findViewById(R.id.fab_add)
 
-        fun bind(movie: ResponseMovieTMDB) {
+        fun bind(movie: MediaModelSealed) {
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")
                 .transform(CenterCrop())

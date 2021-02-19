@@ -33,6 +33,8 @@ import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
@@ -85,7 +87,7 @@ class DiscoveryFragment : Fragment() {
         }
     }
 
-    private fun showMovieDetails(movie: ResponseMovieTMDB) {
+    private fun showMovieDetails(movie: MediaModelSealed) {
         findNavController().navigate(
             DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragmentTMDB(
                 movieBackdrop = movie.backdropPath,
@@ -99,8 +101,16 @@ class DiscoveryFragment : Fragment() {
         )
     }
 
-    private fun onAddMediaClicked(movie: ResponseMovieTMDB) {
-        viewModel.addMediaToRecentlyAdded(movie)
+    private fun onAddMediaClicked(movie: MediaModelSealed) {
+        val watchlistMedia = when (movie) {
+            is MediaModelSealed.MovieModel -> {
+                movie.copy(watchListType = WatchListType.RECENTLY_ADDED)
+            }
+            is MediaModelSealed.ShowModel -> {
+                movie.copy(watchListType = WatchListType.RECENTLY_ADDED)
+            }
+        }
+        viewModel.addMediaToRecentlyAdded(watchlistMedia)
     }
 
     private fun setupBinding() {
@@ -157,7 +167,7 @@ class DiscoveryFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    updateList(popularMovieListAdapter, it.data.movies)
+                    updateList(popularMovieListAdapter, it.data)
                     attachOnScrollListener(
                         binding.rcFeaturedCategoriesDiscover,
                         popularMoviesLayoutManager
@@ -172,7 +182,7 @@ class DiscoveryFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    updateList(topRatedMovieListAdapter, it.data.movies)
+                    updateList(topRatedMovieListAdapter, it.data)
                     attachOnScrollListener(
                         binding.rcTopRatedMovies,
                         topRatedMoviesLayoutManager
@@ -187,7 +197,7 @@ class DiscoveryFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    updateList(upcomingMovieListAdapter, it.data.movies)
+                    updateList(upcomingMovieListAdapter, it.data)
                     attachOnScrollListener(
                         binding.rcUpcomingMovies,
                         upcomingMoviesLayoutManager
@@ -201,7 +211,7 @@ class DiscoveryFragment : Fragment() {
 
     private fun updateList(
         adapter: MovieListAdapter,
-        list: List<ResponseMovieTMDB>
+        list: List<MediaModelSealed>
     ) {
         adapter.updateMovies(list)
     }

@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.domain.model
 
 import com.google.gson.annotations.SerializedName
 
+// TODO all fields can be null - thus provide default values
 data class ResponseMovieTMDB(
     @SerializedName("id") val id: Long,
     @SerializedName("title") val title: String,

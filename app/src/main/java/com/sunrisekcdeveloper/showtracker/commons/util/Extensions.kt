@@ -35,6 +35,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 // Models
+fun ResponseMovieTMDB.asMediaModel(mediaType: MediaType): MediaModelSealed {
+    return when (mediaType) {
+        MediaType.MOVIE -> MediaModelSealed.MovieModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+        MediaType.SHOW -> MediaModelSealed.ShowModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+    }
+}
 fun MediaModelSealed.MovieModel.asWatchListEntity() = WatchListEntity(
     id = id,
     title = title,
@@ -145,7 +169,7 @@ fun ResponseMovieTMDB.asMediaEntity(type: String) = MediaEntity(
     posterPath = posterPath ?: "",
     backdropPath = backdropPath ?: "",
     rating = rating,
-    releaseDate = releaseDate,
+    releaseDate = releaseDate?: "",
     type = type
 )
 
