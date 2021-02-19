@@ -22,44 +22,18 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 @Dao
 abstract class DetailDao {
+
+    @Query("UPDATE tbl_watchlist_media SET watchlist_type = :watchListType WHERE id = :id ")
+    abstract suspend fun updateWatchListType(id: Long, watchListType: WatchListType)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertMovie(vararg item: MediaEntity)
 
     @Query("SELECT * FROM tbl_media_dump WHERE id = :id")
     abstract suspend fun media(id: Long): MediaEntity
-
-    @Query("DELETE FROM tbl_watchlist_recently_added WHERE id = :id")
-    abstract suspend fun removeRecentlyAddedMedia(id: Long)
-
-    @Query("DELETE FROM tbl_watchlist_upcoming WHERE id = :id")
-    abstract suspend fun removeUpcomingMedia(id: Long)
-
-    @Query("DELETE FROM tbl_watchlist_completed WHERE id = :id")
-    abstract suspend fun removeCompletedMedia(id: Long)
-
-    @Query("DELETE FROM tbl_watchlist_in_progress WHERE id = :id")
-    abstract suspend fun removeInProgressMedia(id: Long)
-
-    @Query("DELETE FROM tbl_watchlist_anticipated WHERE id = :id")
-    abstract suspend fun removeAnticipatedMedia(id: Long)
-
-    @Insert
-    abstract suspend fun insertRecentlyAddedMedia(media: RecentlyAddedMediaEntity)
-
-    @Insert
-    abstract suspend fun insertUpcomingMedia(media: UpcomingMediaEntity)
-
-    @Insert
-    abstract suspend fun insertCompletedMedia(media: CompletedMediaEntity)
-
-    @Insert
-    abstract suspend fun insertInProgressMedia(media: InProgressMediaEntity)
-
-    @Insert
-    abstract suspend fun insertAnticipatedMedia(media: AnticipatedMediaEntity)
 }

@@ -22,10 +22,11 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 class SaveMediaToWatchListUseCase(
     @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
 ) : SaveMediaToWatchListUseCaseContract {
-    override suspend fun invoke(media: ResponseMovieTMDB) =
+    override suspend fun invoke(media: MediaModelSealed) =
         discoveryRepo.saveMediaToWatchList(media)
 }

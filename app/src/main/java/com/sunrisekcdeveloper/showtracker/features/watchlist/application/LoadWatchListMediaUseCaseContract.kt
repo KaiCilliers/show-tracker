@@ -18,9 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.AnticipatedMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-interface LoadAnticipatedMediaUseCaseContract {
-    suspend operator fun invoke(): Resource<List<AnticipatedMediaEntity>>
+interface LoadWatchListMediaUseCaseContract {
+    suspend operator fun invoke(): Resource<List<MediaModelSealed>>
 }

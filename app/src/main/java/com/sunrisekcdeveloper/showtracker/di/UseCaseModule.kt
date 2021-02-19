@@ -70,35 +70,10 @@ object UseCaseModule {
 
     // Watchlist
     @Provides
-    fun provideLoadRecentlyAddedMediaUseCase(
+    fun provideLoadWatchListMediaUseCase(
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadRecentlyAddedMediaUseCaseContract =
-        LoadRecentlyAddedMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadInProgressMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadInProgressMediaUseCaseContract =
-        LoadInProgressMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadUpcomingMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadUpcomingMediaUseCaseContract =
-        LoadUpcomingMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadCompletedMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadCompletedMediaUseCaseContract =
-        LoadCompletedMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadAnticipatedMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadAnticipatedMediaUseCaseContract =
-        LoadAnticipatedMediaUseCase(watchlistRepo)
-
+    ) : LoadWatchListMediaUseCaseContract =
+        LoadWatchListMediaUseCase(watchlistRepo)
 
     // Detail
     @Provides

@@ -23,7 +23,10 @@ import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * Progress ViewModel
@@ -31,62 +34,47 @@ import kotlinx.coroutines.launch
  * @constructor Create empty Progress view model
  */
 class WatchlistViewModel @ViewModelInject constructor(
-    private val loadRecentlyAddedMediaUseCase: LoadRecentlyAddedMediaUseCaseContract,
-    private val loadInProgressMediaUseCase: LoadInProgressMediaUseCaseContract,
-    private val loadUpcomingMediaUseCase: LoadUpcomingMediaUseCaseContract,
-    private val loadCompletedMediaUseCase: LoadCompletedMediaUseCaseContract,
-    private val loadAnticipatedMediaUseCase: LoadAnticipatedMediaUseCaseContract
+    private val loadWatchListMediaUseCase: LoadWatchListMediaUseCaseContract
 ) : ViewModel() {
-    private val _recentlyAddedMedia = MutableLiveData<Resource<List<RecentlyAddedMediaEntity>>>()
-    val recentlyAddedMedia: LiveData<Resource<List<RecentlyAddedMediaEntity>>>
-        get() = _recentlyAddedMedia
 
-    private val _inProgressMedia = MutableLiveData<Resource<List<InProgressMediaEntity>>>()
-    val inProgressMedia: LiveData<Resource<List<InProgressMediaEntity>>>
-        get() = _inProgressMedia
-
-    private val _upcomingMedia = MutableLiveData<Resource<List<UpcomingMediaEntity>>>()
-    val upcomingMedia: LiveData<Resource<List<UpcomingMediaEntity>>>
-        get() = _upcomingMedia
-
-    private val _completedMedia = MutableLiveData<Resource<List<CompletedMediaEntity>>>()
-    val completedMedia: LiveData<Resource<List<CompletedMediaEntity>>>
-        get() = _completedMedia
-
-    private val _anticipatedMedia = MutableLiveData<Resource<List<AnticipatedMediaEntity>>>()
-    val anticipatedMedia: LiveData<Resource<List<AnticipatedMediaEntity>>>
-        get() = _anticipatedMedia
+    private val _watchListMedia = MutableLiveData<Resource<Map<WatchListType, MutableList<MediaModelSealed>>>>()
+    val watchListMedia: LiveData<Resource<Map<WatchListType, MutableList<MediaModelSealed>>>>
+        get() = _watchListMedia
 
     init {
-        getRecentlyAddedMedia()
-        getInProgressMedia()
-        getUpcomingMedia()
-        getCompletedMedia()
-        getAnticipatedMedia()
+        getWatchListMedia()
     }
 
-    private fun getRecentlyAddedMedia() = viewModelScope.launch {
-        val data = loadRecentlyAddedMediaUseCase()
-        _recentlyAddedMedia.value = data
-    }
-
-    private fun getInProgressMedia() = viewModelScope.launch {
-        val data = loadInProgressMediaUseCase()
-        _inProgressMedia.value = data
-    }
-
-    private fun getUpcomingMedia() = viewModelScope.launch {
-        val data = loadUpcomingMediaUseCase()
-        _upcomingMedia.value = data
-    }
-
-    private fun getCompletedMedia() = viewModelScope.launch {
-        val data = loadCompletedMediaUseCase()
-        _completedMedia.value = data
-    }
-
-    private fun getAnticipatedMedia() = viewModelScope.launch {
-        val data = loadAnticipatedMediaUseCase()
-        _anticipatedMedia.value = data
+    private fun getWatchListMedia() = viewModelScope.launch {
+        val data = loadWatchListMediaUseCase()
+        val results = mutableMapOf<WatchListType, MutableList<MediaModelSealed>>()
+        when (data) {
+            is Resource.Loading -> {}
+            is Resource.Error -> {}
+            is Resource.Success -> {
+                data.data.forEach {
+                    when (it.watchListType) {
+                        WatchListType.RECENTLY_ADDED -> {
+                            results.getOrPut(WatchListType.RECENTLY_ADDED, { mutableListOf() }).add(it)
+                        }
+                        WatchListType.IN_PROGRESS -> {
+                            results.getOrPut(WatchListType.IN_PROGRESS, { mutableListOf() }).add(it)
+                        }
+                        WatchListType.UPCOMING -> {
+                            results.getOrPut(WatchListType.UPCOMING, { mutableListOf() }).add(it)
+                        }
+                        WatchListType.COMPLETED -> {
+                            results.getOrPut(WatchListType.COMPLETED, { mutableListOf() }).add(it)
+                        }
+                        WatchListType.ANTICIPATED -> {
+                            results.getOrPut(WatchListType.ANTICIPATED, { mutableListOf() }).add(it)
+                        }
+                        else -> {
+                        }
+                    }
+                }
+            }
+        }
+        _watchListMedia.postValue(Resource.Success(results))
     }
 }
