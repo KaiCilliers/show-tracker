@@ -24,6 +24,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryPopularEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryTopRatedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryUpcomingEntity
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListEntity
@@ -35,6 +38,117 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 // Models
+fun DiscoveryPopularEntity.asMediaModel(type: MediaType): MediaModelSealed {
+    return when (mediaType) {
+        MediaType.MOVIE -> MediaModelSealed.MovieModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+        MediaType.SHOW -> MediaModelSealed.ShowModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+    }
+}
+fun DiscoveryTopRatedEntity.asMediaModel(type: MediaType): MediaModelSealed {
+    return when (mediaType) {
+        MediaType.MOVIE -> MediaModelSealed.MovieModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+        MediaType.SHOW -> MediaModelSealed.ShowModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+    }
+}
+fun DiscoveryUpcomingEntity.asMediaModel(type: MediaType): MediaModelSealed {
+    return when (mediaType) {
+        MediaType.MOVIE -> MediaModelSealed.MovieModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+        MediaType.SHOW -> MediaModelSealed.ShowModel(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath?: "",
+            backdropPath = backdropPath?: "",
+            rating = rating,
+            releaseDate = releaseDate?: "",
+            watchListType = WatchListType.NONE
+        )
+    }
+}
+fun MediaModelSealed.asDiscoveryPopularEntity() = DiscoveryPopularEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath?: "",
+    backdropPath = backdropPath?: "",
+    rating = rating,
+    releaseDate = releaseDate?: "",
+    mediaType = when (this) {
+        is MediaModelSealed.ShowModel -> MediaType.SHOW
+        is MediaModelSealed.MovieModel -> MediaType.MOVIE
+    }
+)
+fun MediaModelSealed.asDiscoveryTopRatedEntity() = DiscoveryTopRatedEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath?: "",
+    backdropPath = backdropPath?: "",
+    rating = rating,
+    releaseDate = releaseDate?: "",
+    mediaType = when (this) {
+        is MediaModelSealed.ShowModel -> MediaType.SHOW
+        is MediaModelSealed.MovieModel -> MediaType.MOVIE
+    }
+)
+fun MediaModelSealed.asDiscoveryUpcomingEntity() = DiscoveryUpcomingEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath?: "",
+    backdropPath = backdropPath?: "",
+    rating = rating,
+    releaseDate = releaseDate?: "",
+    mediaType = when (this) {
+        is MediaModelSealed.ShowModel -> MediaType.SHOW
+        is MediaModelSealed.MovieModel -> MediaType.MOVIE
+    }
+)
 fun ResponseMovieTMDB.asMediaModel(mediaType: MediaType): MediaModelSealed {
     return when (mediaType) {
         MediaType.MOVIE -> MediaModelSealed.MovieModel(

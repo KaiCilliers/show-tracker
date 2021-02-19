@@ -18,13 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.asMediaEntity
-import com.sunrisekcdeveloper.showtracker.commons.util.asMediaModel
-import com.sunrisekcdeveloper.showtracker.commons.util.asWatchListEntity
+import com.sunrisekcdeveloper.showtracker.commons.util.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryPopularEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryType
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.MediaType
@@ -32,6 +32,8 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaM
 import kotlinx.coroutines.*
 import timber.log.Timber
 
+// TODO network results saves to local in wrong order
+// TODO send database results first then refresh local data if needed
 class DiscoveryRepository(
     @DiscoveryClient private val remote: DiscoveryRemoteDataSourceContract,
     private val dao: DiscoveryDao,
@@ -42,7 +44,13 @@ class DiscoveryRepository(
         return when (val response = remote.popularMovies(page)) {
             is Resource.Success -> {
                 saveMedia(response)
-                Resource.Success(response.data.movies.map { it.asMediaModel(MediaType.MOVIE) })
+                persisDiscoveryMedia(
+                    response.data.movies.map { it.asMediaModel(MediaType.MOVIE) },
+                    DiscoveryType.POPULAR
+                )
+                Resource.Success(
+                    dao.popularList().map { it.asMediaModel(MediaType.MOVIE) }
+                )
             }
             is Resource.Error -> Resource.Error(response.message)
             Resource.Loading -> Resource.Loading
@@ -53,7 +61,13 @@ class DiscoveryRepository(
         return when (val response = remote.topRatedMovies(page)) {
             is Resource.Success -> {
                 saveMedia(response)
-                Resource.Success(response.data.movies.map { it.asMediaModel(MediaType.MOVIE) })
+                persisDiscoveryMedia(
+                    response.data.movies.map { it.asMediaModel(MediaType.MOVIE) },
+                    DiscoveryType.TOP_RATED
+                )
+                Resource.Success(
+                    dao.topRatedList().map { it.asMediaModel(MediaType.MOVIE) }
+                )
             }
             is Resource.Error -> Resource.Error(response.message)
             Resource.Loading -> Resource.Loading
@@ -64,7 +78,13 @@ class DiscoveryRepository(
         return when (val response = remote.upcomingMovies(page)) {
             is Resource.Success -> {
                 saveMedia(response)
-                Resource.Success(response.data.movies.map { it.asMediaModel(MediaType.MOVIE) })
+                persisDiscoveryMedia(
+                    response.data.movies.map { it.asMediaModel(MediaType.MOVIE) },
+                    DiscoveryType.UPCOMING
+                )
+                Resource.Success(
+                    dao.upcomingList().map { it.asMediaModel(MediaType.MOVIE) }
+                )
             }
             is Resource.Error -> Resource.Error(response.message)
             Resource.Loading -> Resource.Loading
@@ -75,6 +95,20 @@ class DiscoveryRepository(
         when (media) {
             is MediaModelSealed.ShowModel -> TODO()
             is MediaModelSealed.MovieModel -> dao.insertWatchListEntity(media.asWatchListEntity())
+        }
+    }
+
+    private suspend fun persisDiscoveryMedia(media: List<MediaModelSealed>, type: DiscoveryType) {
+        when (type) {
+            DiscoveryType.POPULAR -> {
+                dao.insertPopularEntity(*media.map { it.asDiscoveryPopularEntity() }.toTypedArray())
+            }
+            DiscoveryType.TOP_RATED -> {
+                dao.insertTopRatedEntity(*media.map { it.asDiscoveryTopRatedEntity() }.toTypedArray())
+            }
+            DiscoveryType.UPCOMING -> {
+                dao.insertUpcomingEntity(*media.map { it.asDiscoveryUpcomingEntity() }.toTypedArray())
+            }
         }
     }
 

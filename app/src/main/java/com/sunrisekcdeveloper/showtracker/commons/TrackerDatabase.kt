@@ -25,6 +25,9 @@ import androidx.room.TypeConverters
 import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryPopularEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryTopRatedEntity
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.DiscoveryUpcomingEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.converter.WatchListConverter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListEntity
@@ -33,9 +36,11 @@ import java.util.Date
 
 @Database(
     entities = [
-        MediaEntity::class, WatchListEntity::class
+        MediaEntity::class, WatchListEntity::class,
+    DiscoveryPopularEntity::class, DiscoveryTopRatedEntity::class,
+    DiscoveryUpcomingEntity::class
     ],
-    version = 32,
+    version = 33,
     exportSchema = false
 )
 @TypeConverters(WatchListConverter::class, TrackerTypeConverters::class)
