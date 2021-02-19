@@ -24,11 +24,8 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.Respons
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 interface DiscoveryRepositoryContract {
-    suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie>
-    suspend fun popularMoviesInvokeMe(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun topRatedMoviesInvokeMe(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun upcomingMoviesInvokeMe(page: Int): Resource<List<MediaModelSealed>>
+    suspend fun popularMovies(page: Int): Resource<List<MediaModelSealed>>
+    suspend fun topRatedMovies(page: Int): Resource<List<MediaModelSealed>>
+    suspend fun upcomingMovies(page: Int): Resource<List<MediaModelSealed>>
     suspend fun saveMediaToWatchList(media: MediaModelSealed)
 }

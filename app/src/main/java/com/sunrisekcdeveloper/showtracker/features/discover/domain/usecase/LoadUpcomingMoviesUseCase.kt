@@ -28,5 +28,5 @@ class LoadUpcomingMoviesUseCase(
     @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
 ) : LoadUpcomingMoviesUseCaseContract {
     override suspend fun invoke(page: Int): Resource<List<MediaModelSealed>> =
-        discoveryRepo.upcomingMoviesInvokeMe(page)
+        discoveryRepo.upcomingMovies(page)
 }

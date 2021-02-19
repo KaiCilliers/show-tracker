@@ -38,7 +38,7 @@ class DiscoveryRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DiscoveryRepositoryContract {
 
-    override suspend fun popularMoviesInvokeMe(page: Int): Resource<List<MediaModelSealed>> {
+    override suspend fun popularMovies(page: Int): Resource<List<MediaModelSealed>> {
         return when (val response = remote.popularMovies(page)) {
             is Resource.Success -> {
                 saveMedia(response)
@@ -49,7 +49,7 @@ class DiscoveryRepository(
         }
     }
 
-    override suspend fun topRatedMoviesInvokeMe(page: Int): Resource<List<MediaModelSealed>> {
+    override suspend fun topRatedMovies(page: Int): Resource<List<MediaModelSealed>> {
         return when (val response = remote.topRatedMovies(page)) {
             is Resource.Success -> {
                 saveMedia(response)
@@ -60,7 +60,7 @@ class DiscoveryRepository(
         }
     }
 
-    override suspend fun upcomingMoviesInvokeMe(page: Int): Resource<List<MediaModelSealed>> {
+    override suspend fun upcomingMovies(page: Int): Resource<List<MediaModelSealed>> {
         return when (val response = remote.upcomingMovies(page)) {
             is Resource.Success -> {
                 saveMedia(response)
@@ -69,24 +69,6 @@ class DiscoveryRepository(
             is Resource.Error -> Resource.Error(response.message)
             Resource.Loading -> Resource.Loading
         }
-    }
-
-    override suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie> {
-        val response = remote.popularMovies(page)
-        saveMedia(response)
-        return response
-    }
-
-    override suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie> {
-        val response = remote.topRatedMovies(page)
-        saveMedia(response)
-        return response
-    }
-
-    override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> {
-        val response = remote.upcomingMovies(page)
-        saveMedia(response)
-        return response
     }
 
     override suspend fun saveMediaToWatchList(media: MediaModelSealed) {
