@@ -90,14 +90,15 @@ class WatchlistFragment : Fragment() {
         }
     }
 
+    // todo detail UI should differ based on movie or show
     private fun showMovieDetails(media: MediaModelSealed) {
         findNavController().navigate(
             WatchlistFragmentDirections.actionWatchlistFragmentDestToDetailFragmentTMDB(
                 movieBackdrop = media.backdropPath,
                 moviePoster = media.posterPath,
-                movieTitle = media.title,
+                movieTitle = "TEMP",
                 movieRating = media.rating,
-                movieReleaseDate = media.releaseDate,
+                movieReleaseDate = "TEMP",
                 movieOverview = media.overview,
                 watchlistType = media.watchListType.name,
                 movieId = media.id

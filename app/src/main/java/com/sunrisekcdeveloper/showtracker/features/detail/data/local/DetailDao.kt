@@ -32,8 +32,14 @@ abstract class DetailDao {
     abstract suspend fun updateWatchListType(id: Long, watchListType: WatchListType)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertMovie(vararg item: MediaEntity)
+    abstract suspend fun dumpMovie(vararg item: MediaEntity.MovieEntityTMDB)
 
-    @Query("SELECT * FROM tbl_media_dump WHERE id = :id")
-    abstract suspend fun media(id: Long): MediaEntity
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun dumpShow(vararg item: MediaEntity.ShowEntityTMDB)
+
+    @Query("SELECT * FROM tbl_movie_dump WHERE id = :id")
+    abstract suspend fun fromMovieDump(id: Long): MediaEntity.MovieEntityTMDB
+
+    @Query("SELECT * FROM tbl_show_dump WHERE id = :id")
+    abstract suspend fun fromShowDump(id: Long): MediaEntity.ShowEntityTMDB
 }

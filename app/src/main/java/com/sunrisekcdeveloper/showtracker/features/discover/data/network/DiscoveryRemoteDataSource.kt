@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.showtracker.commons.BaseRemoteDataSource
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryApi
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedShow
 
 class DiscoveryRemoteDataSource(
     @DiscoveryApi private val api: DiscoveryServiceContract
@@ -37,5 +38,17 @@ class DiscoveryRemoteDataSource(
     override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> = safeApiCall {
         api.upcomingMovies(page = page)
     }
-}
 
+    override suspend fun popularShows(page: Int): Resource<EnvelopePaginatedShow> = safeApiCall {
+        api.popularShows(page = page)
+    }
+
+    override suspend fun topRatedShows(page: Int): Resource<EnvelopePaginatedShow> = safeApiCall {
+        api.topRatedShows(page = page)
+    }
+
+    override suspend fun airingTodayShows(page: Int): Resource<EnvelopePaginatedShow> =
+        safeApiCall {
+            api.airingTodayShows(page = page)
+        }
+}

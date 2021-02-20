@@ -34,6 +34,12 @@ class DetailRepository(
         dao.updateWatchListType(id, type)
     }
 
-    override suspend fun media(id: Long): MediaEntity = dao.media(id)
+    override suspend fun movie(id: Long): MediaEntity.MovieEntityTMDB {
+        return dao.fromMovieDump(id)
+    }
+
+    override suspend fun show(id: Long): MediaEntity.ShowEntityTMDB {
+        return dao.fromShowDump(id)
+    }
 }
 

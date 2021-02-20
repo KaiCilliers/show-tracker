@@ -44,7 +44,7 @@ open class BaseRemoteDataSource(
             }
         }
 
-    fun <T> error(message: String, e: Exception): Resource<T> {
+    private fun <T> error(message: String, e: Exception): Resource<T> {
         Timber.e(message)
         return Resource.Error("Network call has failed for the following reason: $message")
     }

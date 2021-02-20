@@ -21,10 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.*
 
@@ -38,12 +35,18 @@ class DiscoveryViewModel @ViewModelInject constructor(
     private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
+    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
+    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
+    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract,
     private val saveMediaToWatchListUseCase: SaveMediaToWatchListUseCaseContract
 ) : ViewModel() {
 
-    var popularMoviesPage = 1
-    var topRatedMoviesPage = 1
-    var upcomingMoviesPage = 1
+    var popularMoviesPage = 0
+    var topRatedMoviesPage = 0
+    var upcomingMoviesPage = 0
+    var popularShowsPage = 0
+    var topRatedShowsPage = 0
+    var latestShowsPage = 0
 
     private val _popularMovies = MutableLiveData<Resource<List<MediaModelSealed>>>()
     val popularMovies: LiveData<Resource<List<MediaModelSealed>>>
@@ -57,11 +60,26 @@ class DiscoveryViewModel @ViewModelInject constructor(
     val upcomingMovies: LiveData<Resource<List<MediaModelSealed>>>
         get() = _upcomingMovies
 
+    private val _popularShows = MutableLiveData<Resource<List<MediaModelSealed>>>()
+    val popularShows: LiveData<Resource<List<MediaModelSealed>>>
+        get() = _popularShows
+
+    private val _topRatedShows = MutableLiveData<Resource<List<MediaModelSealed>>>()
+    val topRatedShows: LiveData<Resource<List<MediaModelSealed>>>
+        get() = _topRatedShows
+
+    private val _airingTodayShows = MutableLiveData<Resource<List<MediaModelSealed>>>()
+    val airingTodayShows: LiveData<Resource<List<MediaModelSealed>>>
+        get() = _airingTodayShows
+
     init {
         viewModelScope.launch {
             launch { getPopularMovies() }
             launch { getTopRatedMovies() }
             launch { getUpcomingMovies() }
+            launch { getPopularShows() }
+            launch { getTopRatedShows() }
+            launch { getAiringTodayShows() }
         }
     }
 
@@ -73,6 +91,16 @@ class DiscoveryViewModel @ViewModelInject constructor(
     }
     fun getUpcomingMovies() = viewModelScope.launch {
         dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
+    }
+
+    fun getPopularShows() = viewModelScope.launch {
+        dispatch(_popularShows) { loadPopularShowsUseCase(++popularShowsPage) }
+    }
+    fun getTopRatedShows() = viewModelScope.launch {
+        dispatch(_topRatedShows) { loadTopRatedShowsUseCase(++topRatedShowsPage) }
+    }
+    fun getAiringTodayShows() = viewModelScope.launch {
+        dispatch(_airingTodayShows) { loadAiringTodayShowsUseCase(++latestShowsPage) }
     }
 
     fun addMediaToRecentlyAdded(media: MediaModelSealed) = viewModelScope.launch {

@@ -32,14 +32,12 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -61,6 +59,18 @@ class DiscoveryFragment : Fragment() {
     @Inject
     lateinit var upcomingMovieListAdapter: MovieListAdapter
     private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var popularShowListAdapter: MovieListAdapter
+    private lateinit var popularShowLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var topRatedShowsListAdapter: MovieListAdapter
+    private lateinit var topRatedShowLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var airingTodayShowListAdapter: MovieListAdapter
+    private lateinit var airingTodayShowLayoutManager: LinearLayoutManager
 
     private lateinit var binding: FragmentDiscoveryBinding
 
@@ -89,12 +99,13 @@ class DiscoveryFragment : Fragment() {
 
     private fun showMovieDetails(movie: MediaModelSealed) {
         findNavController().navigate(
+            // todo different detail layout based on media type: movie/show
             DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragmentTMDB(
                 movieBackdrop = movie.backdropPath,
                 moviePoster = movie.posterPath,
-                movieTitle = movie.title,
+                movieTitle = "TEMP 2",
                 movieRating = movie.rating,
-                movieReleaseDate = movie.releaseDate,
+                movieReleaseDate = "TEMP 3",
                 movieOverview = movie.overview,
                 movieId = movie.id
             )
@@ -117,10 +128,16 @@ class DiscoveryFragment : Fragment() {
         popularMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
         topRatedMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
         upcomingMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        popularShowListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        topRatedMovieListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
+        airingTodayShowListAdapter.onMovieClick = { movie -> showMovieDetails(movie) }
 
         popularMovieListAdapter.onAddClicked = { movie -> onAddMediaClicked(movie) }
         topRatedMovieListAdapter.onAddClicked = { movie -> onAddMediaClicked(movie) }
         upcomingMovieListAdapter.onAddClicked = { movie -> onAddMediaClicked(movie) }
+        popularShowListAdapter.onMovieClick = { movie -> onAddMediaClicked(movie) }
+        topRatedMovieListAdapter.onMovieClick = { movie -> onAddMediaClicked(movie) }
+        airingTodayShowListAdapter.onMovieClick = { movie -> onAddMediaClicked(movie) }
 
         popularMoviesLayoutManager = LinearLayoutManager(
             requireContext(),
@@ -137,7 +154,23 @@ class DiscoveryFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        popularShowLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        topRatedShowLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        airingTodayShowLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
 
+        // todo rename to rcPopularMovies
         binding.rcFeaturedCategoriesDiscover.layoutManager = popularMoviesLayoutManager
         binding.rcFeaturedCategoriesDiscover.adapter = popularMovieListAdapter
 
@@ -146,6 +179,15 @@ class DiscoveryFragment : Fragment() {
 
         binding.rcUpcomingMovies.layoutManager = upcomingMoviesLayoutManager
         binding.rcUpcomingMovies.adapter = upcomingMovieListAdapter
+
+        binding.rcPopularShows.layoutManager = popularShowLayoutManager
+        binding.rcPopularShows.adapter = popularShowListAdapter
+
+        binding.rcTopRatedShows.layoutManager = topRatedShowLayoutManager
+        binding.rcTopRatedShows.adapter = topRatedShowsListAdapter
+
+        binding.rcAiringTodayShows.layoutManager = airingTodayShowLayoutManager
+        binding.rcAiringTodayShows.adapter = airingTodayShowListAdapter
 
         attachOnScrollListener(
             binding.rcFeaturedCategoriesDiscover,
@@ -159,6 +201,18 @@ class DiscoveryFragment : Fragment() {
             binding.rcUpcomingMovies,
             upcomingMoviesLayoutManager
         ) { viewModel.getUpcomingMovies() }
+        attachOnScrollListener(
+            binding.rcPopularShows,
+            popularShowLayoutManager
+        ) { viewModel.getPopularShows() }
+        attachOnScrollListener(
+            binding.rcTopRatedShows,
+            topRatedShowLayoutManager
+        ) { viewModel.getTopRatedShows() }
+        attachOnScrollListener(
+            binding.rcAiringTodayShows,
+            airingTodayShowLayoutManager
+        ) { viewModel.getAiringTodayShows() }
     }
 
     private fun observeViewModel() {
@@ -202,6 +256,51 @@ class DiscoveryFragment : Fragment() {
                         binding.rcUpcomingMovies,
                         upcomingMoviesLayoutManager
                     ) { viewModel.getUpcomingMovies() }
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.popularShows.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(popularShowListAdapter, it.data)
+                    attachOnScrollListener(
+                        binding.rcPopularShows,
+                        popularShowLayoutManager
+                    ) { viewModel.getPopularShows() }
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.topRatedShows.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(topRatedShowsListAdapter, it.data)
+                    attachOnScrollListener(
+                        binding.rcTopRatedShows,
+                        topRatedShowLayoutManager
+                    ) { viewModel.getTopRatedShows() }
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.airingTodayShows.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(airingTodayShowListAdapter, it.data)
+                    attachOnScrollListener(
+                        binding.rcAiringTodayShows,
+                        airingTodayShowLayoutManager
+                    ) { viewModel.getAiringTodayShows() }
                 }
                 is Resource.Error -> {
                 }

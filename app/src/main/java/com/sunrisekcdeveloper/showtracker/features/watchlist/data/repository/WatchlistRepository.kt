@@ -40,6 +40,8 @@ class WatchlistRepository(
     override suspend fun watchListMedia(): Resource<List<MediaModelSealed>> {
         val data = dao.watchListMedia()
         val uiModels = data.map {
+            // todo watchlistentity can only be movie or show
+            //  fix the model conversions
             when (it.mediaType) {
                 MediaType.MOVIE -> it.asDomainMovieSealed()
                 MediaType.SHOW -> it.asDomainShowSealed()

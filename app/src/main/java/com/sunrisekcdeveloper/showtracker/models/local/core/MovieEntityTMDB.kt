@@ -24,18 +24,34 @@ import androidx.room.PrimaryKey
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
-@Entity(tableName = "tbl_media_dump")
-data class MediaEntity(
-    @PrimaryKey
-    val id: Long,
-    val title: String,
-    val overview: String,
-    @ColumnInfo(name = "poster_path")
-    val posterPath: String,
-    @ColumnInfo(name = "backdrop_path")
-    val backdropPath: String,
-    val rating: Float,
-    @ColumnInfo(name = "release_date")
-    val releaseDate: String,
-    val type: String
-)
+sealed class MediaEntity {
+    @Entity(tableName = "tbl_movie_dump")
+    data class MovieEntityTMDB(
+        @PrimaryKey
+        val id: Long,
+        val title: String,
+        val overview: String,
+        @ColumnInfo(name = "poster_path")
+        val posterPath: String,
+        @ColumnInfo(name = "backdrop_path")
+        val backdropPath: String,
+        val rating: Float,
+        @ColumnInfo(name = "release_date")
+        val releaseDate: String
+    ) : MediaEntity()
+
+    @Entity(tableName = "tbl_show_dump")
+    data class ShowEntityTMDB(
+        @PrimaryKey
+        val id: Long,
+        val name: String,
+        val overview: String,
+        @ColumnInfo(name = "poster_path")
+        val posterPath: String,
+        @ColumnInfo(name = "backdrop_path")
+        val backdropPath: String,
+        val rating: Float,
+        @ColumnInfo(name = "first_air_date")
+        val firstAirDate: String
+    ) : MediaEntity()
+}

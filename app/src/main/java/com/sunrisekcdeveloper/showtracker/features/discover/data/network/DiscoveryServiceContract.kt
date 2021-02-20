@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedShow
 import retrofit2.Response
 
 interface DiscoveryServiceContract {
@@ -39,4 +40,18 @@ interface DiscoveryServiceContract {
         page: Int
     ): Response<EnvelopePaginatedMovie>
 
+    suspend fun popularShows(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
+    ): Response<EnvelopePaginatedShow>
+
+    suspend fun topRatedShows(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
+    ): Response<EnvelopePaginatedShow>
+
+    suspend fun airingTodayShows(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
+    ): Response<EnvelopePaginatedShow>
 }
