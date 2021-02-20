@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model
 
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 
+// todo remove legacy model
 data class MediaModel(
     val id: Long,
     val title: String,
@@ -30,53 +31,48 @@ data class MediaModel(
     val releaseDate: String
 )
 
+// todo rename
 sealed class MediaModelSealed(
     open val id: Long,
-    open val title: String,
     open val overview: String,
     open val posterPath: String,
     open val backdropPath: String,
     open val rating: Float,
-    open val releaseDate: String,
     open val watchListType: WatchListType
 ) {
     data class ShowModel(
         override val id: Long,
-        override val title: String,
+        val name: String,
         override val overview: String,
         override val posterPath: String,
         override val backdropPath: String,
         override val rating: Float,
-        override val releaseDate: String,
+        val firstAirDate: String,
         override val watchListType: WatchListType
     ) : MediaModelSealed(
         id,
-        title,
         overview,
         posterPath,
         backdropPath,
         rating,
-        releaseDate,
         watchListType
     )
 
     data class MovieModel(
         override val id: Long,
-        override val title: String,
+        val title: String,
         override val overview: String,
         override val posterPath: String,
         override val backdropPath: String,
         override val rating: Float,
-        override val releaseDate: String,
+        val releaseDate: String,
         override val watchListType: WatchListType
     ) : MediaModelSealed(
         id,
-        title,
         overview,
         posterPath,
         backdropPath,
         rating,
-        releaseDate,
         watchListType
     )
 }

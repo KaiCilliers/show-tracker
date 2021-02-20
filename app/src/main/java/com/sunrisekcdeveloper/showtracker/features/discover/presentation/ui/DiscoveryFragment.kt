@@ -32,7 +32,6 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,12 +88,13 @@ class DiscoveryFragment : Fragment() {
 
     private fun showMovieDetails(movie: MediaModelSealed) {
         findNavController().navigate(
+            // todo different detail layout based on media type: movie/show
             DiscoveryFragmentDirections.actionDiscoverFragmentDestToDetailFragmentTMDB(
                 movieBackdrop = movie.backdropPath,
                 moviePoster = movie.posterPath,
-                movieTitle = movie.title,
+                movieTitle = "TEMP 2",
                 movieRating = movie.rating,
-                movieReleaseDate = movie.releaseDate,
+                movieReleaseDate = "TEMP 3",
                 movieOverview = movie.overview,
                 movieId = movie.id
             )

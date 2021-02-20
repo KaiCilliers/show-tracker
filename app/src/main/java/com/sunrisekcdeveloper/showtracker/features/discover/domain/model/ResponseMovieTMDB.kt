@@ -21,12 +21,43 @@ package com.sunrisekcdeveloper.showtracker.features.discover.domain.model
 import com.google.gson.annotations.SerializedName
 
 // TODO all fields can be null - thus provide default values
-data class ResponseMovieTMDB(
-    @SerializedName("id") val id: Long,
-    @SerializedName("title") val title: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String,
-    @SerializedName("backdrop_path") val backdropPath: String,
-    @SerializedName("vote_average") val rating: Float,
-    @SerializedName("release_date") val releaseDate: String
-)
+// todo rename
+//data class ResponseMovieTMDB(
+//    @SerializedName("id") val id: Long,
+//    @SerializedName("title") val title: String,
+//    @SerializedName("overview") val overview: String,
+//    @SerializedName("poster_path") val posterPath: String,
+//    @SerializedName("backdrop_path") val backdropPath: String,
+//    @SerializedName("vote_average") val rating: Float,
+//    @SerializedName("release_date") val releaseDate: String
+//)
+//data class ResponseShowTMDB(
+//    @SerializedName("id") val id: Long?,
+//    @SerializedName("name") val name: String?,
+//    @SerializedName("overview") val overview: String?,
+//    @SerializedName("poster_path") val posterPath: String?,
+//    @SerializedName("backdrop_path") val backdropPath: String?,
+//    @SerializedName("vote_average") val rating: Float?,
+//    @SerializedName("first_air_date") val firstAirDate: String?
+//)
+
+sealed class ResponseStandardMedia {
+    data class ResponseMovie(
+        @SerializedName("id") val id: Long,
+        @SerializedName("title") val title: String,
+        @SerializedName("overview") val overview: String,
+        @SerializedName("poster_path") val posterPath: String,
+        @SerializedName("backdrop_path") val backdropPath: String,
+        @SerializedName("vote_average") val rating: Float,
+        @SerializedName("release_date") val releaseDate: String
+    ) : ResponseStandardMedia()
+    data class ResponseShow(
+        @SerializedName("id") val id: Long?,
+        @SerializedName("name") val name: String?,
+        @SerializedName("overview") val overview: String?,
+        @SerializedName("poster_path") val posterPath: String?,
+        @SerializedName("backdrop_path") val backdropPath: String?,
+        @SerializedName("vote_average") val rating: Float?,
+        @SerializedName("first_air_date") val firstAirDate: String?
+    ) : ResponseStandardMedia()
+}

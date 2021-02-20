@@ -16,18 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.roomresults
+package com.sunrisekcdeveloper.showtracker.features.discover.application
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.models.local.categories.MostPlayedListEntity
-import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-data class MostPlayedMovies(
-    @Embedded val data: MostPlayedListEntity,
-    @Relation(
-        parentColumn = "fk_played_media_slug",
-        entityColumn = "movie_slug"
-    )
-    val movie: MediaEntity?
-)
+interface LoadLatestShowsUseCaseContract {
+    suspend operator fun invoke(page: Int): Resource<List<MediaModelSealed>>
+}

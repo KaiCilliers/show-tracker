@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.Wa
 import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 interface DetailRepositoryContract {
-    suspend fun media(id: Long): MediaEntity
+    suspend fun movie(id: Long): MediaEntity.MovieEntityTMDB
+    suspend fun show(id: Long): MediaEntity.ShowEntityTMDB
     suspend fun updateWatchListType(id: Long, type: WatchListType)
 }

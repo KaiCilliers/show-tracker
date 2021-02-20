@@ -19,8 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 interface DiscoveryRepositoryContract {

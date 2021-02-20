@@ -27,6 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpco
 import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 /**
  * Home ViewModel

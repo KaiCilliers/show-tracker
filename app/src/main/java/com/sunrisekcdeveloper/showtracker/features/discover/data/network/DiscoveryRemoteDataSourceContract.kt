@@ -20,9 +20,14 @@ package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedShow
 
 interface DiscoveryRemoteDataSourceContract {
     suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie>
     suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie>
     suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie>
+
+    suspend fun popularShows(page: Int): Resource<EnvelopePaginatedShow>
+    suspend fun topRatedShows(page: Int): Resource<EnvelopePaginatedShow>
+    suspend fun latestShows(page: Int): Resource<EnvelopePaginatedShow>
 }

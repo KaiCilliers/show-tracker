@@ -22,7 +22,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
@@ -33,9 +32,10 @@ import java.util.Date
 
 @Database(
     entities = [
-        MediaEntity::class, WatchListEntity::class
+        MediaEntity.MovieEntityTMDB::class, WatchListEntity::class,
+        MediaEntity.ShowEntityTMDB::class
     ],
-    version = 32,
+    version = 33,
     exportSchema = false
 )
 @TypeConverters(WatchListConverter::class, TrackerTypeConverters::class)
