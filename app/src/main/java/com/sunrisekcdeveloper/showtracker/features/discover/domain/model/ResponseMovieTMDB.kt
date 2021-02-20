@@ -51,6 +51,8 @@ sealed class ResponseStandardMedia {
         @SerializedName("vote_average") val rating: Float,
         @SerializedName("release_date") val releaseDate: String
     ) : ResponseStandardMedia()
+
+    // todo cross reference TMDB api enpoint documentation of response object possible values
     data class ResponseShow(
         @SerializedName("id") val id: Long?,
         @SerializedName("name") val name: String?,

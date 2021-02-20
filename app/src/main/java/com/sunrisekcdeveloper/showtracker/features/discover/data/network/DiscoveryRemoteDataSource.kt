@@ -43,12 +43,12 @@ class DiscoveryRemoteDataSource(
         api.popularShows(page = page)
     }
 
-    override suspend fun topRatedShows(page: Int): Resource<EnvelopePaginatedShow> = safeApiCall{
+    override suspend fun topRatedShows(page: Int): Resource<EnvelopePaginatedShow> = safeApiCall {
         api.topRatedShows(page = page)
     }
 
-    override suspend fun latestShows(page: Int): Resource<EnvelopePaginatedShow> = safeApiCall {
-        api.latestShows(page = page)
-    }
+    override suspend fun airingTodayShows(page: Int): Resource<EnvelopePaginatedShow> =
+        safeApiCall {
+            api.airingTodayShows(page = page)
+        }
 }
-

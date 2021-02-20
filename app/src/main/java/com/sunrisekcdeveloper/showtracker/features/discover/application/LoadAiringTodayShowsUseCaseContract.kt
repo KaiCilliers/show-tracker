@@ -16,19 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discover.application
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-interface DiscoveryRepositoryContract {
-    suspend fun popularMovies(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun topRatedMovies(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun upcomingMovies(page: Int): Resource<List<MediaModelSealed>>
-
-    suspend fun popularShows(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun topRatedShows(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun airingTodayShows(page: Int): Resource<List<MediaModelSealed>>
-
-    suspend fun saveMediaToWatchList(media: MediaModelSealed)
+interface LoadAiringTodayShowsUseCaseContract {
+    suspend operator fun invoke(page: Int): Resource<List<MediaModelSealed>>
 }

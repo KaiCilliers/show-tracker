@@ -50,7 +50,7 @@ interface DiscoveryServiceContract {
         page: Int
     ): Response<EnvelopePaginatedShow>
 
-    suspend fun latestShows(
+    suspend fun airingTodayShows(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedShow>

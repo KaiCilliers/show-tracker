@@ -16,19 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discover.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-interface DiscoveryRepositoryContract {
-    suspend fun popularMovies(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun topRatedMovies(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun upcomingMovies(page: Int): Resource<List<MediaModelSealed>>
-
-    suspend fun popularShows(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun topRatedShows(page: Int): Resource<List<MediaModelSealed>>
-    suspend fun airingTodayShows(page: Int): Resource<List<MediaModelSealed>>
-
-    suspend fun saveMediaToWatchList(media: MediaModelSealed)
+class LoadPopularShowsUseCase(
+    @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
+) : LoadPopularShowsUseCaseContract {
+    override suspend fun invoke(page: Int): Resource<List<MediaModelSealed>> =
+        discoveryRepo.popularShows(page)
 }

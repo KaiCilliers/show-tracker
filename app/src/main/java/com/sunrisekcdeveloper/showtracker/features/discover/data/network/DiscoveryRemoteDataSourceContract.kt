@@ -29,5 +29,5 @@ interface DiscoveryRemoteDataSourceContract {
 
     suspend fun popularShows(page: Int): Resource<EnvelopePaginatedShow>
     suspend fun topRatedShows(page: Int): Resource<EnvelopePaginatedShow>
-    suspend fun latestShows(page: Int): Resource<EnvelopePaginatedShow>
+    suspend fun airingTodayShows(page: Int): Resource<EnvelopePaginatedShow>
 }

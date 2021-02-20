@@ -55,8 +55,9 @@ interface DiscoveryService : DiscoveryServiceContract {
         @Query("page") page: Int
     ): Response<EnvelopePaginatedShow>
 
-    @GET("tv/latest")
-    override suspend fun latestShows(
+    @GET("tv/airing_today")
+    override suspend fun airingTodayShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedShow>}
+    ): Response<EnvelopePaginatedShow>
+}
