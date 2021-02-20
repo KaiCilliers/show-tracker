@@ -18,63 +18,36 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.commons.util.asDomainMovieSealed
+import com.sunrisekcdeveloper.showtracker.commons.util.asDomainShowSealed
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.WatchlistClient
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 class WatchlistRepository(
     @WatchlistClient private val remote: WatchlistDataSourceContract,
     private val dao: WatchlistDao,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : WatchListRepositoryContract {
-    override suspend fun recentlyAddedMedia(): Resource<List<RecentlyAddedMediaEntity>> {
-        val list = dao.recentlyAddedMedia()
-        return if (!list.isNullOrEmpty()) {
-            Resource.Success(list)
-        } else {
-            Resource.Error("No media in recently added table")
-        }
-    }
 
-    override suspend fun inProgressMedia(): Resource<List<InProgressMediaEntity>> {
-        val list = dao.inProgressMedia()
-        return if (!list.isNullOrEmpty()) {
-            Resource.Success(list)
-        } else {
-            Resource.Error("No media in recently added table")
+    override suspend fun watchListMedia(): Resource<List<MediaModelSealed>> {
+        val data = dao.watchListMedia()
+        val uiModels = data.map {
+            // todo watchlistentity can only be movie or show
+            //  fix the model conversions
+            when (it.mediaType) {
+                MediaType.MOVIE -> it.asDomainMovieSealed()
+                MediaType.SHOW -> it.asDomainShowSealed()
+            }
         }
-    }
-
-    override suspend fun upcomingMedia(): Resource<List<UpcomingMediaEntity>> {
-        val list = dao.upcomingMedia()
-        return if (!list.isNullOrEmpty()) {
-            Resource.Success(list)
-        } else {
-            Resource.Error("No media in recently added table")
-        }
-    }
-
-    override suspend fun completedMedia(): Resource<List<CompletedMediaEntity>> {
-        val list = dao.completedMedia()
-        return if (!list.isNullOrEmpty()) {
-            Resource.Success(list)
-        } else {
-            Resource.Error("No media in recently added table")
-        }
-    }
-
-    override suspend fun anticipatedMedia(): Resource<List<AnticipatedMediaEntity>> {
-        val list = dao.anticipatedMedia()
-        return if (!list.isNullOrEmpty()) {
-            Resource.Success(list)
-        } else {
-            Resource.Error("No media in recently added table")
-        }
+        return Resource.Success(uiModels)
     }
 }
 

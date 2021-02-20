@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.application
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 interface LoadUpcomingMoviesUseCaseContract {
-    suspend operator fun invoke(page: Int): Resource<EnvelopePaginatedMovie>
+    suspend operator fun invoke(page: Int): Resource<List<MediaModelSealed>>
 }

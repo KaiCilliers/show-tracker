@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.data.network
 
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedShow
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -41,4 +42,22 @@ interface DiscoveryService : DiscoveryServiceContract {
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
     ): Response<EnvelopePaginatedMovie>
+
+    @GET("tv/popular")
+    override suspend fun popularShows(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<EnvelopePaginatedShow>
+
+    @GET("tv/top_rated")
+    override suspend fun topRatedShows(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<EnvelopePaginatedShow>
+
+    @GET("tv/airing_today")
+    override suspend fun airingTodayShows(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<EnvelopePaginatedShow>
 }

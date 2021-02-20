@@ -16,11 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.application
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.UpcomingMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-interface LoadUpcomingMediaUseCaseContract {
-    suspend operator fun invoke(): Resource<List<UpcomingMediaEntity>>
+class LoadPopularShowsUseCase(
+    @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
+) : LoadPopularShowsUseCaseContract {
+    override suspend fun invoke(page: Int): Resource<List<MediaModelSealed>> =
+        discoveryRepo.popularShows(page)
 }

@@ -20,8 +20,17 @@ package com.sunrisekcdeveloper.showtracker.features.discover.domain.model
 
 import com.google.gson.annotations.SerializedName
 
+// todo merge into single envelope
+//  issue is having variable media of type List<SealedClass>
+//  retrofit does not know which implementation of the sealed class to use
+//  possible solution is using a custom retrofit adapter
 data class EnvelopePaginatedMovie(
     @SerializedName("page") val page: Int,
-    @SerializedName("results") val movies: List<ResponseMovieTMDB>,
+    @SerializedName("results") val media: List<ResponseStandardMedia.ResponseMovie>,
+    @SerializedName("total_pages") val pages: Int
+)
+data class EnvelopePaginatedShow(
+    @SerializedName("page") val page: Int,
+    @SerializedName("results") val media: List<ResponseStandardMedia.ResponseShow>,
     @SerializedName("total_pages") val pages: Int
 )

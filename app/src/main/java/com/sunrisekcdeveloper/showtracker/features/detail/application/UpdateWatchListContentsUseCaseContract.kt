@@ -18,8 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.application
 
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
+
 
 interface UpdateWatchListContentsUseCaseContract {
-    suspend operator fun invoke(id: Long, from: WatchListType, to: WatchListType)
+    suspend operator fun invoke(mediaId: Long, newType: WatchListType)
 }

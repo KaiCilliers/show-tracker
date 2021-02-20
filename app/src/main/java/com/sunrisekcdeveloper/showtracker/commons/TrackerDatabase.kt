@@ -22,23 +22,23 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.converter.WatchListConverter
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListEntity
 import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import java.util.Date
 
 @Database(
     entities = [
-        RecentlyAddedMediaEntity::class, AnticipatedMediaEntity::class,
-        CompletedMediaEntity::class, InProgressMediaEntity::class,
-        UpcomingMediaEntity::class, MediaEntity::class
+        MediaEntity.MovieEntityTMDB::class, WatchListEntity::class,
+        MediaEntity.ShowEntityTMDB::class
     ],
-    version = 29,
+    version = 33,
     exportSchema = false
 )
-@TypeConverters(TrackerTypeConverters::class)
+@TypeConverters(WatchListConverter::class, TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
     abstract fun discoveryDao(): DiscoveryDao
     abstract fun watchlistDao(): WatchlistDao

@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.application
+package com.sunrisekcdeveloper.showtracker.features.discover.application
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.CompletedMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-interface LoadCompletedMediaUseCaseContract {
-    suspend operator fun invoke(): Resource<List<CompletedMediaEntity>>
+interface LoadTopRatedShowsUseCaseContract {
+    suspend operator fun invoke(page: Int): Resource<List<MediaModelSealed>>
 }

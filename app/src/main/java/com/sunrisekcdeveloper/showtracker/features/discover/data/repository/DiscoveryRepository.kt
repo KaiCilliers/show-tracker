@@ -19,14 +19,15 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.data.repository
 
 import com.sunrisekcdeveloper.showtracker.commons.util.asMediaEntity
-import com.sunrisekcdeveloper.showtracker.commons.util.asRecentlyAddedEntity
+import com.sunrisekcdeveloper.showtracker.commons.util.asMediaModel
+import com.sunrisekcdeveloper.showtracker.commons.util.asWatchListEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseMovieTMDB
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseStandardMedia
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -35,32 +36,85 @@ class DiscoveryRepository(
     private val dao: DiscoveryDao,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DiscoveryRepositoryContract {
-    override suspend fun popularMovies(page: Int): Resource<EnvelopePaginatedMovie> {
-        val response = remote.popularMovies(page)
-        saveMedia(response)
-        return response
+
+    override suspend fun popularMovies(page: Int): Resource<List<MediaModelSealed>> {
+        return when (val response = remote.popularMovies(page)) {
+            is Resource.Success -> {
+                saveMedia(response.data.media)
+                Resource.Success(response.data.media.map { it.asMediaModel() })
+            }
+            is Resource.Error -> Resource.Error(response.message)
+            Resource.Loading -> Resource.Loading
+        }
     }
 
-    override suspend fun topRatedMovies(page: Int): Resource<EnvelopePaginatedMovie> {
-        val response = remote.topRatedMovies(page)
-        saveMedia(response)
-        return response
+    override suspend fun topRatedMovies(page: Int): Resource<List<MediaModelSealed>> {
+        return when (val response = remote.topRatedMovies(page)) {
+            is Resource.Success -> {
+                saveMedia(response.data.media)
+                Resource.Success(response.data.media.map { it.asMediaModel() })
+            }
+            is Resource.Error -> Resource.Error(response.message)
+            Resource.Loading -> Resource.Loading
+        }
     }
 
-    override suspend fun upcomingMovies(page: Int): Resource<EnvelopePaginatedMovie> {
-        val response = remote.upcomingMovies(page)
-        saveMedia(response)
-        return response
+    override suspend fun upcomingMovies(page: Int): Resource<List<MediaModelSealed>> {
+        return when (val response = remote.upcomingMovies(page)) {
+            is Resource.Success -> {
+                saveMedia(response.data.media)
+                Resource.Success(response.data.media.map { it.asMediaModel() })
+            }
+            is Resource.Error -> Resource.Error(response.message)
+            Resource.Loading -> Resource.Loading
+        }
     }
 
-    override suspend fun saveMediaToWatchList(media: ResponseMovieTMDB) {
-        dao.insertRecentlyAddedMedia(media.asRecentlyAddedEntity())
+    override suspend fun popularShows(page: Int): Resource<List<MediaModelSealed>> {
+        return when (val response = remote.popularShows(page)) {
+            is Resource.Success -> {
+                saveMedia(response.data.media)
+                Resource.Success(response.data.media.map { it.asMediaModel() })
+            }
+            is Resource.Error -> Resource.Error(response.message)
+            Resource.Loading -> Resource.Loading
+        }
     }
 
-    private suspend fun saveMedia(input: Resource<EnvelopePaginatedMovie>) {
-        if (input is Resource.Success) {
-            input.data.movies.forEach {
-                dao.insertMedia(it.asMediaEntity("movie"))
+    override suspend fun topRatedShows(page: Int): Resource<List<MediaModelSealed>> {
+        return when (val response = remote.topRatedShows(page)) {
+            is Resource.Success -> {
+                saveMedia(response.data.media)
+                Resource.Success(response.data.media.map { it.asMediaModel() })
+            }
+            is Resource.Error -> Resource.Error(response.message)
+            Resource.Loading -> Resource.Loading
+        }
+    }
+
+    override suspend fun airingTodayShows(page: Int): Resource<List<MediaModelSealed>> {
+        return when (val response = remote.airingTodayShows(page)) {
+            is Resource.Success -> {
+                saveMedia(response.data.media)
+                Resource.Success(response.data.media.map { it.asMediaModel() })
+            }
+            is Resource.Error -> Resource.Error(response.message)
+            Resource.Loading -> Resource.Loading
+        }
+    }
+
+    override suspend fun saveMediaToWatchList(media: MediaModelSealed) {
+        when (media) {
+            is MediaModelSealed.ShowModel -> TODO()
+            is MediaModelSealed.MovieModel -> dao.insertWatchListEntity(media.asWatchListEntity())
+        }
+    }
+
+    private suspend fun saveMedia(mediaList: List<ResponseStandardMedia>) {
+        mediaList.forEach {
+            when (it) {
+                is ResponseStandardMedia.ResponseMovie -> dao.insertMovieDump(it.asMediaEntity())
+                is ResponseStandardMedia.ResponseShow -> dao.insertShowDump(it.asMediaEntity())
             }
         }
     }

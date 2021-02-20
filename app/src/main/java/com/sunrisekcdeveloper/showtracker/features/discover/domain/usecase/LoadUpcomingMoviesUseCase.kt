@@ -19,15 +19,14 @@
 package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.EnvelopePaginatedMovie
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 class LoadUpcomingMoviesUseCase(
     @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
 ) : LoadUpcomingMoviesUseCaseContract {
-    override suspend fun invoke(page: Int): Resource<EnvelopePaginatedMovie> =
+    override suspend fun invoke(page: Int): Resource<List<MediaModelSealed>> =
         discoveryRepo.upcomingMovies(page)
 }

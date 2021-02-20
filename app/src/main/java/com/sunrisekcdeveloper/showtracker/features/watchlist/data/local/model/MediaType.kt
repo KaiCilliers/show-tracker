@@ -16,11 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.application
+package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.AnticipatedMediaEntity
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-
-interface LoadAnticipatedMediaUseCaseContract {
-    suspend operator fun invoke(): Resource<List<AnticipatedMediaEntity>>
+enum class MediaType {
+    MOVIE, SHOW
 }

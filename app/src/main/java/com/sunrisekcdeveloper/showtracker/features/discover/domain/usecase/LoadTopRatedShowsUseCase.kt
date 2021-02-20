@@ -16,18 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
+package com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.AnticipatedMediaEntity
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadAnticipatedMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
+import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
-class LoadAnticipatedMediaUseCase(
-    @WatchlistRepo private val watchListRepo: WatchListRepositoryContract
-) : LoadAnticipatedMediaUseCaseContract {
-    override suspend fun invoke(): Resource<List<AnticipatedMediaEntity>> =
-        watchListRepo.anticipatedMedia()
+class LoadTopRatedShowsUseCase(
+    @DiscoveryRepo private val discoveryRepo: DiscoveryRepositoryContract
+) : LoadTopRatedShowsUseCaseContract {
+    override suspend fun invoke(page: Int): Resource<List<MediaModelSealed>> =
+        discoveryRepo.topRatedShows(page)
 }

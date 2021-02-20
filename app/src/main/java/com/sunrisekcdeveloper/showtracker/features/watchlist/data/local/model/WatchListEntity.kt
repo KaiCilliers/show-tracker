@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020. The Android Open Source Project
+ * Copyright © 2021. The Android Open Source Project
  *
  * @author Kai Cilliers
  *
@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.local.core
+package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
-import com.sunrisekcdeveloper.showtracker.models.roomresults.Movie
 
-@Entity(tableName = "tbl_media_dump")
-data class MediaEntity(
+@Entity(tableName = "tbl_watchlist_media")
+data class WatchListEntity(
     @PrimaryKey
     val id: Long,
     val title: String,
@@ -37,5 +35,8 @@ data class MediaEntity(
     val rating: Float,
     @ColumnInfo(name = "release_date")
     val releaseDate: String,
-    val type: String
+    @ColumnInfo(name = "media_type")
+    val mediaType: MediaType,
+    @ColumnInfo(name = "watchlist_type")
+    val watchListType: WatchListType
 )

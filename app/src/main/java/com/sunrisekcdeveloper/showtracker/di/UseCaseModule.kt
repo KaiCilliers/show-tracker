@@ -24,15 +24,9 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.UpdateWatchListContentsUseCase
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadPopularMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadUpcomingMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.application.SaveMediaToWatchListUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discover.application.*
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadPopularMoviesUseCase
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadTopRatedMoviesUseCase
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.LoadUpcomingMoviesUseCase
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.SaveMediaToWatchListUseCase
+import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.*
@@ -44,6 +38,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object UseCaseModule {
+    // Discovery
     @Provides
     fun provideLoadPopularMoviesUseCase(
         @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
@@ -68,37 +63,30 @@ object UseCaseModule {
     ) : SaveMediaToWatchListUseCaseContract =
         SaveMediaToWatchListUseCase(discoveryRepo)
 
+    @Provides
+    fun provideLoadAiringTodayShowsUseCase(
+        @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
+    ) : LoadAiringTodayShowsUseCaseContract =
+        LoadAiringTodayShowsUseCase(discoveryRepo)
+
+    @Provides
+    fun provideLoadPopularShowsUseCase(
+        @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
+    ) : LoadPopularShowsUseCaseContract =
+        LoadPopularShowsUseCase(discoveryRepo)
+
+    @Provides
+    fun provideTopRatedShowsUseCase(
+        @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
+    ) : LoadTopRatedShowsUseCaseContract =
+        LoadTopRatedShowsUseCase(discoveryRepo)
+
     // Watchlist
     @Provides
-    fun provideLoadRecentlyAddedMediaUseCase(
+    fun provideLoadWatchListMediaUseCase(
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadRecentlyAddedMediaUseCaseContract =
-        LoadRecentlyAddedMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadInProgressMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadInProgressMediaUseCaseContract =
-        LoadInProgressMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadUpcomingMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadUpcomingMediaUseCaseContract =
-        LoadUpcomingMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadCompletedMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadCompletedMediaUseCaseContract =
-        LoadCompletedMediaUseCase(watchlistRepo)
-
-    @Provides
-    fun provideLoadAnticipatedMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadAnticipatedMediaUseCaseContract =
-        LoadAnticipatedMediaUseCase(watchlistRepo)
-
+    ) : LoadWatchListMediaUseCaseContract =
+        LoadWatchListMediaUseCase(watchlistRepo)
 
     // Detail
     @Provides

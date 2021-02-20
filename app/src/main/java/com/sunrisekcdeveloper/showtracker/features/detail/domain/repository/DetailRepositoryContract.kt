@@ -18,22 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 
 interface DetailRepositoryContract {
-
-    suspend fun media(id: Long): MediaEntity
-
-    suspend fun removeMediaFromRecentlyAdded(id: Long)
-    suspend fun removeMediaFromUpcoming(id: Long)
-    suspend fun removeMediaFromCompleted(id: Long)
-    suspend fun removeMediaFromAnticipated(id: Long)
-    suspend fun removeMediaFromInProgress(id: Long)
-
-    suspend fun addMediaToRecentlyAdded(media: RecentlyAddedMediaEntity)
-    suspend fun addMediaToUpcoming(media: UpcomingMediaEntity)
-    suspend fun addMediaToCompleted(media: CompletedMediaEntity)
-    suspend fun addMediaToAnticipated(media: AnticipatedMediaEntity)
-    suspend fun addMediaToInProgress(media: InProgressMediaEntity)
+    suspend fun movie(id: Long): MediaEntity.MovieEntityTMDB
+    suspend fun show(id: Long): MediaEntity.ShowEntityTMDB
+    suspend fun updateWatchListType(id: Long, type: WatchListType)
 }

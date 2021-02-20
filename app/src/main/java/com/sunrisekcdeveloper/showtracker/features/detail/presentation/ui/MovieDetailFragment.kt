@@ -29,8 +29,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.chip.Chip
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentMovieDetailBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchListType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
@@ -40,8 +41,6 @@ class MovieDetailFragment : Fragment() {
     private val arguments: MovieDetailFragmentArgs by navArgs()
 
     private val viewModel: DetailViewModel by viewModels()
-
-    private lateinit var selectedChip: Chip
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,29 +55,17 @@ class MovieDetailFragment : Fragment() {
 
     private fun setup() {
         binding.cgChoiceSaveInList.setOnCheckedChangeListener { group, checkedId ->
-            val chip = requireActivity().findViewById<Chip?>(checkedId)
-            val fromList = when (selectedChip) {
-                this.binding.chipChoiceRecentlyAdded ->  WatchListType.RECENTLY_ADDED
-                this.binding.chipChoiceAnticipated ->  WatchListType.ANTICIPATED
-                this.binding.chipChoiceCompleted ->  WatchListType.COMPLETED
-                this.binding.chipChoiceUpcoming ->  WatchListType.UPCOMING
-                this.binding.chipChoiceInProgress ->  WatchListType.IN_PROGRESS
+            val newType = when (binding.cgChoiceSaveInList.findViewById<Chip>(checkedId)) {
+                this.binding.chipChoiceRecentlyAdded -> WatchListType.RECENTLY_ADDED
+                this.binding.chipChoiceAnticipated -> WatchListType.ANTICIPATED
+                this.binding.chipChoiceCompleted -> WatchListType.COMPLETED
+                this.binding.chipChoiceUpcoming -> WatchListType.UPCOMING
+                this.binding.chipChoiceInProgress -> WatchListType.IN_PROGRESS
                 else -> WatchListType.NONE
-            }
-            val choice = chip?.let {
-                when (chip) {
-                    this.binding.chipChoiceRecentlyAdded ->  WatchListType.RECENTLY_ADDED
-                    this.binding.chipChoiceAnticipated ->  WatchListType.ANTICIPATED
-                    this.binding.chipChoiceCompleted ->  WatchListType.COMPLETED
-                    this.binding.chipChoiceUpcoming ->  WatchListType.UPCOMING
-                    this.binding.chipChoiceInProgress ->  WatchListType.IN_PROGRESS
-                    else -> WatchListType.NONE
-                }
             }
             viewModel.updateWatchList(
                 arguments.movieId,
-                fromList,
-                choice!!
+                newType
             )
         }
     }
@@ -103,30 +90,29 @@ class MovieDetailFragment : Fragment() {
         binding.movieRating.rating = arguments.movieRating / 2f
         binding.movieReleaseDate.text = arguments.movieReleaseDate
         binding.movieOverview.text = arguments.movieOverview
-
         determineList()
     }
 
     private fun determineList() {
-        val list = arguments.watchlistType
-        if (list == "recently") {
-            binding.chipChoiceRecentlyAdded.isChecked = true
-            selectedChip = binding.chipChoiceRecentlyAdded
-        } else if (list == "progress") {
-            binding.chipChoiceInProgress.isChecked = true
-            selectedChip = binding.chipChoiceInProgress
-        } else if (list == "upcoming") {
-            binding.chipChoiceUpcoming.isChecked = true
-            selectedChip = binding.chipChoiceUpcoming
-        } else if (list == "complete") {
-            binding.chipChoiceCompleted.isChecked = true
-            selectedChip = binding.chipChoiceCompleted
-        } else if (list == "anticipated") {
-            binding.chipChoiceAnticipated.isChecked = true
-            selectedChip = binding.chipChoiceAnticipated
-        } else {
-            binding.chipChoiceNone.isChecked = true
-            selectedChip = binding.chipChoiceNone
+        when (arguments.watchlistType) {
+            WatchListType.RECENTLY_ADDED.name -> {
+                binding.chipChoiceRecentlyAdded.isChecked = true
+            }
+            WatchListType.IN_PROGRESS.name -> {
+                binding.chipChoiceInProgress.isChecked = true
+            }
+            WatchListType.UPCOMING.name -> {
+                binding.chipChoiceUpcoming.isChecked = true
+            }
+            WatchListType.COMPLETED.name -> {
+                binding.chipChoiceCompleted.isChecked = true
+            }
+            WatchListType.ANTICIPATED.name -> {
+                binding.chipChoiceAnticipated.isChecked = true
+            }
+            else -> {
+                binding.chipChoiceNone.isChecked = true
+            }
         }
     }
 
