@@ -23,11 +23,11 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.LoadWatchListMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
+import kotlinx.coroutines.flow.Flow
 
 class LoadWatchListMediaUseCase(
     @WatchlistRepo private val watchListRepo: WatchListRepositoryContract
 ) : LoadWatchListMediaUseCaseContract {
-    override suspend fun invoke(): Resource<List<MediaModelSealed>> {
-        return watchListRepo.watchListMedia()
-    }
+    override fun invoke(): Flow<Resource<List<MediaModelSealed>>> =
+        watchListRepo.watchListMediaFlow()
 }

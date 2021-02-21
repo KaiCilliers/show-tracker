@@ -21,7 +21,8 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
+import kotlinx.coroutines.flow.Flow
 
 interface LoadWatchListMediaUseCaseContract {
-    suspend operator fun invoke(): Resource<List<MediaModelSealed>>
+    operator fun invoke(): Flow<Resource<List<MediaModelSealed>>>
 }

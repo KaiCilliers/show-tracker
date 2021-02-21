@@ -25,6 +25,10 @@ import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -37,44 +41,47 @@ class WatchlistViewModel @ViewModelInject constructor(
     private val loadWatchListMediaUseCase: LoadWatchListMediaUseCaseContract
 ) : ViewModel() {
 
-    private val _watchListMedia = MutableLiveData<Resource<Map<WatchListType, MutableList<MediaModelSealed>>>>()
-    val watchListMedia: LiveData<Resource<Map<WatchListType, MutableList<MediaModelSealed>>>>
-        get() = _watchListMedia
-
-    init {
-        getWatchListMedia()
-    }
-
-    private fun getWatchListMedia() = viewModelScope.launch {
-        val data = loadWatchListMediaUseCase()
-        val results = mutableMapOf<WatchListType, MutableList<MediaModelSealed>>()
-        when (data) {
-            is Resource.Loading -> {}
-            is Resource.Error -> {}
-            is Resource.Success -> {
-                data.data.forEach {
-                    when (it.watchListType) {
-                        WatchListType.RECENTLY_ADDED -> {
-                            results.getOrPut(WatchListType.RECENTLY_ADDED, { mutableListOf() }).add(it)
-                        }
-                        WatchListType.IN_PROGRESS -> {
-                            results.getOrPut(WatchListType.IN_PROGRESS, { mutableListOf() }).add(it)
-                        }
-                        WatchListType.UPCOMING -> {
-                            results.getOrPut(WatchListType.UPCOMING, { mutableListOf() }).add(it)
-                        }
-                        WatchListType.COMPLETED -> {
-                            results.getOrPut(WatchListType.COMPLETED, { mutableListOf() }).add(it)
-                        }
-                        WatchListType.ANTICIPATED -> {
-                            results.getOrPut(WatchListType.ANTICIPATED, { mutableListOf() }).add(it)
-                        }
-                        else -> {
+    @ExperimentalCoroutinesApi
+    val watchlistMedia: LiveData<Resource<MutableMap<WatchListType, MutableList<MediaModelSealed>>>> =
+        loadWatchListMediaUseCase()
+            .onStart { emit(Resource.Loading) }
+            .map {
+                val results = mutableMapOf<WatchListType, MutableList<MediaModelSealed>>()
+                when (it) {
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Error -> {
+                    }
+                    is Resource.Success -> {
+                        it.data.forEach { uiModel ->
+                            when (uiModel.watchListType) {
+                                WatchListType.RECENTLY_ADDED -> {
+                                    results.getOrPut(
+                                        WatchListType.RECENTLY_ADDED,
+                                        { mutableListOf() }).add(uiModel)
+                                }
+                                WatchListType.IN_PROGRESS -> {
+                                    results.getOrPut(WatchListType.IN_PROGRESS, { mutableListOf() })
+                                        .add(uiModel)
+                                }
+                                WatchListType.UPCOMING -> {
+                                    results.getOrPut(WatchListType.UPCOMING, { mutableListOf() })
+                                        .add(uiModel)
+                                }
+                                WatchListType.COMPLETED -> {
+                                    results.getOrPut(WatchListType.COMPLETED, { mutableListOf() })
+                                        .add(uiModel)
+                                }
+                                WatchListType.ANTICIPATED -> {
+                                    results.getOrPut(WatchListType.ANTICIPATED, { mutableListOf() })
+                                        .add(uiModel)
+                                }
+                                else -> {
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-        _watchListMedia.postValue(Resource.Success(results))
-    }
+                Resource.Success(results)
+            }.asLiveData(viewModelScope.coroutineContext)
 }

@@ -18,13 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
+import kotlinx.coroutines.flow.Flow
 import androidx.room.Dao
 import androidx.room.Query
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListEntity
 
 @Dao
 abstract class WatchlistDao {
     @Query("SELECT * FROM tbl_watchlist_media ORDER BY watchlist_type")
-    abstract suspend fun watchListMedia(): List<WatchListEntity>
+    abstract fun watchListMediaFlow(): Flow<List<WatchListEntity>>
 }

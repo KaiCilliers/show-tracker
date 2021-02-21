@@ -34,6 +34,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.Wa
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 /**
@@ -162,8 +163,9 @@ class WatchlistFragment : Fragment() {
         adapter.updateList(list)
     }
 
+    @ExperimentalCoroutinesApi
     private fun observeViewModel() {
-        viewModel.watchListMedia.subscribe(viewLifecycleOwner) {
+        viewModel.watchlistMedia.subscribe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> { }
                 is Resource.Error -> { }

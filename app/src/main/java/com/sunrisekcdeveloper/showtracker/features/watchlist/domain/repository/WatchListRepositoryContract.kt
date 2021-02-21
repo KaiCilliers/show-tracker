@@ -18,11 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
+import kotlinx.coroutines.flow.Flow
 
 interface WatchListRepositoryContract {
-    suspend fun watchListMedia(): Resource<List<MediaModelSealed>>
+    fun watchListMediaFlow(): Flow<Resource<List<MediaModelSealed>>>
 }
