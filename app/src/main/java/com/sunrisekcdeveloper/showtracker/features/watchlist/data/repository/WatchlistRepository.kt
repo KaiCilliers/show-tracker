@@ -29,7 +29,8 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.Watchl
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class WatchlistRepository(
     @WatchlistClient private val remote: WatchlistDataSourceContract,
@@ -37,17 +38,19 @@ class WatchlistRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : WatchListRepositoryContract {
 
-    override suspend fun watchListMedia(): Resource<List<MediaModelSealed>> {
-        val data = dao.watchListMedia()
-        val uiModels = data.map {
-            // todo watchlistentity can only be movie or show
-            //  fix the model conversions
-            when (it.mediaType) {
-                MediaType.MOVIE -> it.asDomainMovieSealed()
-                MediaType.SHOW -> it.asDomainShowSealed()
+    override fun watchListMediaFlow(): Flow<Resource<List<MediaModelSealed>>> =
+        dao.watchListMediaFlow()
+            .map { list ->
+                Resource.Success(
+                    list.map {
+                        // todo watchlistentity can only be movie or show
+                        //  fix the model conversions
+                        when (it.mediaType) {
+                            MediaType.MOVIE -> it.asDomainMovieSealed()
+                            MediaType.SHOW -> it.asDomainShowSealed()
+                        }
+                    }
+                )
             }
-        }
-        return Resource.Success(uiModels)
-    }
 }
 

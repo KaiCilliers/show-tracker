@@ -72,6 +72,17 @@ fun MediaModelSealed.MovieModel.asWatchListEntity() = WatchListEntity(
     mediaType = MediaType.MOVIE,
     watchListType = watchListType
 )
+fun MediaModelSealed.ShowModel.asWatchListEntity() = WatchListEntity(
+    id = id,
+    title = name,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    rating = rating,
+    releaseDate = firstAirDate,
+    mediaType = MediaType.SHOW,
+    watchListType = watchListType
+)
 fun WatchListEntity.asDomainMovieSealed() = MediaModelSealed.MovieModel(
     id = id,
     title = title,

@@ -60,38 +60,38 @@ object UseCaseModule {
     @Provides
     fun provideSaveMediaToWatchListUseCase(
         @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
-    ) : SaveMediaToWatchListUseCaseContract =
+    ): SaveMediaToWatchListUseCaseContract =
         SaveMediaToWatchListUseCase(discoveryRepo)
 
     @Provides
     fun provideLoadAiringTodayShowsUseCase(
         @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
-    ) : LoadAiringTodayShowsUseCaseContract =
+    ): LoadAiringTodayShowsUseCaseContract =
         LoadAiringTodayShowsUseCase(discoveryRepo)
 
     @Provides
     fun provideLoadPopularShowsUseCase(
         @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
-    ) : LoadPopularShowsUseCaseContract =
+    ): LoadPopularShowsUseCaseContract =
         LoadPopularShowsUseCase(discoveryRepo)
 
     @Provides
     fun provideTopRatedShowsUseCase(
         @DiscoveryRepo discoveryRepo: DiscoveryRepositoryContract
-    ) : LoadTopRatedShowsUseCaseContract =
+    ): LoadTopRatedShowsUseCaseContract =
         LoadTopRatedShowsUseCase(discoveryRepo)
 
     // Watchlist
     @Provides
     fun provideLoadWatchListMediaUseCase(
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ) : LoadWatchListMediaUseCaseContract =
+    ): LoadWatchListMediaUseCaseContract =
         LoadWatchListMediaUseCase(watchlistRepo)
 
     // Detail
     @Provides
     fun providesUpdateWatchListContentsUseCase(
         @DetailRepo detailRepo: DetailRepositoryContract
-    ) : UpdateWatchListContentsUseCaseContract =
+    ): UpdateWatchListContentsUseCaseContract =
         UpdateWatchListContentsUseCase(detailRepo)
 }

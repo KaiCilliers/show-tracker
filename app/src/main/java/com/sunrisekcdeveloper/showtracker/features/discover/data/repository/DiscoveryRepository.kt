@@ -105,7 +105,7 @@ class DiscoveryRepository(
 
     override suspend fun saveMediaToWatchList(media: MediaModelSealed) {
         when (media) {
-            is MediaModelSealed.ShowModel -> TODO()
+            is MediaModelSealed.ShowModel -> dao.insertWatchListEntity(media.asWatchListEntity())
             is MediaModelSealed.MovieModel -> dao.insertWatchListEntity(media.asWatchListEntity())
         }
     }
