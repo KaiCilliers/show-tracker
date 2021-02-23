@@ -28,13 +28,16 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModel
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 
 class WatchlistMediaAdapter(
     private var media: MutableList<MediaModelSealed>,
     var onMediaClicked: (movie: MediaModelSealed) -> Unit = {}
 ) : RecyclerView.Adapter<WatchlistMediaAdapter.MediaViewHolder>() {
+
+    private var all = mutableListOf<MediaModelSealed>()
+    private var filtered = mutableListOf<MediaModelSealed>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -46,6 +49,24 @@ class WatchlistMediaAdapter(
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         holder.bind(media[position])
+    }
+
+    fun filter(filter: FilterListBy) {
+        if (all.isEmpty()) {
+            all.addAll(media)
+        }
+        filtered = when (filter) {
+            FilterListBy.OnlyMovies -> {
+                all.filterIsInstance<MediaModelSealed.MovieModel>().toMutableList()
+            }
+            FilterListBy.OnlyShows -> {
+                all.filterIsInstance<MediaModelSealed.ShowModel>().toMutableList()
+            }
+            FilterListBy.None -> {
+                all
+            }
+        }
+        updateList(filtered)
     }
 
     // todo impl DiffUtil
@@ -81,4 +102,10 @@ class WatchlistMediaAdapter(
             }
         }
     }
+}
+
+sealed class FilterListBy {
+    object OnlyMovies: FilterListBy()
+    object OnlyShows: FilterListBy()
+    object None: FilterListBy()
 }

@@ -32,15 +32,19 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.FilterListBy
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * Progress Fragment that displays upcoming movies and shows with the capability to filter
  * based on movie or show
  */
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class WatchlistFragment : Fragment() {
 
@@ -68,6 +72,8 @@ class WatchlistFragment : Fragment() {
 
     private lateinit var binding: FragmentWatchlistBinding
 
+    private var adapters: List<WatchlistMediaAdapter> = listOf()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,10 +90,22 @@ class WatchlistFragment : Fragment() {
 
     private fun setupFilters() {
         binding.chipFilterMovie.setOnCheckedChangeListener { _, checked ->
-            Toast.makeText(requireContext(), "Movie: $checked", Toast.LENGTH_SHORT).show()
+            if (checked && binding.cgFilter.checkedChipIds.size != 2) {
+                adapters.forEach { it.filter(FilterListBy.OnlyMovies) }
+            } else if (binding.cgFilter.checkedChipIds.size == 1) {
+                adapters.forEach { it.filter(FilterListBy.OnlyShows) }
+            } else {
+                adapters.forEach { it.filter(FilterListBy.None) }
+            }
         }
         binding.chipFilterShows.setOnCheckedChangeListener { _, checked ->
-            Toast.makeText(requireContext(), "Show: $checked", Toast.LENGTH_SHORT).show()
+            if (checked && binding.cgFilter.checkedChipIds.size != 2) {
+                adapters.forEach { it.filter(FilterListBy.OnlyShows) }
+            } else if (binding.cgFilter.checkedChipIds.size == 1) {
+                adapters.forEach { it.filter(FilterListBy.OnlyMovies) }
+            } else {
+                adapters.forEach { it.filter(FilterListBy.None) }
+            }
         }
     }
 
@@ -154,6 +172,8 @@ class WatchlistFragment : Fragment() {
 
         binding.rcAnticipated.layoutManager = anticipatedMediaLayoutManager
         binding.rcAnticipated.adapter = anticipatedMediaListAdapter
+
+        adapters = listOf(recentlyAddedMediaListAdapter, inProgressMediaListAdapter, upComingMediaListAdapter, completedMediaListAdapter, anticipatedMediaListAdapter)
     }
 
     private fun updateList(
@@ -163,7 +183,6 @@ class WatchlistFragment : Fragment() {
         adapter.updateList(list)
     }
 
-    @ExperimentalCoroutinesApi
     private fun observeViewModel() {
         viewModel.watchlistMedia.subscribe(viewLifecycleOwner) {
             when (it) {

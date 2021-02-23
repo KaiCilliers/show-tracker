@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.commons.models.local.*
@@ -26,10 +27,11 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -37,51 +39,67 @@ import java.util.*
  *
  * @constructor Create empty Progress view model
  */
+@ExperimentalCoroutinesApi
 class WatchlistViewModel @ViewModelInject constructor(
     private val loadWatchListMediaUseCase: LoadWatchListMediaUseCaseContract
+//    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var _watchlistMedia =
+        MutableLiveData<Resource<MutableMap<WatchListType, MutableList<MediaModelSealed>>>>()
+
     @ExperimentalCoroutinesApi
-    val watchlistMedia: LiveData<Resource<MutableMap<WatchListType, MutableList<MediaModelSealed>>>> =
-        loadWatchListMediaUseCase()
-            .onStart { emit(Resource.Loading) }
-            .map {
-                val results = mutableMapOf<WatchListType, MutableList<MediaModelSealed>>()
-                when (it) {
-                    is Resource.Loading -> {
-                    }
-                    is Resource.Error -> {
-                    }
-                    is Resource.Success -> {
-                        it.data.forEach { uiModel ->
-                            when (uiModel.watchListType) {
-                                WatchListType.RECENTLY_ADDED -> {
-                                    results.getOrPut(
-                                        WatchListType.RECENTLY_ADDED,
-                                        { mutableListOf() }).add(uiModel)
-                                }
-                                WatchListType.IN_PROGRESS -> {
-                                    results.getOrPut(WatchListType.IN_PROGRESS, { mutableListOf() })
-                                        .add(uiModel)
-                                }
-                                WatchListType.UPCOMING -> {
-                                    results.getOrPut(WatchListType.UPCOMING, { mutableListOf() })
-                                        .add(uiModel)
-                                }
-                                WatchListType.COMPLETED -> {
-                                    results.getOrPut(WatchListType.COMPLETED, { mutableListOf() })
-                                        .add(uiModel)
-                                }
-                                WatchListType.ANTICIPATED -> {
-                                    results.getOrPut(WatchListType.ANTICIPATED, { mutableListOf() })
-                                        .add(uiModel)
-                                }
-                                else -> {
-                                }
+    val watchlistMedia: LiveData<Resource<MutableMap<WatchListType, MutableList<MediaModelSealed>>>>
+        get() = _watchlistMedia
+
+    init {
+        viewModelScope.launch {
+            temp().collect {
+                _watchlistMedia.postValue(it)
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun temp() = loadWatchListMediaUseCase()
+        .onStart { emit(Resource.Loading) }
+        .map {
+            val results = mutableMapOf<WatchListType, MutableList<MediaModelSealed>>()
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Error -> {
+                }
+                is Resource.Success -> {
+                    it.data.forEach { uiModel ->
+                        when (uiModel.watchListType) {
+                            WatchListType.RECENTLY_ADDED -> {
+                                results.getOrPut(
+                                    WatchListType.RECENTLY_ADDED,
+                                    { mutableListOf() }).add(uiModel)
+                            }
+                            WatchListType.IN_PROGRESS -> {
+                                results.getOrPut(WatchListType.IN_PROGRESS, { mutableListOf() })
+                                    .add(uiModel)
+                            }
+                            WatchListType.UPCOMING -> {
+                                results.getOrPut(WatchListType.UPCOMING, { mutableListOf() })
+                                    .add(uiModel)
+                            }
+                            WatchListType.COMPLETED -> {
+                                results.getOrPut(WatchListType.COMPLETED, { mutableListOf() })
+                                    .add(uiModel)
+                            }
+                            WatchListType.ANTICIPATED -> {
+                                results.getOrPut(WatchListType.ANTICIPATED, { mutableListOf() })
+                                    .add(uiModel)
+                            }
+                            else -> {
                             }
                         }
                     }
                 }
-                Resource.Success(results)
-            }.asLiveData(viewModelScope.coroutineContext)
+            }
+            Resource.Success(results)
+        }
 }
