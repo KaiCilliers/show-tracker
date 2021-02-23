@@ -45,6 +45,8 @@ class WatchlistViewModel @ViewModelInject constructor(
 //    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var media: MutableMap<WatchListType, MutableList<MediaModelSealed>> = mutableMapOf()
+
     private var _watchlistMedia =
         MutableLiveData<Resource<MutableMap<WatchListType, MutableList<MediaModelSealed>>>>()
 
@@ -56,8 +58,32 @@ class WatchlistViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             temp().collect {
                 _watchlistMedia.postValue(it)
+                media = it.data
             }
         }
+    }
+
+    fun search(query: String) {
+        val list = media
+        val filteredList = if (query.isEmpty()) {
+            list
+        } else {
+            list.mapValues {
+                val new = it.value.filter { media ->
+                    val regex = Regex(pattern = query, options = setOf(RegexOption.MULTILINE, RegexOption.IGNORE_CASE))
+                    when (media) {
+                        is MediaModelSealed.ShowModel -> {
+                            regex.containsMatchIn(input = media.name)
+                        }
+                        is MediaModelSealed.MovieModel -> {
+                            regex.containsMatchIn(input = media.title)
+                        }
+                    }
+                }
+                new.toMutableList()
+            }
+        }
+        _watchlistMedia.value = Resource.Success(filteredList.toMutableMap())
     }
 
     @ExperimentalCoroutinesApi

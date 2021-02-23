@@ -23,11 +23,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
@@ -35,8 +38,8 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaM
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.FilterListBy
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -85,7 +88,20 @@ class WatchlistFragment : Fragment() {
         setupBinding()
         setupFilters()
         observeViewModel()
+        search()
         return binding.root
+    }
+
+    private fun search() {
+        CoroutineScope(MainScope().coroutineContext).launch {
+            binding.svSearchWatchlist.getQueryTextChangedStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    viewModel.search(it)
+                }
+        }
     }
 
     private fun setupFilters() {

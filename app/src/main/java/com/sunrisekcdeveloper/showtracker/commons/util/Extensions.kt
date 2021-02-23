@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.commons.util
 
 import android.view.View
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
