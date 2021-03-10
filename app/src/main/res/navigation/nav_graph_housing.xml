@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/navigation_discovery_updated"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.discovery.DiscoveryFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryFragmentUpdated"
         android:label="fragment_discovery_updated"
         tools:layout="@layout/fragment_discovery_updated" >
         <action
@@ -56,7 +56,7 @@
         tools:layout="@layout/activity_search_updated" />
     <fragment
         android:id="@+id/discoveryMoviesFragmentUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.discovery.movies.DiscoveryMoviesFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.movies.DiscoveryMoviesFragmentUpdated"
         android:label="fragment_discovery_movies_updated"
         tools:layout="@layout/fragment_discovery_movies_updated" >
         <action
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/discoveryShowsFragmentUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.discovery.shows.DiscoveryShowsFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.shows.DiscoveryShowsFragmentUpdated"
         android:label="fragment_discovery_shows_updated"
         tools:layout="@layout/fragment_discovery_shows_updated" >
         <action

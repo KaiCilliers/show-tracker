@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.discovery
+package com.sunrisekcdeveloper.showtracker.updated.features.discovery.application
 
-class DiscoveryViewModelUpdated {
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
+
+interface LoadTopRatedShowsUseCaseContractUpdated {
+    suspend operator fun invoke(page: Int): Resource<List<DiscoveryUIModel>>
 }

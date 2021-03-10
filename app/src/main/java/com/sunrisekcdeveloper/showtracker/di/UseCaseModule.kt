@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetailRepo
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
@@ -30,6 +31,9 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.*
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.*
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,6 +42,43 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object UseCaseModule {
+    // Discovery Updated
+    @Provides
+    fun provideLoadPopularMoviesUseCaseUpdated(
+        @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
+    ): LoadPopularMoviesUseCaseContractUpdated =
+        LoadPopularMoviesUseCaseUpdated(discoveryRepo)
+
+    @Provides
+    fun provideLoadTopRatedMoviesUseCaseUpdated(
+        @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
+    ): LoadTopRatedMoviesUseCaseContractUpdated =
+        LoadTopRatedMoviesUseCaseUpdated(discoveryRepo)
+
+    @Provides
+    fun provideLoadUpcomingMoviesUseCaseUpdated(
+        @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
+    ): LoadUpcomingMoviesUseCaseContractUpdated =
+        LoadUpcomingMoviesUseCaseUpdated(discoveryRepo)
+
+    @Provides
+    fun provideLoadAiringTodayShowsUseCaseUpdated(
+        @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
+    ): LoadAiringTodayShowsUseCaseContractUpdated =
+        LoadAiringTodayShowsUseCaseUpdated(discoveryRepo)
+
+    @Provides
+    fun provideLoadPopularShowsUseCaseUpdated(
+        @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
+    ): LoadPopularShowsUseCaseContractUpdated =
+        LoadPopularShowsUseCaseUpdated(discoveryRepo)
+
+    @Provides
+    fun provideTopRatedShowsUseCaseUpdated(
+        @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
+    ): LoadTopRatedShowsUseCaseContractUpdated =
+        LoadTopRatedShowsUseCaseUpdated(discoveryRepo)
+
     // Discovery
     @Provides
     fun provideLoadPopularMoviesUseCase(

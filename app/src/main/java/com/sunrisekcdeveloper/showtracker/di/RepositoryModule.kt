@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
@@ -31,6 +32,9 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.W
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistRepository
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.repository.DiscoveryRepositoryUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +48,10 @@ object  RepositoryModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
+    annotation class DiscRepo
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryRepo
 
     @Qualifier
@@ -53,6 +61,14 @@ object  RepositoryModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailRepo
+
+    @ActivityRetainedScoped
+    @DiscRepo
+    @Provides
+    fun provideDiscoveryRepositoryUpdated(
+        @DiscClient remote: DiscoveryRemoteDataSourceContractUpdated
+    ): DiscoveryRepositoryContractUpdated =
+        DiscoveryRepositoryUpdated(remote)
 
     @ActivityRetainedScoped
     @DiscoveryRepo

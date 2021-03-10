@@ -24,7 +24,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.sunrisekcdeveloper.showtracker.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HousingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

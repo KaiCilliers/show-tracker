@@ -32,6 +32,10 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.Watchl
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceUpdated
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +54,15 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
+    annotation class DiscClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -72,6 +84,22 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailApi
 
+
+    @Singleton
+    @DiscClient
+    @Provides
+    fun providesDiscoveryClientUpdated(
+        @DiscApi api: DiscoveryServiceContractUpdated
+    ) : DiscoveryRemoteDataSourceContractUpdated {
+        return DiscoveryRemoteDataSourceUpdated(api)
+    }
+
+    @Singleton
+    @DiscApi
+    @Provides
+    fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
+        return retrofit.create(DiscoveryServiceUpdated::class.java)
+    }
 
     @Singleton
     @DiscoveryClient

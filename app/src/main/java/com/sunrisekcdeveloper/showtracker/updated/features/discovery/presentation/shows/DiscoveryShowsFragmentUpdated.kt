@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.discovery.movies
+package com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.shows
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,18 +28,18 @@ import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryMoviesUpdatedBinding
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryShowsUpdatedBinding
 
-class DiscoveryMoviesFragmentUpdated : Fragment() {
+class DiscoveryShowsFragmentUpdated : Fragment() {
 
-    private lateinit var binding: FragmentDiscoveryMoviesUpdatedBinding
+    private lateinit var binding: FragmentDiscoveryShowsUpdatedBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDiscoveryMoviesUpdatedBinding.inflate(inflater)
+        binding = FragmentDiscoveryShowsUpdatedBinding.inflate(inflater)
         renderSpinner()
         return binding.root
     }
@@ -50,20 +50,22 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
 
     private fun setup() {
         // Navigation - Toolbar Up button
-        binding.toolbarDiscoveryMovies.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbarDiscoveryShows.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         // Navigation - Toolbar Search
-        binding.toolbarDiscoveryMovies.menu.forEach {
+        binding.toolbarDiscoveryShows.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    DiscoveryMoviesFragmentUpdatedDirections.actionDiscoveryMoviesFragmentUpdatedToSearchActivityUpdated()
+                    DiscoveryShowsFragmentUpdatedDirections.actionDiscoveryShowsFragmentUpdatedToSearchActivityUpdated()
                 )
                 true
             }
         }
 
         // Navigation - Spinner
-        binding.spinnerDiscoveryMovies.onItemSelectedListener =
+        binding.spinnerDiscoveryShows.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -74,12 +76,12 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
                     // Discovery Screen
                     if (id == 1L) {
                         findNavController().navigate(
-                            DiscoveryMoviesFragmentUpdatedDirections.actionDiscoveryMoviesFragmentUpdatedToNavigationDiscoveryUpdated()
+                            DiscoveryShowsFragmentUpdatedDirections.actionDiscoveryShowsFragmentUpdatedToNavigationDiscoveryUpdated()
                         )
-                        // TV Show Discovery Screen
+                        // Discovery Movies Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
-                            DiscoveryMoviesFragmentUpdatedDirections.actionDiscoveryMoviesFragmentUpdatedToDiscoveryShowsFragmentUpdated()
+                            DiscoveryShowsFragmentUpdatedDirections.actionDiscoveryShowsFragmentUpdatedToDiscoveryMoviesFragmentUpdated()
                         )
                     }
                 }
@@ -91,12 +93,11 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
     private fun renderSpinner() {
         ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.movie_dropdown_array,
+            R.array.show_dropdown_array,
             android.R.layout.simple_spinner_item
         ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerDiscoveryMovies.adapter = it
+            binding.spinnerDiscoveryShows.adapter = it
         }
     }
-
 }
