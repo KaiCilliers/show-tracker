@@ -36,4 +36,12 @@
     <string name="upcoming_sub_heading">Shows that are sceduled for release soon</string>
     <string name="completed_sub_heading">Movies and Shows that you have already finished watching</string>
     <string name="anticipated_sub_heading">Movies scheduled for release that you intend to watch</string>
+    <string name="title_activity_housing">MainActivity</string>
+    <string name="watchlist_title_updated">Watchlist</string>
+    <string name="discovery_title_updated">Discovery</string>
+    <string name="statistics_title_updated">Statistics</string>
+    <string name="search_title">Search</string>
+    <string name="movies_title">Movies</string>
+    <string name="tv_shows_title">TV Shows</string>
+    <string name="search_by_show_hint">Search TV Show by title</string>
 </resources>
