@@ -26,13 +26,40 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryMoviesUpdatedBinding
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryViewState
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.HorizontalPosterListAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DiscoveryMoviesFragmentUpdated : Fragment() {
 
     private lateinit var binding: FragmentDiscoveryMoviesUpdatedBinding
+
+    private val viewModel: DiscoveryMoviesFragmentViewModel by viewModels()
+
+    @Inject
+    lateinit var popularMovieListAdapter: HorizontalPosterListAdapter
+    private lateinit var popularMoviesLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var topRatedMovieListAdapter: HorizontalPosterListAdapter
+    private lateinit var topRatedMoviesLayoutManager: LinearLayoutManager
+
+    @Inject
+    lateinit var upcomingMovieListAdapter: HorizontalPosterListAdapter
+    private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +73,8 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
+        setupBinding()
+        observeViewModel()
     }
 
     private fun setup() {
@@ -97,6 +126,125 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerDiscoveryMovies.adapter = it
         }
+    }
+
+    private fun observeViewModel() {
+        viewModel.popularMovies.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(popularMovieListAdapter, it.data)
+                    attachOnScrollListener(
+                        binding.rcPopularMovies,
+                        popularMoviesLayoutManager
+                    ) { viewModel.getPopularMovies() }
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.topRatedMovies.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(topRatedMovieListAdapter, it.data)
+                    attachOnScrollListener(
+                        binding.rcTopRatedMovies,
+                        topRatedMoviesLayoutManager
+                    ) { viewModel.getTopRatedMovies() }
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+        viewModel.upcomingMovies.subscribe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    updateList(upcomingMovieListAdapter, it.data)
+                    attachOnScrollListener(
+                        binding.rcUpcomingMovies,
+                        upcomingMoviesLayoutManager
+                    ) { viewModel.getUpcomingMovies() }
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+    }
+
+    private fun setupBinding() {
+        popularMoviesLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        topRatedMoviesLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        upcomingMoviesLayoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
+        binding.rcPopularMovies.layoutManager = popularMoviesLayoutManager
+        binding.rcPopularMovies.adapter = popularMovieListAdapter
+
+        binding.rcTopRatedMovies.layoutManager = topRatedMoviesLayoutManager
+        binding.rcTopRatedMovies.adapter = topRatedMovieListAdapter
+
+        binding.rcUpcomingMovies.layoutManager = upcomingMoviesLayoutManager
+        binding.rcUpcomingMovies.adapter = upcomingMovieListAdapter
+
+        attachOnScrollListener(
+            binding.rcPopularMovies,
+            popularMoviesLayoutManager
+        ) { viewModel.getPopularMovies() }
+        attachOnScrollListener(
+            binding.rcTopRatedMovies,
+            topRatedMoviesLayoutManager
+        ) { viewModel.getTopRatedMovies() }
+        attachOnScrollListener(
+            binding.rcUpcomingMovies,
+            upcomingMoviesLayoutManager
+        ) { viewModel.getUpcomingMovies() }
+    }
+
+    private fun updateList(
+        adapter: HorizontalPosterListAdapter,
+        list: List<DiscoveryUIModel>
+    ) {
+        adapter.updateList(list)
+    }
+
+    private fun attachOnScrollListener(
+        recyclerView: RecyclerView,
+        layoutManager: LinearLayoutManager,
+        fetchNextPage: suspend () -> Unit
+    ) {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // total number of movies inside adapter
+                val totalItems = layoutManager.itemCount
+                // current number of child views attached to the RecyclerView that are currently
+                // being recycled
+                val visibleItemCount = layoutManager.childCount
+                // position of the leftmost visible item in the list
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
+                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
+                    // This is to limit network calls
+                    recyclerView.removeOnScrollListener(this)
+                    MainScope().launch { fetchNextPage() }
+                }
+            }
+        })
     }
 
 }
