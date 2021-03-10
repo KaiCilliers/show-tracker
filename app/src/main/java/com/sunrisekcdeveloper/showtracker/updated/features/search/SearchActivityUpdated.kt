@@ -24,10 +24,18 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivitySearchUpdatedBinding
 
 class SearchActivityUpdated : AppCompatActivity() {
+
     private lateinit var binding: ActivitySearchUpdatedBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchUpdatedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setup()
+    }
+
+    private fun setup() {
+        // Navigation - Toolbar Up button
+        binding.toolbarSearch.setNavigationOnClickListener { finish() }
     }
 }

@@ -92,4 +92,16 @@
             android:id="@+id/action_discoveryShowsFragmentUpdated_to_searchActivityUpdated"
             app:destination="@id/searchActivityUpdated" />
     </fragment>
+    <dialog
+        android:id="@+id/detailMovieBottomSheet"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.DetailMovieBottomSheet"
+        android:label="bottom_sheet_detail_movie"
+        tools:layout="@layout/bottom_sheet_detail_movie" />
+    <dialog
+        android:id="@+id/detailShowBottomSheet"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.DetailShowBottomSheet"
+        android:label="bottom_sheet_detail_show"
+        tools:layout="@layout/bottom_sheet_detail_show" />
+    <action android:id="@+id/action_global_detailShowBottomSheet" app:destination="@id/detailShowBottomSheet"/>
+    <action android:id="@+id/action_global_detailMovieBottomSheet" app:destination="@id/detailMovieBottomSheet"/>
 </navigation>

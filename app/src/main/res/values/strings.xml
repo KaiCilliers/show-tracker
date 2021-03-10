@@ -48,6 +48,9 @@
     <string name="search_header_no_results">Oh no! We could not find what you were looking for.</string>
     <string name="search_sub_header_no_results">Try searching for a different movie or TV show</string>
     <string name="search_header_watchlist">Your unwatched movies and TV shows</string>
+    <string name="add_button">+ Add</string>
+    <string name="movie_watched_text">I watched this</string>
+    <string name="media_add">+ Add</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>
