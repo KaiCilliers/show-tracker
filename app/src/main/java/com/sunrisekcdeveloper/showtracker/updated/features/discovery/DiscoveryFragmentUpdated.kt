@@ -22,8 +22,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
+import androidx.navigation.fragment.findNavController
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryUpdatedBinding
 
 class DiscoveryFragmentUpdated : Fragment() {
@@ -37,5 +38,21 @@ class DiscoveryFragmentUpdated : Fragment() {
     ): View {
         binding = FragmentDiscoveryUpdatedBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setup()
+    }
+
+    private fun setup() {
+        // Navigation - Toolbar Search icon
+        binding.toolbarDiscovery.menu.forEach {
+            it.setOnMenuItemClickListener {
+                findNavController().navigate(
+                    DiscoveryFragmentUpdatedDirections.actionNavigationDiscoveryUpdatedToSearchActivityUpdated()
+                )
+                true
+            }
+        }
     }
 }
