@@ -23,38 +23,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".updated.features.discovery.DiscoveryFragmentUpdated">
+    tools:context=".updated.features.discovery.movies.DiscoveryMoviesFragmentUpdated">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_discovery"
+        android:id="@+id/toolbar_discovery_movies"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        app:navigationIcon="?homeAsUpIndicator"
         app:menu="@menu/menu_discovery_toolbar"
+        app:title="@string/movies_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs_discovery"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/spinner_discovery_movies"
+        android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
-        app:tabMode="fixed"
-        app:tabIndicatorHeight="0dp"
-        app:tabSelectedTextColor="#929292"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_discovery"
+        android:spinnerMode="dialog"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/movies_title"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/tv_shows_title"/>
-
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_discovery_movies" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

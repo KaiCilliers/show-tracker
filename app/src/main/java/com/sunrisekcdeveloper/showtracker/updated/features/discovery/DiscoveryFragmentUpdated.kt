@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryUpdatedBinding
 
 class DiscoveryFragmentUpdated : Fragment() {
@@ -53,6 +54,38 @@ class DiscoveryFragmentUpdated : Fragment() {
                 )
                 true
             }
+        }
+
+        // Navigation - Tabs
+        binding.tabsDiscovery.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    navigateToSelectedTab(it.position)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    navigateToSelectedTab(it.position)
+                }
+            }
+        })
+    }
+
+    private fun navigateToSelectedTab(position: Int) {
+        // Movie Tab
+        if (position == 0) {
+            findNavController().navigate(
+                DiscoveryFragmentUpdatedDirections.actionNavigationDiscoveryUpdatedToDiscoveryMoviesFragmentUpdated()
+            )
+            // TV Show Tab
+        } else if (position == 1) {
+            findNavController().navigate(
+                DiscoveryFragmentUpdatedDirections.actionNavigationDiscoveryUpdatedToDiscoveryShowsFragmentUpdated()
+            )
         }
     }
 }
