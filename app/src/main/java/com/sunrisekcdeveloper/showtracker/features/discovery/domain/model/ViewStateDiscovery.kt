@@ -16,11 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-
-interface LoadTopRatedMoviesUseCaseContractUpdated {
-    suspend operator fun invoke(page: Int): Resource<List<DiscoveryUIModel>>
+sealed class ViewStateDiscovery {
+    object Loading : ViewStateDiscovery()
+    object Error : ViewStateDiscovery()
+    object Success : ViewStateDiscovery()
 }

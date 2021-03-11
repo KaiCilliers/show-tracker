@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 import kotlinx.coroutines.CoroutineDispatcher

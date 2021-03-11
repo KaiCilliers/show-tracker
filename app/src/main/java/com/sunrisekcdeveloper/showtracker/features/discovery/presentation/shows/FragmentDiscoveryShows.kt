@@ -31,35 +31,34 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryShowsUpdatedBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.DiscoveryFragmentUpdatedDirections
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.HorizontalPosterListAdapter
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DiscoveryShowsFragmentUpdated : Fragment() {
+class FragmentDiscoveryShows : Fragment() {
 
-    private lateinit var binding: FragmentDiscoveryShowsUpdatedBinding
+    private lateinit var binding: FragmentDiscoveryOnlyShowsBinding
 
-    private val viewModel: DiscoveryShowsFragmentViewModel by viewModels()
+    private val viewModel: ViewModelDiscoveryShows by viewModels()
 
     @Inject
-    lateinit var popularShowListAdapter: HorizontalPosterListAdapter
+    lateinit var popularShowListAdapter: AdapterSimplePoster
     private lateinit var popularShowLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var topRatedShowsListAdapter: HorizontalPosterListAdapter
+    lateinit var topRatedShowsListAdapter: AdapterSimplePoster
     private lateinit var topRatedShowLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var airingTodayShowListAdapter: HorizontalPosterListAdapter
+    lateinit var airingTodayShowListAdapter: AdapterSimplePoster
     private lateinit var airingTodayShowLayoutManager: LinearLayoutManager
 
     override fun onCreateView(
@@ -67,7 +66,7 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDiscoveryShowsUpdatedBinding.inflate(inflater)
+        binding = FragmentDiscoveryOnlyShowsBinding.inflate(inflater)
         renderSpinner()
         return binding.root
     }
@@ -81,14 +80,14 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
             when (mediaType) {
-                MediaTypeUpdated.Movie -> {
+                MediaType.Movie -> {
                     findNavController().navigate(
-                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                        FragmentDiscoveryShowsDirections.actionGlobalDetailMovieBottomSheet(mediaId)
                     )
                 }
-                MediaTypeUpdated.Show -> {
+                MediaType.Show -> {
                     findNavController().navigate(
-                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                        FragmentDiscoveryShowsDirections.actionGlobalDetailShowBottomSheet(mediaId)
                     )
                 }
             }
@@ -195,7 +194,7 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
         binding.toolbarDiscoveryShows.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    DiscoveryShowsFragmentUpdatedDirections.actionDiscoveryShowsFragmentUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryShowsDirections.actionDiscoveryShowsFragmentUpdatedToSearchActivityUpdated()
                 )
                 true
             }
@@ -213,12 +212,12 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
                     // Discovery Screen
                     if (id == 1L) {
                         findNavController().navigate(
-                            DiscoveryShowsFragmentUpdatedDirections.actionDiscoveryShowsFragmentUpdatedToNavigationDiscoveryUpdated()
+                            FragmentDiscoveryShowsDirections.actionDiscoveryShowsFragmentUpdatedToNavigationDiscoveryUpdated()
                         )
                         // Discovery Movies Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
-                            DiscoveryShowsFragmentUpdatedDirections.actionDiscoveryShowsFragmentUpdatedToDiscoveryMoviesFragmentUpdated()
+                            FragmentDiscoveryShowsDirections.actionDiscoveryShowsFragmentUpdatedToDiscoveryMoviesFragmentUpdated()
                         )
                     }
                 }
@@ -239,8 +238,8 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
     }
 
     private fun updateList(
-        adapter: HorizontalPosterListAdapter,
-        list: List<DiscoveryUIModel>
+        adapter: AdapterSimplePoster,
+        list: List<UIModelDiscovery>
     ) {
         adapter.updateList(list)
     }

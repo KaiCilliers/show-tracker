@@ -29,10 +29,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchUpdatedBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
@@ -93,7 +93,7 @@ class SearchFragmentUpdated : Fragment() {
     private fun setup() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
             when (mediaType) {
-                MediaTypeUpdated.Movie -> {
+                MediaType.Movie -> {
                     Timber.d("movie")
                     findNavController().navigate(
                         SearchFragmentUpdatedDirections.actionSearchFragmentUpdatedToDetailMovieBottomSheet2(
@@ -102,7 +102,7 @@ class SearchFragmentUpdated : Fragment() {
                     )
 
                 }
-                MediaTypeUpdated.Show -> {
+                MediaType.Show -> {
                     Timber.d("show")
                     findNavController().navigate(
                         SearchFragmentUpdatedDirections.actionSearchFragmentUpdatedToDetailShowBottomSheet2(

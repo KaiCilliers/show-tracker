@@ -23,28 +23,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
-class HorizontalPosterListAdapter(
-    private var data: MutableList<DiscoveryUIModel>,
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { mediaId, mediaType ->  }
-) : RecyclerView.Adapter<HorizontalPosterListAdapter.HorizontalPosterViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalPosterViewHolder =
-        HorizontalPosterViewHolder.from(parent)
+class AdapterSimplePoster(
+    private var data: MutableList<UIModelDiscovery>,
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ ->  }
+) : RecyclerView.Adapter<AdapterSimplePoster.ViewHolderSimplePoster>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePoster =
+        ViewHolderSimplePoster.from(parent)
 
-    override fun onBindViewHolder(holder: HorizontalPosterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolderSimplePoster, position: Int) {
         val item = data[position]
         holder.bind(item)
-        holder.binding.imgvItemMoviePoster.setOnClickListener {
+        holder.binding.imgvItemMoviePoster.click {
             onPosterClickListener.onClick(item.id, item.mediaType)
         }
     }
 
     override fun getItemCount(): Int = data.size
 
-    fun updateList(data: List<DiscoveryUIModel>) {
+    fun updateList(data: List<UIModelDiscovery>) {
         this.data.addAll(data)
         notifyItemRangeInserted(
             this.data.size,
@@ -52,22 +53,24 @@ class HorizontalPosterListAdapter(
         )
     }
 
-    class HorizontalPosterViewHolder(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DiscoveryUIModel) {
+    fun replaceList(data: List<UIModelDiscovery>) {
+        this.data.clear()
+        updateList(data)
+    }
+
+    class ViewHolderSimplePoster(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: UIModelDiscovery) {
             Glide.with(binding.root)
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvItemMoviePoster)
         }
         companion object {
-            fun from(parent: ViewGroup) : HorizontalPosterViewHolder = HorizontalPosterViewHolder(
+            fun from(parent: ViewGroup) : ViewHolderSimplePoster = ViewHolderSimplePoster(
                 ItemSimplePosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
         }
     }
-}
-fun interface OnPosterClickListener {
-    fun onClick(mediaId: String, mediaType: MediaTypeUpdated)
 }

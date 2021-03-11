@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-
-interface LoadPopularShowsUseCaseContractUpdated {
-    suspend operator fun invoke(page: Int): Resource<List<DiscoveryUIModel>>
+sealed class MediaType {
+    object Movie: MediaType()
+    object Show: MediaType()
 }

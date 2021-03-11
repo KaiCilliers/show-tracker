@@ -18,22 +18,15 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 
-interface DiscoveryRemoteDataSourceContractUpdated {
+interface RemoteDataSourceDiscoveryContract {
     suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated>
     suspend fun topRatedMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated>
     suspend fun upcomingMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated>
     suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated>
     suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated>
     suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated>
-}
-sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
-    data class Error(val message: String) : NetworkResult<Nothing>()
-    companion object {
-        fun <T> success(data: T) = Success(data)
-        fun error(message: String) = Error(message)
-    }
 }

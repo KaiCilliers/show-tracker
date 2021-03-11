@@ -16,11 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-
-interface LoadAiringTodayShowsUseCaseContractUpdated {
-    suspend operator fun invoke(page: Int): Resource<List<DiscoveryUIModel>>
+sealed class ViewActionsDiscovery {
+    object FetchMovieAndShowData : ViewActionsDiscovery()
 }

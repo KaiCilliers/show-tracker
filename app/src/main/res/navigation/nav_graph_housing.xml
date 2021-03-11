@@ -26,9 +26,9 @@
 
     <fragment
         android:id="@+id/navigation_discovery_updated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.DiscoveryFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery"
         android:label="fragment_discovery_updated"
-        tools:layout="@layout/fragment_discovery_updated" >
+        tools:layout="@layout/fragment_discovery" >
         <action
             android:id="@+id/action_navigation_discovery_updated_to_searchActivityUpdated"
             app:destination="@id/searchActivityUpdated" />
@@ -56,9 +56,9 @@
         tools:layout="@layout/activity_search_updated" />
     <fragment
         android:id="@+id/discoveryMoviesFragmentUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.DiscoveryMoviesFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies"
         android:label="fragment_discovery_movies_updated"
-        tools:layout="@layout/fragment_discovery_movies_updated" >
+        tools:layout="@layout/fragment_discovery_only_movies" >
         <action
             android:id="@+id/action_discoveryMoviesFragmentUpdated_to_navigation_discovery_updated"
             app:destination="@id/navigation_discovery_updated"
@@ -75,9 +75,9 @@
     </fragment>
     <fragment
         android:id="@+id/discoveryShowsFragmentUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.DiscoveryShowsFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShows"
         android:label="fragment_discovery_shows_updated"
-        tools:layout="@layout/fragment_discovery_shows_updated" >
+        tools:layout="@layout/fragment_discovery_only_shows" >
         <action
             android:id="@+id/action_discoveryShowsFragmentUpdated_to_navigation_discovery_updated"
             app:destination="@id/navigation_discovery_updated"

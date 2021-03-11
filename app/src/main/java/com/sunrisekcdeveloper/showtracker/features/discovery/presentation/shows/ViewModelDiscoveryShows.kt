@@ -24,34 +24,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadAiringTodayShowsUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularShowsUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadAiringTodayShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DiscoveryShowsFragmentViewModel @ViewModelInject constructor(
-    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContractUpdated,
-    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContractUpdated,
-    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContractUpdated
+class ViewModelDiscoveryShows @ViewModelInject constructor(
+    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
+    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
+    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
 ) : ViewModel() {
 
     var popularShowsPage = 0
     var topRatedShowsPage = 0
     var latestShowsPage = 0
 
-    private val _popularShows = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val popularShows: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _popularShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val popularShows: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _popularShows
 
-    private val _topRatedShows = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val topRatedShows: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _topRatedShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val topRatedShows: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _topRatedShows
 
-    private val _airingTodayShows = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val airingTodayShows: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _airingTodayShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val airingTodayShows: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _airingTodayShows
 
     init {
@@ -73,8 +73,8 @@ class DiscoveryShowsFragmentViewModel @ViewModelInject constructor(
     }
 
     private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<List<DiscoveryUIModel>>>,
-        call: suspend () -> Resource<List<DiscoveryUIModel>>
+        mutableLiveData: MutableLiveData<Resource<List<UIModelDiscovery>>>,
+        call: suspend () -> Resource<List<UIModelDiscovery>>
     ) {
         val data = withContext(Dispatchers.IO) { call() }
         withContext(Dispatchers.Main) { mutableLiveData.value = data }

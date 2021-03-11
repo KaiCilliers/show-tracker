@@ -24,10 +24,10 @@ import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.R
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetail
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceContractUpdated
@@ -82,17 +82,17 @@ object NetworkModule {
     @Singleton
     @SourceDiscovery
     @Provides
-    fun providesDiscoveryClientUpdated(
-        @ApiDiscovery api: DiscoveryServiceContractUpdated
-    ) : DiscoveryRemoteDataSourceContractUpdated {
-        return DiscoveryRemoteDataSourceUpdated(api)
+    fun provideRemoteDataSourceDiscovery(
+        @ApiDiscovery api: ServiceDiscoveryContract
+    ) : RemoteDataSourceDiscoveryContract {
+        return RemoteDataSourceDiscovery(api)
     }
 
     @Singleton
     @ApiDiscovery
     @Provides
-    fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
-        return retrofit.create(DiscoveryServiceUpdated::class.java)
+    fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
+        return retrofit.create(ServiceDiscovery::class.java)
     }
 
     @Singleton

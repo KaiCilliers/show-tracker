@@ -19,22 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
 
-data class DiscoveryUIModel(
+data class UIModelDiscovery(
     val id: String,
-    val mediaType: MediaTypeUpdated,
+    val mediaType: MediaType,
     val posterPath: String
 )
-
-sealed class ListType {
-    object MoviePopular : ListType()
-    object MovieTopRated : ListType()
-    object MovieUpcoming : ListType()
-    object ShowPopular : ListType()
-    object ShowTopRated : ListType()
-    object ShowAiringToday : ListType()
-}
-
-sealed class MediaTypeUpdated {
-    object Movie: MediaTypeUpdated()
-    object Show: MediaTypeUpdated()
-}

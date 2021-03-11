@@ -25,18 +25,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewActionsDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewStateDiscovery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DiscoveryViewModelUpdated @ViewModelInject constructor(
+class ViewModelDiscovery @ViewModelInject constructor(
     private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
-    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContractUpdated,
-    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContractUpdated,
-    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContractUpdated,
-    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContractUpdated,
-    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContractUpdated
+    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
+    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
+    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
+    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
+    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
 ) : ViewModel() {
 
     // todo implement paging 3
@@ -47,38 +49,38 @@ class DiscoveryViewModelUpdated @ViewModelInject constructor(
     var topRatedShowsPage = 0
     var latestShowsPage = 0
 
-    private val _state = MutableLiveData<DiscoveryViewState>().apply {
-        value = DiscoveryViewState.Loading
+    private val _state = MutableLiveData<ViewStateDiscovery>().apply {
+        value = ViewStateDiscovery.Loading
     }
-    val state: LiveData<DiscoveryViewState> = _state
+    val state: LiveData<ViewStateDiscovery> = _state
 
-    private val _popularMovies = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val popularMovies: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _popularMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val popularMovies: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _popularMovies
 
-    private val _topRatedMovies = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val topRatedMovies: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _topRatedMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val topRatedMovies: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _topRatedMovies
 
-    private val _upcomingMovies = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val upcomingMovies: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _upcomingMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val upcomingMovies: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _upcomingMovies
 
-    private val _popularShows = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val popularShows: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _popularShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val popularShows: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _popularShows
 
-    private val _topRatedShows = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val topRatedShows: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _topRatedShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val topRatedShows: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _topRatedShows
 
-    private val _airingTodayShows = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val airingTodayShows: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _airingTodayShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val airingTodayShows: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _airingTodayShows
 
-    fun performAction(action: DiscoveryViewActions) = viewModelScope.launch {
+    fun performAction(action: ViewActionsDiscovery) = viewModelScope.launch {
         when (action) {
-            DiscoveryViewActions.FetchMovieAndShowData -> {
+            ViewActionsDiscovery.FetchMovieAndShowData -> {
                 viewModelScope.launch {
                     launch { getPopularMovies() }
                     launch { getTopRatedMovies() }
@@ -112,20 +114,10 @@ class DiscoveryViewModelUpdated @ViewModelInject constructor(
     }
 
     private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<List<DiscoveryUIModel>>>,
-        call: suspend () -> Resource<List<DiscoveryUIModel>>
+        mutableLiveData: MutableLiveData<Resource<List<UIModelDiscovery>>>,
+        call: suspend () -> Resource<List<UIModelDiscovery>>
     ) {
         val data = withContext(Dispatchers.IO) { call() }
         withContext(Dispatchers.Main) { mutableLiveData.value = data }
     }
-}
-
-sealed class DiscoveryViewActions {
-    object FetchMovieAndShowData : DiscoveryViewActions()
-}
-
-sealed class DiscoveryViewState {
-    object Loading : DiscoveryViewState()
-    object Error : DiscoveryViewState()
-    object Success : DiscoveryViewState()
 }

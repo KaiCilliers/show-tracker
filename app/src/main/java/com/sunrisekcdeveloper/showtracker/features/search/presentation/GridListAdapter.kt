@@ -23,8 +23,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.OnPosterClickListener
 
 class GridListAdapter(
     private var data: MutableList<SearchUIModel>,

@@ -24,34 +24,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularMoviesUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DiscoveryMoviesFragmentViewModel @ViewModelInject constructor(
+class ViewModelDiscoveryMovies @ViewModelInject constructor(
     private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
-    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContractUpdated,
-    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContractUpdated
+    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
+    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
 ) : ViewModel() {
 
     var popularMoviesPage = 0
     var topRatedMoviesPage = 0
     var upcomingMoviesPage = 0
 
-    private val _popularMovies = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val popularMovies: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _popularMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val popularMovies: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _popularMovies
 
-    private val _topRatedMovies = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val topRatedMovies: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _topRatedMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val topRatedMovies: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _topRatedMovies
 
-    private val _upcomingMovies = MutableLiveData<Resource<List<DiscoveryUIModel>>>()
-    val upcomingMovies: LiveData<Resource<List<DiscoveryUIModel>>>
+    private val _upcomingMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
+    val upcomingMovies: LiveData<Resource<List<UIModelDiscovery>>>
         get() = _upcomingMovies
 
     init {
@@ -74,8 +74,8 @@ class DiscoveryMoviesFragmentViewModel @ViewModelInject constructor(
 
 
     private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<List<DiscoveryUIModel>>>,
-        call: suspend () -> Resource<List<DiscoveryUIModel>>
+        mutableLiveData: MutableLiveData<Resource<List<UIModelDiscovery>>>,
+        call: suspend () -> Resource<List<UIModelDiscovery>>
     ) {
         val data = withContext(Dispatchers.IO) { call() }
         withContext(Dispatchers.Main) { mutableLiveData.value = data }

@@ -18,11 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
@@ -56,12 +56,12 @@ class SearchRepositoryUpdated(
 fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asSearchUIModel() = SearchUIModel(
     id = "$id",
     title = title,
-    mediaType = MediaTypeUpdated.Movie,
+    mediaType = MediaType.Movie,
     posterPath = posterPath ?: ""
 )
 fun ResponseStandardMediaUpdated.ResponseShowUpdated.asSearchUIModel() = SearchUIModel(
     id = "$id",
     title = name,
-    mediaType = MediaTypeUpdated.Show,
+    mediaType = MediaType.Show,
     posterPath = posterPath ?: ""
 )

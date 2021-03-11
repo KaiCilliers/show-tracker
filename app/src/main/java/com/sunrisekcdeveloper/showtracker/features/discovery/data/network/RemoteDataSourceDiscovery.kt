@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,10 +26,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class DiscoveryRemoteDataSourceUpdated(
-    private val api: DiscoveryServiceContractUpdated,
+class RemoteDataSourceDiscovery(
+    private val api: ServiceDiscoveryContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : DiscoveryRemoteDataSourceContractUpdated {
+) : RemoteDataSourceDiscoveryContract {
     override suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated> = safeApiCall {
         api.popularMovies(page = page)
     }

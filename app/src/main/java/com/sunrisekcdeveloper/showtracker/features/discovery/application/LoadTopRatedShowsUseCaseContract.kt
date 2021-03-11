@@ -16,16 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discovery.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
-interface DiscoveryRepositoryContractUpdated {
-    suspend fun popularMovies(page: Int): Resource<List<DiscoveryUIModel>>
-    suspend fun topRatedMovies(page: Int): Resource<List<DiscoveryUIModel>>
-    suspend fun upcomingMovies(page: Int): Resource<List<DiscoveryUIModel>>
-    suspend fun popularShows(page: Int): Resource<List<DiscoveryUIModel>>
-    suspend fun topRatedShows(page: Int): Resource<List<DiscoveryUIModel>>
-    suspend fun airingTodayShows(page: Int): Resource<List<DiscoveryUIModel>>
+interface LoadTopRatedShowsUseCaseContract {
+    suspend operator fun invoke(page: Int): Resource<List<UIModelDiscovery>>
 }

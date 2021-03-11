@@ -29,55 +29,56 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryUpdatedBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.DiscoveryViewActions.FetchMovieAndShowData
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewActionsDiscovery.FetchMovieAndShowData
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewStateDiscovery
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class DiscoveryFragmentUpdated : Fragment() {
+class FragmentDiscovery : Fragment() {
 
     @Inject
-    lateinit var popularMovieListAdapter: HorizontalPosterListAdapter
+    lateinit var popularMovieListAdapter: AdapterSimplePoster
     private lateinit var popularMoviesLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var topRatedMovieListAdapter: HorizontalPosterListAdapter
+    lateinit var topRatedMovieListAdapter: AdapterSimplePoster
     private lateinit var topRatedMoviesLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var upcomingMovieListAdapter: HorizontalPosterListAdapter
+    lateinit var upcomingMovieListAdapter: AdapterSimplePoster
     private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var popularShowListAdapter: HorizontalPosterListAdapter
+    lateinit var popularShowListAdapter: AdapterSimplePoster
     private lateinit var popularShowLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var topRatedShowsListAdapter: HorizontalPosterListAdapter
+    lateinit var topRatedShowsListAdapter: AdapterSimplePoster
     private lateinit var topRatedShowLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var airingTodayShowListAdapter: HorizontalPosterListAdapter
+    lateinit var airingTodayShowListAdapter: AdapterSimplePoster
     private lateinit var airingTodayShowLayoutManager: LinearLayoutManager
 
-    private lateinit var binding: FragmentDiscoveryUpdatedBinding
-    private val viewModel: DiscoveryViewModelUpdated by viewModels()
+    private lateinit var binding: FragmentDiscoveryBinding
+    private val viewModel: ViewModelDiscovery by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDiscoveryUpdatedBinding.inflate(inflater)
+        binding = FragmentDiscoveryBinding.inflate(inflater)
         return binding.root
     }
 
@@ -91,16 +92,15 @@ class DiscoveryFragmentUpdated : Fragment() {
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
             when (mediaType) {
-                MediaTypeUpdated.Movie -> {
-                    Timber.d("movie")
+                MediaType.Movie -> {
                     findNavController().navigate(
-                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                        // todo replace global navigation
+                        FragmentDiscoveryDirections.actionGlobalDetailMovieBottomSheet(mediaId)
                     )
                 }
-                MediaTypeUpdated.Show -> {
-                    Timber.d("show")
+                MediaType.Show -> {
                     findNavController().navigate(
-                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                        FragmentDiscoveryDirections.actionGlobalDetailShowBottomSheet(mediaId)
                     )
                 }
             }
@@ -281,9 +281,9 @@ class DiscoveryFragmentUpdated : Fragment() {
         }
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                DiscoveryViewState.Loading -> { }
-                DiscoveryViewState.Error ->  { }
-                DiscoveryViewState.Success -> { }
+                ViewStateDiscovery.Loading -> { }
+                ViewStateDiscovery.Error ->  { }
+                ViewStateDiscovery.Success -> { }
             }
         }
     }
@@ -293,7 +293,7 @@ class DiscoveryFragmentUpdated : Fragment() {
         binding.toolbarDiscovery.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    DiscoveryFragmentUpdatedDirections.actionNavigationDiscoveryUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToSearchActivityUpdated()
                 )
                 true
             }
@@ -322,19 +322,20 @@ class DiscoveryFragmentUpdated : Fragment() {
         // Movie Tab
         if (position == 0) {
             findNavController().navigate(
-                DiscoveryFragmentUpdatedDirections.actionNavigationDiscoveryUpdatedToDiscoveryMoviesFragmentUpdated()
+                // todo rename this awful action functions
+                FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToDiscoveryMoviesFragmentUpdated()
             )
             // TV Show Tab
         } else if (position == 1) {
             findNavController().navigate(
-                DiscoveryFragmentUpdatedDirections.actionNavigationDiscoveryUpdatedToDiscoveryShowsFragmentUpdated()
+                FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToDiscoveryShowsFragmentUpdated()
             )
         }
     }
 
     private fun updateList(
-        adapter: HorizontalPosterListAdapter,
-        list: List<DiscoveryUIModel>
+        adapter: AdapterSimplePoster,
+        list: List<UIModelDiscovery>
     ) {
         adapter.updateList(list)
     }

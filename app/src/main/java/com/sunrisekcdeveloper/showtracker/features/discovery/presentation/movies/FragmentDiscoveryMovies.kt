@@ -31,35 +31,34 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryMoviesUpdatedBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.DiscoveryFragmentUpdatedDirections
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.HorizontalPosterListAdapter
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyMoviesBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DiscoveryMoviesFragmentUpdated : Fragment() {
+class FragmentDiscoveryMovies : Fragment() {
 
-    private lateinit var binding: FragmentDiscoveryMoviesUpdatedBinding
+    private lateinit var binding: FragmentDiscoveryOnlyMoviesBinding
 
-    private val viewModel: DiscoveryMoviesFragmentViewModel by viewModels()
+    private val viewModel: ViewModelDiscoveryMovies by viewModels()
 
     @Inject
-    lateinit var popularMovieListAdapter: HorizontalPosterListAdapter
+    lateinit var popularMovieListAdapter: AdapterSimplePoster
     private lateinit var popularMoviesLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var topRatedMovieListAdapter: HorizontalPosterListAdapter
+    lateinit var topRatedMovieListAdapter: AdapterSimplePoster
     private lateinit var topRatedMoviesLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var upcomingMovieListAdapter: HorizontalPosterListAdapter
+    lateinit var upcomingMovieListAdapter: AdapterSimplePoster
     private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
 
     override fun onCreateView(
@@ -67,7 +66,7 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDiscoveryMoviesUpdatedBinding.inflate(inflater)
+        binding = FragmentDiscoveryOnlyMoviesBinding.inflate(inflater)
         renderSpinner()
         return binding.root
     }
@@ -86,7 +85,7 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    DiscoveryMoviesFragmentUpdatedDirections.actionDiscoveryMoviesFragmentUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToSearchActivityUpdated()
                 )
                 true
             }
@@ -104,12 +103,12 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
                     // Discovery Screen
                     if (id == 1L) {
                         findNavController().navigate(
-                            DiscoveryMoviesFragmentUpdatedDirections.actionDiscoveryMoviesFragmentUpdatedToNavigationDiscoveryUpdated()
+                            FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToNavigationDiscoveryUpdated()
                         )
                         // TV Show Discovery Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
-                            DiscoveryMoviesFragmentUpdatedDirections.actionDiscoveryMoviesFragmentUpdatedToDiscoveryShowsFragmentUpdated()
+                            FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToDiscoveryShowsFragmentUpdated()
                         )
                     }
                 }
@@ -180,14 +179,14 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
             when (mediaType) {
-                MediaTypeUpdated.Movie -> {
+                MediaType.Movie -> {
                     findNavController().navigate(
-                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                        FragmentDiscoveryMoviesDirections.actionGlobalDetailMovieBottomSheet(mediaId)
                     )
                 }
-                MediaTypeUpdated.Show -> {
+                MediaType.Show -> {
                     findNavController().navigate(
-                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                        FragmentDiscoveryMoviesDirections.actionGlobalDetailShowBottomSheet(mediaId)
                     )
                 }
             }
@@ -237,8 +236,8 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
     }
 
     private fun updateList(
-        adapter: HorizontalPosterListAdapter,
-        list: List<DiscoveryUIModel>
+        adapter: AdapterSimplePoster,
+        list: List<UIModelDiscovery>
     ) {
         adapter.updateList(list)
     }

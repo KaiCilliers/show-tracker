@@ -20,13 +20,13 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularShowsUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 
-class LoadPopularShowsUseCaseUpdated(
-    @RepoDiscovery private val discoveryRepo: DiscoveryRepositoryContractUpdated
-) : LoadPopularShowsUseCaseContractUpdated {
-    override suspend fun invoke(page: Int): Resource<List<DiscoveryUIModel>> =
-        discoveryRepo.popularShows(page)
+class LoadTopRatedShowsUseCase(
+    @RepoDiscovery private val discoveryRepo: RepositoryDiscoveryContract
+) : LoadTopRatedShowsUseCaseContract {
+    override suspend fun invoke(page: Int): Resource<List<UIModelDiscovery>> =
+        discoveryRepo.topRatedShows(page)
 }

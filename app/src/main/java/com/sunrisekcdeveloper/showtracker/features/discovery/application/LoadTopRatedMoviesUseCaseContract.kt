@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
-interface LoadTopRatedShowsUseCaseContractUpdated {
-    suspend operator fun invoke(page: Int): Resource<List<DiscoveryUIModel>>
+interface LoadTopRatedMoviesUseCaseContract {
+    suspend operator fun invoke(page: Int): Resource<List<UIModelDiscovery>>
 }

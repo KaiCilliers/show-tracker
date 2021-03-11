@@ -24,6 +24,10 @@ import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMov
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -50,6 +54,16 @@ fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
     watchlisted = false,
     startedWatching = false,
     upToDate = false
+)
+fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
+    id = "$id",
+    mediaType = MediaType.Movie,
+    posterPath = posterPath ?: ""
+)
+fun ResponseStandardMediaUpdated.ResponseShowUpdated.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
+    id = "$id",
+    mediaType = MediaType.Show,
+    posterPath = posterPath ?: ""
 )
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {

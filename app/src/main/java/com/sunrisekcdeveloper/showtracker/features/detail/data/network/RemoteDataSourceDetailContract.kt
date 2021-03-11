@@ -18,11 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 
 interface RemoteDataSourceDetailContract {
     suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail>

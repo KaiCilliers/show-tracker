@@ -24,7 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -84,5 +84,5 @@ data class SearchUIModel(
     val id: String,
     val title: String,
     val posterPath: String,
-    val mediaType: MediaTypeUpdated
+    val mediaType: MediaType
 )

@@ -18,46 +18,39 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
+import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Query
 
-interface DiscoveryServiceUpdated : DiscoveryServiceContractUpdated {
-    @GET("movie/popular")
-    override suspend fun popularMovies(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+interface ServiceDiscoveryContract {
+    suspend fun popularMovies(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
     ): Response<EnvelopePaginatedMovieUpdated>
 
-    @GET("movie/top_rated")
-    override suspend fun topRatedMovies(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+    suspend fun topRatedMovies(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
     ): Response<EnvelopePaginatedMovieUpdated>
 
-    @GET("movie/upcoming")
-    override suspend fun upcomingMovies(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+    suspend fun upcomingMovies(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
     ): Response<EnvelopePaginatedMovieUpdated>
 
-    @GET("tv/popular")
-    override suspend fun popularShows(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+    suspend fun popularShows(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
     ): Response<EnvelopePaginatedShowUpdated>
 
-    @GET("tv/top_rated")
-    override suspend fun topRatedShows(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+    suspend fun topRatedShows(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
     ): Response<EnvelopePaginatedShowUpdated>
 
-    @GET("tv/airing_today")
-    override suspend fun airingTodayShows(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+    suspend fun airingTodayShows(
+        apiKey: String = BuildConfig.TMDB_API_KEY,
+        page: Int
     ): Response<EnvelopePaginatedShowUpdated>
 }

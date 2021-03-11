@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.data.network
+package com.sunrisekcdeveloper.showtracker.common
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
-
-interface SearchRemoteDataSourceContractUpdated {
-    suspend fun moviesByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedMovieUpdated>
-    suspend fun showsByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedShowUpdated>
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Error(val message: String) : NetworkResult<Nothing>()
+    companion object {
+        fun <T> success(data: T) = Success(data)
+        fun error(message: String) = Error(message)
+    }
 }

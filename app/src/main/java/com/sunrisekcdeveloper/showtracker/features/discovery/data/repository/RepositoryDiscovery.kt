@@ -18,22 +18,21 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.repository
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 
-class DiscoveryRepositoryUpdated(
-    private val remote: DiscoveryRemoteDataSourceContractUpdated
-) : DiscoveryRepositoryContractUpdated {
-    override suspend fun popularMovies(page: Int): Resource<List<DiscoveryUIModel>> {
+class RepositoryDiscovery(
+    private val remote: RemoteDataSourceDiscoveryContract
+) : RepositoryDiscoveryContract {
+    override suspend fun popularMovies(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.popularMovies(page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asDiscoveryUIModel(ListType.MoviePopular) })
+                Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MoviePopular) })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -41,10 +40,10 @@ class DiscoveryRepositoryUpdated(
         }
     }
 
-    override suspend fun topRatedMovies(page: Int): Resource<List<DiscoveryUIModel>> {
+    override suspend fun topRatedMovies(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.topRatedMovies(page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asDiscoveryUIModel(ListType.MovieTopRated) })
+                Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MovieTopRated) })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -52,10 +51,10 @@ class DiscoveryRepositoryUpdated(
         }
     }
 
-    override suspend fun upcomingMovies(page: Int): Resource<List<DiscoveryUIModel>> {
+    override suspend fun upcomingMovies(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.upcomingMovies(page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asDiscoveryUIModel(ListType.MovieUpcoming) })
+                Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MovieUpcoming) })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -63,10 +62,10 @@ class DiscoveryRepositoryUpdated(
         }
     }
 
-    override suspend fun popularShows(page: Int): Resource<List<DiscoveryUIModel>> {
+    override suspend fun popularShows(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.popularShows(page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asDiscoveryUIModel(ListType.ShowPopular) })
+                Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowPopular) })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -74,10 +73,10 @@ class DiscoveryRepositoryUpdated(
         }
     }
 
-    override suspend fun topRatedShows(page: Int): Resource<List<DiscoveryUIModel>> {
+    override suspend fun topRatedShows(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.topRatedShows(page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asDiscoveryUIModel(ListType.ShowTopRated) })
+                Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowTopRated) })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -85,10 +84,10 @@ class DiscoveryRepositoryUpdated(
         }
     }
 
-    override suspend fun airingTodayShows(page: Int): Resource<List<DiscoveryUIModel>> {
+    override suspend fun airingTodayShows(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.airingTodayShows(page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asDiscoveryUIModel(ListType.ShowAiringToday) })
+                Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowAiringToday) })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -96,14 +95,3 @@ class DiscoveryRepositoryUpdated(
         }
     }
 }
-
-fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asDiscoveryUIModel(listType: ListType) = DiscoveryUIModel(
-    id = "$id",
-    mediaType = MediaTypeUpdated.Movie,
-    posterPath = posterPath ?: ""
-)
-fun ResponseStandardMediaUpdated.ResponseShowUpdated.asDiscoveryUIModel(listType: ListType) = DiscoveryUIModel(
-    id = "$id",
-    mediaType = MediaTypeUpdated.Show,
-    posterPath = posterPath ?: ""
-)

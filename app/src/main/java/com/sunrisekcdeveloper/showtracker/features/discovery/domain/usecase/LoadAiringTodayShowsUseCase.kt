@@ -20,13 +20,13 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadAiringTodayShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 
-class LoadUpcomingMoviesUseCaseUpdated(
-    @RepoDiscovery private val discoveryRepo: DiscoveryRepositoryContractUpdated
-) : LoadUpcomingMoviesUseCaseContractUpdated {
-    override suspend fun invoke(page: Int): Resource<List<DiscoveryUIModel>> =
-        discoveryRepo.upcomingMovies(page)
+class LoadAiringTodayShowsUseCase(
+    @RepoDiscovery private val discoveryRepo: RepositoryDiscoveryContract
+) : LoadAiringTodayShowsUseCaseContract {
+    override suspend fun invoke(page: Int): Resource<List<UIModelDiscovery>> =
+        discoveryRepo.airingTodayShows(page)
 }

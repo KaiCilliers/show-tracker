@@ -24,9 +24,9 @@ import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.DiscoveryRepositoryUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.SearchRepositoryUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
@@ -59,10 +59,10 @@ object RepositoryModule {
     @ActivityRetainedScoped
     @RepoDiscovery
     @Provides
-    fun provideDiscoveryRepositoryUpdated(
-        @SourceDiscovery remote: DiscoveryRemoteDataSourceContractUpdated
-    ): DiscoveryRepositoryContractUpdated =
-        DiscoveryRepositoryUpdated(remote)
+    fun provideRepositoryDiscovery(
+        @SourceDiscovery remote: RemoteDataSourceDiscoveryContract
+    ): RepositoryDiscoveryContract =
+        RepositoryDiscovery(remote)
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)

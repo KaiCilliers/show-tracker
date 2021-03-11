@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelShowDetail
@@ -26,7 +27,6 @@ import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.R
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import kotlinx.coroutines.*
 import timber.log.Timber
 

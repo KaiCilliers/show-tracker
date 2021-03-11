@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.HorizontalPosterListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.GridListAdapter
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.TitlePosterListAdapter
 import dagger.Module
@@ -41,7 +41,7 @@ object AdapterModule {
     }
 
     @Provides
-    fun provideHorizontalPosterListAdapter(): HorizontalPosterListAdapter {
-        return HorizontalPosterListAdapter(mutableListOf())
+    fun provideSimplePosterAdapter(): AdapterSimplePoster {
+        return AdapterSimplePoster(mutableListOf())
     }
 }
