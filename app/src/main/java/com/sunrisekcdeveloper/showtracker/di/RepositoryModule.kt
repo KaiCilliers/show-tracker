@@ -18,7 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetClient
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClientUpdated
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.DetailRepository
@@ -31,6 +34,16 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.W
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistRepository
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository.DetailRepositoryUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.repository.DiscoveryRepositoryUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.repository.SearchRepositoryUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.domain.repository.SearchRepositoryContractUpdated
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,7 +53,15 @@ import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object  RepositoryModule {
+object RepositoryModule {
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetRepo
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscRepo
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -53,6 +74,34 @@ object  RepositoryModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailRepo
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchRepoUpdated
+
+    @ActivityRetainedScoped
+    @SearchRepoUpdated
+    @Provides
+    fun provideSearchRepositoryUpdated(
+        @SearchClientUpdated remote: SearchRemoteDataSourceContractUpdated
+    ): SearchRepositoryContractUpdated =
+        SearchRepositoryUpdated(remote)
+
+    @ActivityRetainedScoped
+    @DetRepo
+    @Provides
+    fun provideDetailRepositoryUpdated(
+        @DetClient remote: DetailRemoteDataSourceContractUpdated
+    ): DetailRepositoryContractUpdated =
+        DetailRepositoryUpdated(remote)
+
+    @ActivityRetainedScoped
+    @DiscRepo
+    @Provides
+    fun provideDiscoveryRepositoryUpdated(
+        @DiscClient remote: DiscoveryRemoteDataSourceContractUpdated
+    ): DiscoveryRepositoryContractUpdated =
+        DiscoveryRepositoryUpdated(remote)
 
     @ActivityRetainedScoped
     @DiscoveryRepo

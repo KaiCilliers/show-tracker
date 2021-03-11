@@ -32,6 +32,18 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.Watchl
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceUpdated
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +62,23 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
+    annotation class DetClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetApi
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
     annotation class DiscoveryClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DiscApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -72,6 +100,61 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailApi
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchClientUpdated
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchApiUpdated
+
+    @Singleton
+    @SearchClientUpdated
+    @Provides
+    fun providesSearchClientUpdated(
+        @SearchApiUpdated api: SearchServiceContractUpdated
+    ) : SearchRemoteDataSourceContractUpdated {
+        return SearchRemoteDataSourceUpdated(api)
+    }
+
+    @Singleton
+    @SearchApiUpdated
+    @Provides
+    fun provideSearchApiUpdated(retrofit: Retrofit): SearchServiceContractUpdated {
+        return retrofit.create(SearchServiceUpdated::class.java)
+    }
+
+    @Singleton
+    @DetClient
+    @Provides
+    fun providesDetailClientUpdated(
+        @DetApi api: DetailServiceContractUpdated
+    ) : DetailRemoteDataSourceContractUpdated {
+        return DetailRemoteDataSourceUpdated(api)
+    }
+
+    @Singleton
+    @DetApi
+    @Provides
+    fun provideDetailApiUpdated(retrofit: Retrofit): DetailServiceContractUpdated {
+        return retrofit.create(DetailServiceUpdated::class.java)
+    }
+
+    @Singleton
+    @DiscClient
+    @Provides
+    fun providesDiscoveryClientUpdated(
+        @DiscApi api: DiscoveryServiceContractUpdated
+    ) : DiscoveryRemoteDataSourceContractUpdated {
+        return DiscoveryRemoteDataSourceUpdated(api)
+    }
+
+    @Singleton
+    @DiscApi
+    @Provides
+    fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
+        return retrofit.create(DiscoveryServiceUpdated::class.java)
+    }
 
     @Singleton
     @DiscoveryClient
