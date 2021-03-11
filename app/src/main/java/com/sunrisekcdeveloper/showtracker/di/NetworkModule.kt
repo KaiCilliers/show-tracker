@@ -40,6 +40,10 @@ import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.networ
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceUpdated
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -95,6 +99,30 @@ object NetworkModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailApi
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchClientUpdated
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SearchApiUpdated
+
+    @Singleton
+    @SearchClientUpdated
+    @Provides
+    fun providesSearchClientUpdated(
+        @SearchApiUpdated api: SearchServiceContractUpdated
+    ) : SearchRemoteDataSourceContractUpdated {
+        return SearchRemoteDataSourceUpdated(api)
+    }
+
+    @Singleton
+    @SearchApiUpdated
+    @Provides
+    fun provideSearchApiUpdated(retrofit: Retrofit): SearchServiceContractUpdated {
+        return retrofit.create(SearchServiceUpdated::class.java)
+    }
 
     @Singleton
     @DetClient

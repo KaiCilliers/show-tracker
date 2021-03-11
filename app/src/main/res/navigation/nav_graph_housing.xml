@@ -51,7 +51,7 @@
         tools:layout="@layout/fragment_statistics_updated" />
     <activity
         android:id="@+id/searchActivityUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.search.SearchActivityUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.SearchActivityUpdated"
         android:label="activity_search_updated"
         tools:layout="@layout/activity_search_updated" />
     <fragment

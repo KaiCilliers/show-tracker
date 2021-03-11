@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowTracker">
-        <activity android:name=".updated.features.search.SearchActivityUpdated"></activity>
+        <activity android:name=".updated.features.search.presentation.SearchActivityUpdated"></activity>
         <activity android:name=".updated.common.HousingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
