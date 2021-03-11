@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".updated.features.discovery.presentation.shows.DiscoveryShowsFragmentUpdated">
+    tools:context=".features.discovery.presentation.shows.DiscoveryShowsFragmentUpdated">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_discovery_shows"

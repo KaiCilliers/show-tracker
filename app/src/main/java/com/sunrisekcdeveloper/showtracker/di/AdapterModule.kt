@@ -18,11 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.HorizontalPosterListAdapter
-import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.GridListAdapter
-import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.TitlePosterListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.HorizontalPosterListAdapter
+import com.sunrisekcdeveloper.showtracker.features.search.presentation.GridListAdapter
+import com.sunrisekcdeveloper.showtracker.features.search.presentation.TitlePosterListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,15 +43,5 @@ object AdapterModule {
     @Provides
     fun provideHorizontalPosterListAdapter(): HorizontalPosterListAdapter {
         return HorizontalPosterListAdapter(mutableListOf())
-    }
-
-    @Provides
-    fun provideMovieListAdapter(): MovieListAdapter {
-        return MovieListAdapter(mutableListOf())
-    }
-
-    @Provides
-    fun providesWatchListMediaAdapter(): WatchlistMediaAdapter {
-        return WatchlistMediaAdapter(mutableListOf())
     }
 }

@@ -20,30 +20,18 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailService
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailServiceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryService
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryServiceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceUpdated
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,143 +47,52 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetailClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetailApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchClientUpdated
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchApiUpdated
-
     @Singleton
-    @SearchClientUpdated
+    @SourceSearch
     @Provides
     fun providesSearchClientUpdated(
-        @SearchApiUpdated api: SearchServiceContractUpdated
+        @ApiSearch api: SearchServiceContractUpdated
     ) : SearchRemoteDataSourceContractUpdated {
         return SearchRemoteDataSourceUpdated(api)
     }
 
     @Singleton
-    @SearchApiUpdated
+    @ApiSearch
     @Provides
     fun provideSearchApiUpdated(retrofit: Retrofit): SearchServiceContractUpdated {
         return retrofit.create(SearchServiceUpdated::class.java)
     }
 
     @Singleton
-    @DetClient
+    @SourceDetail
     @Provides
     fun providesDetailClientUpdated(
-        @DetApi api: DetailServiceContractUpdated
+        @ApiDetail api: DetailServiceContractUpdated
     ) : DetailRemoteDataSourceContractUpdated {
         return DetailRemoteDataSourceUpdated(api)
     }
 
     @Singleton
-    @DetApi
+    @ApiDetail
     @Provides
     fun provideDetailApiUpdated(retrofit: Retrofit): DetailServiceContractUpdated {
         return retrofit.create(DetailServiceUpdated::class.java)
     }
 
     @Singleton
-    @DiscClient
+    @SourceDiscovery
     @Provides
     fun providesDiscoveryClientUpdated(
-        @DiscApi api: DiscoveryServiceContractUpdated
+        @ApiDiscovery api: DiscoveryServiceContractUpdated
     ) : DiscoveryRemoteDataSourceContractUpdated {
         return DiscoveryRemoteDataSourceUpdated(api)
     }
 
     @Singleton
-    @DiscApi
+    @ApiDiscovery
     @Provides
     fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
         return retrofit.create(DiscoveryServiceUpdated::class.java)
-    }
-
-    @Singleton
-    @DiscoveryClient
-    @Provides
-    fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryRemoteDataSourceContract {
-        return DiscoveryRemoteDataSource(api)
-    }
-
-    @Singleton
-    @DiscoveryApi
-    @Provides
-    fun provideDiscoveryApi(retrofit: Retrofit): DiscoveryServiceContract {
-        return retrofit.create(DiscoveryService::class.java)
-    }
-
-    @Singleton
-    @WatchlistClient
-    @Provides
-    fun provideWatchlistClient(@WatchlistApi api: WatchlistServiceContract) : WatchlistDataSourceContract {
-        return WatchlistRemoteDataSource(api)
-    }
-
-    @Singleton
-    @WatchlistApi
-    @Provides
-    fun provideWatchlistApi(retrofit: Retrofit): WatchlistServiceContract {
-        return retrofit.create(WatchlistService::class.java)
-    }
-
-    @Singleton
-    @DetailClient
-    @Provides
-    fun provideDetailClient(@DetailApi api: DetailServiceContract) : DetailDataSourceContract {
-        return DetailRemoteDataSource(api)
-    }
-
-    @Singleton
-    @DetailApi
-    @Provides
-    fun provideDetailApi(retrofit: Retrofit): DetailServiceContract {
-        return retrofit.create(DetailService::class.java)
     }
 
     @Singleton
@@ -218,4 +115,28 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceSearch
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiSearch
 }
