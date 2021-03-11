@@ -24,7 +24,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.sunrisekcdeveloper.showtracker.commons.models.local.*
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListEntity
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.WatchListType
@@ -35,32 +34,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 // Models
-fun ResponseStandardMedia.asMediaModel() : MediaModelSealed {
-    return when (this) {
-        is ResponseStandardMedia.ResponseMovie -> this.asMediaModel()
-        is ResponseStandardMedia.ResponseShow -> this.asMediaModel()
-    }
-}
-fun ResponseStandardMedia.ResponseMovie.asMediaModel() = MediaModelSealed.MovieModel(
-    id = id,
-    title = title,
-    overview = overview,
-    posterPath = posterPath?: "",
-    backdropPath = backdropPath?: "",
-    rating = rating,
-    releaseDate = releaseDate?: "",
-    watchListType = WatchListType.NONE
-)
-fun ResponseStandardMedia.ResponseShow.asMediaModel() = MediaModelSealed.ShowModel(
-    id = id?: 0L,
-    name = name?: "",
-    overview = overview?: "",
-    posterPath = posterPath?: "",
-    backdropPath = backdropPath?: "",
-    rating = rating?: 0.0F,
-    firstAirDate = firstAirDate?: "",
-    watchListType = WatchListType.NONE
-)
 fun MediaModelSealed.MovieModel.asWatchListEntity() = WatchListEntity(
     id = id,
     title = title,
@@ -153,30 +126,6 @@ fun AnticipatedMediaEntity.asDomainMovie() = MediaModel(
     backdropPath = backdropPath,
     rating = rating,
     releaseDate = releaseDate
-)
-fun ResponseStandardMedia.asMediaEntity() : MediaEntity {
-    return when (this) {
-        is ResponseStandardMedia.ResponseMovie -> this.asMediaEntity()
-        is ResponseStandardMedia.ResponseShow -> this.asMediaEntity()
-    }
-}
-fun ResponseStandardMedia.ResponseMovie.asMediaEntity() = MediaEntity.MovieEntityTMDB(
-    id = id,
-    title = title,
-    overview = overview,
-    posterPath = posterPath ?: "",
-    backdropPath = backdropPath ?: "",
-    rating = rating,
-    releaseDate = releaseDate?: ""
-)
-fun ResponseStandardMedia.ResponseShow.asMediaEntity() = MediaEntity.ShowEntityTMDB(
-    id = id?: 0L,
-    name = name?: "",
-    overview = overview?: "",
-    posterPath = posterPath?: "",
-    backdropPath = backdropPath?: "",
-    rating = rating?: 0.0F,
-    firstAirDate = firstAirDate?: ""
 )
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {

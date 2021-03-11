@@ -20,12 +20,7 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscClient
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscoveryClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClientUpdated
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.repository.DiscoveryRepository
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
@@ -60,10 +55,6 @@ object RepositoryModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryRepo
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
     annotation class WatchlistRepo
 
     @Qualifier
@@ -93,15 +84,6 @@ object RepositoryModule {
         @DiscClient remote: DiscoveryRemoteDataSourceContractUpdated
     ): DiscoveryRepositoryContractUpdated =
         DiscoveryRepositoryUpdated(remote)
-
-    @ActivityRetainedScoped
-    @DiscoveryRepo
-    @Provides
-    fun provideDiscoveryRepository(
-        dao: DiscoveryDao,
-        @DiscoveryClient remote: DiscoveryRemoteDataSourceContract
-    ): DiscoveryRepositoryContract =
-        DiscoveryRepository(remote, dao)
 
     @ActivityRetainedScoped
     @WatchlistRepo

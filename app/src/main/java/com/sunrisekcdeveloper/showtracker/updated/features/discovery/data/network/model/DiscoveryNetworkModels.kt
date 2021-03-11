@@ -19,7 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.model
 
 import com.google.gson.annotations.SerializedName
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.model.ResponseStandardMedia
 
 data class EnvelopePaginatedMovieUpdated(
     @SerializedName("page") val page: Int,

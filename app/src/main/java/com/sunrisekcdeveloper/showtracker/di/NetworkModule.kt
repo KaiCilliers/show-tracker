@@ -20,10 +20,6 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryService
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryServiceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
@@ -70,15 +66,7 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
     annotation class DiscApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -142,20 +130,6 @@ object NetworkModule {
     @Provides
     fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
         return retrofit.create(DiscoveryServiceUpdated::class.java)
-    }
-
-    @Singleton
-    @DiscoveryClient
-    @Provides
-    fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryRemoteDataSourceContract {
-        return DiscoveryRemoteDataSource(api)
-    }
-
-    @Singleton
-    @DiscoveryApi
-    @Provides
-    fun provideDiscoveryApi(retrofit: Retrofit): DiscoveryServiceContract {
-        return retrofit.create(DiscoveryService::class.java)
     }
 
     @Singleton

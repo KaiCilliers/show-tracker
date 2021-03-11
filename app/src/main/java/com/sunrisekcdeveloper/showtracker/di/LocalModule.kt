@@ -21,7 +21,6 @@ package com.sunrisekcdeveloper.showtracker.di
 import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.commons.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import dagger.Module
 import dagger.Provides
@@ -49,10 +48,6 @@ object LocalModule {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
-
-    @Singleton
-    @Provides
-    fun provideDiscoveryDao(db: TrackerDatabase): DiscoveryDao = db.discoveryDao()
 
     @Singleton
     @Provides

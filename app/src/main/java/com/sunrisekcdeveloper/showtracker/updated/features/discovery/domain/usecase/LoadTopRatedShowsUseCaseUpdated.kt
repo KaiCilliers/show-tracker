@@ -19,12 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
-import com.sunrisekcdeveloper.showtracker.features.discover.application.LoadTopRatedShowsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadTopRatedShowsUseCaseContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated

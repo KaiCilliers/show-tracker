@@ -19,7 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.models.network.envelopes
 
 import com.squareup.moshi.Json
-import com.sunrisekcdeveloper.showtracker.features.discover.data.local.model.FeaturedEntity
 import com.sunrisekcdeveloper.showtracker.models.local.categories.TrendingListEntity
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseMovie
 import com.sunrisekcdeveloper.showtracker.models.network.base.ResponseShow
@@ -41,10 +40,6 @@ data class EnvelopeWatchers(
     fun asTrendingMovieEntity() = TrendingListEntity(
         mediaSlug = movie!!.identifiers.slug,
         watchers = watchers
-    )
-    fun asFeaturedMovieEntity() = FeaturedEntity(
-        mediaSlug = movie!!.identifiers.slug,
-        tag = "Trending"
     )
 
     companion object {
