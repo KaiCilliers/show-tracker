@@ -30,7 +30,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import dagger.Module
 import dagger.Provides
@@ -43,7 +43,7 @@ object UseCaseModule {
     // Search
     @Provides
     fun provideSearchMediaByTitleUseCase(
-        @RepoSearch searchRepo: SearchRepositoryContractUpdated
+        @RepoSearch searchRepo: RepositorySearchContract
     ): SearchMediaByTitleUseCaseContract =
         SearchMediaByTitleUseCase(searchRepo)
 

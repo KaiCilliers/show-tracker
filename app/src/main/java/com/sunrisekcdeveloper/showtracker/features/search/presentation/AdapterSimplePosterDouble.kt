@@ -24,45 +24,47 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
+import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 
-class TitlePosterListAdapter(
-    private var data: MutableList<SearchUIModel>,
+// todo replace with simpleposter adapter
+//  fun onbind must accept only the data required or have its own model so that
+//  I can create extension function on the UI models
+class AdapterSimplePosterDouble(
+    private var data: MutableList<UIModelSearch>,
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { mediaId, mediaType ->  }
-) : RecyclerView.Adapter<TitlePosterListAdapter.TitlePosterViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitlePosterViewHolder =
-        TitlePosterViewHolder.from(parent)
+) : RecyclerView.Adapter<AdapterSimplePosterDouble.ViewHolderSimplePosterDouble>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterDouble =
+        ViewHolderSimplePosterDouble.from(parent)
 
-    override fun onBindViewHolder(holder: TitlePosterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolderSimplePosterDouble, position: Int) {
         val item = data[position]
         holder.bind(item)
-        holder.binding.cardPoster.setOnClickListener {
+        holder.binding.imgvItemMoviePoster.setOnClickListener {
             onPosterClickListener.onClick(item.id, item.mediaType)
         }
     }
 
     override fun getItemCount(): Int = data.size
 
-    fun updateList(data: List<SearchUIModel>) {
+    fun updateList(data: List<UIModelSearch>) {
         this.data.addAll(data)
         notifyItemRangeInserted(
             this.data.size,
-            data.size -1
+            data.size - 1
         )
     }
 
-    // inner class benefits from being able to reference parent (even private variables)
-    class TitlePosterViewHolder(val binding: ItemSimplePosterAndTitleBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: SearchUIModel) {
+    class ViewHolderSimplePosterDouble(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: UIModelSearch) {
             Glide.with(binding.root)
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())
-                .into(binding.imgvItemMediaPoster)
-            binding.tvMediaTitle.text = data.title
+                .into(binding.imgvItemMoviePoster)
         }
         companion object {
-            fun from(parent: ViewGroup): TitlePosterViewHolder = TitlePosterViewHolder(
-                ItemSimplePosterAndTitleBinding.inflate(
+            fun from(parent: ViewGroup) : ViewHolderSimplePosterDouble = ViewHolderSimplePosterDouble(
+                ItemSimplePosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )

@@ -27,9 +27,9 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.Repo
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.repository.SearchRepositoryUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,9 +44,9 @@ object RepositoryModule {
     @RepoSearch
     @Provides
     fun provideSearchRepositoryUpdated(
-        @SourceSearch remote: SearchRemoteDataSourceContractUpdated
-    ): SearchRepositoryContractUpdated =
-        SearchRepositoryUpdated(remote)
+        @SourceSearch remote: RemoteDataSourceSearchContract
+    ): RepositorySearchContract =
+        RepositorySearch(remote)
 
     @ActivityRetainedScoped
     @RepoDetail

@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/searchFragmentUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.FragmentSearch"
         android:label="fragment_search_updated"
-        tools:layout="@layout/fragment_search_updated" >
+        tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragmentUpdated_to_detailMovieBottomSheet2"
             app:destination="@id/detailMovieBottomSheet2" />

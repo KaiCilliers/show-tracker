@@ -20,22 +20,18 @@ package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.databinding.ActivitySearchUpdatedBinding
+import com.sunrisekcdeveloper.showtracker.databinding.ActivitySearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
 
 @AndroidEntryPoint
-class SearchActivityUpdated : AppCompatActivity() {
+class ActivitySearch : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySearchUpdatedBinding
+    private lateinit var binding: ActivitySearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchUpdatedBinding.inflate(layoutInflater)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 }

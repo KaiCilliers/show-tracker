@@ -19,9 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.features.search.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 
-interface SearchRepositoryContractUpdated {
-    suspend fun moviesByTitle(page: Int, query: String) : Resource<List<SearchUIModel>>
-    suspend fun showsByTitle(page: Int, query: String) : Resource<List<SearchUIModel>>
+interface RepositorySearchContract {
+    suspend fun moviesByTitle(page: Int, query: String) : Resource<List<UIModelSearch>>
+    suspend fun showsByTitle(page: Int, query: String) : Resource<List<UIModelSearch>>
 }

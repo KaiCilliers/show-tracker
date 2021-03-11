@@ -28,10 +28,10 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.Remote
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearch
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearch
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,17 +50,17 @@ object NetworkModule {
     @Singleton
     @SourceSearch
     @Provides
-    fun providesSearchClientUpdated(
-        @ApiSearch api: SearchServiceContractUpdated
-    ) : SearchRemoteDataSourceContractUpdated {
-        return SearchRemoteDataSourceUpdated(api)
+    fun provideRemoteDataSourceSearch(
+        @ApiSearch api: ServiceSearchContract
+    ) : RemoteDataSourceSearchContract {
+        return RemoteDataSourceSearch(api)
     }
 
     @Singleton
     @ApiSearch
     @Provides
-    fun provideSearchApiUpdated(retrofit: Retrofit): SearchServiceContractUpdated {
-        return retrofit.create(SearchServiceUpdated::class.java)
+    fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
+        return retrofit.create(ServiceSearch::class.java)
     }
 
     @Singleton

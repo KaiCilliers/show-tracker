@@ -27,10 +27,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class SearchRemoteDataSourceUpdated(
-    @ApiSearch private val api: SearchServiceContractUpdated,
+class RemoteDataSourceSearch(
+    @ApiSearch private val api: ServiceSearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : SearchRemoteDataSourceContractUpdated {
+) : RemoteDataSourceSearchContract {
     override suspend fun moviesByTitle(
         query: String,
         page: Int

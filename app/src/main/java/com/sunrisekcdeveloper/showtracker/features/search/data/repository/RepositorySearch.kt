@@ -20,20 +20,19 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 
-class SearchRepositoryUpdated(
-    @SourceSearch private val remote: SearchRemoteDataSourceContractUpdated
-) : SearchRepositoryContractUpdated {
-    override suspend fun moviesByTitle(page: Int, query: String): Resource<List<SearchUIModel>> {
+class RepositorySearch(
+    @SourceSearch private val remote: RemoteDataSourceSearchContract
+) : RepositorySearchContract {
+    override suspend fun moviesByTitle(page: Int, query: String): Resource<List<UIModelSearch>> {
         return when (val response = remote.moviesByTitle(query, page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asSearchUIModel() })
+                Resource.Success(response.data.media.map { it.asUIModelSearch() })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -41,10 +40,10 @@ class SearchRepositoryUpdated(
         }
     }
 
-    override suspend fun showsByTitle(page: Int, query: String): Resource<List<SearchUIModel>> {
+    override suspend fun showsByTitle(page: Int, query: String): Resource<List<UIModelSearch>> {
         return when (val response = remote.showsByTitle(query, page)) {
             is NetworkResult.Success -> {
-                Resource.Success(response.data.media.map { it.asSearchUIModel() })
+                Resource.Success(response.data.media.map { it.asUIModelSearch() })
             }
             is NetworkResult.Error -> {
                 Resource.Error(response.message)
@@ -52,16 +51,3 @@ class SearchRepositoryUpdated(
         }
     }
 }
-
-fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asSearchUIModel() = SearchUIModel(
-    id = "$id",
-    title = title,
-    mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
-)
-fun ResponseStandardMediaUpdated.ResponseShowUpdated.asSearchUIModel() = SearchUIModel(
-    id = "$id",
-    title = name,
-    mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
-)

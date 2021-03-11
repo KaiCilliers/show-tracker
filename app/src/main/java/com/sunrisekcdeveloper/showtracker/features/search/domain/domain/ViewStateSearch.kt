@@ -16,13 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.data.network
+package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 
-interface SearchRemoteDataSourceContractUpdated {
-    suspend fun moviesByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedMovieUpdated>
-    suspend fun showsByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedShowUpdated>
+sealed class ViewStateSearch<out T: List<UIModelSearch>> {
+    object SuggestedContent : ViewStateSearch<Nothing>()
+    object NoSearchResults : ViewStateSearch<Nothing>()
+    data class SearchResults(val data: List<UIModelSearch>) : ViewStateSearch<List<UIModelSearch>>()
 }

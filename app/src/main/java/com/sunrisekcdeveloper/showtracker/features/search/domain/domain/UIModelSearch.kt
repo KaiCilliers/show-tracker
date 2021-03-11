@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.application
+package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
-interface SearchMediaByTitleUseCaseContract {
-    suspend operator fun invoke(page: Int, query: String) : Resource<List<UIModelSearch>>
-}
+data class UIModelSearch(
+    val id: String,
+    val title: String,
+    val posterPath: String,
+    val mediaType: MediaType
+)

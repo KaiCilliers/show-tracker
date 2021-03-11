@@ -31,8 +31,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchUpdatedBinding
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
@@ -44,19 +46,19 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchFragmentUpdated : Fragment() {
+class FragmentSearch : Fragment() {
 
-    private lateinit var binding: FragmentSearchUpdatedBinding
+    private lateinit var binding: FragmentSearchBinding
 
-    private val viewModel: SearchViewModel by viewModels()
+    private val viewModel: ViewModelSearch by viewModels()
 
     // todo rename adapter to SimplePosterAdapter
     @Inject
-    lateinit var gridAdapter: GridListAdapter
+    lateinit var gridAdapter: AdapterSimplePosterDouble
     private lateinit var gridLayoutManager: GridLayoutManager
 
     @Inject
-    lateinit var linearAdapter: TitlePosterListAdapter
+    lateinit var linearAdapter: AdapterSimplePosterTitle
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreateView(
@@ -64,7 +66,7 @@ class SearchFragmentUpdated : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchUpdatedBinding.inflate(inflater)
+        binding = FragmentSearchBinding.inflate(inflater)
         return binding.root
     }
 
@@ -77,13 +79,13 @@ class SearchFragmentUpdated : Fragment() {
     private fun observeViewModel() {
         viewModel.searchState.observe(viewLifecycleOwner) {
             when (it) {
-                SearchState.SuggestedContent -> {
+                ViewStateSearch.SuggestedContent -> {
                     showSuggestedState()
                 }
-                SearchState.NoSearchResults -> {
+                ViewStateSearch.NoSearchResults -> {
                     showNoResultsState()
                 }
-                is SearchState.SearchResults -> {
+                is ViewStateSearch.SearchResults -> {
                     showResultState(it.data)
                 }
             }
@@ -96,7 +98,7 @@ class SearchFragmentUpdated : Fragment() {
                 MediaType.Movie -> {
                     Timber.d("movie")
                     findNavController().navigate(
-                        SearchFragmentUpdatedDirections.actionSearchFragmentUpdatedToDetailMovieBottomSheet2(
+                        FragmentSearchDirections.actionSearchFragmentUpdatedToDetailMovieBottomSheet2(
                             mediaId
                         )
                     )
@@ -105,7 +107,7 @@ class SearchFragmentUpdated : Fragment() {
                 MediaType.Show -> {
                     Timber.d("show")
                     findNavController().navigate(
-                        SearchFragmentUpdatedDirections.actionSearchFragmentUpdatedToDetailShowBottomSheet2(
+                        FragmentSearchDirections.actionSearchFragmentUpdatedToDetailShowBottomSheet2(
                             mediaId
                         )
                     )
@@ -135,11 +137,11 @@ class SearchFragmentUpdated : Fragment() {
 
         lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
-                .debounce(600)
+                .debounce(1000)
                 .filter { query ->
                     // simply fetch all the data from database
                     if (query.isEmpty()) {
-                        viewModel.setState(SearchState.SuggestedContent)
+                        viewModel.setState(ViewStateSearch.SuggestedContent)
                         return@filter false
                     }
                     return@filter true
@@ -160,7 +162,7 @@ class SearchFragmentUpdated : Fragment() {
         showSuggestedList()
     }
 
-    private fun showResultState(data: List<SearchUIModel>) {
+    private fun showResultState(data: List<UIModelSearch>) {
         hideNoResultsState()
         binding.tvHeaderWatchlistContent.visibility = View.VISIBLE
         binding.tvHeaderWatchlistContent.text = "Results"

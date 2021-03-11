@@ -18,24 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Query
 
-interface SearchServiceUpdated : SearchServiceContractUpdated {
-    @GET("search/movie")
-    override suspend fun searchMoviesByTitle(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int,
-        @Query("query") query: String
-    ): Response<EnvelopePaginatedMovieUpdated>
-
-    @GET("search/tv")
-    override suspend fun searchShowByTitle(
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int,
-        @Query("query") query: String
-    ): Response<EnvelopePaginatedShowUpdated>
+interface RemoteDataSourceSearchContract {
+    suspend fun moviesByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedMovieUpdated>
+    suspend fun showsByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedShowUpdated>
 }

@@ -24,29 +24,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchViewModel @ViewModelInject constructor(
+class ViewModelSearch @ViewModelInject constructor(
     private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract
 ) : ViewModel() {
 
     var mediaPage = 0
 
-    private val _searchState = MutableLiveData<SearchState<List<SearchUIModel>>>().apply {
-        value = SearchState.SuggestedContent
+    private val _searchState = MutableLiveData<ViewStateSearch<List<UIModelSearch>>>().apply {
+        value = ViewStateSearch.SuggestedContent
     }
-    val searchState: LiveData<SearchState<List<SearchUIModel>>> = _searchState
+    val searchState: LiveData<ViewStateSearch<List<UIModelSearch>>> = _searchState
 
-    fun setState(state: SearchState<List<SearchUIModel>>) {
+    fun setState(state: ViewStateSearch<List<UIModelSearch>>) {
         viewModelScope.launch {
             when(state) {
-                SearchState.SuggestedContent -> _searchState.value = state
-                SearchState.NoSearchResults -> _searchState.value = state
-                is SearchState.SearchResults -> _searchState.value = state
+                ViewStateSearch.SuggestedContent -> _searchState.value = state
+                ViewStateSearch.NoSearchResults -> _searchState.value = state
+                is ViewStateSearch.SearchResults -> _searchState.value = state
             }
         }
     }
@@ -60,29 +61,16 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<SearchState<List<SearchUIModel>>>,
-        call: suspend () -> Resource<List<SearchUIModel>>
+        mutableLiveData: MutableLiveData<ViewStateSearch<List<UIModelSearch>>>,
+        call: suspend () -> Resource<List<UIModelSearch>>
     ) {
         val data = withContext(Dispatchers.IO) { call() }
         withContext(Dispatchers.Main) {
             if (data is Resource.Success) {
-                mutableLiveData.value = SearchState.SearchResults(data.data)
+                mutableLiveData.value = ViewStateSearch.SearchResults(data.data)
             } else {
-                mutableLiveData.value = SearchState.SearchResults(listOf())
+                mutableLiveData.value = ViewStateSearch.SearchResults(listOf())
             }
         }
     }
 }
-
-sealed class SearchState<out T: List<SearchUIModel>> {
-    object SuggestedContent : SearchState<Nothing>()
-    object NoSearchResults : SearchState<Nothing>()
-    data class SearchResults(val data: List<SearchUIModel>) : SearchState<List<SearchUIModel>>()
-}
-
-data class SearchUIModel(
-    val id: String,
-    val title: String,
-    val posterPath: String,
-    val mediaType: MediaType
-)

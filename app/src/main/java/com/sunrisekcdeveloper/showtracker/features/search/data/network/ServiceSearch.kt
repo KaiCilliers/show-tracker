@@ -18,21 +18,24 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
-import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-interface SearchServiceContractUpdated {
-    suspend fun searchMoviesByTitle(
-        apiKey: String = BuildConfig.TMDB_API_KEY,
-        page: Int,
-        query: String
-    ) : Response<EnvelopePaginatedMovieUpdated>
+interface ServiceSearch : ServiceSearchContract {
+    @GET("search/movie")
+    override suspend fun searchMoviesByTitle(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int,
+        @Query("query") query: String
+    ): Response<EnvelopePaginatedMovieUpdated>
 
-    suspend fun searchShowByTitle(
-        apiKey: String = BuildConfig.TMDB_API_KEY,
-        page: Int,
-        query: String
-    ) : Response<EnvelopePaginatedShowUpdated>
+    @GET("search/tv")
+    override suspend fun searchShowByTitle(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int,
+        @Query("query") query: String
+    ): Response<EnvelopePaginatedShowUpdated>
 }
