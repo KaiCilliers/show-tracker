@@ -20,10 +20,6 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceContractUpdated
@@ -67,14 +63,6 @@ object NetworkModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class DiscApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -130,20 +118,6 @@ object NetworkModule {
     @Provides
     fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
         return retrofit.create(DiscoveryServiceUpdated::class.java)
-    }
-
-    @Singleton
-    @WatchlistClient
-    @Provides
-    fun provideWatchlistClient(@WatchlistApi api: WatchlistServiceContract) : WatchlistDataSourceContract {
-        return WatchlistRemoteDataSource(api)
-    }
-
-    @Singleton
-    @WatchlistApi
-    @Provides
-    fun provideWatchlistApi(retrofit: Retrofit): WatchlistServiceContract {
-        return retrofit.create(WatchlistService::class.java)
     }
 
     @Singleton

@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.MediaType
 
 data class DiscoveryUIModel(
     val id: String,

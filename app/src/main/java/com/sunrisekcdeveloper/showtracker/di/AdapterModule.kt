@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.HorizontalPosterListAdapter
 import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.GridListAdapter
 import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.TitlePosterListAdapter
@@ -44,10 +43,5 @@ object AdapterModule {
     @Provides
     fun provideHorizontalPosterListAdapter(): HorizontalPosterListAdapter {
         return HorizontalPosterListAdapter(mutableListOf())
-    }
-
-    @Provides
-    fun providesWatchListMediaAdapter(): WatchlistMediaAdapter {
-        return WatchlistMediaAdapter(mutableListOf())
     }
 }

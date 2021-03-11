@@ -32,7 +32,6 @@ import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryUpdatedBinding
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryViewActions.FetchMovieAndShowData

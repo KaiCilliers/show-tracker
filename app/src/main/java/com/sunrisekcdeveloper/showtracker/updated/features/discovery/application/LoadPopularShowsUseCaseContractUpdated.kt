@@ -19,7 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.application
 
 import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
 
 interface LoadPopularShowsUseCaseContractUpdated {

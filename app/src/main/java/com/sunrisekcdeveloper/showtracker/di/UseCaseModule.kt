@@ -22,9 +22,6 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepoUpdated
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
@@ -100,11 +97,4 @@ object UseCaseModule {
         @DiscRepo discoveryRepo: DiscoveryRepositoryContractUpdated
     ): LoadTopRatedShowsUseCaseContractUpdated =
         LoadTopRatedShowsUseCaseUpdated(discoveryRepo)
-
-    // Watchlist
-    @Provides
-    fun provideLoadWatchListMediaUseCase(
-        @WatchlistRepo watchlistRepo: WatchListRepositoryContract
-    ): LoadWatchListMediaUseCaseContract =
-        LoadWatchListMediaUseCase(watchlistRepo)
 }

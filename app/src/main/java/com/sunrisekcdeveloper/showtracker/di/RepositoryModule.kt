@@ -21,10 +21,6 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscClient
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClientUpdated
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistRepository
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository.DetailRepositoryUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
@@ -84,13 +80,4 @@ object RepositoryModule {
         @DiscClient remote: DiscoveryRemoteDataSourceContractUpdated
     ): DiscoveryRepositoryContractUpdated =
         DiscoveryRepositoryUpdated(remote)
-
-    @ActivityRetainedScoped
-    @WatchlistRepo
-    @Provides
-    fun provideWatchlistRepository(
-        dao: WatchlistDao,
-        @NetworkModule.WatchlistClient remote: WatchlistDataSourceContract
-    ): WatchListRepositoryContract =
-        WatchlistRepository(remote, dao)
 }
