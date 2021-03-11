@@ -41,14 +41,14 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_watchlist_updated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.WatchlistFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.FragmentWatchlist"
         android:label="fragment_watchlist_updated"
-        tools:layout="@layout/fragment_watchlist_updated" />
+        tools:layout="@layout/fragment_watchlist" />
     <fragment
         android:id="@+id/navigation_statistics_updated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.StatisticsFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.FragmentStatistics"
         android:label="fragment_statistics_updated"
-        tools:layout="@layout/fragment_statistics_updated" />
+        tools:layout="@layout/fragment_statistics" />
     <activity
         android:id="@+id/searchActivityUpdated"
         android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchActivityUpdated"

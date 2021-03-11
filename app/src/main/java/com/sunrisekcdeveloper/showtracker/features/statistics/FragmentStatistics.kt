@@ -23,16 +23,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentStatisticsUpdatedBinding
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentStatisticsBinding
 
-class StatisticsFragmentUpdated : Fragment() {
-    private lateinit var binding: FragmentStatisticsUpdatedBinding
+class FragmentStatistics : Fragment() {
+    private lateinit var binding: FragmentStatisticsBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStatisticsUpdatedBinding.inflate(inflater)
+        binding = FragmentStatisticsBinding.inflate(inflater)
         return binding.root
     }
 }

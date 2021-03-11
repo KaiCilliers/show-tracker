@@ -23,16 +23,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistUpdatedBinding
+import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 
-class WatchlistFragmentUpdated : Fragment() {
-    private lateinit var binding: FragmentWatchlistUpdatedBinding
+class FragmentWatchlist : Fragment() {
+    private lateinit var binding: FragmentWatchlistBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentWatchlistUpdatedBinding.inflate(inflater)
+        binding = FragmentWatchlistBinding.inflate(inflater)
         return binding.root
     }
 }
