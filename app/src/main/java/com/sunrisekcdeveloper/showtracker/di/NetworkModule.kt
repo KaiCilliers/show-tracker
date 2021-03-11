@@ -32,6 +32,10 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.Watchl
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryServiceContractUpdated
@@ -51,6 +55,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class DetApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -84,6 +96,21 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class DetailApi
 
+    @Singleton
+    @DetClient
+    @Provides
+    fun providesDetailClientUpdated(
+        @DetApi api: DetailServiceContractUpdated
+    ) : DetailRemoteDataSourceContractUpdated {
+        return DetailRemoteDataSourceUpdated(api)
+    }
+
+    @Singleton
+    @DetApi
+    @Provides
+    fun provideDetailApiUpdated(retrofit: Retrofit): DetailServiceContractUpdated {
+        return retrofit.create(DetailServiceUpdated::class.java)
+    }
 
     @Singleton
     @DiscClient

@@ -104,6 +104,6 @@ fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asDiscoveryUIModel(listTyp
 )
 fun ResponseStandardMediaUpdated.ResponseShowUpdated.asDiscoveryUIModel(listType: ListType) = DiscoveryUIModel(
     id = "$id",
-    mediaType = MediaTypeUpdated.Movie,
+    mediaType = MediaTypeUpdated.Show,
     posterPath = posterPath ?: ""
 )

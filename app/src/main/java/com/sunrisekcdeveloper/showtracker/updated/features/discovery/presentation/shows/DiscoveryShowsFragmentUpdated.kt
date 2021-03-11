@@ -35,8 +35,11 @@ import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryShowsUpdatedBinding
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryFragmentUpdatedDirections
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryViewState
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.HorizontalPosterListAdapter
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.OnPosterClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -78,6 +81,25 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
     }
 
     private fun setupBinding() {
+        val onClick = OnPosterClickListener { mediaId, mediaType ->
+            when (mediaType) {
+                MediaTypeUpdated.Movie -> {
+                    findNavController().navigate(
+                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                    )
+                }
+                MediaTypeUpdated.Show -> {
+                    findNavController().navigate(
+                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                    )
+                }
+            }
+        }
+
+        popularShowListAdapter.onPosterClickListener = onClick
+        topRatedShowsListAdapter.onPosterClickListener = onClick
+        airingTodayShowListAdapter.onPosterClickListener = onClick
+
         popularShowLayoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,

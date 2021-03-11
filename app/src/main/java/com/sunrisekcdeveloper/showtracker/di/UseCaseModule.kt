@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetailRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
@@ -31,6 +32,11 @@ import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.WatchListRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.*
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase.FetchMovieDetailsUseCase
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase.FetchShowDetailsUseCase
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.usecase.*
@@ -42,6 +48,19 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object UseCaseModule {
+    // Detail
+    @Provides
+    fun provideFetchMovieDetailUseCase(
+        @DetRepo detailRepo: DetailRepositoryContractUpdated
+    ): FetchMovieDetailsUseCaseContract =
+        FetchMovieDetailsUseCase(detailRepo)
+
+    @Provides
+    fun provideFetchShowDetailUseCase(
+        @DetRepo detailRepo: DetailRepositoryContractUpdated
+    ): FetchShowDetailsUseCaseContract =
+        FetchShowDetailsUseCase(detailRepo)
+
     // Discovery Updated
     @Provides
     fun provideLoadPopularMoviesUseCaseUpdated(

@@ -16,18 +16,30 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail
+package com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetDetailShowBinding
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
+@AndroidEntryPoint
 class DetailShowBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetDetailShowBinding
+
+    private val arguments: DetailShowBottomSheetArgs by navArgs()
+
+    private val viewModel: DetailShowViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,10 +52,30 @@ class DetailShowBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
+        Timber.d("ID: ${arguments.showId}")
+        viewModel.showDetails(arguments.showId)
     }
 
     private fun setup() {
         // Navigation - Close fragment
         binding.imgDetailShowClose.setOnClickListener { dismissAllowingStateLoss() }
+        viewModel.showDetails.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    Glide.with(requireContext())
+                        .load("https://image.tmdb.org/t/p/w342${it.data.posterPath}")
+                        .transform(CenterCrop())
+                        .into(binding.imgDetailShowPoster)
+
+                    binding.tvDetailShowTitle.text = it.data.name
+                    binding.tvDetailShowDescription.text = it.data.overview
+                    binding.tvDetailShowFirstAirDate.text = it.data.firstAirDate
+                    binding.tvDetailShowCertification.text = it.data.certification
+                    binding.tvDetailShowSeasons.text = "${it.data.seasonsTotal} Seasons"
+                }
+                is Resource.Error -> {}
+                Resource.Loading -> {}
+            }
+        }
     }
 }

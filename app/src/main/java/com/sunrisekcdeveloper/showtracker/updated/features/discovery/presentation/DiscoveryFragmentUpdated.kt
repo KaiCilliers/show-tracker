@@ -35,11 +35,13 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryUpdatedBi
 import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.MediaModelSealed
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryViewActions.FetchMovieAndShowData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -90,6 +92,30 @@ class DiscoveryFragmentUpdated : Fragment() {
     }
 
     private fun setupBinding() {
+        val onClick = OnPosterClickListener { mediaId, mediaType ->
+            when (mediaType) {
+                MediaTypeUpdated.Movie -> {
+                    Timber.d("movie")
+                    findNavController().navigate(
+                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                    )
+                }
+                MediaTypeUpdated.Show -> {
+                    Timber.d("show")
+                    findNavController().navigate(
+                        DiscoveryFragmentUpdatedDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                    )
+                }
+            }
+        }
+
+        popularMovieListAdapter.onPosterClickListener = onClick
+        topRatedMovieListAdapter.onPosterClickListener = onClick
+        upcomingMovieListAdapter.onPosterClickListener = onClick
+        popularShowListAdapter.onPosterClickListener = onClick
+        topRatedShowsListAdapter.onPosterClickListener = onClick
+        airingTodayShowListAdapter.onPosterClickListener = onClick
+
         popularMoviesLayoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,

@@ -24,16 +24,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.MediaType
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
+import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
 
 class HorizontalPosterListAdapter(
-    private var data: MutableList<DiscoveryUIModel>
+    private var data: MutableList<DiscoveryUIModel>,
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { mediaId, mediaType ->  }
 ) : RecyclerView.Adapter<HorizontalPosterListAdapter.HorizontalPosterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalPosterViewHolder =
         HorizontalPosterViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: HorizontalPosterViewHolder, position: Int) {
-        holder.bind(data[position])
+        val item = data[position]
+        holder.bind(item)
+        holder.binding.imgvItemMoviePoster.setOnClickListener {
+            onPosterClickListener.onClick(item.id, item.mediaType)
+        }
     }
 
     override fun getItemCount(): Int = data.size
@@ -61,4 +68,7 @@ class HorizontalPosterListAdapter(
             )
         }
     }
+}
+fun interface OnPosterClickListener {
+    fun onClick(mediaId: String, mediaType: MediaTypeUpdated)
 }
