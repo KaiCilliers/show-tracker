@@ -20,10 +20,6 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailService
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailServiceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSource
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryService
@@ -91,14 +87,6 @@ object NetworkModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class WatchlistApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetailClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetailApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -182,20 +170,6 @@ object NetworkModule {
     @Provides
     fun provideWatchlistApi(retrofit: Retrofit): WatchlistServiceContract {
         return retrofit.create(WatchlistService::class.java)
-    }
-
-    @Singleton
-    @DetailClient
-    @Provides
-    fun provideDetailClient(@DetailApi api: DetailServiceContract) : DetailDataSourceContract {
-        return DetailRemoteDataSource(api)
-    }
-
-    @Singleton
-    @DetailApi
-    @Provides
-    fun provideDetailApi(retrofit: Retrofit): DetailServiceContract {
-        return retrofit.create(DetailService::class.java)
     }
 
     @Singleton

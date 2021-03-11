@@ -19,14 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetRepo
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetailRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscoveryRepo
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepoUpdated
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.WatchlistRepo
-import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateWatchListContentsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.DetailRepositoryContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.UpdateWatchListContentsUseCase
 import com.sunrisekcdeveloper.showtracker.features.discover.application.*
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.repository.DiscoveryRepositoryContract
 import com.sunrisekcdeveloper.showtracker.features.discover.domain.usecase.*
@@ -159,11 +155,4 @@ object UseCaseModule {
         @WatchlistRepo watchlistRepo: WatchListRepositoryContract
     ): LoadWatchListMediaUseCaseContract =
         LoadWatchListMediaUseCase(watchlistRepo)
-
-    // Detail
-    @Provides
-    fun providesUpdateWatchListContentsUseCase(
-        @DetailRepo detailRepo: DetailRepositoryContract
-    ): UpdateWatchListContentsUseCaseContract =
-        UpdateWatchListContentsUseCase(detailRepo)
 }

@@ -22,7 +22,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DetailDao
 import com.sunrisekcdeveloper.showtracker.features.discover.data.local.DiscoveryDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.WatchlistDao
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.converter.WatchListConverter
@@ -42,7 +41,6 @@ import java.util.Date
 abstract class TrackerDatabase : RoomDatabase() {
     abstract fun discoveryDao(): DiscoveryDao
     abstract fun watchlistDao(): WatchlistDao
-    abstract fun detailDao(): DetailDao
 }
 
 /**
