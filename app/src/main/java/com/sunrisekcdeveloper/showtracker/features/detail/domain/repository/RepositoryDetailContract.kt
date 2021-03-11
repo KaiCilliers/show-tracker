@@ -16,17 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.repository
 
-data class ShowDetailUIModel(
-    val id: String,
-    val name: String,
-    val posterPath: String,
-    val overview: String,
-    val certification: String,
-    val firstAirDate: String,
-    val seasonsTotal: Int,
-    val watchlisted: Boolean,
-    val startedWatching: Boolean,
-    val upToDate: Boolean
-)
+import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+
+interface RepositoryDetailContract {
+    suspend fun movieDetails(id: String): Resource<UIModelMovieDetail>
+    suspend fun showDetails(id: String): Resource<UIModelShowDetail>
+}

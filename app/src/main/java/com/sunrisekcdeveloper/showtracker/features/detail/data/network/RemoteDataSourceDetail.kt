@@ -16,19 +16,25 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network
+package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class DetailRemoteDataSourceUpdated(
-    @ApiDetail private val api: DetailServiceContractUpdated,
+class RemoteDataSourceDetail(
+    @ApiDetail private val api: ServiceDetailContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : DetailRemoteDataSourceContractUpdated {
+) : RemoteDataSourceDetailContract {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
         api.movieDetail(id = id)
     }

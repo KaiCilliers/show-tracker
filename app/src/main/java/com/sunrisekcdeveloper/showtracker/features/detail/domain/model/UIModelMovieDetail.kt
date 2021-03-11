@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
-data class MovieDetailUIModel(
+data class UIModelMovieDetail(
     val id: String,
     val title: String,
     val posterPath: String,

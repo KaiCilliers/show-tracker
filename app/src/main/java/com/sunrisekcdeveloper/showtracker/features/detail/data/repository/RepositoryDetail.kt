@@ -16,25 +16,25 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository
+package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.ResponseMovieDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.MovieDetailUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.ShowDetailUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import kotlinx.coroutines.*
 import timber.log.Timber
 
-class DetailRepositoryUpdated(
-    @SourceDetail private val remote: DetailRemoteDataSourceContractUpdated,
+class RepositoryDetail(
+    @SourceDetail private val remote: RemoteDataSourceDetailContract,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-) : DetailRepositoryContractUpdated {
-    override suspend fun showDetails(id: String): Resource<ShowDetailUIModel> = withContext(scope.coroutineContext) {
+) : RepositoryDetailContract {
+    override suspend fun showDetails(id: String): Resource<UIModelShowDetail> = withContext(scope.coroutineContext) {
         val detailCall = async { remote.showDetail(id) }
         val certificationCall = async { remote.showCertification(id) }
 
@@ -44,12 +44,12 @@ class DetailRepositoryUpdated(
         Timber.d("$detailResponse")
         Timber.d("$certificationResponse")
 
-        var partial: ShowDetailUIModel? = null
+        var partial: UIModelShowDetail? = null
         val certs = mutableListOf<String>()
 
         when(detailResponse) {
             is NetworkResult.Success -> {
-                partial = detailResponse.data.asShowDetailUIModel()
+                partial = detailResponse.data.asUIModelShowDetail()
             }
             is NetworkResult.Error -> { }
         }
@@ -65,7 +65,7 @@ class DetailRepositoryUpdated(
         return@withContext Resource.Success(whole!!)
     }
 
-    override suspend fun movieDetails(id: String): Resource<MovieDetailUIModel> = withContext(scope.coroutineContext) {
+    override suspend fun movieDetails(id: String): Resource<UIModelMovieDetail> = withContext(scope.coroutineContext) {
         val detailCall = async { remote.movieDetails(id) }
         val certificationCall = async { remote.movieReleaseDates(id) }
 
@@ -75,12 +75,12 @@ class DetailRepositoryUpdated(
         Timber.d("$detailResponse")
         Timber.d("$certificationResponse")
 
-        var partial: MovieDetailUIModel? = null
+        var partial: UIModelMovieDetail? = null
         val certs = mutableListOf<String>()
 
         when(detailResponse) {
             is NetworkResult.Success -> {
-                partial = detailResponse.data.asMovieDetailUIModel()
+                partial = detailResponse.data.asUIModelMovieDetail()
             }
             is NetworkResult.Error -> { }
         }
@@ -99,28 +99,3 @@ class DetailRepositoryUpdated(
         return@withContext Resource.Success(whole!!)
     }
 }
-
-// todo save call to db then get entity to convert to UI
-fun ResponseMovieDetail.asMovieDetailUIModel() = MovieDetailUIModel(
-    id = "$id",
-    title = title,
-    posterPath = posterPath ?: "",
-    overview = overview,
-    releaseYear = releaseDate,
-    certification = "",
-    runtime = "$runtime",
-    watchlisted = false,
-    watched = false
-)
-fun ResponseShowDetail.asShowDetailUIModel() = ShowDetailUIModel(
-    id = "$id",
-    name = name,
-    posterPath = posterPath,
-    overview = overview,
-    certification = "",
-    firstAirDate = firstAirYear,
-    seasonsTotal = seasonTotal,
-    watchlisted = false,
-    startedWatching = false,
-    upToDate = false
-)

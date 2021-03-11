@@ -21,11 +21,11 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase.FetchMovieDetailsUseCase
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase.FetchShowDetailsUseCase
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.FetchMovieDetailsUseCase
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.FetchShowDetailsUseCase
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
@@ -49,14 +49,14 @@ object UseCaseModule {
 
     // Detail
     @Provides
-    fun provideFetchMovieDetailUseCase(
-        @RepoDetail detailRepo: DetailRepositoryContractUpdated
+    fun provideFetchMovieDetailsUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
     ): FetchMovieDetailsUseCaseContract =
         FetchMovieDetailsUseCase(detailRepo)
 
     @Provides
-    fun provideFetchShowDetailUseCase(
-        @RepoDetail detailRepo: DetailRepositoryContractUpdated
+    fun provideFetchShowDetailsUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
     ): FetchShowDetailsUseCaseContract =
         FetchShowDetailsUseCase(detailRepo)
 

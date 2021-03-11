@@ -28,35 +28,32 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetDetailMovieBinding
+import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.presentation.ViewModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailMovieBottomSheet : BottomSheetDialogFragment() {
+class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
-    private lateinit var binding: BottomSheetDetailMovieBinding
-
-    private val arguments: DetailMovieBottomSheetArgs by navArgs()
-
-    private val viewModel: DetailMovieViewModel by viewModels()
+    private lateinit var binding: BottomSheetMovieDetailBinding
+    private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
+    private val viewModel: ViewModelMovieDetail by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomSheetDetailMovieBinding.inflate(inflater)
+        binding = BottomSheetMovieDetailBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
-        viewModel.movieDetails(arguments.movieId)
+        observe()
     }
 
-    private fun setup() {
-        // Navigation - Close fragment
-        binding.imgDetailMovieClose.setOnClickListener { dismissAllowingStateLoss() }
+    private fun observe() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -70,10 +67,17 @@ class DetailMovieBottomSheet : BottomSheetDialogFragment() {
                     binding.tvDetailMovieReleaseYear.text = it.data.releaseYear
                     binding.tvDetailMovieCertification.text = it.data.certification
                 }
+                // todo impl other cases
                 is Resource.Error -> { }
                 Resource.Loading -> { }
             }
         }
+    }
+
+    private fun setup() {
+        // Navigation - Close fragment
+        binding.imgDetailMovieClose.setOnClickListener { dismissAllowingStateLoss() }
+        viewModel.movieDetails(arguments.movieId)
     }
 
 }

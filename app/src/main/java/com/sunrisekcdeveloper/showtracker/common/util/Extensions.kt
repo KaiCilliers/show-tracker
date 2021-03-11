@@ -20,11 +20,37 @@ package com.sunrisekcdeveloper.showtracker.common.util
 
 import android.view.View
 import android.widget.SearchView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
+// todo save call to db then get entity to convert to UI
+fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
+    id = "$id",
+    title = title,
+    posterPath = posterPath ?: "",
+    overview = overview,
+    releaseYear = releaseDate,
+    certification = "",
+    runtime = "$runtime",
+    watchlisted = false,
+    watched = false
+)
+fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
+    id = "$id",
+    name = name,
+    posterPath = posterPath,
+    overview = overview,
+    certification = "",
+    firstAirDate = firstAirYear,
+    seasonsTotal = seasonTotal,
+    watchlisted = false,
+    startedWatching = false,
+    upToDate = false
+)
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")

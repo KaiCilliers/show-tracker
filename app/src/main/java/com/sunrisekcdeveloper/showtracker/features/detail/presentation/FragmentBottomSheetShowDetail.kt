@@ -28,37 +28,33 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetDetailShowBinding
+import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.presentation.ViewModelShowDetail
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class DetailShowBottomSheet : BottomSheetDialogFragment() {
+class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
 
-    private lateinit var binding: BottomSheetDetailShowBinding
-
-    private val arguments: DetailShowBottomSheetArgs by navArgs()
-
-    private val viewModel: DetailShowViewModel by viewModels()
+    private lateinit var binding: BottomSheetShowDetailBinding
+    private val arguments: FragmentBottomSheetShowDetailArgs by navArgs()
+    private val viewModel: ViewModelShowDetail by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomSheetDetailShowBinding.inflate(inflater)
+        binding = BottomSheetShowDetailBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
-        Timber.d("ID: ${arguments.showId}")
-        viewModel.showDetails(arguments.showId)
+        observe()
     }
 
-    private fun setup() {
-        // Navigation - Close fragment
-        binding.imgDetailShowClose.setOnClickListener { dismissAllowingStateLoss() }
+    private fun observe() {
         viewModel.showDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -71,11 +67,19 @@ class DetailShowBottomSheet : BottomSheetDialogFragment() {
                     binding.tvDetailShowDescription.text = it.data.overview
                     binding.tvDetailShowFirstAirDate.text = it.data.firstAirDate
                     binding.tvDetailShowCertification.text = it.data.certification
+                    // todo remove ugly concat
                     binding.tvDetailShowSeasons.text = "${it.data.seasonsTotal} Seasons"
                 }
+                // todo impl other cases
                 is Resource.Error -> {}
                 Resource.Loading -> {}
             }
         }
+    }
+
+    private fun setup() {
+        // Navigation - Close fragment
+        binding.imgDetailShowClose.setOnClickListener { dismissAllowingStateLoss() }
+        viewModel.showDetails(arguments.showId)
     }
 }

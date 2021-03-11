@@ -94,18 +94,18 @@
     </fragment>
     <dialog
         android:id="@+id/detailMovieBottomSheet"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.DetailMovieBottomSheet"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetMovieDetail"
         android:label="bottom_sheet_detail_movie"
-        tools:layout="@layout/bottom_sheet_detail_movie" >
+        tools:layout="@layout/bottom_sheet_movie_detail" >
         <argument
             android:name="movieId"
             app:argType="string" />
     </dialog>
     <dialog
         android:id="@+id/detailShowBottomSheet"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.DetailShowBottomSheet"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetShowDetail"
         android:label="bottom_sheet_detail_show"
-        tools:layout="@layout/bottom_sheet_detail_show" >
+        tools:layout="@layout/bottom_sheet_show_detail" >
         <argument
             android:name="showId"
             app:argType="string" />

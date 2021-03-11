@@ -20,10 +20,10 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetail
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceContractUpdated
@@ -66,17 +66,17 @@ object NetworkModule {
     @Singleton
     @SourceDetail
     @Provides
-    fun providesDetailClientUpdated(
-        @ApiDetail api: DetailServiceContractUpdated
-    ) : DetailRemoteDataSourceContractUpdated {
-        return DetailRemoteDataSourceUpdated(api)
+    fun providesRemoteDataSourceDetail(
+        @ApiDetail api: ServiceDetailContract
+    ) : RemoteDataSourceDetailContract {
+        return RemoteDataSourceDetail(api)
     }
 
     @Singleton
     @ApiDetail
     @Provides
-    fun provideDetailApiUpdated(retrofit: Retrofit): DetailServiceContractUpdated {
-        return retrofit.create(DetailServiceUpdated::class.java)
+    fun provideServiceDetail(retrofit: Retrofit): ServiceDetailContract {
+        return retrofit.create(ServiceDetail::class.java)
     }
 
     @Singleton

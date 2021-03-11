@@ -16,34 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network
+package com.sunrisekcdeveloper.showtracker.features.detail.data.model
 
 import com.google.gson.annotations.SerializedName
-import com.sunrisekcdeveloper.showtracker.BuildConfig
-import retrofit2.Response
-
-interface DetailServiceContractUpdated {
-    suspend fun movieDetail(
-        id: String,
-        apiKey: String = BuildConfig.TMDB_API_KEY
-    ): Response<ResponseMovieDetail>
-
-    suspend fun movieCertification(
-        id: String,
-        apiKey: String = BuildConfig.TMDB_API_KEY
-    ): Response<EnvelopeMovieReleaseDates>
-
-    suspend fun showDetail(
-        id: String,
-        apiKey: String = BuildConfig.TMDB_API_KEY
-    ): Response<ResponseShowDetail>
-
-    suspend fun showCertification(
-        id: String,
-        apiKey: String = BuildConfig.TMDB_API_KEY
-    ): Response<EnvelopeShowCertification>
-
-}
 
 data class ResponseShowDetail(
     @SerializedName("id") val id: Int,

@@ -16,17 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.ShowDetailUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 
 class FetchShowDetailsUseCase(
-    @RepoDetail private val detailRepo: DetailRepositoryContractUpdated
+    @RepoDetail private val detailRepo: RepositoryDetailContract
 ) : FetchShowDetailsUseCaseContract {
-    override suspend fun invoke(id: String): Resource<ShowDetailUIModel> =
+    override suspend fun invoke(id: String): Resource<UIModelShowDetail> =
         detailRepo.showDetails(id)
 }

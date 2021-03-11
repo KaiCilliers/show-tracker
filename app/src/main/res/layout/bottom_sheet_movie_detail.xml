@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".updated.features.detail.presentation.DetailMovieBottomSheet">
+    tools:context=".updated.features.detail.presentation.FragmentBottomSheetMovieDetail">
 
     <!-- TODO  give correct poster dimensions-->
     <ImageView

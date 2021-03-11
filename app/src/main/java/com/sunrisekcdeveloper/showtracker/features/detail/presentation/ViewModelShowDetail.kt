@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation
+package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -24,18 +24,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.ShowDetailUIModel
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import kotlinx.coroutines.launch
 
-class DetailShowViewModel @ViewModelInject constructor(
+class ViewModelShowDetail @ViewModelInject constructor(
     private val fetchShowDetailsUseCase: FetchShowDetailsUseCaseContract
 ) : ViewModel() {
-    private val _showDetails = MutableLiveData<Resource<ShowDetailUIModel>>()
-    val showDetails: LiveData<Resource<ShowDetailUIModel>>
+    private val _showDetails = MutableLiveData<Resource<UIModelShowDetail>>()
+    val showDetails: LiveData<Resource<UIModelShowDetail>>
         get() = _showDetails
 
     fun showDetails(id: String) = viewModelScope.launch {
+        // todo remove need for bangbang!!
         _showDetails.value = fetchShowDetailsUseCase(id)!!
     }
 }

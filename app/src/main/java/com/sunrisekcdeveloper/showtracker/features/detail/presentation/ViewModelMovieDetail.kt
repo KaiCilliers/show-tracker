@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation
+package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.hilt.lifecycle.ViewModelInject
@@ -24,18 +24,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.MovieDetailUIModel
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import kotlinx.coroutines.launch
 
-class DetailMovieViewModel @ViewModelInject constructor(
+class ViewModelMovieDetail @ViewModelInject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract
 ) : ViewModel() {
-    private val _movieDetails = MutableLiveData<Resource<MovieDetailUIModel>>()
-    val movieDetails: LiveData<Resource<MovieDetailUIModel>>
+    private val _movieDetails = MutableLiveData<Resource<UIModelMovieDetail>>()
+    val movieDetails: LiveData<Resource<UIModelMovieDetail>>
         get() = _movieDetails
 
     fun movieDetails(id: String) = viewModelScope.launch {
+        // todo remove need for bangbang!!
         _movieDetails.value = fetchMovieDetailsUseCase(id)!!
     }
 }

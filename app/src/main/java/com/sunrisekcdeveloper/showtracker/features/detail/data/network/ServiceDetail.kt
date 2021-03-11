@@ -16,14 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network
+package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface DetailServiceUpdated : DetailServiceContractUpdated {
+interface ServiceDetail : ServiceDetailContract {
     @GET("movie/{id}")
     override suspend fun movieDetail(
         @Path("id") id: String,

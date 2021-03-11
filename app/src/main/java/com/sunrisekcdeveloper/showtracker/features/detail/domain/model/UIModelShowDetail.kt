@@ -16,13 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
-
-interface DetailRemoteDataSourceContractUpdated {
-    suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail>
-    suspend fun movieReleaseDates(id: String) : NetworkResult<EnvelopeMovieReleaseDates>
-    suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail>
-    suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification>
-}
+data class UIModelShowDetail(
+    val id: String,
+    val name: String,
+    val posterPath: String,
+    val overview: String,
+    val certification: String,
+    val firstAirDate: String,
+    val seasonsTotal: Int,
+    val watchlisted: Boolean,
+    val startedWatching: Boolean,
+    val upToDate: Boolean
+)
