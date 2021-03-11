@@ -70,6 +70,7 @@ class SearchFragmentUpdated : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
+        binding.toolbarSearch.setNavigationOnClickListener { findNavController().popBackStack() } // todo up button returns to discovery
         observeViewModel()
     }
 

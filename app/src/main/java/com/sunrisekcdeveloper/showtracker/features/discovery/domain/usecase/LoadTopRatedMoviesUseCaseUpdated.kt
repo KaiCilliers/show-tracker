@@ -19,13 +19,13 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
 
 class LoadTopRatedMoviesUseCaseUpdated(
-    @DiscRepo private val discoveryRepo: DiscoveryRepositoryContractUpdated
+    @RepoDiscovery private val discoveryRepo: DiscoveryRepositoryContractUpdated
 ) : LoadTopRatedMoviesUseCaseContractUpdated {
     override suspend fun invoke(page: Int): Resource<List<DiscoveryUIModel>> =
         discoveryRepo.topRatedMovies(page)

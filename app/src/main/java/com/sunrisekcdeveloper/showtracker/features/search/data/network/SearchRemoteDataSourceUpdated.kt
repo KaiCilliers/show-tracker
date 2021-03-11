@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchApiUpdated
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class SearchRemoteDataSourceUpdated(
-    @SearchApiUpdated private val api: SearchServiceContractUpdated,
+    @ApiSearch private val api: SearchServiceContractUpdated,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SearchRemoteDataSourceContractUpdated {
     override suspend fun moviesByTitle(

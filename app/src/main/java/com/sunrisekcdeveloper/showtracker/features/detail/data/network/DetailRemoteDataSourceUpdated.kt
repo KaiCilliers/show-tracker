@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetApi
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiDetail
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class DetailRemoteDataSourceUpdated(
-    @DetApi private val api: DetailServiceContractUpdated,
+    @ApiDetail private val api: DetailServiceContractUpdated,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : DetailRemoteDataSourceContractUpdated {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {

@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClientUpdated
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
@@ -28,7 +28,7 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.Sear
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
 
 class SearchRepositoryUpdated(
-    @SearchClientUpdated private val remote: SearchRemoteDataSourceContractUpdated
+    @SourceSearch private val remote: SearchRemoteDataSourceContractUpdated
 ) : SearchRepositoryContractUpdated {
     override suspend fun moviesByTitle(page: Int, query: String): Resource<List<SearchUIModel>> {
         return when (val response = remote.moviesByTitle(query, page)) {

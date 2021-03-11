@@ -47,74 +47,49 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchClientUpdated
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchApiUpdated
-
     @Singleton
-    @SearchClientUpdated
+    @SourceSearch
     @Provides
     fun providesSearchClientUpdated(
-        @SearchApiUpdated api: SearchServiceContractUpdated
+        @ApiSearch api: SearchServiceContractUpdated
     ) : SearchRemoteDataSourceContractUpdated {
         return SearchRemoteDataSourceUpdated(api)
     }
 
     @Singleton
-    @SearchApiUpdated
+    @ApiSearch
     @Provides
     fun provideSearchApiUpdated(retrofit: Retrofit): SearchServiceContractUpdated {
         return retrofit.create(SearchServiceUpdated::class.java)
     }
 
     @Singleton
-    @DetClient
+    @SourceDetail
     @Provides
     fun providesDetailClientUpdated(
-        @DetApi api: DetailServiceContractUpdated
+        @ApiDetail api: DetailServiceContractUpdated
     ) : DetailRemoteDataSourceContractUpdated {
         return DetailRemoteDataSourceUpdated(api)
     }
 
     @Singleton
-    @DetApi
+    @ApiDetail
     @Provides
     fun provideDetailApiUpdated(retrofit: Retrofit): DetailServiceContractUpdated {
         return retrofit.create(DetailServiceUpdated::class.java)
     }
 
     @Singleton
-    @DiscClient
+    @SourceDiscovery
     @Provides
     fun providesDiscoveryClientUpdated(
-        @DiscApi api: DiscoveryServiceContractUpdated
+        @ApiDiscovery api: DiscoveryServiceContractUpdated
     ) : DiscoveryRemoteDataSourceContractUpdated {
         return DiscoveryRemoteDataSourceUpdated(api)
     }
 
     @Singleton
-    @DiscApi
+    @ApiDiscovery
     @Provides
     fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
         return retrofit.create(DiscoveryServiceUpdated::class.java)
@@ -140,4 +115,28 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceSearch
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiSearch
 }

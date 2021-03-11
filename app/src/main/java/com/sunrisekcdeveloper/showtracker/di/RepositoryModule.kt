@@ -18,9 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetClient
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DiscClient
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClientUpdated
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDiscovery
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository.DetailRepositoryUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
@@ -40,44 +40,44 @@ import javax.inject.Qualifier
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object RepositoryModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetRepo
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscRepo
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistRepo
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SearchRepoUpdated
-
     @ActivityRetainedScoped
-    @SearchRepoUpdated
+    @RepoSearch
     @Provides
     fun provideSearchRepositoryUpdated(
-        @SearchClientUpdated remote: SearchRemoteDataSourceContractUpdated
+        @SourceSearch remote: SearchRemoteDataSourceContractUpdated
     ): SearchRepositoryContractUpdated =
         SearchRepositoryUpdated(remote)
 
     @ActivityRetainedScoped
-    @DetRepo
+    @RepoDetail
     @Provides
     fun provideDetailRepositoryUpdated(
-        @DetClient remote: DetailRemoteDataSourceContractUpdated
+        @SourceDetail remote: DetailRemoteDataSourceContractUpdated
     ): DetailRepositoryContractUpdated =
         DetailRepositoryUpdated(remote)
 
     @ActivityRetainedScoped
-    @DiscRepo
+    @RepoDiscovery
     @Provides
     fun provideDiscoveryRepositoryUpdated(
-        @DiscClient remote: DiscoveryRemoteDataSourceContractUpdated
+        @SourceDiscovery remote: DiscoveryRemoteDataSourceContractUpdated
     ): DiscoveryRepositoryContractUpdated =
         DiscoveryRepositoryUpdated(remote)
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class RepoDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class RepoDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class RepoWatchlist
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class RepoSearch
+
 }

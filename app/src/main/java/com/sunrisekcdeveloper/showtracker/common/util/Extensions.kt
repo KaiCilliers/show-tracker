@@ -50,14 +50,3 @@ fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
  * @receiver [View]
  */
 inline fun View.click(crossinline action: () -> Unit) = setOnClickListener { action() }
-
-/**
- * Subscribe simplifies subscribing to LiveData
- *
- * @param T data type that LiveData wraps
- * @param owner specifies when the observer should be terminated
- * @param action code to execute when LiveData's data changes
- * @receiver [LiveData]
- */
-inline fun <T> LiveData<T>.subscribe(owner: LifecycleOwner, crossinline action: (T) -> Unit) =
-    observe(owner, Observer { action(it) })

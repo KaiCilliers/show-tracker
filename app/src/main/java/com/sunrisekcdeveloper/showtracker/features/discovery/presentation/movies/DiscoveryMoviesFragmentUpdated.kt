@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryMoviesUpdatedBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
@@ -131,7 +130,7 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.popularMovies.subscribe(viewLifecycleOwner) {
+        viewModel.popularMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -146,7 +145,7 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.topRatedMovies.subscribe(viewLifecycleOwner) {
+        viewModel.topRatedMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -161,7 +160,7 @@ class DiscoveryMoviesFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.upcomingMovies.subscribe(viewLifecycleOwner) {
+        viewModel.upcomingMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }

@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryUpdatedBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
@@ -190,7 +189,7 @@ class DiscoveryFragmentUpdated : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.popularMovies.subscribe(viewLifecycleOwner) {
+        viewModel.popularMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -205,7 +204,7 @@ class DiscoveryFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.topRatedMovies.subscribe(viewLifecycleOwner) {
+        viewModel.topRatedMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -220,7 +219,7 @@ class DiscoveryFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.upcomingMovies.subscribe(viewLifecycleOwner) {
+        viewModel.upcomingMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -235,7 +234,7 @@ class DiscoveryFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.popularShows.subscribe(viewLifecycleOwner) {
+        viewModel.popularShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -250,7 +249,7 @@ class DiscoveryFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.topRatedShows.subscribe(viewLifecycleOwner) {
+        viewModel.topRatedShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -265,7 +264,7 @@ class DiscoveryFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.airingTodayShows.subscribe(viewLifecycleOwner) {
+        viewModel.airingTodayShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }

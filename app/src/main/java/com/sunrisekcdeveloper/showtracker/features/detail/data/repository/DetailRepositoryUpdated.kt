@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetClient
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.ResponseShowDetail
@@ -31,7 +31,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 class DetailRepositoryUpdated(
-    @DetClient private val remote: DetailRemoteDataSourceContractUpdated,
+    @SourceDetail private val remote: DetailRemoteDataSourceContractUpdated,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : DetailRepositoryContractUpdated {
     override suspend fun showDetails(id: String): Resource<ShowDetailUIModel> = withContext(scope.coroutineContext) {

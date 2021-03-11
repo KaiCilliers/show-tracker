@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepoUpdated
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
@@ -29,7 +29,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class SearchMediaByTitleUseCase(
-    @SearchRepoUpdated private val searchRepo: SearchRepositoryContractUpdated,
+    @RepoSearch private val searchRepo: SearchRepositoryContractUpdated,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SearchMediaByTitleUseCaseContract {
     override suspend fun invoke(page: Int, query: String): Resource<List<SearchUIModel>> {

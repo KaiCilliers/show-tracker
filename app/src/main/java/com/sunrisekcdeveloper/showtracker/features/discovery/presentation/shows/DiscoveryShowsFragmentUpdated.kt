@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryShowsUpdatedBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaTypeUpdated
@@ -139,7 +138,7 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.popularShows.subscribe(viewLifecycleOwner) {
+        viewModel.popularShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -154,7 +153,7 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.topRatedShows.subscribe(viewLifecycleOwner) {
+        viewModel.topRatedShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }
@@ -169,7 +168,7 @@ class DiscoveryShowsFragmentUpdated : Fragment() {
                 }
             }
         }
-        viewModel.airingTodayShows.subscribe(viewLifecycleOwner) {
+        viewModel.airingTodayShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                 }

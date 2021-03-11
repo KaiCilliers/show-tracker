@@ -19,13 +19,13 @@
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetRepo
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.ShowDetailUIModel
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
 
 class FetchShowDetailsUseCase(
-    @DetRepo private val detailRepo: DetailRepositoryContractUpdated
+    @RepoDetail private val detailRepo: DetailRepositoryContractUpdated
 ) : FetchShowDetailsUseCaseContract {
     override suspend fun invoke(id: String): Resource<ShowDetailUIModel> =
         detailRepo.showDetails(id)

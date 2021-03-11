@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowTracker">
         <activity android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchActivityUpdated"/>
-        <activity android:name=".common.HousingActivity">
+        <activity android:name=".common.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
