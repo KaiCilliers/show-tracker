@@ -31,13 +31,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.commons.util.subscribe
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.subscribe
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryShowsUpdatedBinding
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryFragmentUpdatedDirections
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.DiscoveryViewState
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.HorizontalPosterListAdapter
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.OnPosterClickListener
 import dagger.hilt.android.AndroidEntryPoint

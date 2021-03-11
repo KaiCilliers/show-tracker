@@ -16,23 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.commons.models.local
+package com.sunrisekcdeveloper.showtracker.common.util
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "tbl_watchlist_completed")
-data class CompletedMediaEntity(
-    @PrimaryKey
-    val id: Long,
-    val title: String,
-    val overview: String,
-    @ColumnInfo(name = "poster_path")
-    val posterPath: String,
-    @ColumnInfo(name = "backdrop_path")
-    val backdropPath: String,
-    val rating: Float,
-    @ColumnInfo(name = "release_date")
-    val releaseDate: String
-)
+sealed class Resource<out T> {
+    data class Success<out T>(val data: T): Resource<T>()
+    data class Error(val message: String): Resource<Nothing>()
+    object Loading: Resource<Nothing>()
+}

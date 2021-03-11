@@ -18,12 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DetRepo
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.MovieDetailUIModel
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.ShowDetailUIModel
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
 

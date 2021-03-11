@@ -24,7 +24,7 @@
 
     </data>
 
-    <merge tools:context=".commons.MainActivity">
+    <merge tools:context=".common.MainActivity">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"

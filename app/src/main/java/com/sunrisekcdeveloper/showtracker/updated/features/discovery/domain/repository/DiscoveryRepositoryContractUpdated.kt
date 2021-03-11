@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
 
 interface DiscoveryRepositoryContractUpdated {

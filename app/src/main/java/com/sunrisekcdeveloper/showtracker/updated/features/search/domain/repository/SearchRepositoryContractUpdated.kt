@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.search.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.SearchUIModel
 
 interface SearchRepositoryContractUpdated {

@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.application
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.ShowDetailUIModel
 
 interface FetchShowDetailsUseCaseContract {

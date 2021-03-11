@@ -18,8 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.DetClient
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.ResponseMovieDetail

@@ -22,7 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".updated.common.HousingActivity">
+    tools:context=".common.HousingActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/botnav_housing"

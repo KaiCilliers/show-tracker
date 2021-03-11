@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sunrisekcdeveloper.showtracker.commons.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.commons
+package com.sunrisekcdeveloper.showtracker.common
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

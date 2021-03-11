@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.NetworkResult
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.model.ResponseStandardMediaUpdated

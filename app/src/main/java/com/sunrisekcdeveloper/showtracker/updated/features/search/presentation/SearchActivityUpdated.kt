@@ -18,32 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.search.presentation
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.commons.util.getQueryTextChangedStateFlow
-import com.sunrisekcdeveloper.showtracker.databinding.ActivitySearchUpdatedBinding
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.DetailMovieBottomSheet
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.OnPosterClickListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchActivityUpdated : AppCompatActivity() {

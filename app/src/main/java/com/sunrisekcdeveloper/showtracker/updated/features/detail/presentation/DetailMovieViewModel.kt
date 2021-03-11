@@ -23,12 +23,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.MovieDetailUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadAiringTodayShowsUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadPopularShowsUseCaseContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadTopRatedShowsUseCaseContractUpdated
 import kotlinx.coroutines.launch
 
 class DetailMovieViewModel @ViewModelInject constructor(

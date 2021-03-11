@@ -16,10 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.commons
+package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
-import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import java.util.Date
 
 @Database(

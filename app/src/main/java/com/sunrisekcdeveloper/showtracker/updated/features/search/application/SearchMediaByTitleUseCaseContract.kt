@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.search.application
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.SearchUIModel
 
 interface SearchMediaByTitleUseCaseContract {

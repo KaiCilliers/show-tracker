@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.DiscRepo
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadPopularMoviesUseCaseContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel

@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadPopularMoviesUseCaseContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadTopRatedMoviesUseCaseContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated

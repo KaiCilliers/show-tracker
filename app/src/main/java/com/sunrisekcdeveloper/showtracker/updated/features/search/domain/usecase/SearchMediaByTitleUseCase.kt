@@ -18,11 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.search.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.SearchRepoUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.search.domain.repository.SearchRepositoryContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.SearchUIModel
 import kotlinx.coroutines.CoroutineDispatcher

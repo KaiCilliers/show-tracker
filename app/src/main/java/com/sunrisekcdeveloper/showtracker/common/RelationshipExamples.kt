@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.models.local
+package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
 

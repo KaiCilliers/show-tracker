@@ -50,3 +50,16 @@ class App : Application() {
         Timber.plant(Timber.DebugTree())
     }
 }
+
+//private lateinit var binding: ActivityMainBinding
+//
+//override fun onCreate(savedInstanceState: Bundle?) {
+//    super.onCreate(savedInstanceState)
+//    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//    setup()
+//}
+//
+//// TODO this bottom nav bar needs to be gone when navigating to movie details fragment
+//private fun setup() {
+//    binding.bottomNavigationMain.setupWithNavController(findNavController(R.id.nav_host_fragment_main))
+//}

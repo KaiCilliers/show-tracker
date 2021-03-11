@@ -18,9 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.detail.application
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.MovieDetailUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
 
 interface FetchMovieDetailsUseCaseContract {
     suspend operator fun invoke(id: String): Resource<MovieDetailUIModel>

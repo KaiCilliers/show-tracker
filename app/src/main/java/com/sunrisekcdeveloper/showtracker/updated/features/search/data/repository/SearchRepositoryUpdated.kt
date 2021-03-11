@@ -18,17 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.updated.features.search.data.repository
 
-import com.sunrisekcdeveloper.showtracker.commons.util.datastate.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SearchClientUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.NetworkResult
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.network.model.ResponseStandardMediaUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.data.repository.asDiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.DiscoveryUIModel
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.updated.features.discovery.domain.model.MediaTypeUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.search.data.network.SearchServiceContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.search.domain.repository.SearchRepositoryContractUpdated
 import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.SearchUIModel
 

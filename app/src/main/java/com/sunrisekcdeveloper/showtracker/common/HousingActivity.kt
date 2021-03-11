@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.common
+package com.sunrisekcdeveloper.showtracker.common
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView

@@ -16,15 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.commons.util
+package com.sunrisekcdeveloper.showtracker.common.util
 
 import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.sunrisekcdeveloper.showtracker.commons.models.local.*
-import com.sunrisekcdeveloper.showtracker.models.local.core.MediaEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
