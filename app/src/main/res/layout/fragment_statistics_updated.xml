@@ -22,7 +22,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".updated.features.statistics.StatisticsFragmentUpdated">
+    tools:context=".features.statistics.StatisticsFragmentUpdated">
 
     <TextView
         android:id="@+id/text_notifications"

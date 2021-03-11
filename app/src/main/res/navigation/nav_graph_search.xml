@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/searchFragmentUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.SearchFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchFragmentUpdated"
         android:label="fragment_search_updated"
         tools:layout="@layout/fragment_search_updated" >
         <action

@@ -18,9 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.updated.features.discovery.presentation.HorizontalPosterListAdapter
-import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.GridListAdapter
-import com.sunrisekcdeveloper.showtracker.updated.features.search.presentation.TitlePosterListAdapter
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.HorizontalPosterListAdapter
+import com.sunrisekcdeveloper.showtracker.features.search.presentation.GridListAdapter
+import com.sunrisekcdeveloper.showtracker.features.search.presentation.TitlePosterListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

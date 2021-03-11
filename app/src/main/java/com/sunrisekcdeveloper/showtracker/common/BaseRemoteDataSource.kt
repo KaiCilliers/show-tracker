@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.common
 
-import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
