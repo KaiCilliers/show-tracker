@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright © 2020. The Android Open Source Project
+  ~ Copyright © 2021. The Android Open Source Project
   ~
   ~ @author Kai Cilliers
   ~
@@ -19,61 +19,97 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph_main"
-    app:startDestination="@id/watchlist_fragment_dest">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_housing"
+    app:startDestination="@id/navigation_discovery_updated">
+
 
     <fragment
-        android:id="@+id/discover_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discover.presentation.ui.DiscoveryFragment"
-        android:label="DiscoverFragment"
-        tools:layout="@layout/fragment_discovery">
+        android:id="@+id/navigation_discovery_updated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery"
+        android:label="fragment_discovery_updated"
+        tools:layout="@layout/fragment_discovery" >
         <action
-            android:id="@+id/action_discover_fragment_dest_to_detailFragmentTMDB"
-            app:destination="@id/detailFragmentTMDB" />
+            android:id="@+id/action_navigation_discovery_updated_to_searchActivityUpdated"
+            app:destination="@id/searchActivityUpdated" />
+        <action
+            android:id="@+id/action_navigation_discovery_updated_to_discoveryMoviesFragmentUpdated"
+            app:destination="@id/discoveryMoviesFragmentUpdated" />
+        <action
+            android:id="@+id/action_navigation_discovery_updated_to_discoveryShowsFragmentUpdated"
+            app:destination="@id/discoveryShowsFragmentUpdated" />
     </fragment>
     <fragment
-        android:id="@+id/watchlist_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.ui.WatchlistFragment"
-        android:label="WatchlistFragment"
-        tools:layout="@layout/fragment_watchlist">
-        <action
-            android:id="@+id/action_watchlist_fragment_dest_to_detailFragmentTMDB"
-            app:destination="@id/detailFragmentTMDB" />
-    </fragment>
+        android:id="@+id/navigation_watchlist_updated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.FragmentWatchlist"
+        android:label="fragment_watchlist_updated"
+        tools:layout="@layout/fragment_watchlist" />
     <fragment
-        android:id="@+id/statistics_fragment_dest"
-        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.presentation.ui.StatisticsFragment"
-        android:label="StatisticsFragment"
+        android:id="@+id/navigation_statistics_updated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.FragmentStatistics"
+        android:label="fragment_statistics_updated"
         tools:layout="@layout/fragment_statistics" />
+    <activity
+        android:id="@+id/searchActivityUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.ActivitySearch"
+        android:label="activity_search_updated"
+        tools:layout="@layout/activity_search" />
     <fragment
-        android:id="@+id/detailFragmentTMDB"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.ui.MovieDetailFragment"
-        android:label="DetailFragmentTMDB"
-        tools:layout="@layout/fragment_movie_detail">
-        <argument
-            android:name="movieBackdrop"
-            app:argType="string" />
-        <argument
-            android:name="moviePoster"
-            app:argType="string" />
-        <argument
-            android:name="movieTitle"
-            app:argType="string" />
-        <argument
-            android:name="movieRating"
-            app:argType="float" />
-        <argument
-            android:name="movieReleaseDate"
-            app:argType="string" />
-        <argument
-            android:name="movieOverview"
-            app:argType="string" />
-        <argument
-            android:name="watchlistType"
-            app:argType="string"
-            android:defaultValue="none" />
+        android:id="@+id/discoveryMoviesFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies"
+        android:label="fragment_discovery_movies_updated"
+        tools:layout="@layout/fragment_discovery_only_movies" >
+        <action
+            android:id="@+id/action_discoveryMoviesFragmentUpdated_to_navigation_discovery_updated"
+            app:destination="@id/navigation_discovery_updated"
+            app:popUpTo="@id/discoveryMoviesFragmentUpdated"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_discoveryMoviesFragmentUpdated_to_discoveryShowsFragmentUpdated"
+            app:destination="@id/discoveryShowsFragmentUpdated"
+            app:popUpTo="@id/discoveryMoviesFragmentUpdated"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_discoveryMoviesFragmentUpdated_to_searchActivityUpdated"
+            app:destination="@id/searchActivityUpdated" />
+    </fragment>
+    <fragment
+        android:id="@+id/discoveryShowsFragmentUpdated"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShows"
+        android:label="fragment_discovery_shows_updated"
+        tools:layout="@layout/fragment_discovery_only_shows" >
+        <action
+            android:id="@+id/action_discoveryShowsFragmentUpdated_to_navigation_discovery_updated"
+            app:destination="@id/navigation_discovery_updated"
+            app:popUpTo="@id/discoveryShowsFragmentUpdated"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_discoveryShowsFragmentUpdated_to_discoveryMoviesFragmentUpdated"
+            app:destination="@id/discoveryMoviesFragmentUpdated"
+            app:popUpTo="@id/discoveryShowsFragmentUpdated"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_discoveryShowsFragmentUpdated_to_searchActivityUpdated"
+            app:destination="@id/searchActivityUpdated" />
+    </fragment>
+    <dialog
+        android:id="@+id/detailMovieBottomSheet"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetMovieDetail"
+        android:label="bottom_sheet_detail_movie"
+        tools:layout="@layout/bottom_sheet_movie_detail" >
         <argument
             android:name="movieId"
-            app:argType="long" />
-    </fragment>
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/detailShowBottomSheet"
+        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetShowDetail"
+        android:label="bottom_sheet_detail_show"
+        tools:layout="@layout/bottom_sheet_show_detail" >
+        <argument
+            android:name="showId"
+            app:argType="string" />
+    </dialog>
+    <action android:id="@+id/action_global_detailShowBottomSheet" app:destination="@id/detailShowBottomSheet"/>
+    <action android:id="@+id/action_global_detailMovieBottomSheet" app:destination="@id/detailMovieBottomSheet"/>
 </navigation>

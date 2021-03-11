@@ -21,16 +21,16 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase.FetchMovieDetailsUseCase
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.usecase.FetchShowDetailsUseCase
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.FetchMovieDetailsUseCase
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.FetchShowDetailsUseCase
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import dagger.Module
 import dagger.Provides
@@ -43,57 +43,57 @@ object UseCaseModule {
     // Search
     @Provides
     fun provideSearchMediaByTitleUseCase(
-        @RepoSearch searchRepo: SearchRepositoryContractUpdated
+        @RepoSearch searchRepo: RepositorySearchContract
     ): SearchMediaByTitleUseCaseContract =
         SearchMediaByTitleUseCase(searchRepo)
 
     // Detail
     @Provides
-    fun provideFetchMovieDetailUseCase(
-        @RepoDetail detailRepo: DetailRepositoryContractUpdated
+    fun provideFetchMovieDetailsUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
     ): FetchMovieDetailsUseCaseContract =
         FetchMovieDetailsUseCase(detailRepo)
 
     @Provides
-    fun provideFetchShowDetailUseCase(
-        @RepoDetail detailRepo: DetailRepositoryContractUpdated
+    fun provideFetchShowDetailsUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
     ): FetchShowDetailsUseCaseContract =
         FetchShowDetailsUseCase(detailRepo)
 
-    // Discovery Updated
+    // Discovery
     @Provides
-    fun provideLoadPopularMoviesUseCaseUpdated(
-        @RepoDiscovery discoveryRepo: DiscoveryRepositoryContractUpdated
-    ): LoadPopularMoviesUseCaseContractUpdated =
-        LoadPopularMoviesUseCaseUpdated(discoveryRepo)
+    fun provideLoadPopularMoviesUseCase(
+        @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
+    ): LoadPopularMoviesUseCaseContract =
+        LoadPopularMoviesUseCase(discoveryRepo)
 
     @Provides
-    fun provideLoadTopRatedMoviesUseCaseUpdated(
-        @RepoDiscovery discoveryRepo: DiscoveryRepositoryContractUpdated
-    ): LoadTopRatedMoviesUseCaseContractUpdated =
-        LoadTopRatedMoviesUseCaseUpdated(discoveryRepo)
+    fun provideLoadTopRatedMoviesUseCase(
+        @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
+    ): LoadTopRatedMoviesUseCaseContract =
+        LoadTopRatedMoviesUseCase(discoveryRepo)
 
     @Provides
-    fun provideLoadUpcomingMoviesUseCaseUpdated(
-        @RepoDiscovery discoveryRepo: DiscoveryRepositoryContractUpdated
+    fun provideLoadUpcomingMoviesUseCase(
+        @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
     ): LoadUpcomingMoviesUseCaseContractUpdated =
-        LoadUpcomingMoviesUseCaseUpdated(discoveryRepo)
+        LoadUpcomingMoviesUseCase(discoveryRepo)
 
     @Provides
-    fun provideLoadAiringTodayShowsUseCaseUpdated(
-        @RepoDiscovery discoveryRepo: DiscoveryRepositoryContractUpdated
-    ): LoadAiringTodayShowsUseCaseContractUpdated =
-        LoadAiringTodayShowsUseCaseUpdated(discoveryRepo)
+    fun provideLoadAiringTodayShowsUseCase(
+        @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
+    ): LoadAiringTodayShowsUseCaseContract =
+        LoadAiringTodayShowsUseCase(discoveryRepo)
 
     @Provides
-    fun provideLoadPopularShowsUseCaseUpdated(
-        @RepoDiscovery discoveryRepo: DiscoveryRepositoryContractUpdated
-    ): LoadPopularShowsUseCaseContractUpdated =
-        LoadPopularShowsUseCaseUpdated(discoveryRepo)
+    fun provideLoadPopularShowsUseCase(
+        @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
+    ): LoadPopularShowsUseCaseContract =
+        LoadPopularShowsUseCase(discoveryRepo)
 
     @Provides
-    fun provideTopRatedShowsUseCaseUpdated(
-        @RepoDiscovery discoveryRepo: DiscoveryRepositoryContractUpdated
-    ): LoadTopRatedShowsUseCaseContractUpdated =
-        LoadTopRatedShowsUseCaseUpdated(discoveryRepo)
+    fun provideTopRatedShowsUseCase(
+        @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
+    ): LoadTopRatedShowsUseCaseContract =
+        LoadTopRatedShowsUseCase(discoveryRepo)
 }

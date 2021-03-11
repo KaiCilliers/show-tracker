@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model
 
 import com.google.gson.annotations.SerializedName
-
+// todo rename these bastards
 data class EnvelopePaginatedMovieUpdated(
     @SerializedName("page") val page: Int,
     @SerializedName("results") val media: List<ResponseStandardMediaUpdated.ResponseMovieUpdated>,

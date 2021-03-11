@@ -20,11 +20,65 @@ package com.sunrisekcdeveloper.showtracker.common.util
 
 import android.view.View
 import android.widget.SearchView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
+// todo save call to db then get entity to convert to UI
+fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
+    id = "$id",
+    title = title,
+    posterPath = posterPath ?: "",
+    overview = overview,
+    releaseYear = releaseDate,
+    certification = "",
+    runtime = "$runtime",
+    watchlisted = false,
+    watched = false
+)
+fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
+    id = "$id",
+    name = name,
+    posterPath = posterPath,
+    overview = overview,
+    certification = "",
+    firstAirDate = firstAirYear,
+    seasonsTotal = seasonTotal,
+    watchlisted = false,
+    startedWatching = false,
+    upToDate = false
+)
+fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
+    id = "$id",
+    mediaType = MediaType.Movie,
+    posterPath = posterPath ?: ""
+)
+fun ResponseStandardMediaUpdated.ResponseShowUpdated.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
+    id = "$id",
+    mediaType = MediaType.Show,
+    posterPath = posterPath ?: ""
+)
+fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asUIModelSearch() = UIModelSearch(
+    id = "$id",
+    title = title,
+    mediaType = MediaType.Movie,
+    posterPath = posterPath ?: ""
+)
+fun ResponseStandardMediaUpdated.ResponseShowUpdated.asUIModelSearch() = UIModelSearch(
+    id = "$id",
+    title = name,
+    mediaType = MediaType.Show,
+    posterPath = posterPath ?: ""
+)
+
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")

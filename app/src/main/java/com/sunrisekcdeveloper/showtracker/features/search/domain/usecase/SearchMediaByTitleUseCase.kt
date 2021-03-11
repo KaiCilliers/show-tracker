@@ -21,18 +21,18 @@ package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class SearchMediaByTitleUseCase(
-    @RepoSearch private val searchRepo: SearchRepositoryContractUpdated,
+    @RepoSearch private val searchRepo: RepositorySearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SearchMediaByTitleUseCaseContract {
-    override suspend fun invoke(page: Int, query: String): Resource<List<SearchUIModel>> {
+    override suspend fun invoke(page: Int, query: String): Resource<List<UIModelSearch>> {
         return withContext(dispatcher) {
             val searchMoviesCall = async { searchRepo.moviesByTitle(page, query) }
             val searchShowsCall = async { searchRepo.showsByTitle(page, query) }
@@ -47,7 +47,7 @@ class SearchMediaByTitleUseCase(
             } else if (searchShowsResponse is Resource.Success) {
                 searchShowsResponse.data
             } else {
-                listOf<SearchUIModel>()
+                listOf<UIModelSearch>()
             }
             Resource.Success(results)
         }

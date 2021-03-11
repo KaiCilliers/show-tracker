@@ -21,15 +21,15 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDiscovery
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.repository.DetailRepositoryUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.repository.DetailRepositoryContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.DiscoveryRepositoryUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.DiscoveryRepositoryContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.repository.SearchRepositoryUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.SearchRepositoryContractUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,25 +44,25 @@ object RepositoryModule {
     @RepoSearch
     @Provides
     fun provideSearchRepositoryUpdated(
-        @SourceSearch remote: SearchRemoteDataSourceContractUpdated
-    ): SearchRepositoryContractUpdated =
-        SearchRepositoryUpdated(remote)
+        @SourceSearch remote: RemoteDataSourceSearchContract
+    ): RepositorySearchContract =
+        RepositorySearch(remote)
 
     @ActivityRetainedScoped
     @RepoDetail
     @Provides
-    fun provideDetailRepositoryUpdated(
-        @SourceDetail remote: DetailRemoteDataSourceContractUpdated
-    ): DetailRepositoryContractUpdated =
-        DetailRepositoryUpdated(remote)
+    fun provideRepositoryDetail(
+        @SourceDetail remote: RemoteDataSourceDetailContract
+    ): RepositoryDetailContract =
+        RepositoryDetail(remote)
 
     @ActivityRetainedScoped
     @RepoDiscovery
     @Provides
-    fun provideDiscoveryRepositoryUpdated(
-        @SourceDiscovery remote: DiscoveryRemoteDataSourceContractUpdated
-    ): DiscoveryRepositoryContractUpdated =
-        DiscoveryRepositoryUpdated(remote)
+    fun provideRepositoryDiscovery(
+        @SourceDiscovery remote: RemoteDataSourceDiscoveryContract
+    ): RepositoryDiscoveryContract =
+        RepositoryDiscovery(remote)
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)

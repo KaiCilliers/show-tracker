@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.search.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.SearchUIModel
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 
 interface SearchMediaByTitleUseCaseContract {
-    suspend operator fun invoke(page: Int, query: String) : Resource<List<SearchUIModel>>
+    suspend operator fun invoke(page: Int, query: String) : Resource<List<UIModelSearch>>
 }

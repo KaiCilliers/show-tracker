@@ -20,18 +20,18 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.DetailServiceUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.DiscoveryServiceUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchRemoteDataSourceUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceContractUpdated
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.SearchServiceUpdated
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetail
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearch
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearch
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,49 +50,49 @@ object NetworkModule {
     @Singleton
     @SourceSearch
     @Provides
-    fun providesSearchClientUpdated(
-        @ApiSearch api: SearchServiceContractUpdated
-    ) : SearchRemoteDataSourceContractUpdated {
-        return SearchRemoteDataSourceUpdated(api)
+    fun provideRemoteDataSourceSearch(
+        @ApiSearch api: ServiceSearchContract
+    ) : RemoteDataSourceSearchContract {
+        return RemoteDataSourceSearch(api)
     }
 
     @Singleton
     @ApiSearch
     @Provides
-    fun provideSearchApiUpdated(retrofit: Retrofit): SearchServiceContractUpdated {
-        return retrofit.create(SearchServiceUpdated::class.java)
+    fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
+        return retrofit.create(ServiceSearch::class.java)
     }
 
     @Singleton
     @SourceDetail
     @Provides
-    fun providesDetailClientUpdated(
-        @ApiDetail api: DetailServiceContractUpdated
-    ) : DetailRemoteDataSourceContractUpdated {
-        return DetailRemoteDataSourceUpdated(api)
+    fun providesRemoteDataSourceDetail(
+        @ApiDetail api: ServiceDetailContract
+    ) : RemoteDataSourceDetailContract {
+        return RemoteDataSourceDetail(api)
     }
 
     @Singleton
     @ApiDetail
     @Provides
-    fun provideDetailApiUpdated(retrofit: Retrofit): DetailServiceContractUpdated {
-        return retrofit.create(DetailServiceUpdated::class.java)
+    fun provideServiceDetail(retrofit: Retrofit): ServiceDetailContract {
+        return retrofit.create(ServiceDetail::class.java)
     }
 
     @Singleton
     @SourceDiscovery
     @Provides
-    fun providesDiscoveryClientUpdated(
-        @ApiDiscovery api: DiscoveryServiceContractUpdated
-    ) : DiscoveryRemoteDataSourceContractUpdated {
-        return DiscoveryRemoteDataSourceUpdated(api)
+    fun provideRemoteDataSourceDiscovery(
+        @ApiDiscovery api: ServiceDiscoveryContract
+    ) : RemoteDataSourceDiscoveryContract {
+        return RemoteDataSourceDiscovery(api)
     }
 
     @Singleton
     @ApiDiscovery
     @Provides
-    fun provideDiscoveryApiUpdated(retrofit: Retrofit): DiscoveryServiceContractUpdated {
-        return retrofit.create(DiscoveryServiceUpdated::class.java)
+    fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
+        return retrofit.create(ServiceDiscovery::class.java)
     }
 
     @Singleton

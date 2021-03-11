@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.application
+package com.sunrisekcdeveloper.showtracker.features.detail.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.domain.model.MovieDetailUIModel
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 
 interface FetchMovieDetailsUseCaseContract {
-    suspend operator fun invoke(id: String): Resource<MovieDetailUIModel>
+    suspend operator fun invoke(id: String): Resource<UIModelMovieDetail>
 }
