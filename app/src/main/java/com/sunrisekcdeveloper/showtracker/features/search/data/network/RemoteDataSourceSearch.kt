@@ -25,6 +25,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 class RemoteDataSourceSearch(
     @ApiSearch private val api: ServiceSearchContract,
@@ -34,6 +35,7 @@ class RemoteDataSourceSearch(
         query: String,
         page: Int
     ): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
+        Timber.e("inside datasource...")
         api.searchMoviesByTitle(query = query, page = page)
     }
 

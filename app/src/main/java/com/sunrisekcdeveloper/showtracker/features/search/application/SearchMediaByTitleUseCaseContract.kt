@@ -20,7 +20,8 @@ package com.sunrisekcdeveloper.showtracker.features.search.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import kotlinx.coroutines.flow.Flow
 
 interface SearchMediaByTitleUseCaseContract {
-    suspend operator fun invoke(page: Int, query: String) : Resource<List<UIModelSearch>>
+    suspend operator fun invoke(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
 }

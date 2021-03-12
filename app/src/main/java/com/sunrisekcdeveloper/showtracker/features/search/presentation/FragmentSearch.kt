@@ -30,10 +30,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
@@ -45,6 +48,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.sql.Time
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,14 +58,9 @@ class FragmentSearch : Fragment() {
 
     private val viewModel: ViewModelSearch by viewModels()
 
-    // todo rename adapter to SimplePosterAdapter
     @Inject
     lateinit var gridAdapter: AdapterSimplePoster
     private lateinit var gridLayoutManager: GridLayoutManager
-
-    @Inject
-    lateinit var linearAdapter: AdapterSimplePosterTitle
-    private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,18 +77,25 @@ class FragmentSearch : Fragment() {
         observeViewModel()
     }
 
+    private fun updateList(
+        adapter: AdapterSimplePoster,
+        list: List<UIModelSearch>
+    ) {
+        adapter.updateList(list.asUIModelPosterListt())
+    }
+
     private fun observeViewModel() {
-        viewModel.searchState.observe(viewLifecycleOwner) {
+        viewModel.results.observe(viewLifecycleOwner) {
             when (it) {
-                ViewStateSearch.SuggestedContent -> {
-                    showSuggestedState()
+                is Resource.Success -> {
+                    updateList(gridAdapter, it.data)
+                    attachOnScrollListenerGrid(
+                        binding.recyclerviewSearch,
+                        gridLayoutManager
+                    ) { viewModel.getNextPage() }
                 }
-                ViewStateSearch.NoSearchResults -> {
-                    showNoResultsState()
-                }
-                is ViewStateSearch.SearchResults -> {
-                    showResultState(it.data)
-                }
+                is Resource.Error -> { }
+                Resource.Loading -> { }
             }
         }
     }
@@ -112,7 +118,6 @@ class FragmentSearch : Fragment() {
         }
 
         gridAdapter.onPosterClickListener = onClick
-        linearAdapter.onPosterClickListener = onClick
 
         gridLayoutManager = GridLayoutManager(
             requireContext(),
@@ -120,16 +125,13 @@ class FragmentSearch : Fragment() {
             GridLayoutManager.VERTICAL,
             false
         )
-        linearLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        binding.recyclerviewSearch.adapter = gridAdapter
+        binding.recyclerviewSearch.layoutManager = gridLayoutManager
 
         attachOnScrollListenerGrid(
             binding.recyclerviewSearch,
             gridLayoutManager
-        ) { viewModel.getSearchResults("Harry", false) }// todo
+        ) { viewModel.getNextPage() }
 
         lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
@@ -137,7 +139,7 @@ class FragmentSearch : Fragment() {
                 .filter { query ->
                     // simply fetch all the data from database
                     if (query.isEmpty()) {
-                        viewModel.setState(ViewStateSearch.SuggestedContent)
+                        gridAdapter.replaceList(listOf())
                         return@filter false
                     }
                     return@filter true
@@ -146,52 +148,10 @@ class FragmentSearch : Fragment() {
                 //  here you will make call to database with query which returns a flow
 //                .flatMapLatest {  }
                 .collect { query ->
-                    viewModel.getSearchResults(query, true)
+                    gridAdapter.replaceList(listOf())
+                    viewModel.getSearchResults(query)
                 }
         }
-    }
-
-    private fun showSuggestedState() {
-        hideNoResultsState()
-        binding.tvHeaderWatchlistContent.visibility = View.VISIBLE
-        binding.tvHeaderWatchlistContent.text = "Your unwatched movies and TV shows"
-        showSuggestedList()
-    }
-
-    private fun showResultState(data: List<UIModelSearch>) {
-        hideNoResultsState()
-        binding.tvHeaderWatchlistContent.visibility = View.VISIBLE
-        binding.tvHeaderWatchlistContent.text = "Results"
-        showResultsList()
-        gridAdapter.updateList(data.asUIModelPosterListt())
-    }
-
-    private fun showSuggestedList() {
-        binding.recyclerviewSearch.visibility = View.VISIBLE
-        binding.recyclerviewSearch.adapter = linearAdapter
-        binding.recyclerviewSearch.layoutManager = linearLayoutManager
-    }
-
-    private fun showResultsList() {
-        binding.recyclerviewSearch.visibility = View.VISIBLE
-        binding.recyclerviewSearch.adapter = gridAdapter
-        binding.recyclerviewSearch.layoutManager = gridLayoutManager
-    }
-
-    private fun hideList() {
-        binding.recyclerviewSearch.visibility = View.GONE
-    }
-
-    private fun showNoResultsState() {
-        hideList()
-        binding.tvHeaderNoResults.visibility = View.VISIBLE
-        binding.tvSubHeaderNoResults.visibility = View.VISIBLE
-        binding.tvHeaderWatchlistContent.visibility = View.GONE
-    }
-
-    private fun hideNoResultsState() {
-        binding.tvHeaderNoResults.visibility = View.GONE
-        binding.tvSubHeaderNoResults.visibility = View.GONE
     }
 
     private fun attachOnScrollListenerGrid(

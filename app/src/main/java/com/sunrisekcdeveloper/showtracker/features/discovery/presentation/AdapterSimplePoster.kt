@@ -58,6 +58,7 @@ class AdapterSimplePoster(
     fun replaceList(data: List<UIModelPoster>) {
         this.data.clear()
         updateList(data)
+        notifyDataSetChanged()
     }
 
     class ViewHolderSimplePoster(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
