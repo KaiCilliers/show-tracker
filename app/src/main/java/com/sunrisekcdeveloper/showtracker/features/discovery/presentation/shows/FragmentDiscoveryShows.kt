@@ -33,6 +33,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -241,7 +243,7 @@ class FragmentDiscoveryShows : Fragment() {
         adapter: AdapterSimplePoster,
         list: List<UIModelDiscovery>
     ) {
-        adapter.updateList(list)
+        adapter.updateList(list.asUIModelPosterList())
     }
 
     private fun attachOnScrollListener(

@@ -30,9 +30,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +56,7 @@ class FragmentSearch : Fragment() {
 
     // todo rename adapter to SimplePosterAdapter
     @Inject
-    lateinit var gridAdapter: AdapterSimplePosterDouble
+    lateinit var gridAdapter: AdapterSimplePoster
     private lateinit var gridLayoutManager: GridLayoutManager
 
     @Inject
@@ -167,7 +169,7 @@ class FragmentSearch : Fragment() {
         binding.tvHeaderWatchlistContent.visibility = View.VISIBLE
         binding.tvHeaderWatchlistContent.text = "Results"
         showResultsList()
-        gridAdapter.updateList(data)
+        gridAdapter.updateList(data.asUIModelPosterListt())
     }
 
     private fun showSuggestedList() {
