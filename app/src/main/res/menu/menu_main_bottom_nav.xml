@@ -20,17 +20,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_watchlist_updated"
+        android:id="@+id/destination_main_watchlist_fragment"
         android:title="@string/watchlist_title_updated"
         android:icon="@drawable/ic_home_black_24dp"/>
 
     <item
-        android:id="@+id/navigation_discovery_updated"
+        android:id="@+id/destination_main_discovery_fragment"
         android:title="@string/discovery_title_updated"
         android:icon="@drawable/ic_dashboard_black_24dp"/>
 
     <item
-        android:id="@+id/navigation_statistics_updated"
+        android:id="@+id/destination_main_statistics_fragment"
         android:title="@string/statistics_title_updated"
         android:icon="@drawable/ic_notifications_black_24dp"/>
 

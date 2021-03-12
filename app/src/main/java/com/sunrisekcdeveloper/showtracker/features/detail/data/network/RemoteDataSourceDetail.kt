@@ -19,22 +19,20 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.*
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 class RemoteDataSourceDetail(
     @ApiDetail private val api: ServiceDetailContract,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : RemoteDataSourceDetailContract {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : RemoteDataSourceDetailContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
         api.movieDetail(id = id)
     }
@@ -50,20 +48,4 @@ class RemoteDataSourceDetail(
     override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = safeApiCall {
         api.showCertification(id = id)
     }
-
-    private suspend fun <T> safeApiCall(request: suspend () -> Response<T>): NetworkResult<T> =
-        withContext(dispatcher) {
-            return@withContext try {
-                val response = request()
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    body?.let { data ->
-                        return@withContext NetworkResult.success(data)
-                    }
-                }
-                NetworkResult.error("${response.code()} ${response.message()}")
-            } catch (e: Exception) {
-                NetworkResult.error((e.message ?: e.toString()))
-            }
-        }
 }

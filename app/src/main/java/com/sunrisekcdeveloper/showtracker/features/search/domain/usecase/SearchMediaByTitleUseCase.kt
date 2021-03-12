@@ -25,31 +25,14 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelS
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
 
 class SearchMediaByTitleUseCase(
     @RepoSearch private val searchRepo: RepositorySearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SearchMediaByTitleUseCaseContract {
-    override suspend fun invoke(page: Int, query: String): Resource<List<UIModelSearch>> {
-        return withContext(dispatcher) {
-            val searchMoviesCall = async { searchRepo.moviesByTitle(page, query) }
-            val searchShowsCall = async { searchRepo.showsByTitle(page, query) }
 
-            val searchMoviesResponse = searchMoviesCall.await()
-            val searchShowsResponse = searchShowsCall.await()
-
-            val results = if (searchMoviesResponse is Resource.Success && searchShowsResponse is Resource.Success) {
-                searchMoviesResponse.data.union(searchShowsResponse.data).toList()
-            } else if (searchMoviesResponse is Resource.Success) {
-                searchMoviesResponse.data
-            } else if (searchShowsResponse is Resource.Success) {
-                searchShowsResponse.data
-            } else {
-                listOf<UIModelSearch>()
-            }
-            Resource.Success(results)
-        }
+    override suspend fun invoke(page: Int, query: String): Flow<Resource<List<UIModelSearch>>> {
+        return searchRepo.searchMediaByTitle(page, query)
     }
 }

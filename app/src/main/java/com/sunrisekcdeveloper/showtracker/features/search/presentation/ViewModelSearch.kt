@@ -24,53 +24,41 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class ViewModelSearch @ViewModelInject constructor(
     private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract
 ) : ViewModel() {
 
     var mediaPage = 0
+    var lastQuery = ""
 
-    private val _searchState = MutableLiveData<ViewStateSearch<List<UIModelSearch>>>().apply {
-        value = ViewStateSearch.SuggestedContent
-    }
-    val searchState: LiveData<ViewStateSearch<List<UIModelSearch>>> = _searchState
+    private val _results = MutableLiveData<Resource<List<UIModelSearch>>>()
+    val results: LiveData<Resource<List<UIModelSearch>>>
+        get() = _results
 
-    fun setState(state: ViewStateSearch<List<UIModelSearch>>) {
-        viewModelScope.launch {
-            when(state) {
-                ViewStateSearch.SuggestedContent -> _searchState.value = state
-                ViewStateSearch.NoSearchResults -> _searchState.value = state
-                is ViewStateSearch.SearchResults -> _searchState.value = state
-            }
-        }
-    }
-
-    fun getSearchResults(query: String, newQuery: Boolean) = viewModelScope.launch {
+    fun getSearchResults(query: String) = viewModelScope.launch {
+        Timber.e("inside viemodel get search results...")
         // reset page
-        if (newQuery) {
+        if (lastQuery != query) {
             mediaPage = 0
+            lastQuery = query
         }
-        dispatch(_searchState) { searchMediaByTitleUseCase(++mediaPage, query) }
+        getNextPage()
     }
 
-    private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<ViewStateSearch<List<UIModelSearch>>>,
-        call: suspend () -> Resource<List<UIModelSearch>>
-    ) {
-        val data = withContext(Dispatchers.IO) { call() }
-        withContext(Dispatchers.Main) {
-            if (data is Resource.Success) {
-                mutableLiveData.value = ViewStateSearch.SearchResults(data.data)
-            } else {
-                mutableLiveData.value = ViewStateSearch.SearchResults(listOf())
-            }
+    fun getNextPage() = viewModelScope.launch {
+        Timber.e("inside viewmodel get next page...")
+        searchMediaByTitleUseCase(++mediaPage, lastQuery).collect {
+            _results.value = it
         }
     }
 }

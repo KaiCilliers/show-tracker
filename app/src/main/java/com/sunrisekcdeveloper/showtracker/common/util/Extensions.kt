@@ -24,10 +24,11 @@ import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMov
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMediaUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +40,7 @@ fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
     posterPath = posterPath ?: "",
     overview = overview,
     releaseYear = releaseDate,
-    certification = "",
+    certification = "N/A",
     runtime = "$runtime",
     watchlisted = false,
     watched = false
@@ -49,36 +50,47 @@ fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
     name = name,
     posterPath = posterPath,
     overview = overview,
-    certification = "",
+    certification = "N/A",
     firstAirDate = firstAirYear,
     seasonsTotal = seasonTotal,
     watchlisted = false,
     startedWatching = false,
     upToDate = false
 )
-fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
+fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaType = MediaType.Movie,
     posterPath = posterPath ?: ""
 )
-fun ResponseStandardMediaUpdated.ResponseShowUpdated.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
+fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaType = MediaType.Show,
     posterPath = posterPath ?: ""
 )
-fun ResponseStandardMediaUpdated.ResponseMovieUpdated.asUIModelSearch() = UIModelSearch(
+fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = title,
     mediaType = MediaType.Movie,
     posterPath = posterPath ?: ""
 )
-fun ResponseStandardMediaUpdated.ResponseShowUpdated.asUIModelSearch() = UIModelSearch(
+fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = name,
     mediaType = MediaType.Show,
     posterPath = posterPath ?: ""
 )
-
+fun UIModelDiscovery.asUIModelPoster() = UIModelPoster(
+    id = id,
+    posterPath = posterPath,
+    mediaType = mediaType
+)
+fun List<UIModelDiscovery>.asUIModelPosterList() = this.map { it.asUIModelPoster() }
+fun UIModelSearch.asUIModelPoster() = UIModelPoster(
+    id = id,
+    posterPath = posterPath,
+    mediaType = mediaType
+)
+fun List<UIModelSearch>.asUIModelPosterListt() = this.map { it.asUIModelPoster() }
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")

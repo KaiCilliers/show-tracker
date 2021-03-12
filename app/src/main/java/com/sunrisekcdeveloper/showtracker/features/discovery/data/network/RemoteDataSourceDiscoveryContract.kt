@@ -19,14 +19,14 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 
 interface RemoteDataSourceDiscoveryContract {
-    suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated>
-    suspend fun topRatedMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated>
-    suspend fun upcomingMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated>
-    suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated>
-    suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated>
-    suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated>
+    suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovies>
+    suspend fun topRatedMovies(page: Int): NetworkResult<EnvelopePaginatedMovies>
+    suspend fun upcomingMovies(page: Int): NetworkResult<EnvelopePaginatedMovies>
+    suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShows>
+    suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShows>
+    suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShows>
 }

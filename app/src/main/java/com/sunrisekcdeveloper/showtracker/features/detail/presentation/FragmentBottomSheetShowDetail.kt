@@ -27,6 +27,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.presentation.ViewModelShowDetail
@@ -67,8 +68,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     binding.tvDetailShowDescription.text = it.data.overview
                     binding.tvDetailShowFirstAirDate.text = it.data.firstAirDate
                     binding.tvDetailShowCertification.text = it.data.certification
-                    // todo remove ugly concat
-                    binding.tvDetailShowSeasons.text = "${it.data.seasonsTotal} Seasons"
+                    binding.tvDetailShowSeasons.text = getString(
+                        R.string.season_with_number, it.data.seasonsTotal.toString()
+                    )
                 }
                 // todo impl other cases
                 is Resource.Error -> {}

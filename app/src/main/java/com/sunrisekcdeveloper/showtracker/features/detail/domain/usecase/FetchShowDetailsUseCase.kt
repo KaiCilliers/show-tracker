@@ -23,10 +23,11 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import kotlinx.coroutines.flow.Flow
 
 class FetchShowDetailsUseCase(
     @RepoDetail private val detailRepo: RepositoryDetailContract
 ) : FetchShowDetailsUseCaseContract {
-    override suspend fun invoke(id: String): Resource<UIModelShowDetail> =
+    override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> =
         detailRepo.showDetails(id)
 }

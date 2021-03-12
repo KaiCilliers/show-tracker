@@ -19,7 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setup() {
         binding.botnavHousing.setupWithNavController(
-            findNavController(R.id.nav_host_fragment) // todo rename nav_host_fragment
+            findNavController(R.id.nav_host_fragment_main) // todo rename nav_host_fragment
         )
     }
 }

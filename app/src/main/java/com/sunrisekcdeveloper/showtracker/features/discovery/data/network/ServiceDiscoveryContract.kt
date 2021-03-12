@@ -19,38 +19,38 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import retrofit2.Response
 
 interface ServiceDiscoveryContract {
     suspend fun popularMovies(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
-    ): Response<EnvelopePaginatedMovieUpdated>
+    ): Response<EnvelopePaginatedMovies>
 
     suspend fun topRatedMovies(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
-    ): Response<EnvelopePaginatedMovieUpdated>
+    ): Response<EnvelopePaginatedMovies>
 
     suspend fun upcomingMovies(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
-    ): Response<EnvelopePaginatedMovieUpdated>
+    ): Response<EnvelopePaginatedMovies>
 
     suspend fun popularShows(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
-    ): Response<EnvelopePaginatedShowUpdated>
+    ): Response<EnvelopePaginatedShows>
 
     suspend fun topRatedShows(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
-    ): Response<EnvelopePaginatedShowUpdated>
+    ): Response<EnvelopePaginatedShows>
 
     suspend fun airingTodayShows(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
-    ): Response<EnvelopePaginatedShowUpdated>
+    ): Response<EnvelopePaginatedShows>
 }

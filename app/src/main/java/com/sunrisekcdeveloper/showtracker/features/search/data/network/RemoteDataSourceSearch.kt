@@ -19,45 +19,30 @@
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Response
+import timber.log.Timber
 
 class RemoteDataSourceSearch(
     @ApiSearch private val api: ServiceSearchContract,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : RemoteDataSourceSearchContract {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : RemoteDataSourceSearchContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun moviesByTitle(
         query: String,
         page: Int
-    ): NetworkResult<EnvelopePaginatedMovieUpdated> = safeApiCall {
+    ): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
+        Timber.e("inside datasource...")
         api.searchMoviesByTitle(query = query, page = page)
     }
 
     override suspend fun showsByTitle(
         query: String,
         page: Int
-    ): NetworkResult<EnvelopePaginatedShowUpdated> = safeApiCall {
+    ): NetworkResult<EnvelopePaginatedShows> = safeApiCall {
         api.searchShowByTitle(query = query, page = page)
     }
-
-    private suspend fun <T> safeApiCall(request: suspend () -> Response<T>): NetworkResult<T> =
-        withContext(dispatcher) {
-            return@withContext try {
-                val response = request()
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    body?.let { data ->
-                        return@withContext NetworkResult.success(data)
-                    }
-                }
-                NetworkResult.error("${response.code()} ${response.message()}")
-            } catch (e: Exception) {
-                NetworkResult.error((e.message ?: e.toString()))
-            }
-        }
 }

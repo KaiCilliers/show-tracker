@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import retrofit2.Response
 
 interface ServiceSearchContract {
@@ -28,11 +28,11 @@ interface ServiceSearchContract {
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int,
         query: String
-    ) : Response<EnvelopePaginatedMovieUpdated>
+    ) : Response<EnvelopePaginatedMovies>
 
     suspend fun searchShowByTitle(
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int,
         query: String
-    ) : Response<EnvelopePaginatedShowUpdated>
+    ) : Response<EnvelopePaginatedShows>
 }

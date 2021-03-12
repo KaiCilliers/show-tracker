@@ -23,79 +23,105 @@ import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class RepositoryDetail(
     @SourceDetail private val remote: RemoteDataSourceDetailContract,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
-    override suspend fun showDetails(id: String): Resource<UIModelShowDetail> = withContext(scope.coroutineContext) {
-        val detailCall = async { remote.showDetail(id) }
-        val certificationCall = async { remote.showCertification(id) }
+    override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
+        val show = flow { emit(remote.showDetail(id)) }.flowOn(dispatcher)
+        val cert = flow { emit(remote.showCertification(id)) }.flowOn(dispatcher)
 
-        val detailResponse = detailCall.await()
-        val certificationResponse = certificationCall.await()
+        return combine(show, cert) { showResponse, certResponse ->
+            when (showResponse) {
+                is NetworkResult.Success -> {
+                    var result = showResponse.data.asUIModelShowDetail()
 
-        Timber.d("$detailResponse")
-        Timber.d("$certificationResponse")
+                    when (certResponse) {
+                        is NetworkResult.Success -> {
+                            result = result.copy(
+                                certification = showCertificationUSIfPossible(certResponse.data.results)
+                            )
+                        }
+                        is NetworkResult.Error -> {
+                            Timber.d("Error - certification call was not successful: ${certResponse.message}")
+                        }
+                    }
 
-        var partial: UIModelShowDetail? = null
-        val certs = mutableListOf<String>()
-
-        when(detailResponse) {
-            is NetworkResult.Success -> {
-                partial = detailResponse.data.asUIModelShowDetail()
-            }
-            is NetworkResult.Error -> { }
-        }
-        when(certificationResponse) {
-            is NetworkResult.Success -> {
-                certificationResponse.data.results.forEach {
-                    certs.add(it.certification)
+                    Resource.Success(result)
+                }
+                is NetworkResult.Error -> {
+                    Resource.Error("Error fetching show with ID: $id [${showResponse.message}]")
                 }
             }
-            is NetworkResult.Error -> { }
-        }
-        val whole = partial?.copy(certification = certs[0])
-        return@withContext Resource.Success(whole!!)
+        }.onStart { emit(Resource.Loading) }
     }
 
-    override suspend fun movieDetails(id: String): Resource<UIModelMovieDetail> = withContext(scope.coroutineContext) {
-        val detailCall = async { remote.movieDetails(id) }
-        val certificationCall = async { remote.movieReleaseDates(id) }
+    override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
+        val movieFlow = flow { emit(remote.movieDetails(id)) }.flowOn(dispatcher)
+        val certificationFlow = flow { emit(remote.movieReleaseDates(id)) }.flowOn(dispatcher)
 
-        val detailResponse = detailCall.await()
-        val certificationResponse = certificationCall.await()
+        return combine(movieFlow, certificationFlow) { movieResult, certificationResult ->
+            when (movieResult) {
+                is NetworkResult.Success -> {
+                    var result = movieResult.data.asUIModelMovieDetail()
 
-        Timber.d("$detailResponse")
-        Timber.d("$certificationResponse")
-
-        var partial: UIModelMovieDetail? = null
-        val certs = mutableListOf<String>()
-
-        when(detailResponse) {
-            is NetworkResult.Success -> {
-                partial = detailResponse.data.asUIModelMovieDetail()
-            }
-            is NetworkResult.Error -> { }
-        }
-        when(certificationResponse) {
-            is NetworkResult.Success -> {
-                certificationResponse.data.results.forEach {
-                    it.releaseDates.forEach {
-                        Timber.d("dafuq: $it")
-                        certs.add(it.certification)
+                    when (certificationResult) {
+                        is NetworkResult.Success -> {
+                            result = result.copy(
+                                certification = movieCertificationUSIfPossible(certificationResult.data.results)
+                            )
+                        }
+                        is NetworkResult.Error -> {
+                            Timber.d("Error - certification call was not successful: ${certificationResult.message}")
+                        }
                     }
+
+                    Resource.Success(result)
+                }
+                is NetworkResult.Error -> {
+                    Resource.Error("Error fetching show with ID: $id [${movieResult.message}]")
                 }
             }
-            is NetworkResult.Error -> { }
+        }.onStart { emit(Resource.Loading) }
+    }
+
+    private fun movieCertificationUSIfPossible(data: List<ResponseMovieReleaseDates>): String {
+        return if (data.isNotEmpty()) {
+            val iso = data.find { it.iso == "US" } ?: data[0]
+            return if (iso.releaseDates.isNotEmpty()) {
+                val certification = iso.releaseDates.find { it.releaseType == 3 }?.certification
+                    ?: iso.releaseDates[0].certification
+                return if (certification != "") {
+                    certification
+                } else {
+                    "N/A"
+                }
+            } else {
+                "N/A"
+            }
+        } else {
+            "N/A"
         }
-        val whole = partial?.copy(certification = certs[0])
-        return@withContext Resource.Success(whole!!)
+    }
+
+    private fun showCertificationUSIfPossible(data: List<ResponseShowCertification>): String {
+        return if (data.isNotEmpty()) {
+            data.find {
+                it.iso == "US"
+            }?.certification ?: data[0].certification
+        } else {
+            "N/A"
+        }
     }
 }

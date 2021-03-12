@@ -21,79 +21,86 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_housing"
-    app:startDestination="@id/navigation_discovery_updated">
+    app:startDestination="@id/destination_main_discovery_fragment">
 
 
     <fragment
-        android:id="@+id/navigation_discovery_updated"
+        android:id="@+id/destination_main_discovery_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery"
-        android:label="fragment_discovery_updated"
+        android:label="fragment_discovery"
         tools:layout="@layout/fragment_discovery" >
         <action
-            android:id="@+id/action_navigation_discovery_updated_to_searchActivityUpdated"
-            app:destination="@id/searchActivityUpdated" />
+            android:id="@+id/navigate_from_discovery_to_discovery_movies_fragment"
+            app:destination="@id/destination_main_discovery_movies_fragment" />
         <action
-            android:id="@+id/action_navigation_discovery_updated_to_discoveryMoviesFragmentUpdated"
-            app:destination="@id/discoveryMoviesFragmentUpdated" />
+            android:id="@+id/navigate_from_discovery_to_discovery_shows_fragment"
+            app:destination="@id/destination_discovery_shows_fragment" />
         <action
-            android:id="@+id/action_navigation_discovery_updated_to_discoveryShowsFragmentUpdated"
-            app:destination="@id/discoveryShowsFragmentUpdated" />
+            android:id="@+id/navigate_from_discovery_to_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
+        <action
+            android:id="@+id/navigate_from_discovery_to_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+        <action
+            android:id="@+id/navigate_from_discovery_to_nav_graph_search"
+            app:destination="@id/nav_graph_search" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_watchlist_updated"
+        android:id="@+id/destination_main_watchlist_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.FragmentWatchlist"
-        android:label="fragment_watchlist_updated"
+        android:label="fragment_watchlist"
         tools:layout="@layout/fragment_watchlist" />
     <fragment
-        android:id="@+id/navigation_statistics_updated"
+        android:id="@+id/destination_main_statistics_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.statistics.FragmentStatistics"
-        android:label="fragment_statistics_updated"
+        android:label="fragment_statistics"
         tools:layout="@layout/fragment_statistics" />
-    <activity
-        android:id="@+id/searchActivityUpdated"
-        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.ActivitySearch"
-        android:label="activity_search_updated"
-        tools:layout="@layout/activity_search" />
     <fragment
-        android:id="@+id/discoveryMoviesFragmentUpdated"
+        android:id="@+id/destination_main_discovery_movies_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies"
-        android:label="fragment_discovery_movies_updated"
+        android:label="fragment_discovery_movies"
         tools:layout="@layout/fragment_discovery_only_movies" >
         <action
-            android:id="@+id/action_discoveryMoviesFragmentUpdated_to_navigation_discovery_updated"
-            app:destination="@id/navigation_discovery_updated"
-            app:popUpTo="@id/discoveryMoviesFragmentUpdated"
+            android:id="@+id/navigate_from_discovery_movies_to_discovery_fragment"
+            app:destination="@id/destination_main_discovery_fragment"
+            app:popUpTo="@id/destination_main_discovery_movies_fragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_discoveryMoviesFragmentUpdated_to_discoveryShowsFragmentUpdated"
-            app:destination="@id/discoveryShowsFragmentUpdated"
-            app:popUpTo="@id/discoveryMoviesFragmentUpdated"
+            android:id="@+id/navigate_from_discovery_movies_to_discovery_shows_fragment"
+            app:destination="@id/destination_discovery_shows_fragment"
+            app:popUpTo="@id/destination_main_discovery_movies_fragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_discoveryMoviesFragmentUpdated_to_searchActivityUpdated"
-            app:destination="@id/searchActivityUpdated" />
+            android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
+        <action
+            android:id="@+id/navigate_from_discovery_movies_to_nav_graph_search"
+            app:destination="@id/nav_graph_search" />
     </fragment>
     <fragment
-        android:id="@+id/discoveryShowsFragmentUpdated"
+        android:id="@+id/destination_discovery_shows_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShows"
-        android:label="fragment_discovery_shows_updated"
+        android:label="fragment_discovery_shows"
         tools:layout="@layout/fragment_discovery_only_shows" >
         <action
-            android:id="@+id/action_discoveryShowsFragmentUpdated_to_navigation_discovery_updated"
-            app:destination="@id/navigation_discovery_updated"
-            app:popUpTo="@id/discoveryShowsFragmentUpdated"
+            android:id="@+id/navigate_from_discovery_shows_to_discovery_fragment"
+            app:destination="@id/destination_main_discovery_fragment"
+            app:popUpTo="@id/destination_discovery_shows_fragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_discoveryShowsFragmentUpdated_to_discoveryMoviesFragmentUpdated"
-            app:destination="@id/discoveryMoviesFragmentUpdated"
-            app:popUpTo="@id/discoveryShowsFragmentUpdated"
+            android:id="@+id/navigate_from_discovery_shows_to_discovery_movies_fragment"
+            app:destination="@id/destination_main_discovery_movies_fragment"
+            app:popUpTo="@id/destination_discovery_shows_fragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_discoveryShowsFragmentUpdated_to_searchActivityUpdated"
-            app:destination="@id/searchActivityUpdated" />
+            android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+        <action
+            android:id="@+id/navigate_from_discovery_shows_to_nav_graph_search"
+            app:destination="@id/nav_graph_search" />
     </fragment>
     <dialog
-        android:id="@+id/detailMovieBottomSheet"
+        android:id="@+id/destination_bottom_sheet_detail_movie"
         android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetMovieDetail"
         android:label="bottom_sheet_detail_movie"
         tools:layout="@layout/bottom_sheet_movie_detail" >
@@ -102,7 +109,7 @@
             app:argType="string" />
     </dialog>
     <dialog
-        android:id="@+id/detailShowBottomSheet"
+        android:id="@+id/destination_bottom_sheet_detail_show"
         android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetShowDetail"
         android:label="bottom_sheet_detail_show"
         tools:layout="@layout/bottom_sheet_show_detail" >
@@ -110,6 +117,5 @@
             android:name="showId"
             app:argType="string" />
     </dialog>
-    <action android:id="@+id/action_global_detailShowBottomSheet" app:destination="@id/detailShowBottomSheet"/>
-    <action android:id="@+id/action_global_detailMovieBottomSheet" app:destination="@id/detailMovieBottomSheet"/>
+    <include app:graph="@navigation/nav_graph_search" />
 </navigation>

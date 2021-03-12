@@ -20,7 +20,8 @@ package com.sunrisekcdeveloper.showtracker.features.detail.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import kotlinx.coroutines.flow.Flow
 
 interface FetchMovieDetailsUseCaseContract {
-    suspend operator fun invoke(id: String): Resource<UIModelMovieDetail>
+    suspend operator fun invoke(id: String): Flow<Resource<UIModelMovieDetail>>
 }

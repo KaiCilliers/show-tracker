@@ -26,10 +26,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
 
 class AdapterSimplePoster(
-    private var data: MutableList<UIModelDiscovery>,
+    private var data: MutableList<UIModelPoster>,
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ ->  }
 ) : RecyclerView.Adapter<AdapterSimplePoster.ViewHolderSimplePoster>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePoster =
@@ -45,7 +47,7 @@ class AdapterSimplePoster(
 
     override fun getItemCount(): Int = data.size
 
-    fun updateList(data: List<UIModelDiscovery>) {
+    fun updateList(data: List<UIModelPoster>) {
         this.data.addAll(data)
         notifyItemRangeInserted(
             this.data.size,
@@ -53,13 +55,14 @@ class AdapterSimplePoster(
         )
     }
 
-    fun replaceList(data: List<UIModelDiscovery>) {
+    fun replaceList(data: List<UIModelPoster>) {
         this.data.clear()
         updateList(data)
+        notifyDataSetChanged()
     }
 
     class ViewHolderSimplePoster(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: UIModelDiscovery) {
+        fun bind(data: UIModelPoster) {
             Glide.with(binding.root)
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())

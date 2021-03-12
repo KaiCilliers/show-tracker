@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -40,6 +42,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -95,12 +98,12 @@ class FragmentDiscovery : Fragment() {
                 MediaType.Movie -> {
                     findNavController().navigate(
                         // todo replace global navigation
-                        FragmentDiscoveryDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(mediaId)
                     )
                 }
                 MediaType.Show -> {
                     findNavController().navigate(
-                        FragmentDiscoveryDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(mediaId)
                     )
                 }
             }
@@ -293,7 +296,7 @@ class FragmentDiscovery : Fragment() {
         binding.toolbarDiscovery.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryDirections.navigateFromDiscoveryToNavGraphSearch()
                 )
                 true
             }
@@ -323,12 +326,12 @@ class FragmentDiscovery : Fragment() {
         if (position == 0) {
             findNavController().navigate(
                 // todo rename this awful action functions
-                FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToDiscoveryMoviesFragmentUpdated()
+                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryMoviesFragment()
             )
             // TV Show Tab
         } else if (position == 1) {
             findNavController().navigate(
-                FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToDiscoveryShowsFragmentUpdated()
+                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryShowsFragment()
             )
         }
     }
@@ -337,7 +340,7 @@ class FragmentDiscovery : Fragment() {
         adapter: AdapterSimplePoster,
         list: List<UIModelDiscovery>
     ) {
-        adapter.updateList(list)
+        adapter.updateList(list.asUIModelPosterList())
     }
 
     private fun attachOnScrollListener(

@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -29,35 +29,35 @@ interface ServiceDiscovery : ServiceDiscoveryContract {
     override suspend fun popularMovies(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedMovieUpdated>
+    ): Response<EnvelopePaginatedMovies>
 
     @GET("movie/top_rated")
     override suspend fun topRatedMovies(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedMovieUpdated>
+    ): Response<EnvelopePaginatedMovies>
 
     @GET("movie/upcoming")
     override suspend fun upcomingMovies(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedMovieUpdated>
+    ): Response<EnvelopePaginatedMovies>
 
     @GET("tv/popular")
     override suspend fun popularShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedShowUpdated>
+    ): Response<EnvelopePaginatedShows>
 
     @GET("tv/top_rated")
     override suspend fun topRatedShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedShowUpdated>
+    ): Response<EnvelopePaginatedShows>
 
     @GET("tv/airing_today")
     override suspend fun airingTodayShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Response<EnvelopePaginatedShowUpdated>
+    ): Response<EnvelopePaginatedShows>
 }

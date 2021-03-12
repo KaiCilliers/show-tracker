@@ -33,6 +33,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyMoviesBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -85,7 +87,7 @@ class FragmentDiscoveryMovies : Fragment() {
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToNavGraphSearch()
                 )
                 true
             }
@@ -103,12 +105,12 @@ class FragmentDiscoveryMovies : Fragment() {
                     // Discovery Screen
                     if (id == 1L) {
                         findNavController().navigate(
-                            FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToNavigationDiscoveryUpdated()
+                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryFragment()
                         )
                         // TV Show Discovery Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
-                            FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToDiscoveryShowsFragmentUpdated()
+                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryShowsFragment()
                         )
                     }
                 }
@@ -178,17 +180,10 @@ class FragmentDiscoveryMovies : Fragment() {
 
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
-            when (mediaType) {
-                MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryMoviesDirections.actionGlobalDetailMovieBottomSheet(mediaId)
-                    )
-                }
-                MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryMoviesDirections.actionGlobalDetailShowBottomSheet(mediaId)
-                    )
-                }
+            if (mediaType == MediaType.Movie) {
+                findNavController().navigate(
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(mediaId)
+                )
             }
         }
 
@@ -239,7 +234,7 @@ class FragmentDiscoveryMovies : Fragment() {
         adapter: AdapterSimplePoster,
         list: List<UIModelDiscovery>
     ) {
-        adapter.updateList(list)
+        adapter.updateList(list.asUIModelPosterList())
     }
 
     private fun attachOnScrollListener(

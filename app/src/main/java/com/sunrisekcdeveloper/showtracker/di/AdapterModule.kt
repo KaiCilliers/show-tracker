@@ -19,7 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.AdapterSimplePosterDouble
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.AdapterSimplePosterTitle
 import dagger.Module
 import dagger.Provides
@@ -29,11 +28,6 @@ import dagger.hilt.android.components.ActivityComponent
 @Module
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
-
-    @Provides
-    fun provideGridListAdapter(): AdapterSimplePosterDouble {
-        return AdapterSimplePosterDouble(mutableListOf())
-    }
 
     @Provides
     fun provideTitlePosterListAdapter(): AdapterSimplePosterTitle {

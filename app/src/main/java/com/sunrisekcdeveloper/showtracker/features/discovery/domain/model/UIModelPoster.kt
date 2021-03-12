@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
-import kotlinx.coroutines.flow.Flow
-
-interface RepositorySearchContract {
-    suspend fun searchMediaByTitle(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
-}
+data class UIModelPoster(
+    val id: String,
+    val posterPath: String,
+    val mediaType: MediaType
+)
