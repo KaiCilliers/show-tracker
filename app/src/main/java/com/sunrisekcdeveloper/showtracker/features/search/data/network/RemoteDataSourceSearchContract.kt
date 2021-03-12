@@ -19,10 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 
 interface RemoteDataSourceSearchContract {
-    suspend fun moviesByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedMovieUpdated>
-    suspend fun showsByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedShowUpdated>
+    suspend fun moviesByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedMovies>
+    suspend fun showsByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedShows>
 }

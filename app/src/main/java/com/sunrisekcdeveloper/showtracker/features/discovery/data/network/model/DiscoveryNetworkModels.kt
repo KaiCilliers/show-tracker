@@ -19,19 +19,21 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model
 
 import com.google.gson.annotations.SerializedName
-// todo rename these bastards
-data class EnvelopePaginatedMovieUpdated(
+
+data class EnvelopePaginatedMovies(
     @SerializedName("page") val page: Int,
-    @SerializedName("results") val media: List<ResponseStandardMediaUpdated.ResponseMovieUpdated>,
+    @SerializedName("results") val media: List<ResponseStandardMedia.ResponseMovie>,
     @SerializedName("total_pages") val pages: Int
 )
-data class EnvelopePaginatedShowUpdated(
+
+data class EnvelopePaginatedShows(
     @SerializedName("page") val page: Int,
-    @SerializedName("results") val media: List<ResponseStandardMediaUpdated.ResponseShowUpdated>,
+    @SerializedName("results") val media: List<ResponseStandardMedia.ResponseShow>,
     @SerializedName("total_pages") val pages: Int
 )
-sealed class ResponseStandardMediaUpdated {
-    data class ResponseMovieUpdated(
+
+sealed class ResponseStandardMedia {
+    data class ResponseMovie(
         @SerializedName("id") val id: Long,
         @SerializedName("title") val title: String,
         @SerializedName("overview") val overview: String,
@@ -39,10 +41,9 @@ sealed class ResponseStandardMediaUpdated {
         @SerializedName("backdrop_path") val backdropPath: String?,
         @SerializedName("vote_average") val rating: Float,
         @SerializedName("release_date") val releaseDate: String
-    ) : ResponseStandardMediaUpdated()
+    ) : ResponseStandardMedia()
 
-    // todo cross reference TMDB api enpoint documentation of response object possible values
-    data class ResponseShowUpdated(
+    data class ResponseShow(
         @SerializedName("id") val id: Long,
         @SerializedName("name") val name: String,
         @SerializedName("overview") val overview: String,
@@ -50,5 +51,5 @@ sealed class ResponseStandardMediaUpdated {
         @SerializedName("backdrop_path") val backdropPath: String?,
         @SerializedName("vote_average") val rating: Float,
         @SerializedName("first_air_date") val firstAirDate: String
-    ) : ResponseStandardMediaUpdated()
+    ) : ResponseStandardMedia()
 }

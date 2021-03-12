@@ -21,8 +21,8 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.network
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -33,14 +33,14 @@ class RemoteDataSourceSearch(
     override suspend fun moviesByTitle(
         query: String,
         page: Int
-    ): NetworkResult<EnvelopePaginatedMovieUpdated> = safeApiCall {
+    ): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
         api.searchMoviesByTitle(query = query, page = page)
     }
 
     override suspend fun showsByTitle(
         query: String,
         page: Int
-    ): NetworkResult<EnvelopePaginatedShowUpdated> = safeApiCall {
+    ): NetworkResult<EnvelopePaginatedShows> = safeApiCall {
         api.searchShowByTitle(query = query, page = page)
     }
 }
