@@ -87,7 +87,7 @@ class FragmentDiscoveryMovies : Fragment() {
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToNavGraphSearch()
                 )
                 true
             }
@@ -105,12 +105,12 @@ class FragmentDiscoveryMovies : Fragment() {
                     // Discovery Screen
                     if (id == 1L) {
                         findNavController().navigate(
-                            FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToNavigationDiscoveryUpdated()
+                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryFragment()
                         )
                         // TV Show Discovery Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
-                            FragmentDiscoveryMoviesDirections.actionDiscoveryMoviesFragmentUpdatedToDiscoveryShowsFragmentUpdated()
+                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryShowsFragment()
                         )
                     }
                 }
@@ -180,17 +180,10 @@ class FragmentDiscoveryMovies : Fragment() {
 
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
-            when (mediaType) {
-                MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryMoviesDirections.actionGlobalDetailMovieBottomSheet(mediaId)
-                    )
-                }
-                MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryMoviesDirections.actionGlobalDetailShowBottomSheet(mediaId)
-                    )
-                }
+            if (mediaType == MediaType.Movie) {
+                findNavController().navigate(
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(mediaId)
+                )
             }
         }
 

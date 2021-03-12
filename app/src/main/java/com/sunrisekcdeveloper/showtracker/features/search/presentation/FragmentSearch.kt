@@ -98,20 +98,14 @@ class FragmentSearch : Fragment() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
-                    Timber.d("movie")
                     findNavController().navigate(
-                        FragmentSearchDirections.actionSearchFragmentUpdatedToDetailMovieBottomSheet2(
-                            mediaId
-                        )
+                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(mediaId)
                     )
 
                 }
                 MediaType.Show -> {
-                    Timber.d("show")
                     findNavController().navigate(
-                        FragmentSearchDirections.actionSearchFragmentUpdatedToDetailShowBottomSheet2(
-                            mediaId
-                        )
+                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(mediaId)
                     )
                 }
             }

@@ -97,12 +97,12 @@ class FragmentDiscovery : Fragment() {
                 MediaType.Movie -> {
                     findNavController().navigate(
                         // todo replace global navigation
-                        FragmentDiscoveryDirections.actionGlobalDetailMovieBottomSheet(mediaId)
+                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(mediaId)
                     )
                 }
                 MediaType.Show -> {
                     findNavController().navigate(
-                        FragmentDiscoveryDirections.actionGlobalDetailShowBottomSheet(mediaId)
+                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(mediaId)
                     )
                 }
             }
@@ -295,7 +295,7 @@ class FragmentDiscovery : Fragment() {
         binding.toolbarDiscovery.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryDirections.navigateFromDiscoveryToNavGraphSearch()
                 )
                 true
             }
@@ -325,12 +325,12 @@ class FragmentDiscovery : Fragment() {
         if (position == 0) {
             findNavController().navigate(
                 // todo rename this awful action functions
-                FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToDiscoveryMoviesFragmentUpdated()
+                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryMoviesFragment()
             )
             // TV Show Tab
         } else if (position == 1) {
             findNavController().navigate(
-                FragmentDiscoveryDirections.actionNavigationDiscoveryUpdatedToDiscoveryShowsFragmentUpdated()
+                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryShowsFragment()
             )
         }
     }

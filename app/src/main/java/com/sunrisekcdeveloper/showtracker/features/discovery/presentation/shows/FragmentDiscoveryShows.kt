@@ -81,17 +81,10 @@ class FragmentDiscoveryShows : Fragment() {
 
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaType ->
-            when (mediaType) {
-                MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryShowsDirections.actionGlobalDetailMovieBottomSheet(mediaId)
-                    )
-                }
-                MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryShowsDirections.actionGlobalDetailShowBottomSheet(mediaId)
-                    )
-                }
+            if (mediaType == MediaType.Show) {
+                findNavController().navigate(
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(mediaId)
+                )
             }
         }
 
@@ -196,7 +189,7 @@ class FragmentDiscoveryShows : Fragment() {
         binding.toolbarDiscoveryShows.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.actionDiscoveryShowsFragmentUpdatedToSearchActivityUpdated()
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToNavGraphSearch()
                 )
                 true
             }
@@ -214,12 +207,12 @@ class FragmentDiscoveryShows : Fragment() {
                     // Discovery Screen
                     if (id == 1L) {
                         findNavController().navigate(
-                            FragmentDiscoveryShowsDirections.actionDiscoveryShowsFragmentUpdatedToNavigationDiscoveryUpdated()
+                            FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToDiscoveryFragment()
                         )
                         // Discovery Movies Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
-                            FragmentDiscoveryShowsDirections.actionDiscoveryShowsFragmentUpdatedToDiscoveryMoviesFragmentUpdated()
+                            FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToDiscoveryMoviesFragment()
                         )
                     }
                 }
