@@ -41,16 +41,15 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.Adapte
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.sql.Time
 import javax.inject.Inject
 
+@FlowPreview
 @AndroidEntryPoint
 class FragmentSearch : Fragment() {
 
@@ -135,7 +134,7 @@ class FragmentSearch : Fragment() {
 
         lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
-                .debounce(1000)
+                .debounce(400)
                 .filter { query ->
                     // simply fetch all the data from database
                     if (query.isEmpty()) {
@@ -143,7 +142,7 @@ class FragmentSearch : Fragment() {
                         return@filter false
                     }
                     return@filter true
-                }
+                }.buffer() // todo determine if needed
                 .distinctUntilChanged()
                 //  here you will make call to database with query which returns a flow
 //                .flatMapLatest {  }
