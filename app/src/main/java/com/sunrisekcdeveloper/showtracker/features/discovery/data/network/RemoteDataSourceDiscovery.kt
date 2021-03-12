@@ -19,17 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovieUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShowUpdated
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 class RemoteDataSourceDiscovery(
     private val api: ServiceDiscoveryContract,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : RemoteDataSourceDiscoveryContract {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : RemoteDataSourceDiscoveryContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovieUpdated> = safeApiCall {
         api.popularMovies(page = page)
     }
@@ -53,20 +52,4 @@ class RemoteDataSourceDiscovery(
     override suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShowUpdated> = safeApiCall {
         api.airingTodayShows(page = page)
     }
-
-    private suspend fun <T> safeApiCall(request: suspend () -> Response<T>): NetworkResult<T> =
-        withContext(dispatcher) {
-            return@withContext try {
-                val response = request()
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    body?.let { data ->
-                        return@withContext NetworkResult.success(data)
-                    }
-                }
-                NetworkResult.error("${response.code()} ${response.message()}")
-            } catch (e: Exception) {
-                NetworkResult.error((e.message ?: e.toString()))
-            }
-        }
 }

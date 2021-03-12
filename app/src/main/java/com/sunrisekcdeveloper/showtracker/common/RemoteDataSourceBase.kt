@@ -19,32 +19,25 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import timber.log.Timber
 
-open class BaseRemoteDataSource(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+open class RemoteDataSourceBase(
+    private val dispatcher: CoroutineDispatcher
 ) {
-    suspend fun <T> safeApiCall(request: suspend () -> Response<T>): Resource<T> =
+    suspend fun <T> safeApiCall(request: suspend () -> Response<T>): NetworkResult<T> =
         withContext(dispatcher) {
             return@withContext try {
                 val response = request()
                 if (response.isSuccessful) {
                     val body = response.body()
-                    body?.let {
-                        return@withContext Resource.Success(it)
+                    body?.let { data ->
+                        return@withContext NetworkResult.success(data)
                     }
                 }
-                error("${response.code()} ${response.message()}")
+                NetworkResult.error("${response.code()} ${response.message()}")
             } catch (e: Exception) {
-                error(e.message ?: e.toString(), e)
+                NetworkResult.error((e.message ?: e.toString()))
             }
         }
-
-    private fun <T> error(message: String, e: Exception): Resource<T> {
-        Timber.e(message)
-        return Resource.Error("Network call has failed for the following reason: $message")
-    }
 }
