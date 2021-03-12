@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.features.discover.presentation.adapter.MovieListAdapter
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.adapter.WatchlistMediaAdapter
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
+import com.sunrisekcdeveloper.showtracker.features.search.presentation.AdapterSimplePosterTitle
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,13 +28,14 @@ import dagger.hilt.android.components.ActivityComponent
 @Module
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
+
     @Provides
-    fun provideMovieListAdapter(): MovieListAdapter {
-        return MovieListAdapter(mutableListOf())
+    fun provideTitlePosterListAdapter(): AdapterSimplePosterTitle {
+        return AdapterSimplePosterTitle(mutableListOf())
     }
 
     @Provides
-    fun providesWatchListMediaAdapter(): WatchlistMediaAdapter {
-        return WatchlistMediaAdapter(mutableListOf())
+    fun provideSimplePosterAdapter(): AdapterSimplePoster {
+        return AdapterSimplePoster(mutableListOf())
     }
 }

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!--
-  ~ Copyright © 2020. The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2021. The Android Open Source Project
   ~
   ~ @author Kai Cilliers
   ~
@@ -17,63 +16,58 @@
   ~ limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.discovery.presentation.FragmentDiscovery">
 
-    <data></data>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_discovery"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_discovery_toolbar" />
 
-    <!-- TODO bottom nav still overlaps fragment, wrapping view in ScrollView is a temp fix -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs_discovery"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_discovery"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="#929292">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/movies_title" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/tv_shows_title" />
+
+    </com.google.android.material.tabs.TabLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabs_discovery"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="0dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            tools:context=".features.discover.presentation.ui.DiscoveryFragment">
-
-            <SearchView
-                android:id="@+id/sv_search_discover"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8"
-                android:queryHint="@string/hint_search"
-                android:iconifiedByDefault="false"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_filter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_24"
-                app:layout_constraintTop_toBottomOf="@id/sv_search_discover"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:chipSpacingHorizontal="@dimen/margin_24"
-                app:singleLine="true"
-                app:selectionRequired="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_filter_movie"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/chip_filter_movie"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_filter_shows"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/chip_filter_shows"/>
-
-            </com.google.android.material.chip.ChipGroup>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <!-- POPULAR MOVIES -->
 
@@ -85,29 +79,15 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/popular"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/cg_filter"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_sub_heading_popular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/most_popular_movies"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rc_featured_categories_discover"
+                android:id="@+id/rc_popular_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_8"
-                android:padding="@dimen/padding_8"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:padding="@dimen/padding_8" />
 
             <!-- POPULAR SHOWS -->
 
@@ -119,20 +99,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Popular Shows"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_featured_categories_discover"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_sub_heading_popular_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_shows"
                 android:layout_width="match_parent"
@@ -141,9 +110,7 @@
                 android:layout_marginBottom="16dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:paddingEnd="16dp" />
 
             <!-- TOP RATED MOVIES -->
 
@@ -155,20 +122,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/top_rated"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_popular_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_sub_heading_highest_rated"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/highest_rated_movies"
-                app:layout_constraintTop_toBottomOf="@id/tv_highest_rated_heading"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_movies"
                 android:layout_width="match_parent"
@@ -176,9 +132,7 @@
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_highest_rated"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:paddingEnd="16dp" />
 
             <!-- TOP RATED SHOWS -->
 
@@ -190,20 +144,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Top Rated Shows"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_sub_heading_top_rated_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_shows"
                 android:layout_width="match_parent"
@@ -212,9 +155,7 @@
                 android:layout_marginBottom="16dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_top_rated_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:paddingEnd="16dp" />
 
             <!-- UPCOMING MOVIES -->
 
@@ -226,20 +167,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/upcoming"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_sub_heading_upcoming"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/stay_updated"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_upcoming_movies"
                 android:layout_width="match_parent"
@@ -248,9 +178,7 @@
                 android:layout_marginBottom="16dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_upcoming"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:paddingEnd="16dp" />
 
             <!-- AIRING TODAY SHOWS -->
 
@@ -262,20 +190,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Airing Today Shows"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_upcoming_movies"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_sub_heading_airing_today_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_airing_today_shows"
                 android:layout_width="match_parent"
@@ -284,9 +201,7 @@
                 android:layout_marginBottom="16dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_airing_today_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:paddingEnd="16dp" />
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

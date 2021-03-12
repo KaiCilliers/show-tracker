@@ -20,18 +20,18 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailService
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.DetailServiceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryRemoteDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryService
-import com.sunrisekcdeveloper.showtracker.features.discover.data.network.DiscoveryServiceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistDataSourceContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistService
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistRemoteDataSource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.network.WatchlistServiceContract
+import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetail
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearch
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearch
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,72 +47,52 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DiscoveryApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class WatchlistApi
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetailClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DetailApi
-
-
     @Singleton
-    @DiscoveryClient
+    @SourceSearch
     @Provides
-    fun providesDiscoveryClient(@DiscoveryApi api: DiscoveryServiceContract) : DiscoveryRemoteDataSourceContract {
-        return DiscoveryRemoteDataSource(api)
+    fun provideRemoteDataSourceSearch(
+        @ApiSearch api: ServiceSearchContract
+    ) : RemoteDataSourceSearchContract {
+        return RemoteDataSourceSearch(api)
     }
 
     @Singleton
-    @DiscoveryApi
+    @ApiSearch
     @Provides
-    fun provideDiscoveryApi(retrofit: Retrofit): DiscoveryServiceContract {
-        return retrofit.create(DiscoveryService::class.java)
+    fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
+        return retrofit.create(ServiceSearch::class.java)
     }
 
     @Singleton
-    @WatchlistClient
+    @SourceDetail
     @Provides
-    fun provideWatchlistClient(@WatchlistApi api: WatchlistServiceContract) : WatchlistDataSourceContract {
-        return WatchlistRemoteDataSource(api)
+    fun providesRemoteDataSourceDetail(
+        @ApiDetail api: ServiceDetailContract
+    ) : RemoteDataSourceDetailContract {
+        return RemoteDataSourceDetail(api)
     }
 
     @Singleton
-    @WatchlistApi
+    @ApiDetail
     @Provides
-    fun provideWatchlistApi(retrofit: Retrofit): WatchlistServiceContract {
-        return retrofit.create(WatchlistService::class.java)
+    fun provideServiceDetail(retrofit: Retrofit): ServiceDetailContract {
+        return retrofit.create(ServiceDetail::class.java)
     }
 
     @Singleton
-    @DetailClient
+    @SourceDiscovery
     @Provides
-    fun provideDetailClient(@DetailApi api: DetailServiceContract) : DetailDataSourceContract {
-        return DetailRemoteDataSource(api)
+    fun provideRemoteDataSourceDiscovery(
+        @ApiDiscovery api: ServiceDiscoveryContract
+    ) : RemoteDataSourceDiscoveryContract {
+        return RemoteDataSourceDiscovery(api)
     }
 
     @Singleton
-    @DetailApi
+    @ApiDiscovery
     @Provides
-    fun provideDetailApi(retrofit: Retrofit): DetailServiceContract {
-        return retrofit.create(DetailService::class.java)
+    fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
+        return retrofit.create(ServiceDiscovery::class.java)
     }
 
     @Singleton
@@ -135,4 +115,28 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiDetail
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiDiscovery
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SourceSearch
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ApiSearch
 }

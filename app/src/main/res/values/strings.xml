@@ -5,16 +5,19 @@
     <string name="menu_label_statistics">Statistics</string>
     <string name="hint_search">Search Here</string>
 
-    <string name="popular">Popular</string>
+    <string name="popular">Popular Movies</string>
     <string name="most_popular_movies">Most popular movies</string>
     <string name="error_fetch_movies">Please check your internet connection</string>
-    <string name="top_rated">Top Rated</string>
+    <string name="top_rated">Top Rated Movies</string>
     <string name="highest_rated_movies">Highest rated movies of all times</string>
-    <string name="upcoming">Upcoming</string>
+    <string name="upcoming">Upcoming Movies</string>
     <string name="stay_updated">Stay updated with the latest movies</string>
 
     <string name="chip_filter_movie">Movie</string>
     <string name="chip_filter_shows">Shows</string>
+
+    <!-- Concat -->
+    <string name="season_with_number">%1$s Seasons</string>
 
     <!-- TESTING -->
     <string name="input_text_value">Testing value</string>
@@ -36,4 +39,29 @@
     <string name="upcoming_sub_heading">Shows that are sceduled for release soon</string>
     <string name="completed_sub_heading">Movies and Shows that you have already finished watching</string>
     <string name="anticipated_sub_heading">Movies scheduled for release that you intend to watch</string>
+    <string name="title_activity_housing">MainActivity</string>
+    <string name="watchlist_title_updated">Watchlist</string>
+    <string name="discovery_title_updated">Discovery</string>
+    <string name="statistics_title_updated">Statistics</string>
+    <string name="search_title">Search</string>
+    <string name="movies_title">Movies</string>
+    <string name="tv_shows_title">TV Shows</string>
+    <string name="search_by_show_hint">Search TV Show by title</string>
+    <string name="search_movie_show_hint">Search for a movie or a TV show</string>
+    <string name="search_header_no_results">Oh no! We could not find what you were looking for.</string>
+    <string name="search_sub_header_no_results">Try searching for a different movie or TV show</string>
+    <string name="search_header_watchlist">Your unwatched movies and TV shows</string>
+    <string name="add_button">+ Add</string>
+    <string name="movie_watched_text">I watched this</string>
+    <string name="media_add">+ Add</string>
+    <string-array name="movie_dropdown_array">
+        <item>Movie</item>
+        <item>All</item>
+        <item>TV Shows</item>
+    </string-array>
+    <string-array name="show_dropdown_array">
+        <item>TV Show</item>
+        <item>All</item>
+        <item>Movies</item>
+    </string-array>
 </resources>
