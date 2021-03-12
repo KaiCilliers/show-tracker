@@ -26,6 +26,7 @@ import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ViewModelMovieDetail @ViewModelInject constructor(
@@ -36,7 +37,8 @@ class ViewModelMovieDetail @ViewModelInject constructor(
         get() = _movieDetails
 
     fun movieDetails(id: String) = viewModelScope.launch {
-        // todo remove need for bangbang!!
-        _movieDetails.value = fetchMovieDetailsUseCase(id)!!
+        fetchMovieDetailsUseCase(id).collect {
+            _movieDetails.value = it
+        }
     }
 }

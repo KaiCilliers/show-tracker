@@ -20,7 +20,8 @@ package com.sunrisekcdeveloper.showtracker.features.detail.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import kotlinx.coroutines.flow.Flow
 
 interface FetchShowDetailsUseCaseContract {
-    suspend operator fun invoke(id: String): Resource<UIModelShowDetail>
+    suspend operator fun invoke(id: String): Flow<Resource<UIModelShowDetail>>
 }

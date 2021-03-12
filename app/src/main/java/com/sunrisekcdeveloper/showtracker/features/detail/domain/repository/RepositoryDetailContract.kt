@@ -21,8 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.detail.domain.repository
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import kotlinx.coroutines.flow.Flow
 
 interface RepositoryDetailContract {
-    suspend fun movieDetails(id: String): Resource<UIModelMovieDetail>
-    suspend fun showDetails(id: String): Resource<UIModelShowDetail>
+    suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>>
+    suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>>
 }

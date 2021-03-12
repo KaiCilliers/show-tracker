@@ -26,6 +26,7 @@ import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ViewModelShowDetail @ViewModelInject constructor(
@@ -36,7 +37,8 @@ class ViewModelShowDetail @ViewModelInject constructor(
         get() = _showDetails
 
     fun showDetails(id: String) = viewModelScope.launch {
-        // todo remove need for bangbang!!
-        _showDetails.value = fetchShowDetailsUseCase(id)!!
+        fetchShowDetailsUseCase(id).collect {
+            _showDetails.value = it
+        }
     }
 }
