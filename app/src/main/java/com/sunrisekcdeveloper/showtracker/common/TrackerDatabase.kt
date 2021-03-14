@@ -19,21 +19,24 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
 import java.util.Date
 
 @Database(
     entities = [
-        Placeholder::class
+        EntityMovie::class, EntityWatchlistMovie::class
     ],
-    version = 34,
+    version = 35,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
-}
 
-@Entity(tableName = "tbl_placeholder")
-data class Placeholder(@PrimaryKey val id: String)
+    abstract fun detailDao(): DaoDetail
+
+}
 
 /**
  * Tracker type converters

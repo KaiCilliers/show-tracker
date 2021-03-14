@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation
+package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,9 +28,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.presentation.ViewModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
@@ -66,6 +67,30 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                     binding.tvDetailMovieRuntime.text = it.data.runtime
                     binding.tvDetailMovieReleaseYear.text = it.data.releaseYear
                     binding.tvDetailMovieCertification.text = it.data.certification
+
+                    if (it.data.watchlisted) {
+                        binding.btnDetailMovieAdd.text = "ADDED"
+                        binding.btnDetailMovieAdd.click {
+                            viewModel.removeMovieFromWatchlist(it.data.id)
+                        }
+                    } else {
+                        binding.btnDetailMovieAdd.text = "+ ADD"
+                        binding.btnDetailMovieAdd.click {
+                            viewModel.addMovieToWatchlist(it.data.id)
+                        }
+                    }
+
+                    if (it.data.watched) {
+                        binding.btnDetailMovieWatchStatus.text = "YOU'VE WATCHED THIS"
+                        binding.btnDetailMovieWatchStatus.click {
+                            viewModel.markMovieAsUnWatched(it.data.id)
+                        }
+                    } else {
+                        binding.btnDetailMovieWatchStatus.text = "MARK AS WATCHED"
+                        binding.btnDetailMovieWatchStatus.click {
+                            viewModel.markMovieAsWatched(it.data.id)
+                        }
+                    }
                 }
                 // todo impl other cases
                 is Resource.Error -> { }

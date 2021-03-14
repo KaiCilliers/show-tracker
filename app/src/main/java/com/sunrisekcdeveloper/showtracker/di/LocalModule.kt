@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +48,10 @@ object LocalModule {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
+
+    @Singleton
+    @Provides
+    fun provideDaoDetail(db: TrackerDatabase): DaoDetail = db.detailDao()
 
 //    @Singleton
 //    @Provides

@@ -18,19 +18,24 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.*
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ViewModelMovieDetail @ViewModelInject constructor(
-    private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract
+    private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
+    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCaseContract,
+    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
+    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCaseContract
 ) : ViewModel() {
     private val _movieDetails = MutableLiveData<Resource<UIModelMovieDetail>>()
     val movieDetails: LiveData<Resource<UIModelMovieDetail>>
@@ -40,5 +45,23 @@ class ViewModelMovieDetail @ViewModelInject constructor(
         fetchMovieDetailsUseCase(id).collect {
             _movieDetails.value = it
         }
+    }
+
+    fun removeMovieFromWatchlist(movieId: String) = viewModelScope.launch {
+        removeMovieFromWatchlistUseCase(movieId)
+    }
+
+    fun markMovieAsWatched(movieId: String) = viewModelScope.launch {
+        Timber.e("mark as watched: $movieId")
+        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.Watched)
+    }
+
+    fun markMovieAsUnWatched(movieId: String) = viewModelScope.launch {
+        Timber.e("mark as not watched $movieId")
+        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.NotWatched)
+    }
+
+    fun addMovieToWatchlist(movieId: String) = viewModelScope.launch {
+        addMovieToWatchlistUseCase(movieId)
     }
 }

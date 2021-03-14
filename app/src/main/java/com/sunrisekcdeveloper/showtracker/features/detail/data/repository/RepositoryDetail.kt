@@ -23,12 +23,16 @@ import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -36,8 +40,76 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class RepositoryDetail(
     @SourceDetail private val remote: RemoteDataSourceDetailContract,
+    private val local: DaoDetail,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
+
+    override suspend fun removeMovieFromWatchlist(id: String) {
+        local.removeMovieFromWatchlist(id)
+    }
+
+    override suspend fun updateWatchlistMovieAsWatched(id: String) {
+        local.setMovieAsWatched(id)
+    }
+
+    override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
+        local.setMovieAsNotWatched(id)
+    }
+
+    override suspend fun addMovieToWatchlist(id: String) {
+        local.addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
+    }
+
+    override suspend fun fetchAndSaveMovieDetails(id: String) {
+        withContext(dispatcher) {
+            launch {
+                val responseMovie = remote.movieDetails(id)
+                val responseCertification = remote.movieReleaseDates(id)
+
+                when (responseMovie) {
+                    is NetworkResult.Success -> {
+                        var result = responseMovie.data.asEntityMovie()
+                        when (responseCertification) {
+                            is NetworkResult.Success -> {
+                                result = result.copy(
+                                    certification = movieCertificationUSIfPossible(
+                                        responseCertification.data.results
+                                    )
+                                )
+                            }
+                            is NetworkResult.Error -> {
+                                Timber.e("Error fetching certification data for movie with ID: $id [${responseCertification.message}]")
+                            }
+                        }
+                        saveMovieDetails(result)
+                    }
+                    is NetworkResult.Error -> {
+                        Timber.e("Error fetching movie details for movie with ID: $id [${responseMovie.message}]")
+                    }
+                }
+            }
+        }
+    }
+
+    override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
+        val deets = local.distinctMovieDetailFlow(id)
+        val status = local.distinctWatchlistMovieFlow(id)
+
+        return combine(deets, status) { d, s ->
+            var watchlisted = false
+            var watched = false
+            s?.let {
+                watchlisted = true
+                watched = s.watched
+            }
+            return@combine if (d == null) {
+                Resource.Error("No movie with ID: $id exists in database")
+            } else {
+                Resource.Success(d.asUIModelMovieDetail(watchlisted, watched))
+            }
+        }.onStart { emit(Resource.Loading) }
+    }
+
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
         val show = flow { emit(remote.showDetail(id)) }.flowOn(dispatcher)
         val cert = flow { emit(remote.showCertification(id)) }.flowOn(dispatcher)
@@ -67,33 +139,8 @@ class RepositoryDetail(
         }.onStart { emit(Resource.Loading) }
     }
 
-    override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
-        val movieFlow = flow { emit(remote.movieDetails(id)) }.flowOn(dispatcher)
-        val certificationFlow = flow { emit(remote.movieReleaseDates(id)) }.flowOn(dispatcher)
-
-        return combine(movieFlow, certificationFlow) { movieResult, certificationResult ->
-            when (movieResult) {
-                is NetworkResult.Success -> {
-                    var result = movieResult.data.asUIModelMovieDetail()
-
-                    when (certificationResult) {
-                        is NetworkResult.Success -> {
-                            result = result.copy(
-                                certification = movieCertificationUSIfPossible(certificationResult.data.results)
-                            )
-                        }
-                        is NetworkResult.Error -> {
-                            Timber.d("Error - certification call was not successful: ${certificationResult.message}")
-                        }
-                    }
-
-                    Resource.Success(result)
-                }
-                is NetworkResult.Error -> {
-                    Resource.Error("Error fetching show with ID: $id [${movieResult.message}]")
-                }
-            }
-        }.onStart { emit(Resource.Loading) }
+    private suspend fun saveMovieDetails(entity: EntityMovie) {
+        local.addMovieDetails(entity)
     }
 
     private fun movieCertificationUSIfPossible(data: List<ResponseMovieReleaseDates>): String {
@@ -125,3 +172,25 @@ class RepositoryDetail(
         }
     }
 }
+
+fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
+    id = "$id",
+    title = title,
+    overview = overview,
+    posterPath = posterPath ?: "",
+    certification = "",
+    releaseDate = releaseDate,
+    runTime =  "$runtime"
+)
+
+fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean) = UIModelMovieDetail(
+    id = id,
+    title = title,
+    posterPath = posterPath,
+    overview = overview,
+    releaseYear = releaseDate,
+    certification = certification,
+    runtime = runTime,
+    watchlisted = watchlisted,
+    watched = watched
+)

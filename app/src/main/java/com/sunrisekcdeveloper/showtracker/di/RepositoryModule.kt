@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDiscovery
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
+import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
@@ -52,9 +53,10 @@ object RepositoryModule {
     @RepoDetail
     @Provides
     fun provideRepositoryDetail(
-        @SourceDetail remote: RemoteDataSourceDetailContract
+        @SourceDetail remote: RemoteDataSourceDetailContract,
+        local: DaoDetail
     ): RepositoryDetailContract =
-        RepositoryDetail(remote)
+        RepositoryDetail(remote, local)
 
     @ActivityRetainedScoped
     @RepoDiscovery

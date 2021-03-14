@@ -26,4 +26,9 @@ import kotlinx.coroutines.flow.Flow
 interface RepositoryDetailContract {
     suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>>
     suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>>
+    suspend fun addMovieToWatchlist(id: String)
+    suspend fun fetchAndSaveMovieDetails(id: String)
+    suspend fun updateWatchlistMovieAsWatched(id: String)
+    suspend fun updateWatchlistMovieAsNotWatched(id: String)
+    suspend fun removeMovieFromWatchlist(id: String)
 }

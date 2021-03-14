@@ -18,20 +18,22 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
-import kotlin.system.measureTimeMillis
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
 
-class FetchMovieDetailsUseCase(
+class UpdateMovieWatchedStatusUseCase(
     @RepoDetail private val detailRepo: RepositoryDetailContract
-) : FetchMovieDetailsUseCaseContract {
-    override suspend fun invoke(id: String): Flow<Resource<UIModelMovieDetail>> {
-        detailRepo.fetchAndSaveMovieDetails(id)
-        return detailRepo.movieDetails(id)
+) : UpdateMovieWatchedStatusUseCaseContract {
+    override suspend fun invoke(movieId: String, watchedStatus: MovieWatchedStatus) {
+        when (watchedStatus) {
+            MovieWatchedStatus.Watched -> {
+                detailRepo.updateWatchlistMovieAsWatched(movieId)
+            }
+            MovieWatchedStatus.NotWatched -> {
+                detailRepo.updateWatchlistMovieAsNotWatched(movieId)
+            }
+        }
     }
 }

@@ -21,11 +21,9 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
-import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.FetchMovieDetailsUseCase
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.FetchShowDetailsUseCase
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
@@ -48,6 +46,24 @@ object UseCaseModule {
         SearchMediaByTitleUseCase(searchRepo)
 
     // Detail
+    @Provides
+    fun provideRemoveMovieFromWatchlistUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
+    ) : RemoveMovieFromWatchlistUseCaseContract =
+        RemoveMovieFromWatchlistUseCase(detailRepo)
+
+    @Provides
+    fun provideUpdateMovieWatchedStatusUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
+    ) : UpdateMovieWatchedStatusUseCaseContract =
+        UpdateMovieWatchedStatusUseCase(detailRepo)
+
+    @Provides
+    fun provideAddMovieToWatchlistUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
+    ): AddMovieToWatchlistUseCaseContract =
+        AddMovieToWatchlistUseCase(detailRepo)
+
     @Provides
     fun provideFetchMovieDetailsUseCase(
         @RepoDetail detailRepo: RepositoryDetailContract
