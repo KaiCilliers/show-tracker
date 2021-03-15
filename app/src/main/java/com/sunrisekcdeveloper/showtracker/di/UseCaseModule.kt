@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.detail.application.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.*
@@ -30,14 +31,26 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistMoviesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object UseCaseModule {
+    // Watchlist
+    @Provides
+    fun provideFetchWatchlistMoviesUseCase(
+        @RepoWatchlist watchlistRepo: RepositoryWatchlistContract
+    ) : FetchWatchlistMoviesUseCaseContract =
+        FetchWatchlistMoviesUseCase(watchlistRepo)
+
     // Search
     @Provides
     fun provideSearchMediaByTitleUseCase(

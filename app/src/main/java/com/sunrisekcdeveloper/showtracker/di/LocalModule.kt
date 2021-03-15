@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,6 +53,10 @@ object LocalModule {
     @Singleton
     @Provides
     fun provideDaoDetail(db: TrackerDatabase): DaoDetail = db.detailDao()
+
+    @Singleton
+    @Provides
+    fun provideDaoWatchlist(db: TrackerDatabase): DaoWatchlist = db.watchlistDao()
 
 //    @Singleton
 //    @Provides

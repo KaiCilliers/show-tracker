@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/destination_main_watchlist_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.FragmentWatchlist"
+        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.FragmentWatchlist"
         android:label="fragment_watchlist"
         tools:layout="@layout/fragment_watchlist" />
     <fragment

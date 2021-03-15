@@ -16,23 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist
+package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
+import androidx.room.Dao
+import androidx.room.Query
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
-class FragmentWatchlist : Fragment() {
-    private lateinit var binding: FragmentWatchlistBinding
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentWatchlistBinding.inflate(inflater)
-        return binding.root
-    }
+@Dao
+abstract class DaoWatchlist {
+
+    @Query("SELECT * FROM tbl_watchlist_movie")
+    protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
+
+    fun distinctWatchlistMoviesDetailsFlow() = privateWatchlistMoviesWithDetailsFlow().distinctUntilChanged()
 }

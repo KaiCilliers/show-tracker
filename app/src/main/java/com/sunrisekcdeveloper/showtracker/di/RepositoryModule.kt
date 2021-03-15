@@ -31,16 +31,30 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.R
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.RepositoryWatchlist
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Qualifier
 
+@ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object RepositoryModule {
+
+    @ActivityRetainedScoped
+    @RepoWatchlist
+    @Provides
+    fun provideRepositoryWatchlist(
+        local: DaoWatchlist
+    ) : RepositoryWatchlistContract =
+        RepositoryWatchlist(local)
+
     @ActivityRetainedScoped
     @RepoSearch
     @Provides
