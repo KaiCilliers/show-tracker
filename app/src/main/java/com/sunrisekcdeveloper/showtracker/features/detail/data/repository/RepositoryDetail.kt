@@ -27,12 +27,15 @@ import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -43,6 +46,14 @@ class RepositoryDetail(
     private val local: DaoDetail,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
+
+    override suspend fun addShowToWatchlist(id: String) {
+        local.addShowToWatchlist(EntityWatchlistShow.freshEntryFrom(id))
+    }
+
+    override suspend fun removeShowFromWatchlist(id: String) {
+        local.removeShowFromWatchlist(id)
+    }
 
     override suspend fun removeMovieFromWatchlist(id: String) {
         local.removeMovieFromWatchlist(id)
@@ -110,31 +121,55 @@ class RepositoryDetail(
         }.onStart { emit(Resource.Loading) }
     }
 
-    override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
-        val show = flow { emit(remote.showDetail(id)) }.flowOn(dispatcher)
-        val cert = flow { emit(remote.showCertification(id)) }.flowOn(dispatcher)
+    override suspend fun fetchAndSaveShowDetails(id: String) {
+        withContext(dispatcher) {
+            launch {
+                val responseShow = remote.showDetail(id)
+                val responseCertification = remote.showCertification(id)
 
-        return combine(show, cert) { showResponse, certResponse ->
-            when (showResponse) {
-                is NetworkResult.Success -> {
-                    var result = showResponse.data.asUIModelShowDetail()
-
-                    when (certResponse) {
-                        is NetworkResult.Success -> {
-                            result = result.copy(
-                                certification = showCertificationUSIfPossible(certResponse.data.results)
-                            )
+                when (responseShow) {
+                    is NetworkResult.Success -> {
+                        var result = responseShow.data.asEntityShow()
+                        when(responseCertification) {
+                            is NetworkResult.Success -> {
+                                result = result.copy(
+                                    certification = showCertificationUSIfPossible(responseCertification.data.results)
+                                )
+                            }
+                            is NetworkResult.Error -> {
+                                Timber.e("Error fetching show certification for show: $id")
+                            }
                         }
-                        is NetworkResult.Error -> {
-                            Timber.d("Error - certification call was not successful: ${certResponse.message}")
-                        }
+                        saveShowDetails(result)
                     }
+                    is NetworkResult.Error -> {
+                        Timber.e("Error fetching show details for show with id: $id")
+                    }
+                }
+            }
+        }
+    }
 
-                    Resource.Success(result)
-                }
-                is NetworkResult.Error -> {
-                    Resource.Error("Error fetching show with ID: $id [${showResponse.message}]")
-                }
+    override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
+
+        val showDetails = local.distinctShowDetailFlow(id)
+        val status = local.distinctWatchlistShowFlow(id)
+
+       return combine(showDetails, status) { showDetails, status ->
+            var watchlisted = false
+            var started = false
+            var upToDate = false
+
+            status?.let {
+                watchlisted = true
+                started = it.started
+                upToDate = it.upToDate
+            }
+
+            return@combine if (showDetails == null) {
+                Resource.Error("No show with ID: $id exists in database")
+            } else {
+                Resource.Success(showDetails.asUIModelShowDetail(watchlisted, started, upToDate))
             }
         }.onStart { emit(Resource.Loading) }
     }
@@ -162,6 +197,10 @@ class RepositoryDetail(
         }
     }
 
+    private suspend fun saveShowDetails(entity: EntityShow) {
+        local.addShowDetails(entity)
+    }
+
     private fun showCertificationUSIfPossible(data: List<ResponseShowCertification>): String {
         return if (data.isNotEmpty()) {
             data.find {
@@ -172,6 +211,38 @@ class RepositoryDetail(
         }
     }
 }
+
+fun EntityShow.asUIModelShowDetail(
+    watchlisted: Boolean = false,
+    started: Boolean = false,
+    upToDate: Boolean = false
+) = UIModelShowDetail(
+    id = id,
+    name = title,
+    posterPath = posterPath,
+    overview = overview,
+    certification = certification,
+    firstAirDate = firstAirDate,
+    seasonsTotal = seasonTotal,
+    watchlisted = watchlisted,
+    startedWatching = started,
+    upToDate = upToDate
+)
+
+fun ResponseShowDetail.asEntityShow() = EntityShow(
+    id = "$id",
+    title = name,
+    overview = overview,
+    certification = "N/A",
+    posterPath = posterPath?: "",
+    backdropPath = backdropPath?: "",
+    popularityValue = popularityValue,
+    firstAirDate = firstAirYear,
+    rating = rating,
+    episodeTotal = episodeCount,
+    seasonTotal = seasonCount,
+    lastUpdated = System.currentTimeMillis()
+)
 
 fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
     id = "$id",

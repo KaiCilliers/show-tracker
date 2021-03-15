@@ -24,13 +24,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ViewModelShowDetail @ViewModelInject constructor(
-    private val fetchShowDetailsUseCase: FetchShowDetailsUseCaseContract
+    private val fetchShowDetailsUseCase: FetchShowDetailsUseCaseContract,
+    private val addShowToWatchlistUseCase: AddShowToWatchlistUseCaseContract,
+    private val removeShowFromWatchlistUseCase: RemoveShowFromWatchlistUseCaseContract
 ) : ViewModel() {
     private val _showDetails = MutableLiveData<Resource<UIModelShowDetail>>()
     val showDetails: LiveData<Resource<UIModelShowDetail>>
@@ -41,4 +45,17 @@ class ViewModelShowDetail @ViewModelInject constructor(
             _showDetails.value = it
         }
     }
+
+    fun removeShowFromWatchlist(showId: String) = viewModelScope.launch {
+        removeShowFromWatchlistUseCase(showId)
+    }
+
+    fun addShowToWatchlist(showId: String) = viewModelScope.launch {
+        addShowToWatchlistUseCase(showId)
+    }
+
+    fun updateShowProgress(showId: String) = viewModelScope.launch {
+
+    }
+
 }

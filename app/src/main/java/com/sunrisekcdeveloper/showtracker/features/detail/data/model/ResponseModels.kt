@@ -24,9 +24,13 @@ data class ResponseShowDetail(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String,
+    @SerializedName("backdrop_path") val backdropPath: String?,
+    @SerializedName("poster_path") val posterPath: String?,
+    @SerializedName("vote_average") val rating: Float,
     @SerializedName("first_air_date") val firstAirYear: String,
-    @SerializedName("number_of_seasons") val seasonTotal: Int
+    @SerializedName("number_of_episodes") val episodeCount: Int,
+    @SerializedName("number_of_seasons") val seasonCount: Int,
+    @SerializedName("popularity") val popularityValue: Float
 )
 
 data class EnvelopeShowCertification(

@@ -110,7 +110,7 @@
     </dialog>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_show"
-        android:name="com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation.FragmentBottomSheetShowDetail"
+        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetShowDetail"
         android:label="bottom_sheet_detail_show"
         tools:layout="@layout/bottom_sheet_show_detail" >
         <argument

@@ -18,19 +18,18 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import kotlinx.coroutines.flow.Flow
 
-class FetchShowDetailsUseCase(
+// todo you can combine these usecases and have a simple when statement
+//  on a sealed class to determine if you are performing actions on a
+//  movie or show and then call the appropriate repo methods
+class AddShowToWatchlistUseCase(
     @RepoDetail private val detailRepo: RepositoryDetailContract
-) : FetchShowDetailsUseCaseContract {
-    override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> {
-        detailRepo.fetchAndSaveShowDetails(id)
-        return detailRepo.showDetails(id)
+) : AddShowToWatchlistUseCaseContract {
+    override suspend fun invoke(showId: String) {
+        detailRepo.addShowToWatchlist(showId)
     }
-
 }

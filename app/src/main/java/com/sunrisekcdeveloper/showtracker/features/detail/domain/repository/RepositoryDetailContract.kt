@@ -31,4 +31,8 @@ interface RepositoryDetailContract {
     suspend fun updateWatchlistMovieAsWatched(id: String)
     suspend fun updateWatchlistMovieAsNotWatched(id: String)
     suspend fun removeMovieFromWatchlist(id: String)
+
+    suspend fun fetchAndSaveShowDetails(id: String)
+    suspend fun addShowToWatchlist(id: String)
+    suspend fun removeShowFromWatchlist(id: String)
 }

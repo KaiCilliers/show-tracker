@@ -20,15 +20,18 @@ package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import java.util.Date
 
 @Database(
     entities = [
-        EntityMovie::class, EntityWatchlistMovie::class
+        EntityMovie::class, EntityWatchlistMovie::class,
+        EntityShow::class, EntityWatchlistShow::class,
+        EntitySeason::class, EntityWatchlistSeason::class,
+        EntityEpisode::class, EntityWatchlistEpisode::class,
+        EntityWatchlistBatch::class
     ],
-    version = 35,
+    version = 39,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)

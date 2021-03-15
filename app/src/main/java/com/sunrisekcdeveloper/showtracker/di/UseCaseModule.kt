@@ -47,6 +47,18 @@ object UseCaseModule {
 
     // Detail
     @Provides
+    fun provideAddShowToWatchlistUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
+    ) : AddShowToWatchlistUseCaseContract =
+        AddShowToWatchlistUseCase(detailRepo)
+
+    @Provides
+    fun provideRemoveShowFromWatchlistUseCase(
+        @RepoDetail detailRepo: RepositoryDetailContract
+    ) : RemoveShowFromWatchlistUseCaseContract =
+        RemoveShowFromWatchlistUseCase(detailRepo)
+
+    @Provides
     fun provideRemoveMovieFromWatchlistUseCase(
         @RepoDetail detailRepo: RepositoryDetailContract
     ) : RemoveMovieFromWatchlistUseCaseContract =

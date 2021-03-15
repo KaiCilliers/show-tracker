@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.updated.features.detail.presentation
+package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,8 +29,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.presentation.ViewModelShowDetail
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -71,6 +71,55 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     binding.tvDetailShowSeasons.text = getString(
                         R.string.season_with_number, it.data.seasonsTotal.toString()
                     )
+
+                    Timber.e("watchlisted: ${it.data.watchlisted} " +
+                            "started: ${it.data.startedWatching}" +
+                            " uptodate: ${it.data.upToDate} ")
+
+                    if (it.data.watchlisted) {
+                        binding.btnDetailShowAdd.text = "Added"
+                        binding.btnDetailShowAdd.click {
+                            Timber.e("removing show from watchlist...")
+                            viewModel.removeShowFromWatchlist(it.data.id)
+                        }
+
+                        if (!it.data.startedWatching) {
+                            binding.btnDetailShowWatchStatus.text = "Start Watching"
+                            binding.btnDetailShowWatchStatus.click {
+                                Timber.e("button is start watching")
+                            }
+                        }
+
+                        if (it.data.upToDate) {
+                            binding.btnDetailShowWatchStatus.text = "Up to date"
+                            binding.btnDetailShowWatchStatus.click {
+                                Timber.e("button is up to date")
+                            }
+                        }
+
+                        if ((it.data.startedWatching) && (!it.data.upToDate)) {
+                            binding.btnDetailShowWatchStatus.text = "Update progress"
+                            binding.btnDetailShowWatchStatus.click {
+                                Timber.e("button is update progress")
+                            }
+                        } else {
+                            binding.btnDetailShowWatchStatus.text = "Start Watching"
+                            binding.btnDetailShowWatchStatus.click {
+                                Timber.e("button is start watching")
+                            }
+                        }
+                    } else {
+                        binding.btnDetailShowAdd.text = "+ Add"
+                        binding.btnDetailShowAdd.click {
+                            Timber.e("adding show to watchlist")
+                            viewModel.addShowToWatchlist(it.data.id)
+                        }
+                        binding.btnDetailShowWatchStatus.text = "Start Watching"
+                        binding.btnDetailShowWatchStatus.click {
+                            Timber.e("button is start watching")
+                        }
+                    }
+
                 }
                 // todo impl other cases
                 is Resource.Error -> {}
