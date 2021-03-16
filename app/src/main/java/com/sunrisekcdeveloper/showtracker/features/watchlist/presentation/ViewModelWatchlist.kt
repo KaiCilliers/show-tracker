@@ -26,23 +26,36 @@ import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ViewModelWatchlist @ViewModelInject constructor(
-    private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract
+    private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
+    private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract
 ) : ViewModel() {
     private val _watchlistMovies = MutableLiveData<Resource<List<UIModelWatchlisMovie>>>()
     val watchlistMovies: LiveData<Resource<List<UIModelWatchlisMovie>>>
         get() = _watchlistMovies
 
+    private val _watchlistShows = MutableLiveData<Resource<List<UIModelWatchlistShow>>>()
+    val watchlistShows: LiveData<Resource<List<UIModelWatchlistShow>>>
+        get() = _watchlistShows
+
     init {
         watchlistMovies()
+        watchlistShows()
     }
 
     fun watchlistMovies() = viewModelScope.launch {
         fetchWatchlistMoviesUseCase().collect {
             _watchlistMovies.value = it
+        }
+    }
+
+    fun watchlistShows() = viewModelScope.launch {
+        fetchWatchlistShowsUseCase().collect {
+            _watchlistShows.value = it
         }
     }
 }

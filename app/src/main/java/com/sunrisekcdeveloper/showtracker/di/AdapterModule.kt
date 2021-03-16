@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.AdapterSimplePosterTitle
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.AdapterWatchlistMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.AdapterWatchlistShow
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +31,10 @@ import dagger.hilt.android.components.ActivityComponent
 @InstallIn(ActivityComponent::class)
 object AdapterModule {
 
+    @Provides
+    fun provideWatchlistShowAdapter(): AdapterWatchlistShow {
+        return AdapterWatchlistShow(mutableListOf())
+    }
     @Provides
     fun provideWatchlistMovieAdapter(): AdapterWatchlistMovie {
         return AdapterWatchlistMovie(mutableListOf())

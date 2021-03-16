@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,8 @@ class FragmentWatchlist : Fragment() {
 
     @Inject
     lateinit var watchlistMovieAdapter: AdapterWatchlistMovie
-    private lateinit var watchlistMovieLayoutManager: LinearLayoutManager
+    @Inject
+    lateinit var watchlistShowAdapter: AdapterWatchlistShow
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,8 +53,44 @@ class FragmentWatchlist : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setup()
         binding()
         observeViewModel()
+    }
+
+    private fun setup() {
+        when (binding.tabBarWatchlist.selectedTabPosition) {
+            0 -> {
+                binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+            }
+            else -> {
+                binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+            }
+        }
+        binding.tabBarWatchlist.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    when (it.position) {
+                        0 -> {
+                            binding.svWatchlist.queryHint = "Search TV shows by title"
+                            binding.svWatchlist.setQuery("", true)
+                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+                        }
+                        1 -> {
+                            binding.svWatchlist.queryHint = "Search movies by title"
+                            binding.svWatchlist.setQuery("", true)
+                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+                        }
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
     }
 
     private fun observeViewModel() {
@@ -65,15 +103,26 @@ class FragmentWatchlist : Fragment() {
                 Resource.Loading -> {}
             }
         }
+        viewModel.watchlistShows.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    watchlistShowAdapter.refreshData(it.data)
+                }
+                is Resource.Error -> {
+
+                }
+                Resource.Loading -> {
+
+                }
+            }
+        }
     }
 
     private fun binding() {
-        watchlistMovieLayoutManager = LinearLayoutManager(
+        binding.recyclerviewWatchlist.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
             false
         )
-        binding.recyclerviewWatchlist.layoutManager = watchlistMovieLayoutManager
-        binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
     }
 }

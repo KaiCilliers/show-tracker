@@ -32,8 +32,10 @@ import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMedi
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistMoviesUseCase
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistShowsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,6 +52,12 @@ object UseCaseModule {
         @RepoWatchlist watchlistRepo: RepositoryWatchlistContract
     ) : FetchWatchlistMoviesUseCaseContract =
         FetchWatchlistMoviesUseCase(watchlistRepo)
+
+    @Provides
+    fun provideFetchWatchlistShowsUseCase(
+        @RepoWatchlist watchlistRepo: RepositoryWatchlistContract
+    ) : FetchWatchlistShowsUseCaseContract =
+        FetchWatchlistShowsUseCase(watchlistRepo)
 
     // Search
     @Provides

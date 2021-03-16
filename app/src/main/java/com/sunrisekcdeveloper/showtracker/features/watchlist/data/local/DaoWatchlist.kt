@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 import androidx.room.Dao
 import androidx.room.Query
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistShowDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -31,4 +32,9 @@ abstract class DaoWatchlist {
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
     fun distinctWatchlistMoviesDetailsFlow() = privateWatchlistMoviesWithDetailsFlow().distinctUntilChanged()
+
+    @Query("SELECT * FROM tbl_watchlist_show")
+    protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
+
+    fun distinctWatchlistShowsDetailsFlow() = privateWatchlistShowsWithDetailsFlow().distinctUntilChanged()
 }
