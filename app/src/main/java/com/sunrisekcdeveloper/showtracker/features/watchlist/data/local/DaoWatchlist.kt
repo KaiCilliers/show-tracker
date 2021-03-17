@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistShowDetails
 import kotlinx.coroutines.flow.Flow
@@ -28,11 +29,13 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Dao
 abstract class DaoWatchlist {
 
+    @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
     fun distinctWatchlistMoviesDetailsFlow() = privateWatchlistMoviesWithDetailsFlow().distinctUntilChanged()
 
+    @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
     @Query("SELECT * FROM tbl_watchlist_show")
     protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
 

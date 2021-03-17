@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import java.util.Date
@@ -32,12 +33,13 @@ import java.util.Date
         EntityEpisode::class, EntityWatchlistEpisode::class,
         EntityWatchlistBatch::class
     ],
-    version = 39,
+    version = 44,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
 
+    abstract fun progressDao(): DaoProgress
     abstract fun detailDao(): DaoDetail
     abstract fun watchlistDao(): DaoWatchlist
 

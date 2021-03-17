@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoProgress
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.detail.application.*
@@ -28,6 +29,11 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
+import com.sunrisekcdeveloper.showtracker.features.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.FetchShowSeasonAndEpisodeTotalsUseCase
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.SetShowProgressUseCase
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
@@ -46,6 +52,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object UseCaseModule {
+    // Progress
+    @Provides
+    fun provideFetchShowSeasonAndEpisodeTotalsUseCase(
+        @RepoProgress progressRepo: RepositoryProgressContract
+    ) : FetchShowSeasonAndEpisodeTotalsUseCaseContract =
+        FetchShowSeasonAndEpisodeTotalsUseCase(progressRepo)
+
+    @Provides
+    fun provideSetShowProgressUseCase(
+        @RepoProgress repo: RepositoryProgressContract
+    ) : SetShowProgressUseCaseContract =
+        SetShowProgressUseCase(repo)
+
     // Watchlist
     @Provides
     fun provideFetchWatchlistMoviesUseCase(

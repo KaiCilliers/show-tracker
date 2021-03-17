@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowTracker">
-        <activity android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.ActivitySearch"/>
+        <activity android:name=".features.progress.presentation.ActivityProgress"></activity>
+        <activity android:name=".features.search.presentation.ActivitySearch" />
         <activity android:name=".common.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

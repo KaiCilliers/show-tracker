@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -31,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShowsDirections
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -116,6 +118,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                         }
                         binding.btnDetailShowWatchStatus.text = "Start Watching"
                         binding.btnDetailShowWatchStatus.click {
+                            findNavController().navigate(
+                                FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToNavGraphProgress(it.data.id)
+                            )
                             Timber.e("button is start watching")
                         }
                     }

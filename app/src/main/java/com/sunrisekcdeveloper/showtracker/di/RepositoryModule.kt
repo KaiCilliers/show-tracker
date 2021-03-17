@@ -28,6 +28,10 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.Repo
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
+import com.sunrisekcdeveloper.showtracker.features.progress.data.repository.RepositoryProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
@@ -46,6 +50,15 @@ import javax.inject.Qualifier
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object RepositoryModule {
+
+    @ActivityRetainedScoped
+    @RepoProgress
+    @Provides
+    fun provideRepositoryProgress(
+        @NetworkModule.SourceProgress remote: RemoteDataSourceProgressContract,
+        local: DaoProgress
+    ) : RepositoryProgressContract =
+        RepositoryProgress(remote, local)
 
     @ActivityRetainedScoped
     @RepoWatchlist
@@ -79,6 +92,10 @@ object RepositoryModule {
         @SourceDiscovery remote: RemoteDataSourceDiscoveryContract
     ): RepositoryDiscoveryContract =
         RepositoryDiscovery(remote)
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class RepoProgress
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)

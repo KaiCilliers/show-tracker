@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.coroutines.CoroutineName
 
 // todo consider removing prefixes
 
@@ -55,7 +56,39 @@ data class EntityWatchlistShow(
     @ColumnInfo(name = "watch_show_last_updated") val lastUpdated: Long = System.currentTimeMillis()
 ) {
     companion object {
-        fun freshEntryFrom(id: String) = EntityWatchlistShow(
+        fun partialFrom(
+            id: String,
+            episodeNumber: Int,
+            episodeName: String,
+            seasonNumber: Int,
+            seasonName: String
+        ) = EntityWatchlistShow(
+            id = id,
+            currentEpisodeNumber = episodeNumber,
+            currentEpisodeName = episodeName,
+            currentSeasonNumber = seasonNumber,
+            currentSeasonName = seasonName,
+            started = true,
+            upToDate = false
+        )
+        fun upToDateEntryFrom(
+            id: String,
+            episodeNumber: Int,
+            episodeName: String,
+            seasonNumber: Int,
+            seasonName: String
+        ) = EntityWatchlistShow(
+            id = id,
+            currentEpisodeNumber = episodeNumber,
+            currentEpisodeName = episodeName,
+            currentSeasonNumber = seasonNumber,
+            currentSeasonName = seasonName,
+            started = true,
+            upToDate = true
+        )
+
+        // todo i dont want to track shows without episode and season data
+        fun freshBareEntryFrom(id: String) = EntityWatchlistShow(
             id = id,
             currentEpisodeNumber = 0,
             currentEpisodeName = "",
@@ -69,29 +102,35 @@ data class EntityWatchlistShow(
     }
 }
 
-@Entity(tableName = "tbl_season")
+@Entity(
+    tableName = "tbl_season",
+    primaryKeys = ["season_show_id", "season_id"]
+)
 data class EntitySeason(
-    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "season_show_id") val showId: String,
     @ColumnInfo(name = "season_id") val id: Int,
     @ColumnInfo(name = "season_number") val number: Int,
     @ColumnInfo(name = "season_name") val name: String,
     @ColumnInfo(name = "season_overview") val overview: String,
     @ColumnInfo(name = "season_poster_path") val posterPath: String,
     @ColumnInfo(name = "season_air_date") val airDate: Long,
-    @ColumnInfo(name = "season_episode_total") val episodeTotal: Int
+    @ColumnInfo(name = "season_episode_total") val episodeTotal: Int,
+    @ColumnInfo(name = "season_last_updated") val lastUpdated: Long
 )
 
 @Entity(
     tableName = "tbl_episode",
-    primaryKeys = ["episode_show_id", "episode_number"]
+    primaryKeys = ["episode_show_id", "episode_season_number", "episode_number"]
 )
-data class EntityEpisode(
-    @ColumnInfo(name = "episode_show_id") val showId: Int,
+data class EntityEpisode( // todo consider renaming of table columns without prefix
+    @ColumnInfo(name = "episode_show_id") val showId: String,
+    @ColumnInfo(name = "episode_season_number") val seasonNumber: Int,
     @ColumnInfo(name = "episode_number") val number: Int,
     @ColumnInfo(name = "episode_name") val name: String,
     @ColumnInfo(name = "episode_air_date") val airDate: Long,
     @ColumnInfo(name = "episode_overview") val overview: String,
-    @ColumnInfo(name = "episode_still_path") val stillPath: String
+    @ColumnInfo(name = "episode_still_path") val stillPath: String,
+    @ColumnInfo(name = "episode_last_updated") val lastUpdated: Long // todo last_updated fields should omit prefix as it is not related to the entity, but rather the record
 )
 
 @Entity(
@@ -99,7 +138,7 @@ data class EntityEpisode(
     primaryKeys = ["watch_season_show_id", "watch_season_number"]
 )
 data class EntityWatchlistSeason(
-    @ColumnInfo(name = "watch_season_show_id") val showId: Int,
+    @ColumnInfo(name = "watch_season_show_id") val showId: String,
     @ColumnInfo(name = "watch_season_number") val number: Int,
     @ColumnInfo(name = "watch_season_date_started") val dateStarted: Long,
     @ColumnInfo(name = "watch_season_completed") val completed: Boolean,
@@ -108,23 +147,93 @@ data class EntityWatchlistSeason(
     @ColumnInfo(name = "watch_season_started_tracking_season") val startedTrackingSeason: Boolean,
     @ColumnInfo(name = "watch_season_finished_before_tracking") val finishedBeforeTracking: Boolean,
     @ColumnInfo(name = "watch_season_last_updated") val lastUpdated: Long
-)
+) {
+    companion object {
+        fun partialFrom(showId: String, seasonNumber: Int, currentEpisode: Int) = EntityWatchlistSeason(
+            showId = showId,
+            number = seasonNumber,
+            dateStarted = System.currentTimeMillis(),
+            dateCompleted = -1L,
+            completed = false,
+            currentEpisode = currentEpisode,
+            startedTrackingSeason = true,
+            finishedBeforeTracking = false,
+            lastUpdated = System.currentTimeMillis()
+        )
+        fun upToDateSeasonFrom(showId: String, seasonNumber: Int, currentEpisode: Int) = EntityWatchlistSeason(
+            showId = showId,
+            number = seasonNumber,
+            dateStarted = System.currentTimeMillis(),
+            dateCompleted = System.currentTimeMillis(),
+            completed = true,
+            currentEpisode = currentEpisode,
+            startedTrackingSeason = false,
+            finishedBeforeTracking = true,
+            lastUpdated = System.currentTimeMillis()
+        )
+        fun freshCompleted(showId: String, seasonNumber: Int) = EntityWatchlistSeason(
+            showId = showId,
+            number = seasonNumber,
+            dateStarted = System.currentTimeMillis(),
+            dateCompleted = System.currentTimeMillis(),
+            completed = true,
+            currentEpisode = -1,
+            startedTrackingSeason = false,
+            finishedBeforeTracking = true,
+            lastUpdated = System.currentTimeMillis()
+        )
+    }
+}
 
 @Entity(
     tableName = "tbl_watchlist_episode",
     primaryKeys = ["watch_episode_show_id", "watch_episode_episode_number"]
 )
 data class EntityWatchlistEpisode(
-    @ColumnInfo(name = "watch_episode_show_id") val showId: Int,
+    @ColumnInfo(name = "watch_episode_show_id") val showId: String,
     @ColumnInfo(name = "watch_episode_episode_number") val episodeNumber: Int,
     @ColumnInfo(name = "watch_episode_season_number") val seasonNumber: Int,
     @ColumnInfo(name = "watch_episode_watched") val watched: Boolean,
-    @ColumnInfo(name = "watch_episode_initial_set_progress_batch") val initialSetProgressBatch: Boolean,
+    @ColumnInfo(name = "watch_episode_initial_set_progress_batch") val initialSetProgressBatch: Boolean, // todo consider removing this flag cuase i am not craeting records for previous episode in initial progress
     @ColumnInfo(name = "watch_episode_via_up_to_date_action") val viaUpToDateAction: Boolean,
     @ColumnInfo(name = "watch_episode_date_watched") val dateWatched: Long,
     @ColumnInfo(name = "watch_episode_on_episode_since_date") val onEpisodeSinceDate: Long,
     @ColumnInfo(name = "watch_episode_last_updated") val lastUpdated: Long
-)
+) {
+    companion object {
+        fun notWatchedFrom(
+            showId: String,
+            seasonNumber: Int,
+            episodeNumber: Int
+        ) = EntityWatchlistEpisode(
+            showId = showId,
+            episodeNumber = episodeNumber,
+            seasonNumber = seasonNumber,
+            watched = false,
+            initialSetProgressBatch = true, // todo consider removing field
+            viaUpToDateAction = false, // todo consider removing field
+            dateWatched = -1L,
+            onEpisodeSinceDate = System.currentTimeMillis(),
+            lastUpdated = System.currentTimeMillis()
+        )
+        fun completedFrom(
+            showId: String,
+            seasonNumber: Int,
+            episodeNumber: Int
+        ) = EntityWatchlistEpisode(
+            showId = showId,
+            episodeNumber = episodeNumber,
+            seasonNumber = seasonNumber,
+            watched = true,
+            initialSetProgressBatch = true, // todo consider removing field
+            viaUpToDateAction = true,
+            dateWatched = System.currentTimeMillis(),
+            onEpisodeSinceDate = System.currentTimeMillis(),
+            lastUpdated = System.currentTimeMillis()
+        )
+
+    }
+}
 
 @Entity(tableName = "tbl_watchlist_batch")
 data class EntityWatchlistBatch(

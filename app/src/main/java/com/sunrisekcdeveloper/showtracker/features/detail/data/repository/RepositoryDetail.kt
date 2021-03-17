@@ -20,8 +20,6 @@ package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelMovieDetail
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
@@ -48,7 +46,7 @@ class RepositoryDetail(
 ) : RepositoryDetailContract {
 
     override suspend fun addShowToWatchlist(id: String) {
-        local.addShowToWatchlist(EntityWatchlistShow.freshEntryFrom(id))
+        local.addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
     }
 
     override suspend fun removeShowFromWatchlist(id: String) {
