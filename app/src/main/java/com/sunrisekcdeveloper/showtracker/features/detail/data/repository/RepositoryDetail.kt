@@ -58,7 +58,13 @@ class RepositoryDetail(
     }
 
     override suspend fun updateWatchlistMovieAsWatched(id: String) {
+        // todo better implementation possible
+        insertWatchlistMovieIfNotExists(id)
         local.setMovieAsWatched(id)
+    }
+
+    private suspend fun insertWatchlistMovieIfNotExists(id: String) {
+        local.insertWatchlistMovieExists(EntityWatchlistMovie.unWatchedfrom(id))
     }
 
     override suspend fun updateWatchlistMovieAsNotWatched(id: String) {

@@ -29,6 +29,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Dao
 abstract class DaoDetail {
 
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    abstract suspend fun insertWatchlistMovieExists(entity: EntityWatchlistMovie)
+
     @Query("DELETE FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
     protected abstract suspend fun privateRemoveMovieFromWatchlist(id: String)
 
