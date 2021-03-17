@@ -26,8 +26,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -59,6 +62,18 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun setup() {
+        // todo better onclick implementation needed
+        watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, status ->
+            when (status) {
+                MovieWatchedStatus.Watched -> {
+                    viewModel.markMovieAsUnWatched(id)
+                }
+                MovieWatchedStatus.NotWatched -> {
+                    viewModel.markMovieAsWatched(id)
+                }
+            }
+        }
+
         when (binding.tabBarWatchlist.selectedTabPosition) {
             0 -> {
                 binding.recyclerviewWatchlist.adapter = watchlistShowAdapter

@@ -24,15 +24,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ViewModelWatchlist @ViewModelInject constructor(
     private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
-    private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract
+    private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract,
+    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract
 ) : ViewModel() {
     private val _watchlistMovies = MutableLiveData<Resource<List<UIModelWatchlisMovie>>>()
     val watchlistMovies: LiveData<Resource<List<UIModelWatchlisMovie>>>
@@ -45,6 +49,16 @@ class ViewModelWatchlist @ViewModelInject constructor(
     init {
         watchlistMovies()
         watchlistShows()
+    }
+
+    fun markMovieAsWatched(movieId: String) = viewModelScope.launch {
+        Timber.e("mark as watched: $movieId")
+        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.Watched)
+    }
+
+    fun markMovieAsUnWatched(movieId: String) = viewModelScope.launch {
+        Timber.e("mark as not watched $movieId")
+        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.NotWatched)
     }
 
     fun watchlistMovies() = viewModelScope.launch {
