@@ -138,7 +138,7 @@ class RepositoryProgress(
         number = number,
         name = name,
         overview = overview,
-        posterPath = posterPath,
+        posterPath = posterPath?: "",
         airDate = -1L, // todo conversion function to take string date and return Long version
         episodeTotal = episodeCount,
         lastUpdated = System.currentTimeMillis()

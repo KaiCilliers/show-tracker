@@ -22,8 +22,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.WindowDecorActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
@@ -32,6 +34,7 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,6 +48,8 @@ class FragmentWatchlist : Fragment() {
     lateinit var watchlistMovieAdapter: AdapterWatchlistMovie
     @Inject
     lateinit var watchlistShowAdapter: AdapterWatchlistShow
+
+    private val arguments: FragmentWatchlistArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -122,6 +127,15 @@ class FragmentWatchlist : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     watchlistShowAdapter.refreshData(it.data)
+                    // from show detail scroll to position of show viewed in detail to update progress
+                    arguments.showId?.let {
+                        if (it != "none") {// default
+                            Timber.e("showID: $it")
+                            val position = watchlistShowAdapter.positionOfItem(it)
+                            Timber.e("position: $position")
+                            binding.recyclerviewWatchlist.scrollToPosition(position)
+                        }
+                    }
                 }
                 is Resource.Error -> {
 

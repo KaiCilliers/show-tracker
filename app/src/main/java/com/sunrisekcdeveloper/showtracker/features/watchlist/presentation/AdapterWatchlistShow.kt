@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
+import timber.log.Timber
 
 class AdapterWatchlistShow(
     private val data: MutableList<UIModelWatchlistShow>
@@ -43,6 +44,21 @@ class AdapterWatchlistShow(
         this.data.clear()
         this.data.addAll(data)
         notifyDataSetChanged()
+    }
+
+    fun positionOfItem(showId: String): Int {
+        Timber.e("adapter show id: $showId")
+        Timber.e("data: ${this.data}")
+        val item = this.data.find {
+            it.id == showId
+        }
+        Timber.e("item found: $item")
+        var position = -1
+        item?.let {
+            position = this.data.indexOf(item)
+            Timber.e("position found $position")
+        }
+        return position
     }
 
     class ViewHolderWatchlistShow(val binding: ItemWatchlistShowBinding) : RecyclerView.ViewHolder(binding.root) {

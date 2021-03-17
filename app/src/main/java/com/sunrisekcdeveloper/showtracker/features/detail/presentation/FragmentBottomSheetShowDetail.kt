@@ -107,6 +107,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                             binding.btnDetailShowWatchStatus.text = "Update progress"
                             binding.btnDetailShowWatchStatus.click {
                                 Timber.e("button is update progress")
+                                findNavController().navigate(
+                                    FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToWatchlistFragment(it.data.id)
+                                )
                             }
                         } else {
                             binding.btnDetailShowWatchStatus.text = "Start Watching"

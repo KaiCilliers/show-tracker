@@ -78,7 +78,7 @@ data class ResponseSeason(
     @SerializedName("season_number") val number: Int,
     @SerializedName("name") val name: String,
     @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String,
+    @SerializedName("poster_path") val posterPath: String?,
     @SerializedName("episode_count") val episodeCount: Int,
     @SerializedName("air_date") val dateAired: String
 )
