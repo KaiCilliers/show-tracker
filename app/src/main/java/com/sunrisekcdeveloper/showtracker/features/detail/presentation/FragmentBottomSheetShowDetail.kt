@@ -78,6 +78,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                             "started: ${it.data.startedWatching}" +
                             " uptodate: ${it.data.upToDate} ")
 
+                    // todo this is a mess
                     if (it.data.watchlisted) {
                         binding.btnDetailShowAdd.text = "Added"
                         binding.btnDetailShowAdd.click {
@@ -88,6 +89,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                         if (!it.data.startedWatching) {
                             binding.btnDetailShowWatchStatus.text = "Start Watching"
                             binding.btnDetailShowWatchStatus.click {
+                                findNavController().navigate(
+                                    FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToNavGraphProgress(it.data.id)
+                                )
                                 Timber.e("button is start watching")
                             }
                         }
@@ -107,6 +111,10 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                         } else {
                             binding.btnDetailShowWatchStatus.text = "Start Watching"
                             binding.btnDetailShowWatchStatus.click {
+                                // todo note duplicated 3 time - not cool man
+                                findNavController().navigate(
+                                    FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToNavGraphProgress(it.data.id)
+                                )
                                 Timber.e("button is start watching")
                             }
                         }

@@ -85,6 +85,9 @@ class FragmentProgress : Fragment() {
                     adapterEpisode.addAll(
                         *(1..map.getValue(1)).toList().toTypedArray()
                     )
+                    // todo quick fix while data loads
+                    binding.btnProgressConfirm.isEnabled = true
+                    binding.btnProgressUpToDate.isEnabled = true
                 }
                 is Resource.Error -> {}
                 Resource.Loading -> {}
@@ -93,6 +96,9 @@ class FragmentProgress : Fragment() {
     }
 
     private fun setup() {
+        binding.btnProgressConfirm.isEnabled = false
+        binding.btnProgressUpToDate.isEnabled = false
+
         adapterSeason = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
