@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistEpisode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistSeason
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RepositoryWatchlistContract {
     fun watchlistMovies(sortBy: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>>
-    fun watchlistShows(): Flow<Resource<List<UIModelWatchlistShow>>>
+    fun watchlistShows(sortBy: SortShows): Flow<Resource<List<UIModelWatchlistShow>>>
 
     // todo this is not ideal to return value like this
     suspend fun currentShow(showId: String): EntityShow

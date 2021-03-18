@@ -36,6 +36,7 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,7 +60,6 @@ class FragmentWatchlist : Fragment() {
 
     private val sortOptionsShow = arrayOf(
         "Title",
-        "Almost up to date",
         "Episodes left in season",
         "Recently Watched",
         "Recently Added",
@@ -161,6 +161,23 @@ class FragmentWatchlist : Fragment() {
                         .setSingleChoiceItems(sortOptionsShow, showSortCheckedItem) { dialog, which ->
                             Timber.e("Sort chosen: ${sortOptionsShow[which]}")
                             showSortCheckedItem = which
+                            when (showSortCheckedItem) {
+                                1 -> {
+                                    viewModel.watchlistShows(SortShows.ByEpisodesLeftInSeason)
+                                }
+                                2 -> {
+                                    viewModel.watchlistShows(SortShows.ByRecentlyWatched)
+                                }
+                                3 -> {
+                                    viewModel.watchlistShows(SortShows.ByRecentlyAdded)
+                                }
+                                4 -> {
+                                    viewModel.watchlistShows(SortShows.ByNotStarted)
+                                }
+                                else -> {
+                                    viewModel.watchlistShows(SortShows.ByTitle)
+                                }
+                            }
                             dialog.dismiss()
                         }.show()
                 }

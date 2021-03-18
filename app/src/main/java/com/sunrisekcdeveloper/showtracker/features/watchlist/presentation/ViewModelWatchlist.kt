@@ -31,6 +31,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWa
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -50,8 +51,9 @@ class ViewModelWatchlist @ViewModelInject constructor(
         get() = _watchlistShows
 
     init {
+        // todo problem with sort implementation is when updating items the sort gets reapplied and it is jarring with flickering
         watchlistMovies(SortMovies.ByTitle)
-        watchlistShows()
+        watchlistShows(SortShows.ByTitle)
     }
 
     fun updateShowProgress(action: UpdateShowAction) = viewModelScope.launch{
@@ -74,8 +76,8 @@ class ViewModelWatchlist @ViewModelInject constructor(
         }
     }
 
-    fun watchlistShows() = viewModelScope.launch {
-        fetchWatchlistShowsUseCase().collect {
+    fun watchlistShows(sortBy: SortShows) = viewModelScope.launch {
+        fetchWatchlistShowsUseCase(sortBy).collect {
             _watchlistShows.value = it
         }
     }

@@ -91,6 +91,9 @@ abstract class DaoWatchlist {
 
     open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> {
         val flow = privateWatchlistMoviesWithDetailsFlow()
+        // todo you can call this when inside flow mapping
+        //  then simple run the appropriate mapping logic inside each
+        //  thus having single #map and single #distinctUntilChanged
         return when (sortBy) {
             SortMovies.ByTitle -> {
                 flow.map { list ->
@@ -100,30 +103,65 @@ abstract class DaoWatchlist {
             SortMovies.ByRecentlyAdded -> {
                 flow.map { list ->
                     list.sortedWith(compareByDescending<WatchlistMovieDetails>
-                        { it.watchlist.dateAdded }.thenBy { it.details.title }
+                    { it.watchlist.dateAdded }.thenBy { it.details.title }
                     )
                 }.distinctUntilChanged()
             }
             SortMovies.ByWatched -> {
                 flow.map { list ->
                     list.sortedWith(compareByDescending<WatchlistMovieDetails>
-                        { it.watchlist.watched }.thenBy { it.details.title }
+                    { it.watchlist.watched }.thenBy { it.details.title }
                     )
                 }.distinctUntilChanged()
             }
         }
     }
 
-        @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
-        @Query("SELECT * FROM tbl_watchlist_show")
-        protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
+    @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
+    @Query("SELECT * FROM tbl_watchlist_show")
+    protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
 
-        fun distinctWatchlistShowsDetailsFlow() =
-            privateWatchlistShowsWithDetailsFlow().distinctUntilChanged()
-    }
+    open fun distinctWatchlistShowsDetailsFlow(sortShows: SortShows) =
+        privateWatchlistShowsWithDetailsFlow().map { list ->
+            when (sortShows) {
+                SortShows.ByTitle -> {
+                    list.sortedBy { it.details.title }
+                }
+                SortShows.ByEpisodesLeftInSeason -> {
+                    list.sortedWith(compareBy<WatchlistShowDetails>
+                    { it.watchlist.currentSeasonEpisodeTotal - it.watchlist.currentEpisodeNumber }
+                        .thenBy { it.details.title }
+                    )
+                }
+                SortShows.ByRecentlyWatched -> {
+                    list.sortedWith(compareByDescending<WatchlistShowDetails>
+                    { it.watchlist.lastUpdated }.thenBy { it.details.title }
+                    )
+                }
+                SortShows.ByRecentlyAdded -> {
+                    list.sortedWith(compareByDescending<WatchlistShowDetails>
+                    { it.watchlist.dateAdded }.thenBy { it.details.title }
+                    )
+                }
+                SortShows.ByNotStarted -> {
+                    list.sortedWith(compareBy<WatchlistShowDetails>
+                    { it.watchlist.started }.thenBy { it.details.title }
+                    )
+                }
+            }
+        }.distinctUntilChanged()
+}
 
-    sealed class SortMovies {
-        object ByTitle : SortMovies()
-        object ByRecentlyAdded : SortMovies()
-        object ByWatched : SortMovies()
-    }
+sealed class SortMovies {
+    object ByTitle : SortMovies()
+    object ByRecentlyAdded : SortMovies()
+    object ByWatched : SortMovies()
+}
+
+sealed class SortShows {
+    object ByTitle : SortShows()
+    object ByEpisodesLeftInSeason : SortShows()
+    object ByRecentlyWatched : SortShows()
+    object ByRecentlyAdded : SortShows()
+    object ByNotStarted : SortShows()
+}
