@@ -78,7 +78,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                             "started: ${it.data.startedWatching}" +
                             " uptodate: ${it.data.upToDate} ")
 
-                    // todo this is a mess
+                    Timber.e("${it.data}")
+
+                    // todo this is a mess FIX up to date shows not showing
                     if (it.data.watchlisted) {
                         binding.btnDetailShowAdd.text = "Added"
                         binding.btnDetailShowAdd.click {

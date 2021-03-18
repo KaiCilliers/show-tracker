@@ -52,7 +52,7 @@ class RepositoryProgress(
                 episode.number,
                 episode.name,
                 season.number,
-                season.name
+                season.episodeTotal
             )
         )
     }
@@ -69,7 +69,7 @@ class RepositoryProgress(
                 episode.number,
                 episode.name,
                 season.number,
-                season.name
+                season.episodeTotal
             )
         )
     }

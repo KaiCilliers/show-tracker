@@ -29,6 +29,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatc
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -36,7 +37,8 @@ import timber.log.Timber
 class ViewModelWatchlist @ViewModelInject constructor(
     private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
     private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract,
-    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract
+    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
+    private val updateShowProgressUseCase: UpdateShowProgressUseCaseContract
 ) : ViewModel() {
     private val _watchlistMovies = MutableLiveData<Resource<List<UIModelWatchlisMovie>>>()
     val watchlistMovies: LiveData<Resource<List<UIModelWatchlisMovie>>>
@@ -49,6 +51,10 @@ class ViewModelWatchlist @ViewModelInject constructor(
     init {
         watchlistMovies()
         watchlistShows()
+    }
+
+    fun updateShowProgress(action: UpdateShowAction) = viewModelScope.launch{
+        updateShowProgressUseCase(action)
     }
 
     fun markMovieAsWatched(movieId: String) = viewModelScope.launch {
@@ -84,3 +90,9 @@ data class UIModelWatchlisMovie(
     val dateWatched: Long,
     val lastUpdated: Long
 )
+
+sealed class UpdateShowAction {
+    data class IncrementEpisode(val showId: String) : UpdateShowAction()
+    data class CompleteSeason(val showId: String) : UpdateShowAction()
+    data class UpToDateWithShow(val showId: String) : UpdateShowAction()
+}

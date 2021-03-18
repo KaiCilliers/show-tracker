@@ -19,6 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistEpisode
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistSeason
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
@@ -26,4 +30,26 @@ import kotlinx.coroutines.flow.Flow
 interface RepositoryWatchlistContract {
     fun watchlistMovies(): Flow<Resource<List<UIModelWatchlisMovie>>>
     fun watchlistShows(): Flow<Resource<List<UIModelWatchlistShow>>>
+
+    // todo this is not ideal to return value like this
+    suspend fun currentShow(showId: String): EntityShow
+
+    // todo this is not ideal to return value like this
+    suspend fun currentWatchlistShow(showId: String): EntityWatchlistShow
+
+    suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int)
+
+    suspend fun insertNewWatchlistEpisode(showId: String, season: Int, episode: Int)
+
+    suspend fun incrementSeasonCurrentEpisode(showId: String, currentSeason: Int)
+
+    suspend fun incrementWatchlistShowCurrentEpisode(showId: String)
+
+    suspend fun updateSeasonAsWatched(showId: String, season: Int)
+
+    suspend fun insertNewWatchlistSeason(showId: String, season: Int, episode: Int)
+
+    suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int)
+
+    suspend fun updateWatchlistShowAsUpToDate(showId: String)
 }

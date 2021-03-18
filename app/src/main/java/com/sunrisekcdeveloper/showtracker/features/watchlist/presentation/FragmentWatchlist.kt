@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.WindowDecorActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
@@ -67,6 +68,26 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun setup() {
+        watchlistShowAdapter.onButtonClicked = OnShowStatusClickListener { action ->
+            when (action) {
+                is ShowAdapterAction.MarkEpisode -> {
+                    viewModel.updateShowProgress(
+                        UpdateShowAction.IncrementEpisode(action.showId)
+                    )
+                }
+                is ShowAdapterAction.MarkSeason -> {
+                    viewModel.updateShowProgress(
+                        UpdateShowAction.CompleteSeason(action.showId)
+                    )
+                }
+                is ShowAdapterAction.StartWatchingShow -> {
+                    findNavController().navigate(
+                        FragmentWatchlistDirections.navigateFromWatchlistToNavGraphProgress(action.showId)
+                    )
+                }
+            }
+        }
+
         // todo better onclick implementation needed
         watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, status ->
             when (status) {

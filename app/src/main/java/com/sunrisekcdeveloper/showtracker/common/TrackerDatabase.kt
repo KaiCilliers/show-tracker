@@ -33,7 +33,7 @@ import java.util.Date
         EntityEpisode::class, EntityWatchlistEpisode::class,
         EntityWatchlistBatch::class
     ],
-    version = 44,
+    version = 45,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)

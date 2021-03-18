@@ -49,7 +49,7 @@ data class EntityWatchlistShow(
     @ColumnInfo(name = "watch_show_current_episode_num") val currentEpisodeNumber: Int,
     @ColumnInfo(name = "watch_show_current_episode_name") val currentEpisodeName: String,
     @ColumnInfo(name = "watch_show_current_season_num") val currentSeasonNumber: Int,
-    @ColumnInfo(name = "watch_show_current_season_Name") val currentSeasonName: String,
+    @ColumnInfo(name = "watch_show_current_season_episode_total") val currentSeasonEpisodeTotal: Int,
     @ColumnInfo(name = "watch_show_started") val started: Boolean,
     @ColumnInfo(name = "watch_show_up_to_date") val upToDate: Boolean,
     @ColumnInfo(name = "watch_show_date_added") val dateAdded: Long = System.currentTimeMillis(),
@@ -61,13 +61,13 @@ data class EntityWatchlistShow(
             episodeNumber: Int,
             episodeName: String,
             seasonNumber: Int,
-            seasonName: String
+            seasonEpisodeTotal: Int
         ) = EntityWatchlistShow(
             id = id,
             currentEpisodeNumber = episodeNumber,
             currentEpisodeName = episodeName,
             currentSeasonNumber = seasonNumber,
-            currentSeasonName = seasonName,
+            currentSeasonEpisodeTotal = seasonEpisodeTotal,
             started = true,
             upToDate = false
         )
@@ -76,13 +76,13 @@ data class EntityWatchlistShow(
             episodeNumber: Int,
             episodeName: String,
             seasonNumber: Int,
-            seasonName: String
+            seasonEpisodeTotal: Int
         ) = EntityWatchlistShow(
             id = id,
             currentEpisodeNumber = episodeNumber,
             currentEpisodeName = episodeName,
             currentSeasonNumber = seasonNumber,
-            currentSeasonName = seasonName,
+            currentSeasonEpisodeTotal = seasonEpisodeTotal,
             started = true,
             upToDate = true
         )
@@ -90,10 +90,10 @@ data class EntityWatchlistShow(
         // todo i dont want to track shows without episode and season data
         fun freshBareEntryFrom(id: String) = EntityWatchlistShow(
             id = id,
-            currentEpisodeNumber = 0,
+            currentEpisodeNumber = -1,
             currentEpisodeName = "",
-            currentSeasonName = "",
-            currentSeasonNumber = 0,
+            currentSeasonEpisodeTotal = -1,
+            currentSeasonNumber = -1,
             started = false,
             upToDate = false,
             dateAdded = System.currentTimeMillis(),

@@ -54,6 +54,13 @@
             android:name="showId"
             app:argType="string"
             android:defaultValue="none" />
+        <action
+            android:id="@+id/navigate_from_watchlist_to_nav_graph_progress"
+            app:destination="@id/nav_graph_progress" >
+            <argument
+                android:name="showIdTest"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/destination_main_statistics_fragment"

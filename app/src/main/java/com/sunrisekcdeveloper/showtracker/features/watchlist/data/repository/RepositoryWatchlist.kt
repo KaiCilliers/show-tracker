@@ -22,19 +22,129 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 class RepositoryWatchlist(
     private val local: DaoWatchlist
 ) : RepositoryWatchlistContract {
+
+    override suspend fun currentShow(showId: String): EntityShow {
+        return local.show(showId)
+    }
+
+    override suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int) {
+        val watchlistEpisode = local.watchlistEpisode(showId, episode, season)
+        Timber.d("episode to mark: $watchlistEpisode")
+        watchlistEpisode?.let {
+            Timber.e("inside")
+            local.updateWatchlistEpisode(
+                watchlistEpisode.copy(
+                    watched = true,
+                    dateWatched = System.currentTimeMillis(),
+                    lastUpdated = System.currentTimeMillis()
+                )
+            )
+        }
+    }
+
+    override suspend fun insertNewWatchlistEpisode(showId: String, season: Int, episode: Int) {
+        local.insertWatchlistEpisode(
+            EntityWatchlistEpisode.notWatchedFrom(
+                showId, season, episode
+            )
+        )
+    }
+
+    override suspend fun incrementSeasonCurrentEpisode(showId: String, currentSeason: Int) {
+        val season = local.watchlistSeason(showId, currentSeason)
+        val currentEpisode = season.currentEpisode
+        local.updateWatchlistSeason(
+            season.copy(
+                currentEpisode = (currentEpisode + 1),
+                lastUpdated = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun incrementWatchlistShowCurrentEpisode(showId: String) {
+        val watchlistShow = local.watchlistShow(showId)
+        val newEpisode = local.episode(
+            showId,
+            watchlistShow.currentSeasonNumber,
+            watchlistShow.currentEpisodeNumber + 1
+        )
+        Timber.e("OK - here is some data")
+        Timber.e("show: $watchlistShow")
+        Timber.e("next episode: $newEpisode")
+        local.updateWatchlistShow(
+            watchlistShow.copy(
+                currentEpisodeNumber = newEpisode?.number?: -1,
+                currentEpisodeName = newEpisode?.name?: "oops",
+                lastUpdated = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun updateSeasonAsWatched(showId: String, season: Int) {
+        val watchlistSeason = local.watchlistSeason(showId, season)
+        local.updateWatchlistSeason(
+            watchlistSeason.copy(
+                completed = true,
+                dateCompleted = System.currentTimeMillis(),
+                lastUpdated = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun insertNewWatchlistSeason(showId: String, season: Int, episode: Int) {
+        local.insertWatchlistSeason(
+            EntityWatchlistSeason.partialFrom(
+                showId, season, episode
+            )
+        )
+    }
+
+    override suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int) {
+        val watchlistShow = local.watchlistShow(showId)
+        val episode = local.episode(showId, newSeason, newEpisode)
+        val season = local.season(showId, newSeason)
+        // todo if null objects are returned then try fetch from netowrk and if failed then you need to handle
+        //  consider making room return nullable objects to form handle these null cases
+        // todo some shows return seasons which have zero episodes... handle that case (example is Simpsons last two seasons)
+        Timber.d("show $watchlistShow")
+        Timber.d("episode: $episode")
+        Timber.d("season: $season")
+        local.updateWatchlistShow(
+            watchlistShow.copy(
+                currentEpisodeNumber = episode?.number?: 1,
+                currentEpisodeName = episode?.name?: "Episode 1 :)",
+                currentSeasonNumber = season.number,
+                currentSeasonEpisodeTotal = season.episodeTotal,
+                lastUpdated = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun updateWatchlistShowAsUpToDate(showId: String) {
+        val show = local.watchlistShow(showId)
+        local.updateWatchlistShow(
+            show.copy(
+                upToDate = true,
+                lastUpdated = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun currentWatchlistShow(showId: String): EntityWatchlistShow {
+        return local.watchlistShow(showId)
+    }
+
     override fun watchlistMovies(): Flow<Resource<List<UIModelWatchlisMovie>>> {
         return local.distinctWatchlistMoviesDetailsFlow().map {
             if (it.isNotEmpty()) {
@@ -63,7 +173,7 @@ fun WatchlistShowDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
     currentEpisodeNumber = watchlist.currentEpisodeNumber,
     currentEpisodeName = watchlist.currentEpisodeName,
     currentSeasonNumber = watchlist.currentSeasonNumber,
-    episodesInSeason = -1,
+    episodesInSeason = watchlist.currentSeasonEpisodeTotal,
     started = watchlist.started,
     upToDate = watchlist.upToDate,
     dateAdded = watchlist.dateAdded
@@ -76,7 +186,7 @@ fun List<WatchlistShowDetails>.asListUIModelWatchlistShow(): List<UIModelWatchli
 fun WatchlistMovieDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
     id = details.id,
     title = details.title,
-    overview =  details.overview,
+    overview = details.overview,
     posterPath = details.posterPath,
     watched = watchlist.watched,
     dateAdded = watchlist.dateAdded,
@@ -84,7 +194,7 @@ fun WatchlistMovieDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
     lastUpdated = watchlist.dateLastUpdated
 )
 
-fun List<WatchlistMovieDetails>.asListUIModelWatchlistMovie() : List<UIModelWatchlisMovie> {
+fun List<WatchlistMovieDetails>.asListUIModelWatchlistMovie(): List<UIModelWatchlisMovie> {
     return this.map { it.asUIModelWatchlistMovie() }
 }
 
