@@ -28,12 +28,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,6 +53,24 @@ class FragmentWatchlist : Fragment() {
     lateinit var watchlistShowAdapter: AdapterWatchlistShow
 
     private val arguments: FragmentWatchlistArgs by navArgs()
+
+    private var showSortCheckedItem = 0
+    private var movieSortCheckedItem = 0
+
+    private val sortOptionsShow = arrayOf(
+        "Title",
+        "Almost up to date",
+        "Episodes left in season",
+        "Recently Watched",
+        "Recently Added",
+        "Not Started"
+    )
+
+    private val sortOptionsMovie = arrayOf(
+        "Title",
+        "Recently Added",
+        "Watched"
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -132,6 +152,44 @@ class FragmentWatchlist : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
+
+        binding.imgvFilterWatchlist.setOnClickListener {
+            when (binding.tabBarWatchlist.selectedTabPosition) {
+                0 -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Sort TV Shows by:")
+                        .setSingleChoiceItems(sortOptionsShow, showSortCheckedItem) { dialog, which ->
+                            Timber.e("Sort chosen: ${sortOptionsShow[which]}")
+                            showSortCheckedItem = which
+                            dialog.dismiss()
+                        }.show()
+                }
+                else -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Sort Movies by:")
+                        .setSingleChoiceItems(sortOptionsMovie, movieSortCheckedItem) { dialog, which ->
+                            Timber.e("Sort chosen: ${sortOptionsMovie[which]}")
+                            movieSortCheckedItem = which
+                            when (movieSortCheckedItem) {
+                                1 -> {
+                                    Timber.e("frag: recently added")
+                                    viewModel.watchlistMovies(SortMovies.ByRecentlyAdded)
+                                }
+                                2 -> {
+                                    Timber.e("frag: watched")
+                                    viewModel.watchlistMovies(SortMovies.ByWatched)
+                                }
+                                else -> {
+                                    Timber.e("frag: title")
+                                    viewModel.watchlistMovies(SortMovies.ByTitle)
+                                }
+                            }
+                            dialog.dismiss()
+                        }.show()
+                }
+            }
+        }
+
     }
 
     private fun observeViewModel() {

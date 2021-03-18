@@ -30,6 +30,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMo
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -49,7 +50,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
         get() = _watchlistShows
 
     init {
-        watchlistMovies()
+        watchlistMovies(SortMovies.ByTitle)
         watchlistShows()
     }
 
@@ -67,8 +68,8 @@ class ViewModelWatchlist @ViewModelInject constructor(
         updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.NotWatched)
     }
 
-    fun watchlistMovies() = viewModelScope.launch {
-        fetchWatchlistMoviesUseCase().collect {
+    fun watchlistMovies(sortBy: SortMovies) = viewModelScope.launch {
+        fetchWatchlistMoviesUseCase(sortBy).collect {
             _watchlistMovies.value = it
         }
     }

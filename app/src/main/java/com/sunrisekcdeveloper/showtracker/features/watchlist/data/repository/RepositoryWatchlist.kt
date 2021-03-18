@@ -22,6 +22,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
@@ -145,8 +146,8 @@ class RepositoryWatchlist(
         return local.watchlistShow(showId)
     }
 
-    override fun watchlistMovies(): Flow<Resource<List<UIModelWatchlisMovie>>> {
-        return local.distinctWatchlistMoviesDetailsFlow().map {
+    override fun watchlistMovies(sortMovies: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
+        return local.distinctWatchlistMoviesDetailsFlow(sortMovies).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistMovie())
             } else {

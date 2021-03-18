@@ -24,6 +24,8 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.Wat
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistShowDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.sql.Timestamp
 
 @Dao
@@ -55,35 +57,73 @@ abstract class DaoWatchlist {
     @Update
     abstract suspend fun updateWatchlistShow(show: EntityWatchlistShow)
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM tbl_watchlist_show WHERE watch_show_id = :showId
-    """)
+    """
+    )
     abstract suspend fun watchlistShow(showId: String): EntityWatchlistShow
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM tbl_watchlist_season WHERE watch_season_show_id = :showId
         AND watch_season_number = :season
-    """)
+    """
+    )
     abstract suspend fun watchlistSeason(showId: String, season: Int): EntityWatchlistSeason
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM tbl_watchlist_episode WHERE watch_episode_show_id = :showId
         AND watch_episode_season_number = :season
         AND watch_episode_episode_number = :episode 
-    """)
-    abstract suspend fun watchlistEpisode(showId: String, episode: Int, season: Int): EntityWatchlistEpisode
+    """
+    )
+    abstract suspend fun watchlistEpisode(
+        showId: String,
+        episode: Int,
+        season: Int
+    ): EntityWatchlistEpisode
 
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
-    fun distinctWatchlistMoviesDetailsFlow() =
-        privateWatchlistMoviesWithDetailsFlow().distinctUntilChanged()
+    open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> {
+        val flow = privateWatchlistMoviesWithDetailsFlow()
+        return when (sortBy) {
+            SortMovies.ByTitle -> {
+                flow.map { list ->
+                    list.sortedBy { it.details.title }
+                }
+            }
+            SortMovies.ByRecentlyAdded -> {
+                flow.map { list ->
+                    list.sortedWith(compareByDescending<WatchlistMovieDetails>
+                        { it.watchlist.dateAdded }.thenBy { it.details.title }
+                    )
+                }
+            }
+            SortMovies.ByWatched -> {
+                flow.map { list ->
+                    list.sortedWith(compareByDescending<WatchlistMovieDetails>
+                        { it.watchlist.watched }.thenBy { it.details.title }
+                    )
+                }
+            }
+        }
+    }
 
-    @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
-    @Query("SELECT * FROM tbl_watchlist_show")
-    protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
+        @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
+        @Query("SELECT * FROM tbl_watchlist_show")
+        protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
 
-    fun distinctWatchlistShowsDetailsFlow() =
-        privateWatchlistShowsWithDetailsFlow().distinctUntilChanged()
-}
+        fun distinctWatchlistShowsDetailsFlow() =
+            privateWatchlistShowsWithDetailsFlow().distinctUntilChanged()
+    }
+
+    sealed class SortMovies {
+        object ByTitle : SortMovies()
+        object ByRecentlyAdded : SortMovies()
+        object ByWatched : SortMovies()
+    }
