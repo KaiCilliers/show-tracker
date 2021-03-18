@@ -95,21 +95,21 @@ abstract class DaoWatchlist {
             SortMovies.ByTitle -> {
                 flow.map { list ->
                     list.sortedBy { it.details.title }
-                }
+                }.distinctUntilChanged()
             }
             SortMovies.ByRecentlyAdded -> {
                 flow.map { list ->
                     list.sortedWith(compareByDescending<WatchlistMovieDetails>
                         { it.watchlist.dateAdded }.thenBy { it.details.title }
                     )
-                }
+                }.distinctUntilChanged()
             }
             SortMovies.ByWatched -> {
                 flow.map { list ->
                     list.sortedWith(compareByDescending<WatchlistMovieDetails>
                         { it.watchlist.watched }.thenBy { it.details.title }
                     )
-                }
+                }.distinctUntilChanged()
             }
         }
     }
