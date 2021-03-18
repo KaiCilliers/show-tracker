@@ -40,6 +40,8 @@ sealed class ResponseStandardMedia {
         @SerializedName("poster_path") val posterPath: String?,
         @SerializedName("backdrop_path") val backdropPath: String?,
         @SerializedName("vote_average") val rating: Float,
+        @SerializedName("vote_count") val voteCount: Int,
+        @SerializedName("popularity") val popularity: Float,
         @SerializedName("release_date") val releaseDate: String
     ) : ResponseStandardMedia()
 
@@ -50,6 +52,8 @@ sealed class ResponseStandardMedia {
         @SerializedName("poster_path") val posterPath: String?,
         @SerializedName("backdrop_path") val backdropPath: String?,
         @SerializedName("vote_average") val rating: Float,
+        @SerializedName("vote_count") val voteCount: Int,
+        @SerializedName("popularity") val popularity: Float,
         @SerializedName("first_air_date") val firstAirDate: String
     ) : ResponseStandardMedia()
 }

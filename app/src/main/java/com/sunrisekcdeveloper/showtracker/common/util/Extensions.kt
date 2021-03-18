@@ -71,13 +71,19 @@ fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = title,
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
 fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = name,
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
 fun UIModelDiscovery.asUIModelPoster() = UIModelPoster(
     id = id,

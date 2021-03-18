@@ -134,18 +134,15 @@ class FragmentSearch : Fragment() {
 
         lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
-                .debounce(400)
+                .debounce(300)
                 .filter { query ->
-                    // simply fetch all the data from database
                     if (query.isEmpty()) {
                         gridAdapter.replaceList(listOf())
                         return@filter false
                     }
                     return@filter true
-                }.buffer() // todo determine if needed
+                }
                 .distinctUntilChanged()
-                //  here you will make call to database with query which returns a flow
-//                .flatMapLatest {  }
                 .collect { query ->
                     gridAdapter.replaceList(listOf())
                     viewModel.getSearchResults(query)
