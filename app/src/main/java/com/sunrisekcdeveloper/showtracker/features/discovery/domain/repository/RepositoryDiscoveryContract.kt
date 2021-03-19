@@ -18,8 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository
 
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import kotlinx.coroutines.flow.Flow
 
 interface RepositoryDiscoveryContract {
     suspend fun popularMovies(page: Int): Resource<List<UIModelDiscovery>>
@@ -28,4 +30,6 @@ interface RepositoryDiscoveryContract {
     suspend fun popularShows(page: Int): Resource<List<UIModelDiscovery>>
     suspend fun topRatedShows(page: Int): Resource<List<UIModelDiscovery>>
     suspend fun airingTodayShows(page: Int): Resource<List<UIModelDiscovery>>
+
+    suspend fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>>
 }

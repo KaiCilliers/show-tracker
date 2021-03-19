@@ -18,17 +18,31 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.paging.PagingSourceDiscoveryPopularMovies
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
+import kotlinx.coroutines.flow.Flow
 
 class RepositoryDiscovery(
     private val remote: RemoteDataSourceDiscoveryContract
 ) : RepositoryDiscoveryContract {
+
+    override suspend fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+            config = PagingConfig(
+                pageSize = 20, // todo my api does not use page size attribute (so 20 is just random number)
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { PagingSourceDiscoveryPopularMovies(remote) }
+        ).flow
+
     override suspend fun popularMovies(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.popularMovies(page)) {
             is NetworkResult.Success -> {
