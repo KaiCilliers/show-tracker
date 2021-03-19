@@ -31,5 +31,5 @@ interface RepositoryDiscoveryContract {
     suspend fun topRatedShows(page: Int): Resource<List<UIModelDiscovery>>
     suspend fun airingTodayShows(page: Int): Resource<List<UIModelDiscovery>>
 
-    suspend fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>>
+    fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>>
 }

@@ -35,7 +35,7 @@ class RepositoryDiscovery(
     private val remote: RemoteDataSourceDiscoveryContract
 ) : RepositoryDiscoveryContract {
 
-    override suspend fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+    override fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
             config = PagingConfig(
                 pageSize = 20, // todo my api does not use page size attribute (so 20 is just random number)
                 enablePlaceholders = false

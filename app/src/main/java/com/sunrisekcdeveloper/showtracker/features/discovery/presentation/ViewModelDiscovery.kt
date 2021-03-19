@@ -23,12 +23,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewActionsDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewStateDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -38,8 +43,24 @@ class ViewModelDiscovery @ViewModelInject constructor(
     private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
     private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
     private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
-    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
+    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract,
+    private val repoTemp: RepositoryDiscoveryContract
 ) : ViewModel() {
+
+    // todo try not use nullables (perhaps lateinit with and init{ }?)
+    private var currentSearchResult: Flow<PagingData<UIModelDiscovery>>? = null
+
+    // todo this can be improved
+    fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> {
+        val lastResult = currentSearchResult
+
+        val newResult = repoTemp.popularMoviesStream()
+            .cachedIn(viewModelScope)
+
+        currentSearchResult = newResult
+
+        return newResult
+    }
 
     // todo implement paging 3
     var popularMoviesPage = 0
