@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +41,9 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewAc
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewStateDiscovery
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -49,8 +52,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FragmentDiscovery : Fragment() {
 
-    @Inject
-    lateinit var popularMovieListAdapter: AdapterSimplePoster
     private lateinit var popularMoviesLayoutManager: LinearLayoutManager
 
     @Inject
@@ -76,6 +77,20 @@ class FragmentDiscovery : Fragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private val viewModel: ViewModelDiscovery by viewModels()
 
+    private val pagingAdapter = PagingAdapterSimplePoster()
+
+    private var job: Job? = null
+
+    // todo obviously this is not cool, but it works :)
+    private fun go() {
+        job?.cancel()
+        job = lifecycleScope.launch {
+            viewModel.popularMoviesStream().collectLatest {
+                pagingAdapter.submitData(it)
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -89,6 +104,7 @@ class FragmentDiscovery : Fragment() {
         setup()
         setupBinding()
         observeViewModel()
+        go()
         viewModel.performAction(FetchMovieAndShowData)
     }
 
@@ -109,7 +125,6 @@ class FragmentDiscovery : Fragment() {
             }
         }
 
-        popularMovieListAdapter.onPosterClickListener = onClick
         topRatedMovieListAdapter.onPosterClickListener = onClick
         upcomingMovieListAdapter.onPosterClickListener = onClick
         popularShowListAdapter.onPosterClickListener = onClick
@@ -148,7 +163,7 @@ class FragmentDiscovery : Fragment() {
         )
 
         binding.rcPopularMovies.layoutManager = popularMoviesLayoutManager
-        binding.rcPopularMovies.adapter = popularMovieListAdapter
+        binding.rcPopularMovies.adapter = pagingAdapter
 
         binding.rcTopRatedMovies.layoutManager = topRatedMoviesLayoutManager
         binding.rcTopRatedMovies.adapter = topRatedMovieListAdapter
@@ -165,10 +180,6 @@ class FragmentDiscovery : Fragment() {
         binding.rcAiringTodayShows.layoutManager = airingTodayShowLayoutManager
         binding.rcAiringTodayShows.adapter = airingTodayShowListAdapter
 
-        attachOnScrollListener(
-            binding.rcPopularMovies,
-            popularMoviesLayoutManager
-        ) { viewModel.getPopularMovies() }
         attachOnScrollListener(
             binding.rcTopRatedMovies,
             topRatedMoviesLayoutManager
@@ -192,21 +203,21 @@ class FragmentDiscovery : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.popularMovies.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    updateList(popularMovieListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcPopularMovies,
-                        popularMoviesLayoutManager
-                    ) { viewModel.getPopularMovies() }
-                }
-                is Resource.Error -> {
-                }
-            }
-        }
+//        viewModel.popularMovies.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is Resource.Loading -> {
+//                }
+//                is Resource.Success -> {
+//                    updateList(popularMovieListAdapter, it.data)
+//                    attachOnScrollListener(
+//                        binding.rcPopularMovies,
+//                        popularMoviesLayoutManager
+//                    ) { viewModel.getPopularMovies() }
+//                }
+//                is Resource.Error -> {
+//                }
+//            }
+//        }
         viewModel.topRatedMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
