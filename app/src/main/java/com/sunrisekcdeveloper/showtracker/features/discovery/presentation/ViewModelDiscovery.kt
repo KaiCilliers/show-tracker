@@ -26,6 +26,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
@@ -44,7 +46,7 @@ class ViewModelDiscovery @ViewModelInject constructor(
     private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
     private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
     private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract,
-    private val repoTemp: RepositoryDiscoveryContract
+    @RepoDiscovery private val repoTemp: RepositoryDiscoveryContract
 ) : ViewModel() {
 
     // todo try not use nullables (perhaps lateinit with and init{ }?)
