@@ -41,6 +41,7 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
+            initialLoadSize = 40,
             pageSize = 20, // todo my api does not use page size attribute (so 20 is just random number)
             enablePlaceholders = false
         ),
@@ -55,7 +56,8 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun popularShowsStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
-            pageSize = 50,
+            pageSize = 20,
+            initialLoadSize = 40,
             enablePlaceholders = false
         ),
         remoteMediator = RemoteMediatorDiscoveryPopularShows(remote,database),
@@ -67,7 +69,8 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun topRatedMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
-            pageSize = 50,
+            pageSize = 20,
+            initialLoadSize = 40,
             enablePlaceholders = false
         ),
         remoteMediator = RemoteMediatorDiscoveryTopRatedMovies(remote,database),
@@ -79,7 +82,8 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun topRatedShowsStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
-            pageSize = 50,
+            pageSize = 20,
+            initialLoadSize = 40,
             enablePlaceholders = false
         ),
         remoteMediator = RemoteMediatorDiscoveryTopRatedShows(remote,database),
@@ -91,7 +95,8 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun upcomingMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
-            pageSize = 50,
+            pageSize = 20,
+            initialLoadSize = 40,
             enablePlaceholders = false
         ),
         remoteMediator = RemoteMediatorDiscoveryUpcomingMovies(remote,database),
@@ -103,7 +108,8 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun airingTodayShowsStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
-            pageSize = 50,
+            pageSize = 20,
+            initialLoadSize = 40,
             enablePlaceholders = false
         ),
         remoteMediator = RemoteMediatorDiscoveryAiringShows(remote,database),
