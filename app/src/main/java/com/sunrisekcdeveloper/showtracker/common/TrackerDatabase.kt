@@ -20,6 +20,12 @@ package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoRemoteKeys
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.*
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
@@ -31,14 +37,17 @@ import java.util.Date
         EntityShow::class, EntityWatchlistShow::class,
         EntitySeason::class, EntityWatchlistSeason::class,
         EntityEpisode::class, EntityWatchlistEpisode::class,
-        EntityWatchlistBatch::class
+        EntityWatchlistBatch::class, UIModelDiscovery::class,
+        RemoteKeys::class
     ],
-    version = 45,
+    version = 60,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
 
+    abstract fun remoteKeysDiscovery(): DaoRemoteKeys
+    abstract fun discoveryDao(): DaoDiscovery
     abstract fun progressDao(): DaoProgress
     abstract fun detailDao(): DaoDetail
     abstract fun watchlistDao(): DaoWatchlist
@@ -65,4 +74,55 @@ class TrackerTypeConverters() {
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time?.toLong()
     }
+
+    @TypeConverter
+    fun fromMediaType(type: MediaType): String = type.javaClass.simpleName
+
+    @TypeConverter
+    fun fromStringMediaType(value: String): MediaType {
+        return when (value) {
+            MediaType.Movie.javaClass.simpleName -> {
+                MediaType.Movie
+            }
+            MediaType.Show.javaClass.simpleName -> {
+                MediaType.Show
+            }
+            else -> {
+                MediaType.Movie
+            } // not best way to handle, but it's fine
+        }
+    }
+
+    @TypeConverter
+    fun fromListType(type: ListType): String {
+        return type.javaClass.simpleName
+    }
+
+    @TypeConverter
+    fun fromStringListType(value: String): ListType {
+        return when (value) {
+            ListType.MoviePopular.javaClass.simpleName -> {
+                ListType.MoviePopular
+            }
+            ListType.MovieTopRated.javaClass.simpleName -> {
+                ListType.MovieTopRated
+            }
+            ListType.MovieUpcoming.javaClass.simpleName -> {
+                ListType.MovieUpcoming
+            }
+            ListType.ShowPopular.javaClass.simpleName -> {
+                ListType.ShowPopular
+            }
+            ListType.ShowTopRated.javaClass.simpleName -> {
+                ListType.ShowTopRated
+            }
+            ListType.ShowAiringToday.javaClass.simpleName -> {
+                ListType.ShowAiringToday
+            }
+            else -> {
+                ListType.MoviePopular
+            } // Not best way to handle, but it's fine
+        }
+    }
+
 }

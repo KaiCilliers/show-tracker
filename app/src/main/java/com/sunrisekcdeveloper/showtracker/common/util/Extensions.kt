@@ -60,12 +60,14 @@ fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    listType = listType
 )
 fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    listType = listType
 )
 fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
     id = "$id",

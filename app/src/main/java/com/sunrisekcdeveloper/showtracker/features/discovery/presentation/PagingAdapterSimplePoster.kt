@@ -25,11 +25,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 
-class PagingAdapterSimplePoster : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
+class PagingAdapterSimplePoster(
+    // todo better name and make private with method setter
+    var onClick: OnPosterClickListener = OnPosterClickListener { _, _ ->  }
+) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
     UIMODEL_DISCOVERY_COMPARATOR){
 
     override fun onBindViewHolder(holder: ViewHolderPagingSimplePoster, position: Int) {
@@ -39,20 +44,26 @@ class PagingAdapterSimplePoster : PagingDataAdapter<UIModelDiscovery, ViewHolder
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster.from(parent)
+    ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster.from(parent, onClick)
 
-    class ViewHolderPagingSimplePoster(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolderPagingSimplePoster(
+        val binding: ItemSimplePosterBinding,
+        val onClick: OnPosterClickListener
+        ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelDiscovery) {
             Glide.with(binding.root)
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvItemMoviePoster)
+            binding.root.click {
+                onClick.onClick(data.id, data.mediaType)
+            }
         }
         companion object {
-            fun from(parent: ViewGroup) : ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster(
+            fun from(parent: ViewGroup, onClick: OnPosterClickListener) : ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster(
                 ItemSimplePosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                )
+                ), onClick
             )
         }
     }

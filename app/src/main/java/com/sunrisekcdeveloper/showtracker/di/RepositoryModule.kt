@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDiscovery
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
@@ -89,9 +90,10 @@ object RepositoryModule {
     @RepoDiscovery
     @Provides
     fun provideRepositoryDiscovery(
-        @SourceDiscovery remote: RemoteDataSourceDiscoveryContract
+        @SourceDiscovery remote: RemoteDataSourceDiscoveryContract,
+        database: TrackerDatabase
     ): RepositoryDiscoveryContract =
-        RepositoryDiscovery(remote)
+        RepositoryDiscovery(remote, database)
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)

@@ -16,22 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
+package com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 
 @Entity(
-    tableName = "tbl_paging_discovery",
+    tableName = "tbl_remote_keys_discovery",
     primaryKeys = ["id", "listType"]
 )
-data class UIModelDiscovery(
+data class RemoteKeys(
     val id: String,
-    val mediaType: MediaType,
-    // Added list type to place all discovery lists in a
-    // single table and have multiple DAO functions which
-    // can use this field to determine what list the item
-    // belongs to. Marked as PK due to the possibility of
-    // the same media being present in multiple lists
+    // Media with the same ID can be in multiple lists
     val listType: ListType,
-    val posterPath: String
+    val prevKey: Int?,
+    val nextKey: Int?
 )

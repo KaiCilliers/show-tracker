@@ -32,4 +32,9 @@ interface RepositoryDiscoveryContract {
     suspend fun airingTodayShows(page: Int): Resource<List<UIModelDiscovery>>
 
     fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>>
+    fun popularShowsStream(): Flow<PagingData<UIModelDiscovery>>
+    fun topRatedMoviesStream(): Flow<PagingData<UIModelDiscovery>>
+    fun topRatedShowsStream(): Flow<PagingData<UIModelDiscovery>>
+    fun upcomingMoviesStream(): Flow<PagingData<UIModelDiscovery>>
+    fun airingTodayShowsStream(): Flow<PagingData<UIModelDiscovery>>
 }
