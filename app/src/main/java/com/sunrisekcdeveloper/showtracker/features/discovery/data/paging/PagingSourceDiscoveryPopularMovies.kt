@@ -27,6 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListTy
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import java.io.IOException
 
+// todo this class remains as an example due to inexperience in Paging 3
 class PagingSourceDiscoveryPopularMovies(
     private val remote: RemoteDataSourceDiscoveryContract
 ) : PagingSource<Int, UIModelDiscovery>() {

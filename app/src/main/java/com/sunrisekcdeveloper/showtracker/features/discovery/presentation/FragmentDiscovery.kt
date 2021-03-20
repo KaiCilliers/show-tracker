@@ -42,6 +42,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -75,7 +76,6 @@ class FragmentDiscovery : Fragment() {
     }
 
     private fun observeViewModel() {
-        job?.cancel()
         job = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.streamPopularMovies.collectLatest {
                 adapterPopularMovies.submitData(it)

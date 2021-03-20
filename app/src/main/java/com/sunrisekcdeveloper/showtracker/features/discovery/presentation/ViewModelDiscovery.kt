@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// todo use usecases to load data and not repository directly
 @ExperimentalCoroutinesApi
 class ViewModelDiscovery @ViewModelInject constructor(
     private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
