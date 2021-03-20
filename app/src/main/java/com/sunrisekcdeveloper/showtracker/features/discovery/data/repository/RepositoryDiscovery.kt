@@ -33,6 +33,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListTy
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import kotlinx.coroutines.flow.Flow
 
+// todo The base discovery lists need to look different each day (so why not rank them based on popularity? - just to give it a less static feel)
 class RepositoryDiscovery(
     private val remote: RemoteDataSourceDiscoveryContract,
     private val database: TrackerDatabase
