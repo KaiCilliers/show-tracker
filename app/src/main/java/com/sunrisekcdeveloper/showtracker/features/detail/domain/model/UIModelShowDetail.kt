@@ -28,5 +28,6 @@ data class UIModelShowDetail(
     val seasonsTotal: Int,
     val watchlisted: Boolean,
     val startedWatching: Boolean,
+    val deleted: Boolean,
     val upToDate: Boolean
 )

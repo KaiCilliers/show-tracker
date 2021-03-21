@@ -45,8 +45,14 @@ class RepositoryDetail(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
 
+    // todo there needs some serious work to the business logic with the management of shows and movies
     override suspend fun addShowToWatchlist(id: String) {
-        local.addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
+        val exists = local.watchlistShowExist(id)
+        if (exists) {
+            local.markWatchlistShowAsNotDeleted(id)
+        } else {
+            local.addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
+        }
     }
 
     override suspend fun removeShowFromWatchlist(id: String) {
@@ -145,10 +151,12 @@ class RepositoryDetail(
                 when (responseShow) {
                     is NetworkResult.Success -> {
                         var result = responseShow.data.asEntityShow()
-                        when(responseCertification) {
+                        when (responseCertification) {
                             is NetworkResult.Success -> {
                                 result = result.copy(
-                                    certification = showCertificationUSIfPossible(responseCertification.data.results)
+                                    certification = showCertificationUSIfPossible(
+                                        responseCertification.data.results
+                                    )
                                 )
                             }
                             is NetworkResult.Error -> {
@@ -170,21 +178,30 @@ class RepositoryDetail(
         val showDetails = local.distinctShowDetailFlow(id)
         val status = local.distinctWatchlistShowFlow(id)
 
-       return combine(showDetails, status) { showDetails, status ->
+        return combine(showDetails, status) { showDetails, status ->
             var watchlisted = false
             var started = false
             var upToDate = false
+            var deleted = false
 
             status?.let {
                 watchlisted = true
                 started = it.started
                 upToDate = it.upToDate
+                deleted = it.deleted
             }
 
             return@combine if (showDetails == null) {
                 Resource.Error("No show with ID: $id exists in database")
             } else {
-                Resource.Success(showDetails.asUIModelShowDetail(watchlisted, started, upToDate))
+                Resource.Success(
+                    showDetails.asUIModelShowDetail(
+                        watchlisted,
+                        started,
+                        upToDate,
+                        deleted
+                    )
+                )
             }
         }.onStart { emit(Resource.Loading) }
     }
@@ -230,7 +247,8 @@ class RepositoryDetail(
 fun EntityShow.asUIModelShowDetail(
     watchlisted: Boolean = false,
     started: Boolean = false,
-    upToDate: Boolean = false
+    upToDate: Boolean = false,
+    deleted: Boolean
 ) = UIModelShowDetail(
     id = id,
     name = title,
@@ -239,6 +257,7 @@ fun EntityShow.asUIModelShowDetail(
     certification = certification,
     firstAirDate = firstAirDate,
     seasonsTotal = seasonTotal,
+    deleted = deleted,
     watchlisted = watchlisted,
     startedWatching = started,
     upToDate = upToDate
@@ -249,8 +268,8 @@ fun ResponseShowDetail.asEntityShow() = EntityShow(
     title = name,
     overview = overview,
     certification = "N/A",
-    posterPath = posterPath?: "",
-    backdropPath = backdropPath?: "",
+    posterPath = posterPath ?: "",
+    backdropPath = backdropPath ?: "",
     popularityValue = popularityValue,
     firstAirDate = firstAirYear,
     rating = rating,
@@ -266,18 +285,19 @@ fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
     posterPath = posterPath ?: "",
     certification = "",
     releaseDate = releaseDate,
-    runTime =  "$runtime"
+    runTime = "$runtime"
 )
 
-fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) = UIModelMovieDetail(
-    id = id,
-    title = title,
-    posterPath = posterPath,
-    overview = overview,
-    releaseYear = releaseDate,
-    certification = certification,
-    runtime = runTime,
-    deleted = deleted,
-    watchlisted = watchlisted,
-    watched = watched
-)
+fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =
+    UIModelMovieDetail(
+        id = id,
+        title = title,
+        posterPath = posterPath,
+        overview = overview,
+        releaseYear = releaseDate,
+        certification = certification,
+        runtime = runTime,
+        deleted = deleted,
+        watchlisted = watchlisted,
+        watched = watched
+    )

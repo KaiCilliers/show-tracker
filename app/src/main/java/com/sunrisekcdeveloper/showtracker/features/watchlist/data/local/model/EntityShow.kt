@@ -52,6 +52,8 @@ data class EntityWatchlistShow(
     @ColumnInfo(name = "watch_show_current_season_episode_total") val currentSeasonEpisodeTotal: Int,
     @ColumnInfo(name = "watch_show_started") val started: Boolean,
     @ColumnInfo(name = "watch_show_up_to_date") val upToDate: Boolean,
+    @ColumnInfo(name = "watch_show_deleted") val deleted: Boolean = false,
+    @ColumnInfo(name = "watch_show_deleted_date") val dateDeleted: Long = -1L,
     @ColumnInfo(name = "watch_show_date_added") val dateAdded: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "watch_show_last_updated") val lastUpdated: Long = System.currentTimeMillis()
 ) {

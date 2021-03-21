@@ -56,7 +56,8 @@ fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
     seasonsTotal = seasonCount,
     watchlisted = false,
     startedWatching = false,
-    upToDate = false
+    upToDate = false,
+    deleted = false
 )
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",

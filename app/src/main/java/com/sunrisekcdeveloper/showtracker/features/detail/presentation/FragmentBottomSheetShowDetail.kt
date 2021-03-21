@@ -81,7 +81,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     Timber.e("${it.data}")
 
                     // todo this is a mess FIX up to date shows not showing
-                    if (it.data.watchlisted) {
+                    if (it.data.watchlisted && !it.data.deleted) {
                         binding.btnDetailShowAdd.text = "Added"
                         binding.btnDetailShowAdd.click {
                             Timber.e("removing show from watchlist...")
@@ -98,14 +98,14 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                             }
                         }
 
-                        if (it.data.upToDate) {
+                        if (it.data.upToDate && !it.data.deleted) {
                             binding.btnDetailShowWatchStatus.text = "Up to date"
                             binding.btnDetailShowWatchStatus.click {
                                 Timber.e("button is up to date")
                             }
                         }
 
-                        if ((it.data.startedWatching) && (!it.data.upToDate)) {
+                        if ((it.data.startedWatching) && (!it.data.upToDate) && !it.data.deleted) {
                             binding.btnDetailShowWatchStatus.text = "Update progress"
                             binding.btnDetailShowWatchStatus.click {
                                 Timber.e("button is update progress")
