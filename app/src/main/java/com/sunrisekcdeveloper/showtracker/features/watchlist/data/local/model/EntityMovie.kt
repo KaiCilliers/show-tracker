@@ -42,6 +42,8 @@ data class EntityWatchlistMovie(
     @ColumnInfo(name = "watch_movie_watched") val watched: Boolean,
     @ColumnInfo(name = "watch_movie_date_added") val dateAdded: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "watch_movie_date_watched") val dateWatched: Long,
+    @ColumnInfo(name = "watch_movie_deleted") val deleted: Boolean = false,
+    @ColumnInfo(name = "watch_movie_deleted_date") val dateDeleted: Long = -1L,
     @ColumnInfo(name = "watch_movie_last_updated") val dateLastUpdated: Long = System.currentTimeMillis()
 ) {
     companion object {

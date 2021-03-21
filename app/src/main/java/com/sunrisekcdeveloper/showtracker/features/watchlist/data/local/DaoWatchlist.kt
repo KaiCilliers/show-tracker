@@ -86,7 +86,7 @@ abstract class DaoWatchlist {
     ): EntityWatchlistEpisode
 
     @Transaction
-    @Query("SELECT * FROM tbl_watchlist_movie")
+    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
     open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> {

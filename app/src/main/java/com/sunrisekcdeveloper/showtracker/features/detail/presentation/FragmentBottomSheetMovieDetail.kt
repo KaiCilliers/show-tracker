@@ -68,7 +68,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                     binding.tvDetailMovieReleaseYear.text = it.data.releaseYear
                     binding.tvDetailMovieCertification.text = it.data.certification
 
-                    if (it.data.watchlisted) {
+                    if (it.data.watchlisted && !it.data.deleted) {
                         binding.btnDetailMovieAdd.text = "ADDED"
                         binding.btnDetailMovieAdd.click {
                             viewModel.removeMovieFromWatchlist(it.data.id)
@@ -80,7 +80,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                         }
                     }
 
-                    if (it.data.watched) {
+                    // todo some business logic regarding the watched status of movies "deleted" and then
+                    //  re-added
+                    if (it.data.watched && !it.data.deleted) {
                         binding.btnDetailMovieWatchStatus.text = "YOU'VE WATCHED THIS"
                         binding.btnDetailMovieWatchStatus.click {
                             viewModel.markMovieAsUnWatched(it.data.id)

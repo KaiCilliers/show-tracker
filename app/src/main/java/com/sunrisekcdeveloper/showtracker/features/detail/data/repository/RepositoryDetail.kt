@@ -75,7 +75,13 @@ class RepositoryDetail(
     }
 
     override suspend fun addMovieToWatchlist(id: String) {
-        local.addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
+        val exists = local.watchlistMovieExist(id)
+        if (exists) {
+            local.markWatchlistMovieAsNotDeleted(id)
+            local.setMovieAsWatched(id)
+        } else {
+            local.addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
+        }
     }
 
     override suspend fun fetchAndSaveMovieDetails(id: String) {
@@ -116,14 +122,16 @@ class RepositoryDetail(
         return combine(deets, status) { d, s ->
             var watchlisted = false
             var watched = false
+            var deleted = false
             s?.let {
                 watchlisted = true
                 watched = s.watched
+                deleted = s.deleted
             }
             return@combine if (d == null) {
                 Resource.Error("No movie with ID: $id exists in database")
             } else {
-                Resource.Success(d.asUIModelMovieDetail(watchlisted, watched))
+                Resource.Success(d.asUIModelMovieDetail(watchlisted, watched, deleted))
             }
         }.onStart { emit(Resource.Loading) }
     }
@@ -261,7 +269,7 @@ fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
     runTime =  "$runtime"
 )
 
-fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean) = UIModelMovieDetail(
+fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) = UIModelMovieDetail(
     id = id,
     title = title,
     posterPath = posterPath,
@@ -269,6 +277,7 @@ fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean) = U
     releaseYear = releaseDate,
     certification = certification,
     runtime = runTime,
+    deleted = deleted,
     watchlisted = watchlisted,
     watched = watched
 )

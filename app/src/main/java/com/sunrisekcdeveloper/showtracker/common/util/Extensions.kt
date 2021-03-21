@@ -43,7 +43,8 @@ fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
     certification = "N/A",
     runtime = "$runtime",
     watchlisted = false,
-    watched = false
+    watched = false,
+    deleted = false
 )
 fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
     id = "$id",

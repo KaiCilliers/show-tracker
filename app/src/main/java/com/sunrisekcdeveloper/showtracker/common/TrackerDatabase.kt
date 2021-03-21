@@ -40,12 +40,14 @@ import java.util.Date
         EntityWatchlistBatch::class, UIModelDiscovery::class,
         RemoteKeys::class
     ],
-    version = 62,
+    version = 63,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
 
+    // todo pass database instance to REPOS
+    // todo refactor to have a dao for each table and not for each feature
     abstract fun remoteKeysDiscovery(): DaoRemoteKeys
     abstract fun discoveryDao(): DaoDiscovery
     abstract fun progressDao(): DaoProgress
