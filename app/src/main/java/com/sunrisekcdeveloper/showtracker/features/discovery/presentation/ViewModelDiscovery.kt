@@ -18,25 +18,17 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewActionsDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewStateDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 // todo use usecases to load data and not repository directly
 @ExperimentalCoroutinesApi
@@ -47,7 +39,8 @@ class ViewModelDiscovery @ViewModelInject constructor(
     private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
     private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
     private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract,
-    @RepoDiscovery private val repoTemp: RepositoryDiscoveryContract
+    @RepoDiscovery private val repoTemp: RepositoryDiscoveryContract,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = repoTemp.popularMoviesStream()

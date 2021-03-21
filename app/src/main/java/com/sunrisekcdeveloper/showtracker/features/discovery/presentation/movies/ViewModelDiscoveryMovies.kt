@@ -18,26 +18,19 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 // todo use usecases to load data and not repository directly
 @ExperimentalCoroutinesApi
@@ -45,7 +38,8 @@ class ViewModelDiscoveryMovies @ViewModelInject constructor(
     private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
     private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
-    @RepoDiscovery repo: RepositoryDiscoveryContract
+    @RepoDiscovery repo: RepositoryDiscoveryContract,
+    @Assisted private val savedStateHandle: SavedStateHandle // todo find out how to use this to store flow results...perhaps utilize StateFlow?
 ) : ViewModel() {
 
     val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = repo.popularMoviesStream()

@@ -73,15 +73,9 @@
         android:label="fragment_discovery_movies"
         tools:layout="@layout/fragment_discovery_only_movies" >
         <action
-            android:id="@+id/navigate_from_discovery_movies_to_discovery_fragment"
-            app:destination="@id/destination_main_discovery_fragment"
-            app:popUpTo="@id/destination_main_discovery_movies_fragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/navigate_from_discovery_movies_to_discovery_shows_fragment"
             app:destination="@id/destination_discovery_shows_fragment"
-            app:popUpTo="@id/destination_main_discovery_movies_fragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
@@ -95,15 +89,9 @@
         android:label="fragment_discovery_shows"
         tools:layout="@layout/fragment_discovery_only_shows" >
         <action
-            android:id="@+id/navigate_from_discovery_shows_to_discovery_fragment"
-            app:destination="@id/destination_main_discovery_fragment"
-            app:popUpTo="@id/destination_discovery_shows_fragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/navigate_from_discovery_shows_to_discovery_movies_fragment"
             app:destination="@id/destination_main_discovery_movies_fragment"
-            app:popUpTo="@id/destination_discovery_shows_fragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />

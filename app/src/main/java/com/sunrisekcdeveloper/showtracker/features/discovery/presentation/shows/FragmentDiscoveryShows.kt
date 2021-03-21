@@ -30,20 +30,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -153,10 +147,7 @@ class FragmentDiscoveryShows : Fragment() {
                 ) {
                     // Discovery Screen
                     if (id == 1L) {
-                        // todo pop backstack!!! same with movie
-                        findNavController().navigate(
-                            FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToDiscoveryFragment()
-                        )
+                        findNavController().popBackStack()
                         // Discovery Movies Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
