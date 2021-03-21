@@ -28,6 +28,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
@@ -221,7 +222,7 @@ class FragmentWatchlist : Fragment() {
         viewModel.watchlistMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    watchlistMovieAdapter.refreshList(it.data)
+                    watchlistMovieAdapter.submitList(it.data)
                 }
                 is Resource.Error -> {
                 }

@@ -18,39 +18,28 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
-import android.content.DialogInterface
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import timber.log.Timber
 
 class AdapterWatchlistMovie(
-    private val data: MutableList<UIModelWatchlisMovie>,
     var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> },
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener {_, _ -> }
-) : RecyclerView.Adapter<AdapterWatchlistMovie.ViewHolderWatchlistMovie>() {
+) : ListAdapter<UIModelWatchlisMovie, AdapterWatchlistMovie.ViewHolderWatchlistMovie>(WATCHLIST_MOVIE_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistMovie =
         ViewHolderWatchlistMovie.from(parent, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistMovie, position: Int) {
-        holder.bind(data[position])
-    }
-
-    override fun getItemCount(): Int = data.size
-
-    fun refreshList(data: List<UIModelWatchlisMovie>) {
-        this.data.clear()
-        this.data.addAll(data)
-        notifyDataSetChanged()
+        holder.bind(getItem(position))
     }
 
     // todo take note
@@ -95,6 +84,30 @@ class AdapterWatchlistMovie(
                     LayoutInflater.from(parent.context), parent, false
                 ), clickAction, posterClick
             )
+        }
+    }
+    // todo updating movie items via buttons causes the item to redraw - solution below
+    //  https://medium.com/@MiguelSesma/update-recycler-view-content-without-refreshing-the-data-bb79d768bde8
+    companion object {
+        private val WATCHLIST_MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<UIModelWatchlisMovie>() {
+            override fun areItemsTheSame(
+                oldItem: UIModelWatchlisMovie,
+                newItem: UIModelWatchlisMovie
+            ): Boolean {
+                return (oldItem.title == newItem.title &&
+                        oldItem.id == newItem.id &&
+                        oldItem.dateAdded == newItem.dateAdded &&
+                        oldItem.lastUpdated == newItem.lastUpdated &&
+                        oldItem.watched == newItem.watched &&
+                        oldItem.overview == newItem.overview &&
+                        oldItem.dateWatched == newItem.dateWatched &&
+                        oldItem.posterPath == newItem.posterPath)
+            }
+
+            override fun areContentsTheSame(
+                oldItem: UIModelWatchlisMovie,
+                newItem: UIModelWatchlisMovie
+            ): Boolean = oldItem == newItem
         }
     }
 }

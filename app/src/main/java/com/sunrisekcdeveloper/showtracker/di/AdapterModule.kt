@@ -37,7 +37,7 @@ object AdapterModule {
     }
     @Provides
     fun provideWatchlistMovieAdapter(): AdapterWatchlistMovie {
-        return AdapterWatchlistMovie(mutableListOf())
+        return AdapterWatchlistMovie()
     }
 
     @Provides
