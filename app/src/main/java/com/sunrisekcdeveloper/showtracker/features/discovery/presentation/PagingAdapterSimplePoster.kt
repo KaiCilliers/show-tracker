@@ -72,16 +72,17 @@ class PagingAdapterSimplePoster(
             override fun areItemsTheSame(
                 oldItem: UIModelDiscovery,
                 newItem: UIModelDiscovery
-            ): Boolean {
-                return (oldItem.id == newItem.id &&
-                        oldItem.mediaType == newItem.mediaType &&
-                        oldItem.posterPath == newItem.posterPath)
-            }
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: UIModelDiscovery,
                 newItem: UIModelDiscovery
-            ): Boolean = oldItem == newItem
+            ): Boolean {
+                return (oldItem.id == newItem.id &&
+                        oldItem.mediaType == newItem.mediaType &&
+                        oldItem.posterPath == newItem.posterPath &&
+                        oldItem.listType == newItem.listType)
+            }
         }
     }
 }
