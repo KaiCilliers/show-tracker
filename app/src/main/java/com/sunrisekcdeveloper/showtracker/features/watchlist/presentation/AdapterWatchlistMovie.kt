@@ -35,10 +35,11 @@ import timber.log.Timber
 
 class AdapterWatchlistMovie(
     private val data: MutableList<UIModelWatchlisMovie>,
-    var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> }
+    var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> },
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener {_, _ -> }
 ) : RecyclerView.Adapter<AdapterWatchlistMovie.ViewHolderWatchlistMovie>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistMovie =
-        ViewHolderWatchlistMovie.from(parent, onButtonClicked)
+        ViewHolderWatchlistMovie.from(parent, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistMovie, position: Int) {
         holder.bind(data[position])
@@ -57,7 +58,8 @@ class AdapterWatchlistMovie(
     //  but then you can't have companion object for #from method
     class ViewHolderWatchlistMovie(
         val binding: ItemWatchlistMovieBinding,
-        private val onButtonClicked: OnMovieStatusClickListener
+        private val onButtonClicked: OnMovieStatusClickListener,
+        private val onPosterClickListener: OnPosterClickListener
         ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlisMovie) {
             binding.tvWatchlistMovieTitle.text = item.title
@@ -77,16 +79,21 @@ class AdapterWatchlistMovie(
                 .load("https://image.tmdb.org/t/p/w342${item.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvWatchlistMoviePoster)
+
+            binding.imgvWatchlistMoviePoster.click {
+                onPosterClickListener.onClick(item.id, MediaType.Movie)
+            }
         }
         // todo this button click action passing is silly
         companion object {
             fun from(
                 parent: ViewGroup,
-                clickAction: OnMovieStatusClickListener
+                clickAction: OnMovieStatusClickListener,
+                posterClick: OnPosterClickListener
             ) : ViewHolderWatchlistMovie = ViewHolderWatchlistMovie(
                 ItemWatchlistMovieBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), clickAction
+                ), clickAction, posterClick
             )
         }
     }

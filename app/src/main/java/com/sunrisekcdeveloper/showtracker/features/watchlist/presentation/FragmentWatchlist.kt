@@ -35,6 +35,7 @@ import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMoviesDirections
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +51,7 @@ class FragmentWatchlist : Fragment() {
 
     @Inject
     lateinit var watchlistMovieAdapter: AdapterWatchlistMovie
+
     @Inject
     lateinit var watchlistShowAdapter: AdapterWatchlistShow
 
@@ -158,7 +160,10 @@ class FragmentWatchlist : Fragment() {
                 0 -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Sort TV Shows by:")
-                        .setSingleChoiceItems(sortOptionsShow, showSortCheckedItem) { dialog, which ->
+                        .setSingleChoiceItems(
+                            sortOptionsShow,
+                            showSortCheckedItem
+                        ) { dialog, which ->
                             Timber.e("Sort chosen: ${sortOptionsShow[which]}")
                             showSortCheckedItem = which
                             when (showSortCheckedItem) {
@@ -184,7 +189,10 @@ class FragmentWatchlist : Fragment() {
                 else -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Sort Movies by:")
-                        .setSingleChoiceItems(sortOptionsMovie, movieSortCheckedItem) { dialog, which ->
+                        .setSingleChoiceItems(
+                            sortOptionsMovie,
+                            movieSortCheckedItem
+                        ) { dialog, which ->
                             Timber.e("Sort chosen: ${sortOptionsMovie[which]}")
                             movieSortCheckedItem = which
                             when (movieSortCheckedItem) {
@@ -215,8 +223,10 @@ class FragmentWatchlist : Fragment() {
                 is Resource.Success -> {
                     watchlistMovieAdapter.refreshList(it.data)
                 }
-                is Resource.Error -> {}
-                Resource.Loading -> {}
+                is Resource.Error -> {
+                }
+                Resource.Loading -> {
+                }
             }
         }
         viewModel.watchlistShows.observe(viewLifecycleOwner) {
@@ -244,6 +254,28 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun binding() {
+        val onClick = OnPosterClickListener { mediaId, mediaType ->
+            when (mediaType) {
+                MediaType.Movie -> {
+                    findNavController().navigate(
+                        FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailMovie(
+                            mediaId
+                        )
+                    )
+                }
+                MediaType.Show -> {
+                    findNavController().navigate(
+                        FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailShow(
+                            mediaId
+                        )
+                    )
+                }
+            }
+        }
+
+        watchlistShowAdapter.onPosterClickListener = onClick
+        watchlistMovieAdapter.onPosterClickListener = onClick
+
         binding.recyclerviewWatchlist.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,

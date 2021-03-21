@@ -61,6 +61,12 @@
                 android:name="showIdTest"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+        <action
+            android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
     </fragment>
     <fragment
         android:id="@+id/destination_main_statistics_fragment"

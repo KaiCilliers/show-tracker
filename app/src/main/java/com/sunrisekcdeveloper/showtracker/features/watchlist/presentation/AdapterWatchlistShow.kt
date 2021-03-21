@@ -25,17 +25,20 @@ import android.view.ViewParent
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import timber.log.Timber
 
 class AdapterWatchlistShow(
     private val data: MutableList<UIModelWatchlistShow>,
-    var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ ->  }
+    var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ -> }
 ) : RecyclerView.Adapter<AdapterWatchlistShow.ViewHolderWatchlistShow>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
-        ViewHolderWatchlistShow.from(parent, onButtonClicked)
+        ViewHolderWatchlistShow.from(parent, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistShow, position: Int) {
         holder.bind(data[position])
@@ -66,13 +69,18 @@ class AdapterWatchlistShow(
 
     class ViewHolderWatchlistShow(
         val binding: ItemWatchlistShowBinding,
-        val onButtonClicked: OnShowStatusClickListener
-        ) : RecyclerView.ViewHolder(binding.root) {
+        private val onButtonClicked: OnShowStatusClickListener,
+        private val onPosterClickListener: OnPosterClickListener
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlistShow) {
             Glide.with(binding.root.context)
                 .load("https://image.tmdb.org/t/p/w342${item.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvWatchlistShowPoster)
+
+            binding.imgvWatchlistShowPoster.click {
+                onPosterClickListener.onClick(item.id, MediaType.Show)
+            }
 
             binding.tvWatchlistShowTitle.text = item.title
 
@@ -83,17 +91,33 @@ class AdapterWatchlistShow(
 
             binding.btnWatchlistShowCurrentEpisode.click {
                 Timber.e("adapter - mark season...")
-                onButtonClicked.onClick(ShowAdapterAction.MarkSeason(item.id, item.currentSeasonNumber))
+                onButtonClicked.onClick(
+                    ShowAdapterAction.MarkSeason(
+                        item.id,
+                        item.currentSeasonNumber
+                    )
+                )
             }
 
             binding.btnWatchlistShowMarkAsWatched.click {
                 Timber.e("current episode: ${item.currentEpisodeNumber} and total episodes in season ${item.currentSeasonNumber} is ${item.episodesInSeason}")
                 if (item.currentEpisodeNumber == item.episodesInSeason) {
                     Timber.e("adapter - episode mark season...")
-                    onButtonClicked.onClick(ShowAdapterAction.MarkSeason(item.id, item.currentSeasonNumber))
+                    onButtonClicked.onClick(
+                        ShowAdapterAction.MarkSeason(
+                            item.id,
+                            item.currentSeasonNumber
+                        )
+                    )
                 } else {
                     Timber.e("adapter - mark episode...")
-                    onButtonClicked.onClick(ShowAdapterAction.MarkEpisode(item.id, item.currentSeasonNumber, item.currentEpisodeNumber))
+                    onButtonClicked.onClick(
+                        ShowAdapterAction.MarkEpisode(
+                            item.id,
+                            item.currentSeasonNumber,
+                            item.currentEpisodeNumber
+                        )
+                    )
                 }
             }
 
@@ -106,26 +130,34 @@ class AdapterWatchlistShow(
             } else {
                 binding.tvWatchlistShowUpToDate.visibility = View.GONE
                 if (!item.started) {
-                    binding.btnWatchlistShowStartWatching.visibility = View.VISIBLE // todo make extension function
+                    binding.btnWatchlistShowStartWatching.visibility =
+                        View.VISIBLE // todo make extension function
                     binding.btnWatchlistShowCurrentEpisode.visibility = View.GONE
                     binding.btnWatchlistShowMarkAsWatched.visibility = View.GONE
                     binding.tvWatchlistShowEpisodeName.visibility = View.GONE
                 } else {
-                    binding.btnWatchlistShowStartWatching.visibility = View.GONE // todo make extension function
+                    binding.btnWatchlistShowStartWatching.visibility =
+                        View.GONE // todo make extension function
                     binding.btnWatchlistShowCurrentEpisode.visibility = View.VISIBLE
                     binding.btnWatchlistShowMarkAsWatched.visibility = View.VISIBLE
                     binding.tvWatchlistShowEpisodeName.visibility = View.VISIBLE
 
-                    binding.btnWatchlistShowCurrentEpisode.text = "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"
+                    binding.btnWatchlistShowCurrentEpisode.text =
+                        "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"
                     binding.tvWatchlistShowEpisodeName.text = item.currentEpisodeName
                 }
             }
         }
+
         companion object {
-            fun from(parent: ViewGroup, onButtonClicked: OnShowStatusClickListener) = ViewHolderWatchlistShow(
+            fun from(
+                parent: ViewGroup,
+                onButtonClicked: OnShowStatusClickListener,
+                posterClickListener: OnPosterClickListener
+            ) = ViewHolderWatchlistShow(
                 ItemWatchlistShowBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), onButtonClicked
+                ), onButtonClicked, posterClickListener
             )
         }
     }
@@ -154,12 +186,14 @@ sealed class ShowAdapterAction {
         val showId: String,
         val seasonNumber: Int,
         val episodeNumber: Int
-    ): ShowAdapterAction()
+    ) : ShowAdapterAction()
+
     data class MarkSeason(
         val showId: String,
         val seasonNumber: Int
-    ): ShowAdapterAction()
+    ) : ShowAdapterAction()
+
     data class StartWatchingShow(
         val showId: String
-    ): ShowAdapterAction()
+    ) : ShowAdapterAction()
 }
