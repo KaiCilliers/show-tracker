@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -33,35 +35,28 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import timber.log.Timber
 
 class AdapterWatchlistShow(
-    private val data: MutableList<UIModelWatchlistShow>,
     var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ -> }
-) : RecyclerView.Adapter<AdapterWatchlistShow.ViewHolderWatchlistShow>() {
+) : ListAdapter<UIModelWatchlistShow, AdapterWatchlistShow.ViewHolderWatchlistShow>(WATCHLIST_SHOW_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
         ViewHolderWatchlistShow.from(parent, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistShow, position: Int) {
-        holder.bind(data[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = data.size
-
-    fun refreshData(data: List<UIModelWatchlistShow>) {
-        this.data.clear()
-        this.data.addAll(data)
-        notifyDataSetChanged()
-    }
 
     fun positionOfItem(showId: String): Int {
+        val data = currentList
         Timber.e("adapter show id: $showId")
-        Timber.e("data: ${this.data}")
-        val item = this.data.find {
+        Timber.e("data: ${data}")
+        val item = data.find {
             it.id == showId
         }
         Timber.e("item found: $item")
         var position = -1
         item?.let {
-            position = this.data.indexOf(item)
+            position = data.indexOf(item)
             Timber.e("position found $position")
         }
         return position
@@ -161,6 +156,31 @@ class AdapterWatchlistShow(
             )
         }
     }
+
+    companion object {
+        private val WATCHLIST_SHOW_COMPARATOR = object : DiffUtil.ItemCallback<UIModelWatchlistShow>() {
+            override fun areItemsTheSame(
+                oldItem: UIModelWatchlistShow,
+                newItem: UIModelWatchlistShow
+            ): Boolean = oldItem.id == newItem.id
+
+            override fun areContentsTheSame(
+                oldItem: UIModelWatchlistShow,
+                newItem: UIModelWatchlistShow
+            ): Boolean {
+                return (oldItem.id == newItem.id &&
+                        oldItem.title == newItem.title &&
+                        oldItem.posterPath == newItem.posterPath &&
+                        oldItem.currentEpisodeName == newItem.currentEpisodeName &&
+                        oldItem.currentEpisodeNumber == newItem.currentEpisodeNumber &&
+                        oldItem.currentSeasonNumber == newItem.currentSeasonNumber &&
+                        oldItem.started == newItem.started &&
+                        oldItem.upToDate == newItem.upToDate &&
+                        oldItem.dateAdded == newItem.dateAdded)
+            }
+        }
+    }
+
 }
 
 data class UIModelWatchlistShow(

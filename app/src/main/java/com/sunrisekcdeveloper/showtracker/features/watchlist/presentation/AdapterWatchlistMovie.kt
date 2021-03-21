@@ -86,11 +86,14 @@ class AdapterWatchlistMovie(
             )
         }
     }
-    // todo updating movie items via buttons causes the item to redraw - solution below
-    //  https://medium.com/@MiguelSesma/update-recycler-view-content-without-refreshing-the-data-bb79d768bde8
     companion object {
         private val WATCHLIST_MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<UIModelWatchlisMovie>() {
             override fun areItemsTheSame(
+                oldItem: UIModelWatchlisMovie,
+                newItem: UIModelWatchlisMovie
+            ): Boolean = oldItem.id == newItem.id
+
+            override fun areContentsTheSame(
                 oldItem: UIModelWatchlisMovie,
                 newItem: UIModelWatchlisMovie
             ): Boolean {
@@ -103,11 +106,6 @@ class AdapterWatchlistMovie(
                         oldItem.dateWatched == newItem.dateWatched &&
                         oldItem.posterPath == newItem.posterPath)
             }
-
-            override fun areContentsTheSame(
-                oldItem: UIModelWatchlisMovie,
-                newItem: UIModelWatchlisMovie
-            ): Boolean = oldItem == newItem
         }
     }
 }

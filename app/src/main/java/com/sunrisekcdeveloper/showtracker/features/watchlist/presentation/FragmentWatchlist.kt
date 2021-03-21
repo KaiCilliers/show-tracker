@@ -233,7 +233,7 @@ class FragmentWatchlist : Fragment() {
         viewModel.watchlistShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    watchlistShowAdapter.refreshData(it.data)
+                    watchlistShowAdapter.submitList(it.data)
                     // from show detail scroll to position of show viewed in detail to update progress
                     arguments.showId?.let {
                         if (it != "none") {// default
