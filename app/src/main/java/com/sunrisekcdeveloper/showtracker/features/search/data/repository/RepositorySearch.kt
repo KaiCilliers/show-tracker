@@ -18,6 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
@@ -25,6 +28,7 @@ import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.*
@@ -35,6 +39,17 @@ class RepositorySearch(
     @SourceSearch private val remote: RemoteDataSourceSearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {
+
+    override fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = 40,
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { PagingSourceSearch(remote, query) }
+        ).flow
+    }
 
     override suspend fun searchMediaByTitle(
         page: Int,

@@ -23,42 +23,62 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPoster
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class ViewModelSearch @ViewModelInject constructor(
-    private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract
+    private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract,
+    @RepoSearch private val repo: RepositorySearchContract
 ) : ViewModel() {
 
-    var mediaPage = 0
-    var lastQuery = ""
+    private var currentQuery: String? = null
 
-    private val _results = MutableLiveData<Resource<List<UIModelSearch>>>()
-    val results: LiveData<Resource<List<UIModelSearch>>>
-        get() = _results
+    private var currentSearchResult: Flow<PagingData<UIModelDiscovery>>? = null
 
-    fun getSearchResults(query: String) = viewModelScope.launch {
-        Timber.e("inside viemodel get search results...")
-        // reset page
-        if (lastQuery != query) {
-            mediaPage = 0
-            lastQuery = query
+    // todo returning different UIModel due to pagingadapter requirements
+    //  the adapter needs to have its own data type
+    fun searchMedia(query: String): Flow<PagingData<UIModelDiscovery>> {
+        val lastResult = currentSearchResult
+        if (query == currentQuery && lastResult != null) {
+            return lastResult
         }
-        getNextPage()
-    }
-
-    fun getNextPage() = viewModelScope.launch {
-        Timber.e("inside viewmodel get next page...")
-        searchMediaByTitleUseCase(++mediaPage, lastQuery).collect {
-            _results.value = it
-        }
+        currentQuery = query
+        val newResult: Flow<PagingData<UIModelDiscovery>> = repo.searchMediaByTitlePage(query)
+            .map {
+                it.map { model ->
+                    model.asUIModelDiscovery()
+                }
+            }
+            .cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        return newResult
     }
 }
+
+// todo this is temp fix (adapter needs its own data type)
+private fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
+    id = id,
+    mediaType = mediaType,
+    listType = ListType.MoviePopular,
+    posterPath = posterPath
+)

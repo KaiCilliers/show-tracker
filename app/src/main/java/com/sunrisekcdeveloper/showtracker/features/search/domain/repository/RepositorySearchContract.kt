@@ -18,10 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.domain.repository
 
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import kotlinx.coroutines.flow.Flow
 
 interface RepositorySearchContract {
     suspend fun searchMediaByTitle(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
+    fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>>
 }
