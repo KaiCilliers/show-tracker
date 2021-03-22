@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
 import android.os.Bundle
+import androidx.appcompat.widget.SearchView
 import android.view.InputQueue
 import android.view.LayoutInflater
 import android.view.View

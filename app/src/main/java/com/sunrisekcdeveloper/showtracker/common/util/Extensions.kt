@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.common.util
 
 import android.view.View
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail

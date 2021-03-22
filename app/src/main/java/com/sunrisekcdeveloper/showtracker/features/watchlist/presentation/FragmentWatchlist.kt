@@ -23,8 +23,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.WindowDecorActionBar
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,13 +35,16 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMoviesDirections
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,6 +65,9 @@ class FragmentWatchlist : Fragment() {
 
     private var showSortCheckedItem = 0
     private var movieSortCheckedItem = 0
+
+    private var allMovies: List<UIModelWatchlisMovie> = listOf()
+    private var allShows: List<UIModelWatchlistShow> = listOf()
 
     private val sortOptionsShow = arrayOf(
         "Title",
@@ -216,12 +224,46 @@ class FragmentWatchlist : Fragment() {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            binding.svWatchlist.getQueryTextChangedStateFlow()
+                .debounce(400)
+                .filter { query ->
+                    if (query.isEmpty()) {
+                        when (binding.tabBarWatchlist.selectedTabPosition) {
+                            0 -> { watchlistShowAdapter.submitList(allShows) }
+                            else -> { watchlistMovieAdapter.submitList(allMovies) }
+                        }
+                        false
+                    } else {
+                        true
+                    }
+                }
+                .distinctUntilChanged()
+                .collectLatest { query ->
+                    when (binding.tabBarWatchlist.selectedTabPosition) {
+                        0 -> {
+                            val filtered = allShows.filter {
+                                it.title.contains(query, true)
+                            }
+                            watchlistShowAdapter.submitList(filtered)
+                        }
+                        else -> {
+                            val filtered = allMovies.filter {
+                                it.title.contains(query, true)
+                            }
+                            watchlistMovieAdapter.submitList(filtered)
+                        }
+                    }
+                }
+        }
+
     }
 
     private fun observeViewModel() {
         viewModel.watchlistMovies.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    allMovies = it.data
                     watchlistMovieAdapter.submitList(it.data)
                 }
                 is Resource.Error -> {
@@ -233,6 +275,7 @@ class FragmentWatchlist : Fragment() {
         viewModel.watchlistShows.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    allShows = it.data
                     watchlistShowAdapter.submitList(it.data)
                     // from show detail scroll to position of show viewed in detail to update progress
                     arguments.showId?.let {
