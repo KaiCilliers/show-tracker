@@ -23,6 +23,7 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
@@ -33,7 +34,7 @@ import kotlinx.coroutines.flow.Flow
 class FetchWatchlistShowsUseCase(
     @RepoWatchlist private val repoWatchlist: RepositoryWatchlistContract
 ) : FetchWatchlistShowsUseCaseContract {
-    override suspend fun invoke(): Flow<Resource<List<UIModelWatchlistShow>>> {
-        return repoWatchlist.watchlistShows()
+    override suspend fun invoke(sortBy: SortShows): Flow<Resource<List<UIModelWatchlistShow>>> {
+        return repoWatchlist.watchlistShows(sortBy)
     }
 }

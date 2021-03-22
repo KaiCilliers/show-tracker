@@ -18,23 +18,150 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
-import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.*
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistShowDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import timber.log.Timber
+import java.sql.Timestamp
 
 @Dao
 abstract class DaoWatchlist {
 
-    @Query("SELECT * FROM tbl_watchlist_movie")
+    @Query("SELECT * FROM tbl_show WHERE show_id = :showId")
+    abstract suspend fun show(showId: String): EntityShow
+
+    @Query("SELECT * FROM tbl_season WHERE season_show_id = :showId AND season_number = :season")
+    abstract suspend fun season(showId: String, season: Int): EntitySeason
+
+    @Query("SELECT * FROM tbl_episode WHERE episode_show_id = :showId AND episode_season_number = :season AND episode_number = :episode")
+    abstract suspend fun episode(showId: String, season: Int, episode: Int): EntityEpisode?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertWatchlistSeason(season: EntityWatchlistSeason)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertWatchlistEpisode(episode: EntityWatchlistEpisode)
+
+    // todo consider simply fetching records and using kotlin #copy method and then insert the records again
+    //     like these below
+    @Update
+    abstract suspend fun updateWatchlistEpisode(episode: EntityWatchlistEpisode)
+
+    @Update
+    abstract suspend fun updateWatchlistSeason(season: EntityWatchlistSeason)
+
+    @Update
+    abstract suspend fun updateWatchlistShow(show: EntityWatchlistShow)
+
+    @Query(
+        """
+        SELECT * FROM tbl_watchlist_show WHERE watch_show_id = :showId
+    """
+    )
+    abstract suspend fun watchlistShow(showId: String): EntityWatchlistShow
+
+    @Query(
+        """
+        SELECT * FROM tbl_watchlist_season WHERE watch_season_show_id = :showId
+        AND watch_season_number = :season
+    """
+    )
+    abstract suspend fun watchlistSeason(showId: String, season: Int): EntityWatchlistSeason
+
+    @Query(
+        """
+        SELECT * FROM tbl_watchlist_episode WHERE watch_episode_show_id = :showId
+        AND watch_episode_season_number = :season
+        AND watch_episode_episode_number = :episode 
+    """
+    )
+    abstract suspend fun watchlistEpisode(
+        showId: String,
+        episode: Int,
+        season: Int
+    ): EntityWatchlistEpisode
+
+    @Transaction
+    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
-    fun distinctWatchlistMoviesDetailsFlow() = privateWatchlistMoviesWithDetailsFlow().distinctUntilChanged()
+    open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> {
+        val flow = privateWatchlistMoviesWithDetailsFlow()
+        // todo you can call this when inside flow mapping
+        //  then simple run the appropriate mapping logic inside each
+        //  thus having single #map and single #distinctUntilChanged
+        return when (sortBy) {
+            SortMovies.ByTitle -> {
+                flow.map { list ->
+                    list.sortedBy { it.details.title }
+                }.distinctUntilChanged()
+            }
+            SortMovies.ByRecentlyAdded -> {
+                flow.map { list ->
+                    list.sortedWith(compareByDescending<WatchlistMovieDetails>
+                    { it.watchlist.dateAdded }.thenBy { it.details.title }
+                    )
+                }.distinctUntilChanged()
+            }
+            SortMovies.ByWatched -> {
+                flow.map { list ->
+                    list.sortedWith(compareByDescending<WatchlistMovieDetails>
+                    { it.watchlist.watched }.thenBy { it.details.title }
+                    )
+                }.distinctUntilChanged()
+            }
+        }
+    }
 
-    @Query("SELECT * FROM tbl_watchlist_show")
+    @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
+    @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0")
     protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
 
-    fun distinctWatchlistShowsDetailsFlow() = privateWatchlistShowsWithDetailsFlow().distinctUntilChanged()
+    open fun distinctWatchlistShowsDetailsFlow(sortShows: SortShows) =
+        privateWatchlistShowsWithDetailsFlow().map { list ->
+            when (sortShows) {
+                SortShows.ByTitle -> {
+                    list.sortedBy { it.details.title }
+                }
+                SortShows.ByEpisodesLeftInSeason -> {
+                    list.sortedWith(compareBy<WatchlistShowDetails>
+                    { it.watchlist.currentSeasonEpisodeTotal - it.watchlist.currentEpisodeNumber }
+                        .thenBy { it.details.title }
+                    )
+                }
+                SortShows.ByRecentlyWatched -> {
+                    list.sortedWith(compareByDescending<WatchlistShowDetails>
+                    { it.watchlist.lastUpdated }.thenBy { it.details.title }
+                    )
+                }
+                SortShows.ByRecentlyAdded -> {
+                    list.sortedWith(compareByDescending<WatchlistShowDetails>
+                    { it.watchlist.dateAdded }.thenBy { it.details.title }
+                    )
+                }
+                SortShows.ByNotStarted -> {
+                    list.sortedWith(compareBy<WatchlistShowDetails>
+                    { it.watchlist.started }.thenBy { it.details.title }
+                    )
+                }
+            }
+        }.distinctUntilChanged()
+}
+
+sealed class SortMovies {
+    object ByTitle : SortMovies()
+    object ByRecentlyAdded : SortMovies()
+    object ByWatched : SortMovies()
+}
+
+sealed class SortShows {
+    object ByTitle : SortShows()
+    object ByEpisodesLeftInSeason : SortShows()
+    object ByRecentlyWatched : SortShows()
+    object ByRecentlyAdded : SortShows()
+    object ByNotStarted : SortShows()
 }

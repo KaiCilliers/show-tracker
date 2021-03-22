@@ -24,15 +24,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ViewModelWatchlist @ViewModelInject constructor(
     private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
-    private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract
+    private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract,
+    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
+    private val updateShowProgressUseCase: UpdateShowProgressUseCaseContract
 ) : ViewModel() {
     private val _watchlistMovies = MutableLiveData<Resource<List<UIModelWatchlisMovie>>>()
     val watchlistMovies: LiveData<Resource<List<UIModelWatchlisMovie>>>
@@ -43,18 +51,33 @@ class ViewModelWatchlist @ViewModelInject constructor(
         get() = _watchlistShows
 
     init {
-        watchlistMovies()
-        watchlistShows()
+        // todo problem with sort implementation is when updating items the sort gets reapplied and it is jarring with flickering
+        watchlistMovies(SortMovies.ByTitle)
+        watchlistShows(SortShows.ByTitle)
     }
 
-    fun watchlistMovies() = viewModelScope.launch {
-        fetchWatchlistMoviesUseCase().collect {
+    fun updateShowProgress(action: UpdateShowAction) = viewModelScope.launch{
+        updateShowProgressUseCase(action)
+    }
+
+    fun markMovieAsWatched(movieId: String) = viewModelScope.launch {
+        Timber.e("mark as watched: $movieId")
+        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.Watched)
+    }
+
+    fun markMovieAsUnWatched(movieId: String) = viewModelScope.launch {
+        Timber.e("mark as not watched $movieId")
+        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.NotWatched)
+    }
+
+    fun watchlistMovies(sortBy: SortMovies) = viewModelScope.launch {
+        fetchWatchlistMoviesUseCase(sortBy).collect {
             _watchlistMovies.value = it
         }
     }
 
-    fun watchlistShows() = viewModelScope.launch {
-        fetchWatchlistShowsUseCase().collect {
+    fun watchlistShows(sortBy: SortShows) = viewModelScope.launch {
+        fetchWatchlistShowsUseCase(sortBy).collect {
             _watchlistShows.value = it
         }
     }
@@ -70,3 +93,9 @@ data class UIModelWatchlisMovie(
     val dateWatched: Long,
     val lastUpdated: Long
 )
+
+sealed class UpdateShowAction {
+    data class IncrementEpisode(val showId: String) : UpdateShowAction()
+    data class CompleteSeason(val showId: String) : UpdateShowAction()
+    data class UpToDateWithShow(val showId: String) : UpdateShowAction()
+}

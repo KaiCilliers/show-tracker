@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -31,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShowsDirections
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -59,12 +61,6 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         viewModel.showDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    Glide.with(requireContext())
-                        .load("https://image.tmdb.org/t/p/w342${it.data.posterPath}")
-                        .transform(CenterCrop())
-                        .into(binding.imgDetailShowPoster)
-
-                    binding.tvDetailShowTitle.text = it.data.name
                     binding.tvDetailShowDescription.text = it.data.overview
                     binding.tvDetailShowFirstAirDate.text = it.data.firstAirDate
                     binding.tvDetailShowCertification.text = it.data.certification
@@ -76,7 +72,10 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                             "started: ${it.data.startedWatching}" +
                             " uptodate: ${it.data.upToDate} ")
 
-                    if (it.data.watchlisted) {
+                    Timber.e("${it.data}")
+
+                    // todo this is a mess FIX up to date shows not showing
+                    if (it.data.watchlisted && !it.data.deleted) {
                         binding.btnDetailShowAdd.text = "Added"
                         binding.btnDetailShowAdd.click {
                             Timber.e("removing show from watchlist...")
@@ -86,25 +85,35 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                         if (!it.data.startedWatching) {
                             binding.btnDetailShowWatchStatus.text = "Start Watching"
                             binding.btnDetailShowWatchStatus.click {
+                                findNavController().navigate(
+                                    FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToNavGraphProgress(it.data.id)
+                                )
                                 Timber.e("button is start watching")
                             }
                         }
 
-                        if (it.data.upToDate) {
+                        if (it.data.upToDate && !it.data.deleted) {
                             binding.btnDetailShowWatchStatus.text = "Up to date"
                             binding.btnDetailShowWatchStatus.click {
                                 Timber.e("button is up to date")
                             }
                         }
 
-                        if ((it.data.startedWatching) && (!it.data.upToDate)) {
+                        if ((it.data.startedWatching) && (!it.data.upToDate) && !it.data.deleted) {
                             binding.btnDetailShowWatchStatus.text = "Update progress"
                             binding.btnDetailShowWatchStatus.click {
                                 Timber.e("button is update progress")
+                                findNavController().navigate(
+                                    FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToWatchlistFragment(it.data.id)
+                                )
                             }
                         } else {
                             binding.btnDetailShowWatchStatus.text = "Start Watching"
                             binding.btnDetailShowWatchStatus.click {
+                                // todo note duplicated 3 time - not cool man
+                                findNavController().navigate(
+                                    FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToNavGraphProgress(it.data.id)
+                                )
                                 Timber.e("button is start watching")
                             }
                         }
@@ -116,6 +125,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                         }
                         binding.btnDetailShowWatchStatus.text = "Start Watching"
                         binding.btnDetailShowWatchStatus.click {
+                            findNavController().navigate(
+                                FragmentBottomSheetShowDetailDirections.navigateFromDetailShowToNavGraphProgress(it.data.id)
+                            )
                             Timber.e("button is start watching")
                         }
                     }
@@ -132,5 +144,11 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         // Navigation - Close fragment
         binding.imgDetailShowClose.setOnClickListener { dismissAllowingStateLoss() }
         viewModel.showDetails(arguments.showId)
+        Glide.with(requireContext())
+            .load("https://image.tmdb.org/t/p/w342${arguments.posterPath}")
+            .transform(CenterCrop())
+            .into(binding.imgDetailShowPoster)
+
+        binding.tvDetailShowTitle.text = arguments.showTitle
     }
 }

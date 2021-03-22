@@ -24,5 +24,8 @@ data class UIModelSearch(
     val id: String,
     val title: String,
     val posterPath: String,
-    val mediaType: MediaType
+    val mediaType: MediaType,
+    val rating: Float,
+    val popularity: Float,
+    val ratingVotes: Int
 )

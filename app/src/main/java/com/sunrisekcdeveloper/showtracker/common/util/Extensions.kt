@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.common.util
 
 import android.view.View
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
@@ -43,7 +43,8 @@ fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
     certification = "N/A",
     runtime = "$runtime",
     watchlisted = false,
-    watched = false
+    watched = false,
+    deleted = false
 )
 fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
     id = "$id",
@@ -55,29 +56,40 @@ fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
     seasonsTotal = seasonCount,
     watchlisted = false,
     startedWatching = false,
-    upToDate = false
+    upToDate = false,
+    deleted = false
 )
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
+    mediaTitle = title,
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    listType = listType
 )
 fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
+    mediaTitle = name,
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    listType = listType
 )
 fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = title,
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
 fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = name,
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
 fun UIModelDiscovery.asUIModelPoster() = UIModelPoster(
     id = id,

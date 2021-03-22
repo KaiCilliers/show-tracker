@@ -20,12 +20,15 @@ package com.sunrisekcdeveloper.showtracker.common
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
+// todo rename to ActivtyMain
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 

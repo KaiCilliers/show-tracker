@@ -33,11 +33,11 @@ object AdapterModule {
 
     @Provides
     fun provideWatchlistShowAdapter(): AdapterWatchlistShow {
-        return AdapterWatchlistShow(mutableListOf())
+        return AdapterWatchlistShow()
     }
     @Provides
     fun provideWatchlistMovieAdapter(): AdapterWatchlistMovie {
-        return AdapterWatchlistMovie(mutableListOf())
+        return AdapterWatchlistMovie()
     }
 
     @Provides

@@ -29,12 +29,17 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Dao
 abstract class DaoDetail {
 
-    @Query("DELETE FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
-    protected abstract suspend fun privateRemoveMovieFromWatchlist(id: String)
+    @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id)")
+    abstract suspend fun watchlistMovieExist(id: String): Boolean
 
-    // todo transaction
-    @Query("DELETE FROM tbl_watchlist_show WHERE watch_show_id = :id")
-    abstract suspend fun removeShowFromWatchlist(id: String)
+    @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_show WHERE watch_show_id = :id)")
+    abstract suspend fun watchlistShowExist(id: String): Boolean
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    abstract suspend fun insertWatchlistMovie(entity: EntityWatchlistMovie)
+
+    @Query("UPDATE tbl_watchlist_movie SET watch_movie_deleted = 1, watch_movie_deleted_date = :timeStamp WHERE watch_movie_id = :id")
+    protected abstract suspend fun privateRemoveMovieFromWatchlist(id: String, timeStamp: Long)
 
     @Insert
     abstract suspend fun addShowToWatchlist(entity: EntityWatchlistShow)
@@ -64,6 +69,12 @@ abstract class DaoDetail {
 
     @Query("UPDATE tbl_watchlist_movie SET watch_movie_watched = 0  WHERE watch_movie_id = :id")
     protected abstract suspend fun privateSetMovieAsNotWatched(id: String)
+
+    @Query("UPDATE tbl_watchlist_movie SET watch_movie_deleted = 0 WHERE watch_movie_id = :id")
+    abstract suspend fun markWatchlistMovieAsNotDeleted(id: String)
+
+    @Query("UPDATE tbl_watchlist_show SET watch_show_deleted = 0 WHERE watch_show_id = :id")
+    abstract suspend fun markWatchlistShowAsNotDeleted(id: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun addMovieToWatchlist(entity: EntityWatchlistMovie)
@@ -96,9 +107,20 @@ abstract class DaoDetail {
     //  these records later using work manager
     @Transaction
     open suspend fun removeMovieFromWatchlist(id: String) {
-        privateRemoveMovieFromWatchlist(id)
+        privateRemoveMovieFromWatchlist(id, System.currentTimeMillis())
         updateWatchlistMovieUpdatedAt(id, System.currentTimeMillis())
     }
 
+    @Query("UPDATE tbl_watchlist_show SET watch_show_deleted = 1, watch_show_deleted_date = :timeStamp WHERE watch_show_id = :id ")
+    protected abstract suspend fun privateRemoveShowFromWatchlist(id: String, timeStamp: Long)
+
+    @Query("UPDATE tbl_watchlist_show SET watch_show_last_updated = :timeStamp WHERE watch_show_id = :id")
+    abstract suspend fun updateWatchlistShowUpdatedAt(id: String, timeStamp: Long)
+
+    @Transaction
+    open suspend fun removeShowFromWatchlist(id: String) {
+        privateRemoveShowFromWatchlist(id, System.currentTimeMillis())
+        updateWatchlistShowUpdatedAt(id, System.currentTimeMillis())
+    }
 
 }

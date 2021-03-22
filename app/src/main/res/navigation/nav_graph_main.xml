@@ -49,7 +49,25 @@
         android:id="@+id/destination_main_watchlist_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.FragmentWatchlist"
         android:label="fragment_watchlist"
-        tools:layout="@layout/fragment_watchlist" />
+        tools:layout="@layout/fragment_watchlist" >
+        <argument
+            android:name="showId"
+            app:argType="string"
+            android:defaultValue="none" />
+        <action
+            android:id="@+id/navigate_from_watchlist_to_nav_graph_progress"
+            app:destination="@id/nav_graph_progress" >
+            <argument
+                android:name="showIdTest"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+        <action
+            android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
+    </fragment>
     <fragment
         android:id="@+id/destination_main_statistics_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.statistics.FragmentStatistics"
@@ -61,15 +79,9 @@
         android:label="fragment_discovery_movies"
         tools:layout="@layout/fragment_discovery_only_movies" >
         <action
-            android:id="@+id/navigate_from_discovery_movies_to_discovery_fragment"
-            app:destination="@id/destination_main_discovery_fragment"
-            app:popUpTo="@id/destination_main_discovery_movies_fragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/navigate_from_discovery_movies_to_discovery_shows_fragment"
             app:destination="@id/destination_discovery_shows_fragment"
-            app:popUpTo="@id/destination_main_discovery_movies_fragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
@@ -83,15 +95,9 @@
         android:label="fragment_discovery_shows"
         tools:layout="@layout/fragment_discovery_only_shows" >
         <action
-            android:id="@+id/navigate_from_discovery_shows_to_discovery_fragment"
-            app:destination="@id/destination_main_discovery_fragment"
-            app:popUpTo="@id/destination_discovery_shows_fragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/navigate_from_discovery_shows_to_discovery_movies_fragment"
             app:destination="@id/destination_main_discovery_movies_fragment"
-            app:popUpTo="@id/destination_discovery_shows_fragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />
@@ -107,6 +113,11 @@
         <argument
             android:name="movieId"
             app:argType="string" />
+        <argument android:name="movieTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
+            app:argType="string" />
     </dialog>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_show"
@@ -116,6 +127,23 @@
         <argument
             android:name="showId"
             app:argType="string" />
+        <action
+            android:id="@+id/navigate_from_detail_show_to_nav_graph_progress"
+            app:destination="@id/nav_graph_progress">
+
+            <argument
+                android:name="showIdTest"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/navigate_from_detail_show_to_watchlist_fragment"
+            app:destination="@id/destination_main_watchlist_fragment" />
+        <argument android:name="showTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
+            app:argType="string" />
     </dialog>
     <include app:graph="@navigation/nav_graph_search" />
+    <include app:graph="@navigation/nav_graph_progress" />
 </navigation>

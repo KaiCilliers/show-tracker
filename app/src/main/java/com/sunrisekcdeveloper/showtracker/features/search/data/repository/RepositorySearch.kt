@@ -18,6 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
@@ -25,6 +28,7 @@ import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.*
@@ -35,6 +39,17 @@ class RepositorySearch(
     @SourceSearch private val remote: RemoteDataSourceSearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {
+
+    override fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = 40,
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { PagingSourceSearch(remote, query) }
+        ).flow
+    }
 
     override suspend fun searchMediaByTitle(
         page: Int,
@@ -62,7 +77,32 @@ class RepositorySearch(
                     Timber.d("Error - show search call was not successful: ${showResponse.message}")
                 }
             }
-            Resource.Success(result.toList())
+
+            // todo this can be done nicer
+            val filtered = result.filter { it.posterPath != "" }.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
+            val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
+                { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
+            )
+
+            Timber.d("Sorted: ${sorted.toList()}")
+
+            Timber.d("Results Media Type: ${sorted.map { 
+                when (it.mediaType) {
+                    MediaType.Movie -> "Movie"
+                    MediaType.Show -> "Show"
+                }
+            }}")
+            Timber.d("Results Rating: ${sorted.map {
+                "${it.rating}"
+            }}")
+            Timber.d("Results Popularity: ${sorted.map {
+                "${it.popularity}"
+            }}")
+            Timber.d("Results Vote Count: ${sorted.map {
+                "${it.ratingVotes}"
+            }}")
+
+            Resource.Success(sorted)
         }
     }
 }
@@ -73,7 +113,10 @@ fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = title,
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
 fun List<ResponseStandardMedia.ResponseMovie>.asUIModelSearch() = this.map { it.asUIModelSearch() }
 fun List<ResponseStandardMedia.ResponseShow>.asUIModelSearchh() = this.map { it.asUIModelSearch() }
@@ -81,5 +124,8 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = name,
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )

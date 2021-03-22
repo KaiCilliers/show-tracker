@@ -19,6 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
 import android.os.Bundle
+import androidx.appcompat.widget.SearchView
+import android.view.InputQueue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,29 +28,25 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.sql.Time
-import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 @AndroidEntryPoint
 class FragmentSearch : Fragment() {
@@ -57,9 +55,9 @@ class FragmentSearch : Fragment() {
 
     private val viewModel: ViewModelSearch by viewModels()
 
-    @Inject
-    lateinit var gridAdapter: AdapterSimplePoster
-    private lateinit var gridLayoutManager: GridLayoutManager
+    private val adapterSearchResults = PagingAdapterSimplePoster()
+
+    var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,36 +69,31 @@ class FragmentSearch : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
+            binding.svSearch.setQuery(it, false)
+            search(it)
+        }
         setup()
         binding.toolbarSearch.setNavigationOnClickListener { findNavController().popBackStack() } // todo up button returns to discovery
-        observeViewModel()
     }
 
-    private fun updateList(
-        adapter: AdapterSimplePoster,
-        list: List<UIModelSearch>
-    ) {
-        adapter.updateList(list.asUIModelPosterListt())
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LAST_SEARCH_QUERY, binding.svSearch.query.trim().toString())
     }
 
-    private fun observeViewModel() {
-        viewModel.results.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    updateList(gridAdapter, it.data)
-                    attachOnScrollListenerGrid(
-                        binding.recyclerviewSearch,
-                        gridLayoutManager
-                    ) { viewModel.getNextPage() }
-                }
-                is Resource.Error -> { }
-                Resource.Loading -> { }
+    private fun search(query: String) {
+        searchJob?.cancel()
+
+        searchJob = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchMedia(query).collectLatest {
+                adapterSearchResults.submitData(it)
             }
         }
     }
 
     private fun setup() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
@@ -116,64 +109,49 @@ class FragmentSearch : Fragment() {
             }
         }
 
-        gridAdapter.onPosterClickListener = onClick
+        adapterSearchResults.onClick = onClick
 
-        gridLayoutManager = GridLayoutManager(
+        binding.recyclerviewSearch.layoutManager = GridLayoutManager(
             requireContext(),
             3,
             GridLayoutManager.VERTICAL,
             false
         )
-        binding.recyclerviewSearch.adapter = gridAdapter
-        binding.recyclerviewSearch.layoutManager = gridLayoutManager
 
-        attachOnScrollListenerGrid(
-            binding.recyclerviewSearch,
-            gridLayoutManager
-        ) { viewModel.getNextPage() }
+        binding.recyclerviewSearch.adapter = adapterSearchResults
 
-        lifecycleScope.launchWhenResumed {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
-                .debounce(400)
+                .debounce(300)
                 .filter { query ->
-                    // simply fetch all the data from database
                     if (query.isEmpty()) {
-                        gridAdapter.replaceList(listOf())
+                        adapterSearchResults.submitData(PagingData.empty())
                         return@filter false
                     }
                     return@filter true
-                }.buffer() // todo determine if needed
+                }
                 .distinctUntilChanged()
-                //  here you will make call to database with query which returns a flow
-//                .flatMapLatest {  }
                 .collect { query ->
-                    gridAdapter.replaceList(listOf())
-                    viewModel.getSearchResults(query)
+                    search(query)
                 }
         }
-    }
 
-    private fun attachOnScrollListenerGrid(
-        recyclerView: RecyclerView,
-        layoutManager: GridLayoutManager,
-        fetchNextPage: suspend () -> Unit
-    ) {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // total number of movies inside adapter
-                val totalItems = layoutManager.itemCount
-                // current number of child views attached to the RecyclerView that are currently
-                // being recycled
-                val visibleItemCount = layoutManager.childCount
-                // position of the leftmost visible item in the list
-                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                    // This is to limit network calls
-                    recyclerView.removeOnScrollListener(this)
-                    MainScope().launch { fetchNextPage() }
-                }
-            }
-        })
+        // Here we launch a coroutine which is responsible for scrolling the list to the top
+        // when the list is refreshed from the network
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            // PagingAdapter exposes a Flow`which emits changes in the adapter's loads state
+            // via a CombinedLoadState object
+            adapterSearchResults.loadStateFlow
+                // Only emit when the REFRESH LoadState changes
+                .distinctUntilChangedBy { it.refresh }
+                // Only emit when REFRESH completes i.e., NotLoading
+                .filter { it.refresh is LoadState.NotLoading }
+                // Scroll to the top of the list
+                .collect { binding.recyclerviewSearch.scrollToPosition(0) }
+        }
+    }
+    companion object {
+        private const val LAST_SEARCH_QUERY: String = "last_search_query"
     }
 }

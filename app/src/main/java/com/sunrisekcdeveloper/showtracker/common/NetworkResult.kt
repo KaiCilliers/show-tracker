@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.common
 
 sealed class NetworkResult<out T> {
     data class Success<T>(val data: T) : NetworkResult<T>()
+    // todo add optional throwable
     data class Error(val message: String) : NetworkResult<Nothing>()
     companion object {
         fun <T> success(data: T) = Success(data)

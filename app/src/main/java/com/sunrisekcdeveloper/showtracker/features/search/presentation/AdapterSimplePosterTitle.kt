@@ -29,7 +29,7 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelS
 
 class AdapterSimplePosterTitle(
     private var data: MutableList<UIModelSearch>,
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { mediaId, mediaType ->  }
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : RecyclerView.Adapter<AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
         ViewHolderSimplePosterTitle.from(parent)
@@ -38,7 +38,7 @@ class AdapterSimplePosterTitle(
         val item = data[position]
         holder.bind(item)
         holder.binding.cardPoster.setOnClickListener {
-            onPosterClickListener.onClick(item.id, item.mediaType)
+            onPosterClickListener.onClick(item.id, "", "", item.mediaType)
         }
     }
 

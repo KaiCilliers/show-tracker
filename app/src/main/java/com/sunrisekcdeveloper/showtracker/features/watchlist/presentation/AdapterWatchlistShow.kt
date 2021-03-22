@@ -22,61 +22,170 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import timber.log.Timber
 
 class AdapterWatchlistShow(
-    private val data: MutableList<UIModelWatchlistShow>
-) : RecyclerView.Adapter<AdapterWatchlistShow.ViewHolderWatchlistShow>() {
+    var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ , _, _-> }
+) : ListAdapter<UIModelWatchlistShow, AdapterWatchlistShow.ViewHolderWatchlistShow>(WATCHLIST_SHOW_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
-        ViewHolderWatchlistShow.from(parent)
+        ViewHolderWatchlistShow.from(parent, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistShow, position: Int) {
-        holder.bind(data[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = data.size
 
-    fun refreshData(data: List<UIModelWatchlistShow>) {
-        this.data.clear()
-        this.data.addAll(data)
-        notifyDataSetChanged()
+    fun positionOfItem(showId: String): Int {
+        val data = currentList
+        Timber.e("adapter show id: $showId")
+        Timber.e("data: ${data}")
+        val item = data.find {
+            it.id == showId
+        }
+        Timber.e("item found: $item")
+        var position = -1
+        item?.let {
+            position = data.indexOf(item)
+            Timber.e("position found $position")
+        }
+        return position
     }
 
-    class ViewHolderWatchlistShow(val binding: ItemWatchlistShowBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolderWatchlistShow(
+        val binding: ItemWatchlistShowBinding,
+        private val onButtonClicked: OnShowStatusClickListener,
+        private val onPosterClickListener: OnPosterClickListener
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlistShow) {
             Glide.with(binding.root.context)
                 .load("https://image.tmdb.org/t/p/w342${item.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvWatchlistShowPoster)
 
+            binding.imgvWatchlistShowPoster.click {
+                onPosterClickListener.onClick(
+                    item.id,
+                    item.title,
+                    item.posterPath,
+                    MediaType.Show
+                )
+            }
+
             binding.tvWatchlistShowTitle.text = item.title
 
-            if (!item.started) {
-                binding.btnWatchlistShowStartWatching.visibility = View.VISIBLE // todo make extension function
+            binding.btnWatchlistShowStartWatching.click {
+                Timber.e("adapter - start watching...")
+                onButtonClicked.onClick(ShowAdapterAction.StartWatchingShow(item.id))
+            }
+
+            binding.btnWatchlistShowCurrentEpisode.click {
+                Timber.e("adapter - mark season...")
+                onButtonClicked.onClick(
+                    ShowAdapterAction.MarkSeason(
+                        item.id,
+                        item.currentSeasonNumber
+                    )
+                )
+            }
+
+            binding.btnWatchlistShowMarkAsWatched.click {
+                Timber.e("current episode: ${item.currentEpisodeNumber} and total episodes in season ${item.currentSeasonNumber} is ${item.episodesInSeason}")
+                if (item.currentEpisodeNumber == item.episodesInSeason) {
+                    Timber.e("adapter - episode mark season...")
+                    onButtonClicked.onClick(
+                        ShowAdapterAction.MarkSeason(
+                            item.id,
+                            item.currentSeasonNumber
+                        )
+                    )
+                } else {
+                    Timber.e("adapter - mark episode...")
+                    onButtonClicked.onClick(
+                        ShowAdapterAction.MarkEpisode(
+                            item.id,
+                            item.currentSeasonNumber,
+                            item.currentEpisodeNumber
+                        )
+                    )
+                }
+            }
+
+            if (item.upToDate) {
+                binding.tvWatchlistShowUpToDate.visibility = View.VISIBLE
+                binding.btnWatchlistShowStartWatching.visibility = View.GONE
                 binding.btnWatchlistShowCurrentEpisode.visibility = View.GONE
                 binding.btnWatchlistShowMarkAsWatched.visibility = View.GONE
                 binding.tvWatchlistShowEpisodeName.visibility = View.GONE
             } else {
-                binding.btnWatchlistShowStartWatching.visibility = View.GONE // todo make extension function
-                binding.btnWatchlistShowCurrentEpisode.visibility = View.VISIBLE
-                binding.btnWatchlistShowMarkAsWatched.visibility = View.VISIBLE
-                binding.tvWatchlistShowEpisodeName.visibility = View.VISIBLE
+                binding.tvWatchlistShowUpToDate.visibility = View.GONE
+                if (!item.started) {
+                    binding.btnWatchlistShowStartWatching.visibility =
+                        View.VISIBLE // todo make extension function
+                    binding.btnWatchlistShowCurrentEpisode.visibility = View.GONE
+                    binding.btnWatchlistShowMarkAsWatched.visibility = View.GONE
+                    binding.tvWatchlistShowEpisodeName.visibility = View.GONE
+                } else {
+                    binding.btnWatchlistShowStartWatching.visibility =
+                        View.GONE // todo make extension function
+                    binding.btnWatchlistShowCurrentEpisode.visibility = View.VISIBLE
+                    binding.btnWatchlistShowMarkAsWatched.visibility = View.VISIBLE
+                    binding.tvWatchlistShowEpisodeName.visibility = View.VISIBLE
 
-                binding.btnWatchlistShowCurrentEpisode.text = "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"
-                binding.tvWatchlistShowEpisodeName.text = item.currentEpisodeName
+                    binding.btnWatchlistShowCurrentEpisode.text =
+                        "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"
+                    binding.tvWatchlistShowEpisodeName.text = item.currentEpisodeName
+                }
             }
         }
+
         companion object {
-            fun from(parent: ViewGroup) = ViewHolderWatchlistShow(
+            fun from(
+                parent: ViewGroup,
+                onButtonClicked: OnShowStatusClickListener,
+                posterClickListener: OnPosterClickListener
+            ) = ViewHolderWatchlistShow(
                 ItemWatchlistShowBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                )
+                ), onButtonClicked, posterClickListener
             )
         }
     }
+
+    companion object {
+        private val WATCHLIST_SHOW_COMPARATOR = object : DiffUtil.ItemCallback<UIModelWatchlistShow>() {
+            override fun areItemsTheSame(
+                oldItem: UIModelWatchlistShow,
+                newItem: UIModelWatchlistShow
+            ): Boolean = oldItem.id == newItem.id
+
+            override fun areContentsTheSame(
+                oldItem: UIModelWatchlistShow,
+                newItem: UIModelWatchlistShow
+            ): Boolean {
+                return (oldItem.id == newItem.id &&
+                        oldItem.title == newItem.title &&
+                        oldItem.posterPath == newItem.posterPath &&
+                        oldItem.currentEpisodeName == newItem.currentEpisodeName &&
+                        oldItem.currentEpisodeNumber == newItem.currentEpisodeNumber &&
+                        oldItem.currentSeasonNumber == newItem.currentSeasonNumber &&
+                        oldItem.started == newItem.started &&
+                        oldItem.upToDate == newItem.upToDate &&
+                        oldItem.dateAdded == newItem.dateAdded)
+            }
+        }
+    }
+
 }
 
 data class UIModelWatchlistShow(
@@ -91,3 +200,25 @@ data class UIModelWatchlistShow(
     val upToDate: Boolean,
     val dateAdded: Long
 )
+
+// todo better name
+fun interface OnShowStatusClickListener {
+    fun onClick(action: ShowAdapterAction)
+}
+
+sealed class ShowAdapterAction {
+    data class MarkEpisode(
+        val showId: String,
+        val seasonNumber: Int,
+        val episodeNumber: Int
+    ) : ShowAdapterAction()
+
+    data class MarkSeason(
+        val showId: String,
+        val seasonNumber: Int
+    ) : ShowAdapterAction()
+
+    data class StartWatchingShow(
+        val showId: String
+    ) : ShowAdapterAction()
+}

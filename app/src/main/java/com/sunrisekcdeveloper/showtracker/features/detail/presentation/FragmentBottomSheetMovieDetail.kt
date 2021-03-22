@@ -58,17 +58,12 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    Glide.with(requireContext())
-                        .load("https://image.tmdb.org/t/p/w342${it.data.posterPath}")
-                        .transform(CenterCrop())
-                        .into(binding.imgDetailMoviePoster)
-                    binding.tvDetailMovieTitle.text = it.data.title
                     binding.tvDetailMovieDescription.text = it.data.overview
                     binding.tvDetailMovieRuntime.text = it.data.runtime
                     binding.tvDetailMovieReleaseYear.text = it.data.releaseYear
                     binding.tvDetailMovieCertification.text = it.data.certification
 
-                    if (it.data.watchlisted) {
+                    if (it.data.watchlisted && !it.data.deleted) {
                         binding.btnDetailMovieAdd.text = "ADDED"
                         binding.btnDetailMovieAdd.click {
                             viewModel.removeMovieFromWatchlist(it.data.id)
@@ -80,7 +75,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                         }
                     }
 
-                    if (it.data.watched) {
+                    // todo some business logic regarding the watched status of movies "deleted" and then
+                    //  re-added
+                    if (it.data.watched && !it.data.deleted) {
                         binding.btnDetailMovieWatchStatus.text = "YOU'VE WATCHED THIS"
                         binding.btnDetailMovieWatchStatus.click {
                             viewModel.markMovieAsUnWatched(it.data.id)
@@ -103,6 +100,11 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         // Navigation - Close fragment
         binding.imgDetailMovieClose.setOnClickListener { dismissAllowingStateLoss() }
         viewModel.movieDetails(arguments.movieId)
+        binding.tvDetailMovieTitle.text = arguments.movieTitle
+        Glide.with(binding.root)
+            .load("https://image.tmdb.org/t/p/w342${arguments.posterPath}")
+            .transform(CenterCrop())
+            .into(binding.imgDetailMoviePoster)
     }
 
 }
