@@ -61,12 +61,6 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         viewModel.showDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    Glide.with(requireContext())
-                        .load("https://image.tmdb.org/t/p/w342${it.data.posterPath}")
-                        .transform(CenterCrop())
-                        .into(binding.imgDetailShowPoster)
-
-                    binding.tvDetailShowTitle.text = it.data.name
                     binding.tvDetailShowDescription.text = it.data.overview
                     binding.tvDetailShowFirstAirDate.text = it.data.firstAirDate
                     binding.tvDetailShowCertification.text = it.data.certification
@@ -150,5 +144,11 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         // Navigation - Close fragment
         binding.imgDetailShowClose.setOnClickListener { dismissAllowingStateLoss() }
         viewModel.showDetails(arguments.showId)
+        Glide.with(requireContext())
+            .load("https://image.tmdb.org/t/p/w342${arguments.posterPath}")
+            .transform(CenterCrop())
+            .into(binding.imgDetailShowPoster)
+
+        binding.tvDetailShowTitle.text = arguments.showTitle
     }
 }

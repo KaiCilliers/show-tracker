@@ -77,7 +77,9 @@ class FragmentDiscoveryShows : Fragment() {
             if (mediaType == MediaType.Show) {
                 findNavController().navigate(
                     FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(
-                        mediaId
+                        mediaId,
+                        mediaTitle,
+                        posterPath
                     )
                 )
             }

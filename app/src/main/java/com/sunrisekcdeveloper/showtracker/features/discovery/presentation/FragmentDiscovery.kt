@@ -123,7 +123,9 @@ class FragmentDiscovery : Fragment() {
                 MediaType.Show -> {
                     findNavController().navigate(
                         FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
-                            mediaId
+                            mediaId,
+                            mediaTitle,
+                            posterPath
                         )
                     )
                 }

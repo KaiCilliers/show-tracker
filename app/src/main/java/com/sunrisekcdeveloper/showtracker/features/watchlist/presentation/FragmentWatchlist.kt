@@ -267,7 +267,9 @@ class FragmentWatchlist : Fragment() {
                 MediaType.Show -> {
                     findNavController().navigate(
                         FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailShow(
-                            mediaId
+                            mediaId,
+                            mediaTitle,
+                            posterPath
                         )
                     )
                 }

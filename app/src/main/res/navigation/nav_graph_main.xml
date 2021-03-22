@@ -138,6 +138,11 @@
         <action
             android:id="@+id/navigate_from_detail_show_to_watchlist_fragment"
             app:destination="@id/destination_main_watchlist_fragment" />
+        <argument android:name="showTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
+            app:argType="string" />
     </dialog>
     <include app:graph="@navigation/nav_graph_search" />
     <include app:graph="@navigation/nav_graph_progress" />
