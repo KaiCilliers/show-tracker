@@ -33,7 +33,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 
 class AdapterWatchlistMovie(
     var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> },
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener {_, _ -> }
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener {_, _, _, _ -> }
 ) : ListAdapter<UIModelWatchlisMovie, AdapterWatchlistMovie.ViewHolderWatchlistMovie>(WATCHLIST_MOVIE_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistMovie =
         ViewHolderWatchlistMovie.from(parent, onButtonClicked, onPosterClickListener)
@@ -70,7 +70,12 @@ class AdapterWatchlistMovie(
                 .into(binding.imgvWatchlistMoviePoster)
 
             binding.imgvWatchlistMoviePoster.click {
-                onPosterClickListener.onClick(item.id, MediaType.Movie)
+                onPosterClickListener.onClick(
+                    item.id,
+                    item.title,
+                    item.posterPath,
+                    MediaType.Movie
+                )
             }
         }
         // todo this button click action passing is silly

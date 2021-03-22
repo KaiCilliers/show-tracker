@@ -73,7 +73,7 @@ class FragmentDiscoveryShows : Fragment() {
     }
 
     private fun setupBinding() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             if (mediaType == MediaType.Show) {
                 findNavController().navigate(
                     FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(

@@ -78,6 +78,7 @@ class ViewModelSearch @ViewModelInject constructor(
 // todo this is temp fix (adapter needs its own data type)
 private fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
     id = id,
+    mediaTitle = title,
     mediaType = mediaType,
     listType = ListType.MoviePopular,
     posterPath = posterPath

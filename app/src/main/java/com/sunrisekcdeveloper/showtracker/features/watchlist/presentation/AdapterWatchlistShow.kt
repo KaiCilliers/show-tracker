@@ -36,7 +36,7 @@ import timber.log.Timber
 
 class AdapterWatchlistShow(
     var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ -> }
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ , _, _-> }
 ) : ListAdapter<UIModelWatchlistShow, AdapterWatchlistShow.ViewHolderWatchlistShow>(WATCHLIST_SHOW_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
         ViewHolderWatchlistShow.from(parent, onButtonClicked, onPosterClickListener)
@@ -74,7 +74,12 @@ class AdapterWatchlistShow(
                 .into(binding.imgvWatchlistShowPoster)
 
             binding.imgvWatchlistShowPoster.click {
-                onPosterClickListener.onClick(item.id, MediaType.Show)
+                onPosterClickListener.onClick(
+                    item.id,
+                    item.title,
+                    item.posterPath,
+                    MediaType.Show
+                )
             }
 
             binding.tvWatchlistShowTitle.text = item.title

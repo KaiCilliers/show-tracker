@@ -141,11 +141,11 @@ class FragmentDiscoveryMovies : Fragment() {
     }
 
     private fun setupBinding() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             if (mediaType == MediaType.Movie) {
                 findNavController().navigate(
                     FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(
-                        mediaId
+                        mediaId, mediaTitle, posterPath
                     )
                 )
             }

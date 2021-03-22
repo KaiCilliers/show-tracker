@@ -21,5 +21,5 @@ package com.sunrisekcdeveloper.showtracker.common
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 fun interface OnPosterClickListener {
-    fun onClick(mediaId: String, mediaType: MediaType)
+    fun onClick(mediaId: String, mediaTitle: String, posterPath: String, mediaType: MediaType)
 }

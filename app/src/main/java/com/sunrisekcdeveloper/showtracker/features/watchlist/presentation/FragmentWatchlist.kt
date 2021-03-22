@@ -255,12 +255,12 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun binding() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
                         FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailMovie(
-                            mediaId
+                            mediaId, mediaTitle, posterPath
                         )
                     )
                 }

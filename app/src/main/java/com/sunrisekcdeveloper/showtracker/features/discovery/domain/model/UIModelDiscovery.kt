@@ -27,6 +27,7 @@ import androidx.room.Entity
 data class UIModelDiscovery(
     val id: String,
     val mediaType: MediaType,
+    val mediaTitle: String,
     // Added list type to place all discovery lists in a
     // single table and have multiple DAO functions which
     // can use this field to determine what list the item

@@ -113,6 +113,11 @@
         <argument
             android:name="movieId"
             app:argType="string" />
+        <argument android:name="movieTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
+            app:argType="string" />
     </dialog>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_show"

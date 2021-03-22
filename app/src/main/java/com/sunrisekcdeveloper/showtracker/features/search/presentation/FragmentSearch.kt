@@ -92,7 +92,7 @@ class FragmentSearch : Fragment() {
     }
 
     private fun setup() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(

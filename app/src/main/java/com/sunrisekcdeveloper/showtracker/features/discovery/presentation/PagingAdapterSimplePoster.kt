@@ -34,7 +34,7 @@ import timber.log.Timber
 
 class PagingAdapterSimplePoster(
     // todo better name and make private with method setter
-    var onClick: OnPosterClickListener = OnPosterClickListener { _, _ ->  }
+    var onClick: OnPosterClickListener = OnPosterClickListener { _, _, _ , _ ->  }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
     UIMODEL_DISCOVERY_COMPARATOR){
 
@@ -56,8 +56,25 @@ class PagingAdapterSimplePoster(
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvItemMoviePoster)
+
+            (0..20).random().apply {
+                when(this) {
+                    1 -> {
+                        Timber.d("https://image.tmdb.org/t/p/w92${data.posterPath}")
+                        Timber.d("https://image.tmdb.org/t/p/w154${data.posterPath}")
+                        Timber.d("https://image.tmdb.org/t/p/w342${data.posterPath}")
+                        Timber.d("https://image.tmdb.org/t/p/w780${data.posterPath}")
+                    }
+                    else -> {}
+                }
+            }
+
             binding.root.click {
-                onClick.onClick(data.id, data.mediaType)
+                onClick.onClick(
+                    data.id,
+                    data.mediaTitle,
+                    data.posterPath,
+                    data.mediaType)
             }
         }
         companion object {
@@ -80,6 +97,7 @@ class PagingAdapterSimplePoster(
                 newItem: UIModelDiscovery
             ): Boolean {
                 return (oldItem.id == newItem.id &&
+                        oldItem.mediaTitle == newItem.mediaTitle &&
                         oldItem.mediaType == newItem.mediaType &&
                         oldItem.posterPath == newItem.posterPath &&
                         oldItem.listType == newItem.listType)

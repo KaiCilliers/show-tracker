@@ -108,13 +108,15 @@ class FragmentDiscovery : Fragment() {
     }
 
     private fun setupBinding() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
                         // todo replace global navigation
                         FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
-                            mediaId
+                            movieId = mediaId,
+                            movieTitle = mediaTitle,
+                            posterPath = posterPath
                         )
                     )
                 }

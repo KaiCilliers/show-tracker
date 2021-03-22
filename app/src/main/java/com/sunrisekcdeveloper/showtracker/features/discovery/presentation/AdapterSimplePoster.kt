@@ -32,7 +32,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 
 class AdapterSimplePoster(
     private var data: MutableList<UIModelPoster>,
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ ->  }
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : RecyclerView.Adapter<AdapterSimplePoster.ViewHolderSimplePoster>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePoster =
         ViewHolderSimplePoster.from(parent)
@@ -41,7 +41,10 @@ class AdapterSimplePoster(
         val item = data[position]
         holder.bind(item)
         holder.binding.imgvItemMoviePoster.click {
-            onPosterClickListener.onClick(item.id, item.mediaType)
+            onPosterClickListener.onClick(
+                item.id,
+                "", "",
+                item.mediaType)
         }
     }
 

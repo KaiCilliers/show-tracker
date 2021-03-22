@@ -40,7 +40,7 @@ import java.util.Date
         EntityWatchlistBatch::class, UIModelDiscovery::class,
         RemoteKeys::class
     ],
-    version = 64,
+    version = 65,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)
