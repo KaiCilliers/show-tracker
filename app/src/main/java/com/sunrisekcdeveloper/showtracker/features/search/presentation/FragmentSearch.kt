@@ -97,13 +97,13 @@ class FragmentSearch : Fragment() {
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
-                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(mediaId)
+                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(mediaId, mediaTitle, posterPath)
                     )
 
                 }
                 MediaType.Show -> {
                     findNavController().navigate(
-                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(mediaId)
+                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(mediaId, mediaTitle, posterPath)
                     )
                 }
             }
