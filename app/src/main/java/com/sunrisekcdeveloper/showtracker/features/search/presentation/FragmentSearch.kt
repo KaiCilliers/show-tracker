@@ -31,6 +31,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
@@ -69,6 +70,10 @@ class FragmentSearch : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // todo programatically set searchview attributes due to it not working in layout for some reason
+        binding.svSearch.setIconifiedByDefault(false)
+        binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
+
         savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
             binding.svSearch.setQuery(it, false)
             search(it)
