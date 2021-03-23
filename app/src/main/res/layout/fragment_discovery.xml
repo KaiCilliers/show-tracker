@@ -45,12 +45,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8"
-                android:padding="@dimen/padding_8"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_popular"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <!-- POPULAR SHOWS -->
 
@@ -67,13 +64,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -93,12 +84,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_highest_rated_heading"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -118,13 +104,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -144,13 +124,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_upcoming_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -170,13 +144,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_airing_today_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
