@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Dark Theme specific attributes -->
-    <style name="Theme.ShowTracker" parent="Base.Theme.ShowTracker"/>
-
+    <style name="Theme.ShowTracker" parent="Base.Theme.ShowTracker">
+    </style>
 </resources>
