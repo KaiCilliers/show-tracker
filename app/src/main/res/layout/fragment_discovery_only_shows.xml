@@ -42,8 +42,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/heading_popular_shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,6 +53,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/sub_heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows" />
 
@@ -79,8 +79,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/heading_top_rated_shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_shows" />
 
@@ -91,6 +90,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/sub_heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows" />
 
@@ -116,8 +116,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/heading_airing_today_shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows" />
 
@@ -128,6 +127,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/sub_heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows" />
 

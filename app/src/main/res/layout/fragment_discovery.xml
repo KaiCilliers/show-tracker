@@ -38,14 +38,10 @@
                 android:id="@+id/tv_heading_popular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:text="@string/popular"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_movies"
@@ -66,8 +62,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/heading_popular_shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_movies"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -92,8 +87,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/top_rated"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -118,8 +112,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/heading_top_rated_shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -145,8 +138,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/upcoming"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -172,8 +164,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/heading_airing_today_shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_upcoming_movies"
                 app:layout_constraintStart_toStartOf="parent"/>
 

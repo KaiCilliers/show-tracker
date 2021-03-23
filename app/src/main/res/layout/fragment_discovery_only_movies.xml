@@ -42,8 +42,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/popular"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +54,8 @@
                 android:layout_marginEnd="16dp"
                 android:text="@string/most_popular_movies"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular" />
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_movies"
@@ -77,8 +77,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/top_rated"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_movies" />
 
@@ -89,6 +88,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/highest_rated_movies"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_highest_rated_heading" />
 
@@ -113,8 +113,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/upcoming"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies" />
 
@@ -125,6 +124,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/stay_updated"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming" />
 
