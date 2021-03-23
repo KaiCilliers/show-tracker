@@ -19,9 +19,14 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.text.PrecomputedTextCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -31,7 +36,11 @@ import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
 class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
@@ -58,7 +67,10 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    binding.tvDetailMovieDescription.text = it.data.overview
+                    binding.tvDetailMovieDescription.apply {
+                        text = it.data.overview
+                        setMaxLinesToEllipsize()
+                    }
                     binding.tvDetailMovieRuntime.text = it.data.runtime
                     binding.tvDetailMovieReleaseYear.text = it.data.releaseYear
                     binding.tvDetailMovieCertification.text = it.data.certification
@@ -107,4 +119,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
             .into(binding.imgDetailMoviePoster)
     }
 
+}
+
+fun TextView.setMaxLinesToEllipsize() {
+    val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
+    maxLines = visibleLines
 }

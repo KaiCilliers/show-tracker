@@ -72,6 +72,7 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/margin_small"
         android:textAppearance="?attr/textAppearanceBody2"
+        android:ellipsize="end"
         tools:text="Here is all the description you could need..."
         app:layout_constraintBottom_toTopOf="@+id/btn_detail_movie_watch_status"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,8 +124,8 @@
 
     <TextView
         android:id="@+id/tv_separator_two"
-        android:layout_width="3dp"
-        android:layout_height="21dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         android:textAppearance="?attr/textAppearanceCaption"
         android:text="@string/single_pipe"

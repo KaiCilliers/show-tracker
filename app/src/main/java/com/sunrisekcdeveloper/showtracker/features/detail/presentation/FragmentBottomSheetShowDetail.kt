@@ -61,7 +61,10 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         viewModel.showDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    binding.tvDetailShowDescription.text = it.data.overview
+                    binding.tvDetailShowDescription.apply {
+                        text = it.data.overview
+                        setMaxLinesToEllipsize()
+                    }
                     binding.tvDetailShowFirstAirDate.text = it.data.firstAirDate
                     binding.tvDetailShowCertification.text = it.data.certification
                     binding.tvDetailShowSeasons.text = getString(
