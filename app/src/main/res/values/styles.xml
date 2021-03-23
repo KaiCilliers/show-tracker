@@ -49,7 +49,7 @@
 
     <style name="Widget.ShowTracker.TextView.SubheaderMediaList"
         parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">@style/TextAppearance.ShowTracker.Subtitle2</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
     </style>
 
     <!-- Toolbar -->

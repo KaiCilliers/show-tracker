@@ -69,6 +69,7 @@
     <string name="action_up_to_date">I\'m up to date</string>
     <string name="action_set_watched">Set as watched</string>
     <string name="action_start_watching">Start Watching Now</string>
+    <string name="info_up_to_date_show">You are up to date with this show</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>
