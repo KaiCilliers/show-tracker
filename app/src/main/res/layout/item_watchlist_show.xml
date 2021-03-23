@@ -18,6 +18,7 @@
   -->
 <!--todo add overview to "start watching state" -->
 <!--todo add up to date state -->
+<!-- todo cleanup -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -38,7 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        tools:text="TV SHOW TITLE"
+        tools:text="TV Show Title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -48,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:text="SHOW IS UP TO DATE"
+        tools:text="You are up to date with this show"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
@@ -59,7 +60,7 @@
         android:id="@+id/btn_watchlist_show_start_watching"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="START WATCHING NOW"
+        android:text="@string/action_start_watching"
         android:visibility="gone"
         tools:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/tv_watchlist_show_title"
@@ -89,7 +90,7 @@
         android:id="@+id/btn_watchlist_show_mark_as_watched"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Mark as watched"
+        android:text="@string/action_set_watched"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

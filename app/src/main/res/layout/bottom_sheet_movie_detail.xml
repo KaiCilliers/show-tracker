@@ -32,7 +32,7 @@
         android:layout_height="241dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/error_poster"
+        tools:src="@drawable/error_poster"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_detail_movie_add"/>
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Movie Title"
+        tools:text="Movie Title"
         app:layout_constraintStart_toEndOf="@+id/img_detail_movie_poster"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -72,7 +72,7 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         android:padding="4dp"
-        android:text="Here is all the description you could need..."
+        tools:text="Here is all the description you could need..."
         app:layout_constraintBottom_toTopOf="@+id/btn_detail_movie_watch_status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_detail_movie_poster"
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="1998"
+        tools:text="1998"
         app:layout_constraintStart_toEndOf="@+id/img_detail_movie_poster"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_movie_title"/>
 
@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="13+"
+        tools:text="13+"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintStart_toEndOf="@+id/tv_separator_one"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_movie_release_year" />
@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="1h 44min"
+        tools:text="1h 44min"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintStart_toEndOf="@+id/tv_separator_two"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_movie_release_year" />
@@ -113,7 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="|"
+        android:text="@string/single_pipe"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintStart_toEndOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_movie_release_year"/>
@@ -123,7 +123,7 @@
         android:layout_width="3dp"
         android:layout_height="21dp"
         android:layout_marginStart="8dp"
-        android:text="|"
+        android:text="@string/single_pipe"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintStart_toEndOf="@+id/tv_detail_movie_certification"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_movie_release_year" />

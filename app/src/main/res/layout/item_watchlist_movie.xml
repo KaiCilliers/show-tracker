@@ -45,7 +45,7 @@
         android:id="@+id/btn_watchlist_watched_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set as watched"
+        android:text="@string/action_set_watched"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
