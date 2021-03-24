@@ -39,6 +39,8 @@ import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
@@ -93,7 +95,7 @@ class FragmentWatchlist : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.submitAction(ActionWatchlist.LoadWatchlistData)
 //        setup()
-        setupv2()
+        setup()
         binding()
         observeViewModel()
     }
@@ -102,6 +104,8 @@ class FragmentWatchlist : Fragment() {
         movies: List<UIModelWatchlisMovie>,
         shows: List<UIModelWatchlistShow>
     ) {
+        allShows = shows
+        allMovies = movies
         watchlistMovieAdapter.submitList(movies)
         watchlistShowAdapter.submitList(shows)
 
@@ -147,7 +151,7 @@ class FragmentWatchlist : Fragment() {
         binding.recyclerviewWatchlist.isGone = true
     }
 
-    private fun setupv2() {
+    private fun setup() {
         when (binding.tabBarWatchlist.selectedTabPosition) {
             0 -> {
                 binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
@@ -197,12 +201,12 @@ class FragmentWatchlist : Fragment() {
                     when (it.position) {
                         0 -> {
                             binding.svWatchlist.queryHint = "Search TV shows by title"
-                            binding.svWatchlist.setQuery("", true)
+                            binding.svWatchlist.setQuery(viewModel.showSearchQuery(), true)
                             binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
                         }
                         1 -> {
                             binding.svWatchlist.queryHint = "Search movies by title"
-                            binding.svWatchlist.setQuery("", true)
+                            binding.svWatchlist.setQuery(viewModel.movieSearchQuery(), true)
                             binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
                         }
                     }
@@ -215,69 +219,6 @@ class FragmentWatchlist : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
-    }
-
-    private fun setup() {
-
-        binding.imgvFilterWatchlist.setOnClickListener {
-            when (binding.tabBarWatchlist.selectedTabPosition) {
-                0 -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Sort TV Shows by:")
-                        .setSingleChoiceItems(
-                            sortOptionsShow,
-                            showSortCheckedItem
-                        ) { dialog, which ->
-                            Timber.e("Sort chosen: ${sortOptionsShow[which]}")
-                            showSortCheckedItem = which
-                            when (showSortCheckedItem) {
-                                1 -> {
-//                                    viewModel.watchlistShows(SortShows.ByEpisodesLeftInSeason)
-                                }
-                                2 -> {
-//                                    viewModel.watchlistShows(SortShows.ByRecentlyWatched)
-                                }
-                                3 -> {
-//                                    viewModel.watchlistShows(SortShows.ByRecentlyAdded)
-                                }
-                                4 -> {
-//                                    viewModel.watchlistShows(SortShows.ByNotStarted)
-                                }
-                                else -> {
-//                                    viewModel.watchlistShows(SortShows.ByTitle)
-                                }
-                            }
-                            dialog.dismiss()
-                        }.show()
-                }
-                else -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Sort Movies by:")
-                        .setSingleChoiceItems(
-                            sortOptionsMovie,
-                            movieSortCheckedItem
-                        ) { dialog, which ->
-                            Timber.e("Sort chosen: ${sortOptionsMovie[which]}")
-                            movieSortCheckedItem = which
-                            when (movieSortCheckedItem) {
-                                1 -> {
-                                    Timber.e("frag: recently added")
-//                                    viewModel.watchlistMovies(SortMovies.ByRecentlyAdded)
-                                }
-                                2 -> {
-                                    Timber.e("frag: watched")
-//                                    viewModel.watchlistMovies(SortMovies.ByWatched)
-                                }
-                                else -> {
-                                    Timber.e("frag: title")
-//                                    viewModel.watchlistMovies(SortMovies.ByTitle)
-                                }
-                            }
-                            dialog.dismiss()
-                        }.show()
-                }
-            }
-        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svWatchlist.getQueryTextChangedStateFlow()
@@ -286,9 +227,11 @@ class FragmentWatchlist : Fragment() {
                     if (query.isEmpty()) {
                         when (binding.tabBarWatchlist.selectedTabPosition) {
                             0 -> {
+                                viewModel.updateShowSearchQuery(query)
                                 watchlistShowAdapter.submitList(allShows)
                             }
                             else -> {
+                                viewModel.updateMovieSearchQuery(query)
                                 watchlistMovieAdapter.submitList(allMovies)
                             }
                         }
@@ -301,12 +244,14 @@ class FragmentWatchlist : Fragment() {
                 .collectLatest { query ->
                     when (binding.tabBarWatchlist.selectedTabPosition) {
                         0 -> {
+                            viewModel.updateShowSearchQuery(query)
                             val filtered = allShows.filter {
                                 it.title.contains(query, true)
                             }
                             watchlistShowAdapter.submitList(filtered)
                         }
                         else -> {
+                            viewModel.updateMovieSearchQuery(query)
                             val filtered = allMovies.filter {
                                 it.title.contains(query, true)
                             }
@@ -316,6 +261,66 @@ class FragmentWatchlist : Fragment() {
                 }
         }
 
+        binding.imgvFilterWatchlist.setOnClickListener {
+            when (binding.tabBarWatchlist.selectedTabPosition) {
+                0 -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Sort TV Shows by:")
+                        .setSingleChoiceItems(
+                            sortOptionsShow,
+                            showSortCheckedItem
+                        ) { dialog, which ->
+                            Timber.e("Sort chosen: ${sortOptionsShow[which]}")
+                            showSortCheckedItem = which
+                            viewModel.updateShowSortBy(
+                                when (showSortCheckedItem) {
+                                    1 -> {
+                                        SortShows.ByEpisodesLeftInSeason
+                                    }
+                                    2 -> {
+                                        SortShows.ByRecentlyWatched
+                                    }
+                                    3 -> {
+                                        SortShows.ByRecentlyWatched
+                                    }
+                                    4 -> {
+                                        SortShows.ByNotStarted
+                                    }
+                                    else -> {
+                                        SortShows.ByTitle
+                                    }
+                                }
+                            )
+                            dialog.dismiss()
+                        }.show()
+                }
+                else -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Sort Movies by:")
+                        .setSingleChoiceItems(
+                            sortOptionsMovie,
+                            movieSortCheckedItem
+                        ) { dialog, which ->
+                            Timber.e("Sort chosen: ${sortOptionsMovie[which]}")
+                            movieSortCheckedItem = which
+                            viewModel.updateMovieSortBy(
+                                when (movieSortCheckedItem) {
+                                    1 -> {
+                                        SortMovies.ByRecentlyAdded
+                                    }
+                                    2 -> {
+                                        SortMovies.ByWatched
+                                    }
+                                    else -> {
+                                        SortMovies.ByTitle
+                                    }
+                                }
+                            )
+                            dialog.dismiss()
+                        }.show()
+                }
+            }
+        }
     }
 
     private fun observeViewModel() {

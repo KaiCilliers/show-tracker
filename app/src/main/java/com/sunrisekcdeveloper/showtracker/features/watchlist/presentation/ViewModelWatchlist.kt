@@ -49,6 +49,37 @@ class ViewModelWatchlist @ViewModelInject constructor(
     val state: LiveData<StateWatchlist>
         get() = _state
 
+    private var showSearchQuery = ""
+    private var movieSearchQuery = ""
+    private var movieSortOrder: SortMovies = SortMovies.ByTitle
+    private var showSortOrder: SortShows  = SortShows.ByTitle
+
+    fun showSearchQuery() = showSearchQuery
+    fun movieSearchQuery() = movieSearchQuery
+
+    fun updateShowSearchQuery(query: String) {
+        showSearchQuery = query
+        // todo not pretty but it works
+        if (query.isEmpty()) {
+            submitAction(ActionWatchlist.LoadWatchlistData)
+        }
+    }
+    fun updateMovieSearchQuery(query: String) {
+        movieSearchQuery = query
+        // todo not pretty but it works
+        if (query.isEmpty()) {
+            submitAction(ActionWatchlist.LoadWatchlistData)
+        }
+    }
+    fun updateShowSortBy(sortBy: SortShows) {
+        showSortOrder = sortBy
+        submitAction(ActionWatchlist.LoadWatchlistData)
+    }
+    fun updateMovieSortBy(sortBy: SortMovies) {
+        movieSortOrder = sortBy
+        submitAction(ActionWatchlist.LoadWatchlistData)
+    }
+
     fun submitAction(action: ActionWatchlist) = viewModelScope.launch {
         when (action) {
             ActionWatchlist.LoadWatchlistData -> {
@@ -81,9 +112,10 @@ class ViewModelWatchlist @ViewModelInject constructor(
     }
 
     private fun watchlistData() = viewModelScope.launch {
-        val moviesFlow = fetchWatchlistMoviesUseCase(SortMovies.ByTitle)
-        val showsFlow = fetchWatchlistShowsUseCase(SortShows.ByTitle)
+        val moviesFlow = fetchWatchlistMoviesUseCase(movieSortOrder)
+        val showsFlow = fetchWatchlistShowsUseCase(showSortOrder)
 
+        // todo consider replacing with zip for less emissions
         combine(moviesFlow, showsFlow) { resourceMovie, resourceShow ->
             // If either are loading
             if (resourceMovie is Resource.Loading || resourceShow is Resource.Loading) {
@@ -98,13 +130,26 @@ class ViewModelWatchlist @ViewModelInject constructor(
             // If both are success
             if (resourceMovie is Resource.Success && resourceShow is Resource.Success) {
                 return@combine StateWatchlist.Success(
-                    movies = resourceMovie.data,
-                    shows = resourceShow.data
+                    movies = resourceMovie.data.filter {
+                        if (movieSearchQuery.isEmpty()) {
+                            true
+                        } else {
+                            it.title.contains(movieSearchQuery, true)
+                        }
+                    },
+                    shows = resourceShow.data.filter {
+                        if (showSearchQuery.isEmpty()) {
+                            true
+                        } else {
+                            it.title.contains(showSearchQuery, true)
+                        }
+                    }
                 )
             } else {
                 return@combine StateWatchlist.Error(Exception("Fetching watchlist data unkown state..."))
             }
-        }.collectLatest {
+            // todo consider adding conflate() to flow
+        }.collect {
             _state.value = it
         }
     }
