@@ -24,6 +24,9 @@ import android.view.InputQueue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,11 +37,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ActionSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.EventSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.StateSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,6 +53,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -58,8 +66,6 @@ class FragmentSearch : Fragment() {
 
     private val adapterSearchResults = PagingAdapterSimplePoster()
 
-    var searchJob: Job? = null
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,16 +76,13 @@ class FragmentSearch : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // todo programatically set searchview attributes due to it not working in layout for some reason
-        binding.svSearch.setIconifiedByDefault(false)
-        binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
-
         savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
             binding.svSearch.setQuery(it, false)
-            search(it)
+            viewModel.submitAction(ActionSearch.SearchForMedia(it))
         }
         setup()
-        binding.toolbarSearch.setNavigationOnClickListener { findNavController().popBackStack() } // todo up button returns to discovery
+        viewModel.submitAction(ActionSearch.FirstLoad)
+        observeViewModel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -87,31 +90,116 @@ class FragmentSearch : Fragment() {
         outState.putString(LAST_SEARCH_QUERY, binding.svSearch.query.trim().toString())
     }
 
-    private fun search(query: String) {
-        searchJob?.cancel()
-
-        searchJob = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchMedia(query).collectLatest {
-                adapterSearchResults.submitData(it)
+    private fun observeViewModel() {
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            // todo this is bad, this causes UI flashing :(
+            cleanUI()
+            Timber.e("STOOP ${state.javaClass.simpleName}")
+            when (state) {
+                StateSearch.EmptySearch -> {
+                    viewModel.submitAction(ActionSearch.ShowToast("Here is your unwatched shit"))
+                    stateEmpty()
+                }
+                StateSearch.NoResultsFound -> {
+                    viewModel.submitAction(ActionSearch.ShowToast("No results found"))
+                    stateNoResults()
+                }
+                StateSearch.Loading -> {
+                    viewModel.submitAction(ActionSearch.ShowToast("search Loading"))
+                    stateLoading()
+                }
+                is StateSearch.Success -> {
+                    viewModel.submitAction(ActionSearch.ShowToast("Success"))
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        stateSuccess(state.data)
+                    }
+                }
+                is StateSearch.Error -> {
+                    viewModel.submitAction(ActionSearch.ShowToast("Eorrror"))
+                    stateError()
+                }
             }
         }
-    }
-
-    private fun setup() {
-        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            when (mediaType) {
-                MediaType.Movie -> {
+        viewModel.eventsFlow.onEach { event ->
+            when (event) {
+                is EventSearch.LoadMediaDetails -> {
                     findNavController().navigate(
-                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(mediaId, mediaTitle, posterPath)
+                        when (event.type) {
+                            MediaType.Movie -> { FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(event.mediaId, event.title, event.posterPath) }
+                            MediaType.Show -> { FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(event.mediaId, event.title, event.posterPath) }
+                        }
                     )
-
                 }
-                MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(mediaId, mediaTitle, posterPath)
-                    )
+                is EventSearch.ShowToast -> {
+                    Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
+                }
+                EventSearch.PopBackStack -> {
+                    findNavController().popBackStack()
                 }
             }
+        }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun stateError() {
+
+    }
+    private fun stateLoading() {
+
+    }
+    private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
+        binding.tvHeaderWatchlistContent.text = "Results"
+        binding.recyclerviewSearch.isVisible = true
+        binding.tvHeaderWatchlistContent.isVisible = true
+
+        adapterSearchResults.submitData(page)
+
+        // Here we launch a coroutine which is responsible for scrolling the list to the top
+        // when the list is refreshed from the network
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            // PagingAdapter exposes a Flow`which emits changes in the adapter's loads state
+            // via a CombinedLoadState object
+            adapterSearchResults.loadStateFlow
+                // Only emit when the REFRESH LoadState changes
+                .distinctUntilChangedBy { it.refresh }
+                // Only emit when REFRESH completes i.e., NotLoading
+                .filter { it.refresh is LoadState.NotLoading }
+                // Scroll to the top of the list
+                .collect {
+                    binding.recyclerviewSearch.scrollToPosition(0)
+                    if (adapterSearchResults.itemCount == 0) {
+                        viewModel.submitAction(ActionSearch.NotifyNoSearchResults)
+                    }
+                }
+        }
+    }
+    private fun stateEmpty() {
+        binding.tvHeaderWatchlistContent.text = "Your Unwatched Movies and TV Shows"
+        binding.tvHeaderWatchlistContent.isVisible = true
+        // todo watchlist and movie content with adapter bind to recyclerview
+    }
+    private fun stateNoResults() {
+        binding.tvHeaderNoResults.isVisible = true
+        binding.tvSubHeaderNoResults.isVisible = true
+    }
+    private fun cleanUI() {
+        binding.recyclerviewSearch.isGone = true
+        binding.tvHeaderNoResults.isGone = true
+        binding.tvSubHeaderNoResults.isGone = true
+        binding.tvHeaderWatchlistContent.isGone = true
+    }
+
+
+    private fun setup() {
+        // todo programatically set searchview attributes due to it not working in layout for some reason
+        binding.svSearch.setIconifiedByDefault(false)
+        binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
+
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
+            viewModel.submitAction(ActionSearch.LoadMediaDetails(
+                mediaId, mediaTitle, posterPath, mediaType
+                )
+            )
         }
 
         adapterSearchResults.onClick = onClick
@@ -127,34 +215,21 @@ class FragmentSearch : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
-                .debounce(300)
+//                .debounce(100)
                 .filter { query ->
                     if (query.isEmpty()) {
                         adapterSearchResults.submitData(PagingData.empty())
+                        viewModel.submitAction(ActionSearch.FirstLoad)
                         return@filter false
                     }
                     return@filter true
                 }
                 .distinctUntilChanged()
                 .collect { query ->
-                    search(query)
+                    viewModel.submitAction(ActionSearch.SearchForMedia(query))
                 }
         }
-
-        // Here we launch a coroutine which is responsible for scrolling the list to the top
-        // when the list is refreshed from the network
-        viewLifecycleOwner.lifecycleScope.launch {
-
-            // PagingAdapter exposes a Flow`which emits changes in the adapter's loads state
-            // via a CombinedLoadState object
-            adapterSearchResults.loadStateFlow
-                // Only emit when the REFRESH LoadState changes
-                .distinctUntilChangedBy { it.refresh }
-                // Only emit when REFRESH completes i.e., NotLoading
-                .filter { it.refresh is LoadState.NotLoading }
-                // Scroll to the top of the list
-                .collect { binding.recyclerviewSearch.scrollToPosition(0) }
-        }
+        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.BackButtonPress) } // todo up button returns to discovery
     }
     companion object {
         private const val LAST_SEARCH_QUERY: String = "last_search_query"

@@ -33,14 +33,12 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.*
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -50,6 +48,41 @@ class ViewModelSearch @ViewModelInject constructor(
     private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract,
     @RepoSearch private val repo: RepositorySearchContract
 ) : ViewModel() {
+
+    private val eventChannel = Channel<EventSearch>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    private val _state = MutableLiveData<StateSearch>()
+    val state: LiveData<StateSearch>
+        get() = _state
+
+    fun submitAction(action: ActionSearch) = viewModelScope.launch {
+        when (action) {
+            is ActionSearch.ShowToast -> { eventChannel.send(EventSearch.ShowToast(action.msg)) }
+            is ActionSearch.LoadMediaDetails -> {
+                eventChannel.send(EventSearch.LoadMediaDetails(
+                    action.mediaId,
+                    action.title,
+                    action.posterPath,
+                    action.type
+                ))
+            }
+            is ActionSearch.SearchForMedia -> {
+                searchMedia(action.query).collectLatest { pagingData ->
+                    _state.value = StateSearch.Success(pagingData)
+                }
+            }
+            ActionSearch.BackButtonPress -> {
+                eventChannel.send(EventSearch.PopBackStack)
+            }
+            ActionSearch.FirstLoad -> {
+                _state.value = StateSearch.EmptySearch
+            }
+            ActionSearch.NotifyNoSearchResults -> {
+                _state.value = StateSearch.NoResultsFound
+            }
+        }
+    }
 
     private var currentQuery: String? = null
 
