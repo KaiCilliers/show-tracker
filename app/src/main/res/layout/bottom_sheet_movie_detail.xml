@@ -118,6 +118,8 @@
         android:layout_margin="@dimen/margin_small"
         android:textAppearance="?attr/textAppearanceCaption"
         android:text="@string/single_pipe"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintStart_toEndOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_movie_release_year"/>
@@ -129,6 +131,8 @@
         android:layout_margin="@dimen/margin_small"
         android:textAppearance="?attr/textAppearanceCaption"
         android:text="@string/single_pipe"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_movie_release_year"
         app:layout_constraintStart_toEndOf="@+id/tv_detail_movie_certification"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_movie_release_year" />

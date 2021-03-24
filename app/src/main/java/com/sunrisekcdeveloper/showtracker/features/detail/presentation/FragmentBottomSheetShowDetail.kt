@@ -31,6 +31,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.setMaxLinesToEllipsize
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShowsDirections
 import dagger.hilt.android.AndroidEntryPoint
