@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
+package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model
 
-// todo create companion objects to make it easier to create these classes
-sealed class StateDetailMovie {
-    object Loading : StateDetailMovie()
-    data class Success(val data: UIModelMovieDetail) : StateDetailMovie()
-    data class Error(val exception: Exception) : StateDetailMovie()
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
+
+sealed class StateWatchlist {
+    object Loading : StateWatchlist()
+    data class Success(val movies: List<UIModelWatchlisMovie>, val shows: List<UIModelWatchlistShow>) : StateWatchlist()
+    data class Error(val exception: Exception) : StateWatchlist()
 }

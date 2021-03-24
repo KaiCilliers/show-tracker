@@ -31,6 +31,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 
 class AdapterWatchlistMovie(
     var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> },

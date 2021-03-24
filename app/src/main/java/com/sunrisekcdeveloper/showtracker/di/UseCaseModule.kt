@@ -44,7 +44,6 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.R
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistShowsUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.UpdateShowProgressUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UpdateShowAction
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

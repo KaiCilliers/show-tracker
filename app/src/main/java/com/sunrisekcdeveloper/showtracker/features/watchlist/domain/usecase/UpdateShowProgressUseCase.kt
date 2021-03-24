@@ -18,11 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UpdateShowAction
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 

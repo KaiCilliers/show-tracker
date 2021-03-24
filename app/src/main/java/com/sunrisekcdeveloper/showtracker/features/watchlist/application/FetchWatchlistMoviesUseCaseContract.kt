@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import kotlinx.coroutines.flow.Flow
 
 interface FetchWatchlistMoviesUseCaseContract {

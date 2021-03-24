@@ -19,16 +19,15 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
 @ExperimentalCoroutinesApi
@@ -37,6 +36,9 @@ class FetchWatchlistMoviesUseCase(
 ) : FetchWatchlistMoviesUseCaseContract {
     override suspend fun invoke(sortBy: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
         Timber.e("use case with $sortBy")
-        return repoWatchlist.watchlistMovies(sortBy)
+        return flow {
+            emit(Resource.Loading)
+            emitAll(repoWatchlist.watchlistMovies(sortBy))
+        }
     }
 }

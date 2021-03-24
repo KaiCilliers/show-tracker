@@ -26,7 +26,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovi
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
