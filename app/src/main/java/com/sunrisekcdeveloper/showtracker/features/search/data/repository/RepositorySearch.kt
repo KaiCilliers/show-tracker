@@ -32,10 +32,9 @@ import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistMo
 import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber

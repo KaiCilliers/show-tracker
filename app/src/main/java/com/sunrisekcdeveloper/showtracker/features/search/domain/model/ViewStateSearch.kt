@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.application
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
-import kotlinx.coroutines.flow.Flow
 
-interface SearchMediaByTitleUseCaseContract {
-    suspend operator fun invoke(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
+sealed class ViewStateSearch<out T: List<UIModelSearch>> {
+    object SuggestedContent : ViewStateSearch<Nothing>()
+    object NoSearchResults : ViewStateSearch<Nothing>()
+    data class SearchResults(val data: List<UIModelSearch>) : ViewStateSearch<List<UIModelSearch>>()
 }

@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 
 interface LoadUnwatchedMediaUseCaseContract {
     suspend operator fun invoke() : Resource<List<UIModelUnwatchedSearch>>

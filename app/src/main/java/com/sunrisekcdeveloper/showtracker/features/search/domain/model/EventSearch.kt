@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
-sealed class ViewStateSearch<out T: List<UIModelSearch>> {
-    object SuggestedContent : ViewStateSearch<Nothing>()
-    object NoSearchResults : ViewStateSearch<Nothing>()
-    data class SearchResults(val data: List<UIModelSearch>) : ViewStateSearch<List<UIModelSearch>>()
+sealed class EventSearch {
+    object PopBackStack : EventSearch()
+    data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : EventSearch()
+    data class ShowToast(val msg: String) : EventSearch()
 }

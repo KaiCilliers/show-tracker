@@ -16,12 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.application
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
-interface SearchMediaByTitleUseCaseContract {
-    suspend operator fun invoke(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
-}
+data class UIModelSearch(
+    val id: String,
+    val title: String,
+    val posterPath: String,
+    val mediaType: MediaType,
+    val rating: Float,
+    val popularity: Float,
+    val ratingVotes: Int
+)
+

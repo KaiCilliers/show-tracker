@@ -26,8 +26,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.common.EndPointBackdrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
-import timber.log.Timber
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 
 // todo DiffUtil
 class AdapterSimplePosterTitle(

@@ -16,23 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
-import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
-
-sealed class StateSearch {
-    data class EmptySearch(val data: List<UIModelUnwatchedSearch>) : StateSearch()
-    object NoResultsFound : StateSearch()
-    object Loading : StateSearch()
-    data class Success(val data: PagingData<UIModelDiscovery>) : StateSearch()
-    data class Error(val exception: Exception) : StateSearch()
-}
 
 sealed class ActionSearch {
     object BackButtonPress : ActionSearch()
@@ -41,10 +27,4 @@ sealed class ActionSearch {
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : ActionSearch()
     data class ShowToast(val msg: String) : ActionSearch()
     object LoadUnwatchedContent : ActionSearch()
-}
-
-sealed class EventSearch {
-    object PopBackStack : EventSearch()
-    data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : EventSearch()
-    data class ShowToast(val msg: String) : EventSearch()
 }

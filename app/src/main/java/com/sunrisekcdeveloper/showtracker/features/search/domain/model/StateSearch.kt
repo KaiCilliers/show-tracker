@@ -16,23 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import androidx.paging.PagingData
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
-data class UIModelSearch(
-    val id: String,
-    val title: String,
-    val posterPath: String,
-    val mediaType: MediaType,
-    val rating: Float,
-    val popularity: Float,
-    val ratingVotes: Int
-)
-
-data class UIModelUnwatchedSearch(
-    val id: String,
-    val title: String,
-    val backdropPath: String,
-    val mediaType: MediaType
-)
+sealed class StateSearch {
+    data class EmptySearch(val data: List<UIModelUnwatchedSearch>) : StateSearch()
+    object NoResultsFound : StateSearch()
+    object Loading : StateSearch()
+    data class Success(val data: PagingData<UIModelDiscovery>) : StateSearch()
+    data class Error(val exception: Exception) : StateSearch()
+}
