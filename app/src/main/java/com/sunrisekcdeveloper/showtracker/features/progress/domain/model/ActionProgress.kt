@@ -16,10 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.progress.application
+package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
-
-interface SetShowProgressUseCaseContract {
-    suspend operator fun invoke(progress: SetShowProgress)
+sealed class ActionProgress {
+    object NavigateBack : ActionProgress()
+    data class SetShowProgress(
+        val showId: String,
+        val seasonNumber: Int,
+        val episodeNumber: Int
+    ) : ActionProgress()
+    data class MarkShowUpToDate(val showId: String) : ActionProgress()
+    data class CreateToast(val msg: String) : ActionProgress()
+    data class Load(val showId: String) : ActionProgress()
 }

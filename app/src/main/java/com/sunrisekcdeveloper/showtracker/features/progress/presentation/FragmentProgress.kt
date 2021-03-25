@@ -28,10 +28,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSetProgressBinding
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.EventProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.StateProgress
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -60,39 +66,66 @@ class FragmentProgress : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
         binding.toolbarProgress.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            viewModel.submitAction(ActionProgress.NavigateBack)
         }
-        viewModel.getShowSeasonAndEpisodeCount(arguments.showIdTest)
+        viewModel.submitAction(ActionProgress.Load(arguments.showIdTest))
         observeViewModel()
     }
 
+    private fun stateError() {
+        viewModel.submitAction(ActionProgress.CreateToast("progress error state"))
+    }
+
+    private fun stateLoading() {
+        viewModel.submitAction(ActionProgress.CreateToast("progress loading state"))
+    }
+
+    private fun cleanUI() {
+        binding.btnProgressConfirm.isEnabled = false
+        binding.btnProgressUpToDate.isEnabled = false
+        binding.spinProgressEpisode.isEnabled = false
+        binding.spinProgressSeason.isEnabled = false
+    }
+
+    private fun stateSuccess(data: Map<Int, Int>) {
+        map = data.toMutableMap()
+
+        adapterSeason.clear()
+        adapterEpisode.clear()
+
+        adapterSeason.addAll(*data.keys.toTypedArray())
+        adapterSeason.notifyDataSetChanged()
+
+        adapterEpisode.clear()
+        adapterEpisode.addAll(
+            *(1..map.getValue(1)).toList().toTypedArray()
+        )
+
+        binding.spinProgressSeason.isEnabled = true
+        binding.spinProgressEpisode.isEnabled = true
+        binding.btnProgressConfirm.isEnabled = true
+        binding.btnProgressUpToDate.isEnabled = true
+    }
+
     private fun observeViewModel() {
-        viewModel.showSeasonAndEpisodeCount.observe(viewLifecycleOwner) {
-            Timber.e("from VM: $it")
-            when (it) {
-                is Resource.Success -> {
-                    map = it.data.toMutableMap()
-                    Timber.e("clearing spinner values")
-                    adapterSeason.clear()
-                    adapterEpisode.clear()
-
-                    Timber.e("Repopulating spinners...")
-                    Timber.e("Season spinner values: ${it.data.keys}")
-                    adapterSeason.addAll(*it.data.keys.toTypedArray())
-                    adapterSeason.notifyDataSetChanged()
-
-                    adapterEpisode.clear()
-                    adapterEpisode.addAll(
-                        *(1..map.getValue(1)).toList().toTypedArray()
-                    )
-                    // todo quick fix while data loads
-                    binding.btnProgressConfirm.isEnabled = true
-                    binding.btnProgressUpToDate.isEnabled = true
-                }
-                is Resource.Error -> {}
-                Resource.Loading -> {}
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            cleanUI()
+            when (state) {
+                StateProgress.Loading -> { stateLoading() }
+                is StateProgress.Success -> { stateSuccess(state.values) }
+                is StateProgress.Error -> { stateError() }
             }
         }
+        viewModel.eventsFlow.onEach { event ->
+            when (event) {
+                EventProgress.PopBackStack -> {
+                    findNavController().popBackStack()
+                }
+                is EventProgress.ShowToast -> {
+                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT)
+                }
+            }
+        }.observeInLifecycle(viewLifecycleOwner)
     }
 
     private fun setup() {
@@ -136,17 +169,15 @@ class FragmentProgress : Fragment() {
 
         binding.btnProgressConfirm.click {
             Timber.e("Selected: S${binding.spinProgressSeason.selectedItem}E${binding.spinProgressEpisode.selectedItem}")
-            viewModel.setShowProgress(
+            viewModel.submitAction(ActionProgress.SetShowProgress(
                 arguments.showIdTest,
                 binding.spinProgressSeason.selectedItem.toString().toInt(),
                 binding.spinProgressEpisode.selectedItem.toString().toInt()
-            )
+            ))
         }
 
         binding.btnProgressUpToDate.click {
-            Timber.e("Last Season: ${adapterSeason.count}")
-            Timber.e("Last Episode: ${map.getValue(adapterSeason.count)}")
-            viewModel.setShowUpToDate(arguments.showIdTest)
+            viewModel.submitAction(ActionProgress.MarkShowUpToDate(arguments.showIdTest))
         }
     }
 }

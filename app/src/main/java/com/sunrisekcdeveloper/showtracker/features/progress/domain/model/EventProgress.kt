@@ -16,10 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.progress.application
+package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
-
-interface SetShowProgressUseCaseContract {
-    suspend operator fun invoke(progress: SetShowProgress)
+sealed class EventProgress {
+    object PopBackStack : EventProgress()
+    data class ShowToast(val msg: String) : EventProgress()
 }

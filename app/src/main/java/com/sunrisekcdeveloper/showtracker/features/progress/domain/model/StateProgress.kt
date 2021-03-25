@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.progress.application
+package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
-
-interface SetShowProgressUseCaseContract {
-    suspend operator fun invoke(progress: SetShowProgress)
+sealed class StateProgress {
+    object Loading : StateProgress()
+    data class Success(val values: Map<Int, Int>) : StateProgress()
+    data class Error(val error: Exception) : StateProgress()
 }
