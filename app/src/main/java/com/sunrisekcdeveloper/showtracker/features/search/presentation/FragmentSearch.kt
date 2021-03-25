@@ -40,6 +40,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -59,6 +61,7 @@ class FragmentSearch : Fragment() {
     private val viewModel: ViewModelSearch by viewModels()
 
     private val adapterSearchResults = PagingAdapterSimplePoster()
+
     @Inject
     lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
 
@@ -123,8 +126,20 @@ class FragmentSearch : Fragment() {
                 is EventSearch.LoadMediaDetails -> {
                     findNavController().navigate(
                         when (event.type) {
-                            MediaType.Movie -> { FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(event.mediaId, event.title, event.posterPath) }
-                            MediaType.Show -> { FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(event.mediaId, event.title, event.posterPath) }
+                            MediaType.Movie -> {
+                                FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(
+                                    event.mediaId,
+                                    event.title,
+                                    event.posterPath
+                                )
+                            }
+                            MediaType.Show -> {
+                                FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(
+                                    event.mediaId,
+                                    event.title,
+                                    event.posterPath
+                                )
+                            }
                         }
                     )
                 }
@@ -141,9 +156,11 @@ class FragmentSearch : Fragment() {
     private fun stateError() {
 
     }
+
     private fun stateLoading() {
 
     }
+
     private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
         binding.recyclerviewSearch.layoutManager = gridLayoutManager
         binding.recyclerviewSearch.adapter = adapterSearchResults
@@ -173,11 +190,18 @@ class FragmentSearch : Fragment() {
                 }
         }
     }
+
     // todo handle case where unwatched movies and shows are empty
     //  perhaps show some image that says user should add stuff to their watchlist (along with same header as below)
     private fun stateEmpty(list: List<UIModelUnwatchedSearch>) {
         binding.tvHeaderWatchlistContent.text = "Your Unwatched Movies and TV Shows"
         binding.tvHeaderWatchlistContent.isVisible = true
+
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
+            Timber.e("Media clicked: [id=$mediaId, title=$mediaTitle, imagePath=$posterPath, type=$mediaType]")
+        }
+
+        adapterUnwatchedContent.onPosterClickListener = onClick
 
         binding.recyclerviewSearch.layoutManager = linearLayoutManager
         binding.recyclerviewSearch.adapter = adapterUnwatchedContent
@@ -185,10 +209,12 @@ class FragmentSearch : Fragment() {
         binding.recyclerviewSearch.isVisible = true
 
     }
+
     private fun stateNoResults() {
         binding.tvHeaderNoResults.isVisible = true
         binding.tvSubHeaderNoResults.isVisible = true
     }
+
     private fun cleanUI() {
         binding.recyclerviewSearch.isGone = true
         binding.tvHeaderNoResults.isGone = true
@@ -212,8 +238,9 @@ class FragmentSearch : Fragment() {
         binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            viewModel.submitAction(ActionSearch.LoadMediaDetails(
-                mediaId, mediaTitle, posterPath, mediaType
+            viewModel.submitAction(
+                ActionSearch.LoadMediaDetails(
+                    mediaId, mediaTitle, posterPath, mediaType
                 )
             )
         }
@@ -238,6 +265,7 @@ class FragmentSearch : Fragment() {
         }
         binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.BackButtonPress) } // todo up button returns to discovery
     }
+
     companion object {
         private const val LAST_SEARCH_QUERY: String = "last_search_query"
     }
