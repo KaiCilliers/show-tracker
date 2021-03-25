@@ -27,7 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIMode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 
 sealed class StateSearch {
-    object EmptySearch : StateSearch()
+    data class EmptySearch(val data: List<UIModelUnwatchedSearch>) : StateSearch()
     object NoResultsFound : StateSearch()
     object Loading : StateSearch()
     data class Success(val data: PagingData<UIModelDiscovery>) : StateSearch()
@@ -35,12 +35,12 @@ sealed class StateSearch {
 }
 
 sealed class ActionSearch {
-    object FirstLoad : ActionSearch()
     object BackButtonPress : ActionSearch()
     object NotifyNoSearchResults : ActionSearch()
     data class SearchForMedia(val query: String) : ActionSearch()
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : ActionSearch()
     data class ShowToast(val msg: String) : ActionSearch()
+    object LoadUnwatchedContent : ActionSearch()
 }
 
 sealed class EventSearch {

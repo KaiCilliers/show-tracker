@@ -73,9 +73,10 @@ object RepositoryModule {
     @RepoSearch
     @Provides
     fun provideSearchRepositoryUpdated(
-        @SourceSearch remote: RemoteDataSourceSearchContract
+        @SourceSearch remote: RemoteDataSourceSearchContract,
+        db: TrackerDatabase
     ): RepositorySearchContract =
-        RepositorySearch(remote)
+        RepositorySearch(remote, db)
 
     @ActivityRetainedScoped
     @RepoDetail

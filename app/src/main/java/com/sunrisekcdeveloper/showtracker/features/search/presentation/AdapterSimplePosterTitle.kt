@@ -25,10 +25,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
 
+// todo DiffUtil
 class AdapterSimplePosterTitle(
-    private var data: MutableList<UIModelSearch>,
+    private var data: MutableList<UIModelUnwatchedSearch>,
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : RecyclerView.Adapter<AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
@@ -44,17 +45,15 @@ class AdapterSimplePosterTitle(
 
     override fun getItemCount(): Int = data.size
 
-    fun updateList(data: List<UIModelSearch>) {
+    fun updateList(data: List<UIModelUnwatchedSearch>) {
+        this.data.clear()
         this.data.addAll(data)
-        notifyItemRangeInserted(
-            this.data.size,
-            data.size -1
-        )
+        notifyDataSetChanged()
     }
 
     // inner class benefits from being able to reference parent (even private variables)
     class ViewHolderSimplePosterTitle(val binding: ItemSimplePosterAndTitleBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: UIModelSearch) {
+        fun bind(data: UIModelUnwatchedSearch) {
             Glide.with(binding.root)
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())

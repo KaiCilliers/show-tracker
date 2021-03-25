@@ -34,8 +34,10 @@ import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowP
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.FetchShowSeasonAndEpisodeTotalsUseCase
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.SetShowProgressUseCase
+import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.LoadUnwatchedMediaUseCase
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
@@ -92,6 +94,12 @@ object UseCaseModule {
         @RepoSearch searchRepo: RepositorySearchContract
     ): SearchMediaByTitleUseCaseContract =
         SearchMediaByTitleUseCase(searchRepo)
+
+    @Provides
+    fun provideLoadUnwatchedMediaUseCase(
+        @RepoSearch searchRepo: RepositorySearchContract
+    ) : LoadUnwatchedMediaUseCaseContract =
+        LoadUnwatchedMediaUseCase(searchRepo)
 
     // Detail
     @Provides

@@ -16,16 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
-import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
+import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
+import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-interface RepositorySearchContract {
-    suspend fun loadUnwatchedMedia() : Resource<List<UIModelUnwatchedSearch>>
-    suspend fun searchMediaByTitle(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
-    fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>>
+@ExperimentalCoroutinesApi
+class LoadUnwatchedMediaUseCase(
+    @RepoSearch private val repo: RepositorySearchContract
+) : LoadUnwatchedMediaUseCaseContract {
+    override suspend fun invoke(): Resource<List<UIModelUnwatchedSearch>> {
+        return repo.loadUnwatchedMedia()
+    }
 }

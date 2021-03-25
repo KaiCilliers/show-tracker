@@ -16,23 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
+package com.sunrisekcdeveloper.showtracker.features.search.application
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
 
-data class UIModelSearch(
-    val id: String,
-    val title: String,
-    val posterPath: String,
-    val mediaType: MediaType,
-    val rating: Float,
-    val popularity: Float,
-    val ratingVotes: Int
-)
-
-data class UIModelUnwatchedSearch(
-    val id: String,
-    val title: String,
-    val posterPath: String,
-    val mediaType: MediaType
-)
+interface LoadUnwatchedMediaUseCaseContract {
+    suspend operator fun invoke() : Resource<List<UIModelUnwatchedSearch>>
+}

@@ -27,6 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListTy
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
+import com.sunrisekcdeveloper.showtracker.features.search.data.local.DaoSearch
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import java.util.Date
@@ -53,6 +54,7 @@ abstract class TrackerDatabase : RoomDatabase() {
     abstract fun progressDao(): DaoProgress
     abstract fun detailDao(): DaoDetail
     abstract fun watchlistDao(): DaoWatchlist
+    abstract fun searchDao(): DaoSearch
 
 }
 

@@ -32,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.*
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
@@ -46,6 +47,7 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class ViewModelSearch @ViewModelInject constructor(
     private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract,
+    private val loadUnwatchedMediaUseCase: LoadUnwatchedMediaUseCaseContract,
     @RepoSearch private val repo: RepositorySearchContract
 ) : ViewModel() {
 
@@ -56,16 +58,22 @@ class ViewModelSearch @ViewModelInject constructor(
     val state: LiveData<StateSearch>
         get() = _state
 
+    private val unwatchedMediaCache = mutableListOf<UIModelUnwatchedSearch>()
+
     fun submitAction(action: ActionSearch) = viewModelScope.launch {
         when (action) {
-            is ActionSearch.ShowToast -> { eventChannel.send(EventSearch.ShowToast(action.msg)) }
+            is ActionSearch.ShowToast -> {
+                eventChannel.send(EventSearch.ShowToast(action.msg))
+            }
             is ActionSearch.LoadMediaDetails -> {
-                eventChannel.send(EventSearch.LoadMediaDetails(
-                    action.mediaId,
-                    action.title,
-                    action.posterPath,
-                    action.type
-                ))
+                eventChannel.send(
+                    EventSearch.LoadMediaDetails(
+                        action.mediaId,
+                        action.title,
+                        action.posterPath,
+                        action.type
+                    )
+                )
             }
             is ActionSearch.SearchForMedia -> {
                 searchMedia(action.query).collectLatest { pagingData ->
@@ -75,11 +83,28 @@ class ViewModelSearch @ViewModelInject constructor(
             ActionSearch.BackButtonPress -> {
                 eventChannel.send(EventSearch.PopBackStack)
             }
-            ActionSearch.FirstLoad -> {
-                _state.value = StateSearch.EmptySearch
-            }
             ActionSearch.NotifyNoSearchResults -> {
                 _state.value = StateSearch.NoResultsFound
+            }
+            ActionSearch.LoadUnwatchedContent -> {
+                Timber.e("is cache empty?: ${unwatchedMediaCache.isEmpty()}")
+                if (unwatchedMediaCache.isEmpty()) {
+                    val resource = loadUnwatchedMediaUseCase()
+                    when (resource) {
+                        is Resource.Success -> {
+                            unwatchedMediaCache.addAll(resource.data)
+                            _state.value = StateSearch.EmptySearch(resource.data)
+                        }
+                        is Resource.Error -> {
+                            eventChannel.send(EventSearch.ShowToast("could not load unwatched media content"))
+                        }
+                        Resource.Loading -> {
+                            _state.value = StateSearch.Loading
+                        }
+                    }
+                } else {
+                    _state.value = StateSearch.EmptySearch(unwatchedMediaCache)
+                }
             }
         }
     }

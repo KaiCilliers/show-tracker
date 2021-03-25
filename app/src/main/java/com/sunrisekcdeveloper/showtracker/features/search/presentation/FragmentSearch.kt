@@ -24,6 +24,7 @@ import android.view.InputQueue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -34,6 +35,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
@@ -43,10 +45,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListTy
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ActionSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.EventSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.StateSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -54,6 +53,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -65,6 +65,12 @@ class FragmentSearch : Fragment() {
     private val viewModel: ViewModelSearch by viewModels()
 
     private val adapterSearchResults = PagingAdapterSimplePoster()
+    @Inject
+    lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
+
+    lateinit var linearLayoutManager: LinearLayoutManager
+
+    lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,7 +87,6 @@ class FragmentSearch : Fragment() {
             viewModel.submitAction(ActionSearch.SearchForMedia(it))
         }
         setup()
-        viewModel.submitAction(ActionSearch.FirstLoad)
         observeViewModel()
     }
 
@@ -94,11 +99,10 @@ class FragmentSearch : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             // todo this is bad, this causes UI flashing :(
             cleanUI()
-            Timber.e("STOOP ${state.javaClass.simpleName}")
             when (state) {
-                StateSearch.EmptySearch -> {
+                is StateSearch.EmptySearch -> {
                     viewModel.submitAction(ActionSearch.ShowToast("Here is your unwatched shit"))
-                    stateEmpty()
+                    stateEmpty(state.data)
                 }
                 StateSearch.NoResultsFound -> {
                     viewModel.submitAction(ActionSearch.ShowToast("No results found"))
@@ -147,11 +151,13 @@ class FragmentSearch : Fragment() {
 
     }
     private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
-        binding.tvHeaderWatchlistContent.text = "Results"
+        binding.recyclerviewSearch.layoutManager = gridLayoutManager
+        binding.recyclerviewSearch.adapter = adapterSearchResults
         binding.recyclerviewSearch.isVisible = true
         binding.tvHeaderWatchlistContent.isVisible = true
 
         adapterSearchResults.submitData(page)
+        binding.tvHeaderWatchlistContent.text = "Results"
 
         // Here we launch a coroutine which is responsible for scrolling the list to the top
         // when the list is refreshed from the network
@@ -173,10 +179,17 @@ class FragmentSearch : Fragment() {
                 }
         }
     }
-    private fun stateEmpty() {
+    // todo handle case where unwatched movies and shows are empty
+    //  perhaps show some image that says user should add stuff to their watchlist (along with same header as below)
+    private fun stateEmpty(list: List<UIModelUnwatchedSearch>) {
         binding.tvHeaderWatchlistContent.text = "Your Unwatched Movies and TV Shows"
         binding.tvHeaderWatchlistContent.isVisible = true
-        // todo watchlist and movie content with adapter bind to recyclerview
+
+        binding.recyclerviewSearch.layoutManager = linearLayoutManager
+        binding.recyclerviewSearch.adapter = adapterUnwatchedContent
+        adapterUnwatchedContent.updateList(list)
+        binding.recyclerviewSearch.isVisible = true
+
     }
     private fun stateNoResults() {
         binding.tvHeaderNoResults.isVisible = true
@@ -191,6 +204,15 @@ class FragmentSearch : Fragment() {
 
 
     private fun setup() {
+        linearLayoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.VERTICAL, false
+        )
+        gridLayoutManager = GridLayoutManager(
+            requireContext(),
+            3,
+            GridLayoutManager.VERTICAL,
+            false
+        )
         // todo programatically set searchview attributes due to it not working in layout for some reason
         binding.svSearch.setIconifiedByDefault(false)
         binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
@@ -204,22 +226,13 @@ class FragmentSearch : Fragment() {
 
         adapterSearchResults.onClick = onClick
 
-        binding.recyclerviewSearch.layoutManager = GridLayoutManager(
-            requireContext(),
-            3,
-            GridLayoutManager.VERTICAL,
-            false
-        )
-
-        binding.recyclerviewSearch.adapter = adapterSearchResults
-
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
 //                .debounce(100)
                 .filter { query ->
                     if (query.isEmpty()) {
                         adapterSearchResults.submitData(PagingData.empty())
-                        viewModel.submitAction(ActionSearch.FirstLoad)
+                        viewModel.submitAction(ActionSearch.LoadUnwatchedContent)
                         return@filter false
                     }
                     return@filter true
