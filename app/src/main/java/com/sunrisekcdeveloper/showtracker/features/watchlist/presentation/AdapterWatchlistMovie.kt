@@ -25,11 +25,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 
 class AdapterWatchlistMovie(
     var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> },
@@ -65,7 +67,8 @@ class AdapterWatchlistMovie(
                 }
             }
             Glide.with(binding.root)
-                .load("https://image.tmdb.org/t/p/w342${item.posterPath}")
+                    // todo update all Glide calls with this enum
+                .load(EndpointPoster.Standard.urlWithResource(item.posterPath))
                 .transform(CenterCrop())
                 .into(binding.imgvWatchlistMoviePoster)
 

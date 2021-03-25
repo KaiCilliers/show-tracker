@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.application
 
-import com.sunrisekcdeveloper.showtracker.features.progress.presentation.SetShowProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
 
 interface SetShowProgressUseCaseContract {
     suspend operator fun invoke(progress: SetShowProgress)

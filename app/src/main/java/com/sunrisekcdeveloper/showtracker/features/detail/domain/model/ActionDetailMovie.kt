@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-
-data class UIModelSearch(
-    val id: String,
-    val title: String,
-    val posterPath: String,
-    val mediaType: MediaType,
-    val rating: Float,
-    val popularity: Float,
-    val ratingVotes: Int
-)
+sealed class ActionDetailMovie {
+    data class Load(val movieId: String) : ActionDetailMovie()
+    data class Add(val movieId: String) : ActionDetailMovie()
+    data class Remove(val movieId: String) : ActionDetailMovie()
+    data class SetWatched(val movieId: String) : ActionDetailMovie()
+    data class SetUnwatched(val movieId: String) : ActionDetailMovie()
+    object Close : ActionDetailMovie()
+    data class ShowToast(val msg: String) : ActionDetailMovie()
+}

@@ -38,23 +38,16 @@
                 android:id="@+id/tv_heading_popular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:text="@string/popular"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8"
-                android:padding="@dimen/padding_8"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_popular"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <!-- POPULAR SHOWS -->
 
@@ -65,20 +58,13 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:text="@string/heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_movies"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -92,19 +78,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/top_rated"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_highest_rated_heading"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -117,21 +97,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:text="@string/heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -145,20 +118,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/upcoming"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_upcoming_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -171,21 +137,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:text="@string/heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_upcoming_movies"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_airing_today_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -201,7 +160,6 @@
             android:id="@+id/toolbar_discovery"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

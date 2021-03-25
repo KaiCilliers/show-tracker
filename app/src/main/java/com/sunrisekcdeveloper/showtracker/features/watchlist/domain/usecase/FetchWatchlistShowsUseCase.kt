@@ -19,22 +19,24 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 
 @ExperimentalCoroutinesApi
 class FetchWatchlistShowsUseCase(
     @RepoWatchlist private val repoWatchlist: RepositoryWatchlistContract
 ) : FetchWatchlistShowsUseCaseContract {
     override suspend fun invoke(sortBy: SortShows): Flow<Resource<List<UIModelWatchlistShow>>> {
-        return repoWatchlist.watchlistShows(sortBy)
+        return flow {
+            emit(Resource.Loading)
+            emitAll(repoWatchlist.watchlistShows(sortBy))
+        }
     }
 }

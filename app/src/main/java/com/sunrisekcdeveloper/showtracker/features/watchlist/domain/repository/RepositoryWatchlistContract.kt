@@ -22,10 +22,8 @@ import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistEpisode
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistSeason
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
 

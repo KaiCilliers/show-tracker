@@ -30,27 +30,37 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/navigate_from_search_to_bottom_sheet_detail_movie"
-            app:destination="@id/destination_search_bottom_sheet_detail_movie" />
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
         <action
             android:id="@+id/navigate_from_search_to_bottom_sheet_detail_show"
-            app:destination="@id/destination_search_bottom_sheet_detail_show" />
+            app:destination="@id/destination_bottom_sheet_detail_show" />
     </fragment>
     <dialog
-        android:id="@+id/destination_search_bottom_sheet_detail_movie"
+        android:id="@+id/destination_bottom_sheet_detail_movie"
         android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetMovieDetail"
         android:label="bottom_sheet_detail_movie"
         tools:layout="@layout/bottom_sheet_movie_detail" >
         <argument
             android:name="movieId"
             app:argType="string" />
+        <argument android:name="movieTitle"
+            app:argType="string" />
+        <argument android:name="posterPath"
+            app:argType="string" />
     </dialog>
     <dialog
-        android:id="@+id/destination_search_bottom_sheet_detail_show"
+        android:id="@+id/destination_bottom_sheet_detail_show"
         android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetShowDetail"
         android:label="bottom_sheet_detail_show"
         tools:layout="@layout/bottom_sheet_show_detail" >
         <argument
             android:name="showId"
+            app:argType="string" />
+        <argument
+            android:name="showTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
             app:argType="string" />
     </dialog>
 </navigation>

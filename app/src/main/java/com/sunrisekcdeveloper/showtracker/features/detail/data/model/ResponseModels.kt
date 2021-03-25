@@ -47,9 +47,12 @@ data class ResponseMovieDetail(
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,
     @SerializedName("overview") val overview: String,
+    @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("poster_path") val posterPath: String?,
     @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("runtime") val runtime: Int?
+    @SerializedName("runtime") val runtime: Int?,
+    @SerializedName("popularity") val popularityValue: Float,
+    @SerializedName("vote_average") val rating: Float,
 )
 
 data class EnvelopeMovieReleaseDates(

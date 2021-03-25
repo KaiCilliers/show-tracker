@@ -23,7 +23,7 @@ buildscript {
         okhttp_version = "4.7.2"
         recycler_version = "1.2.0-alpha06"
         paging_version = "3.0.0-alpha07"
-        nav_version = "2.3.1"
+        nav_version = "2.3.4"
         moshi_version = "1.8.0"
         espresso_version = "3.3.0"
         hamcrest_version = "1.3"

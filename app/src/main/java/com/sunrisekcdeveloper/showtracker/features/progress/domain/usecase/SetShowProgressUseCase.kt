@@ -18,12 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
 import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.progress.data.repository.RepositoryProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
-import com.sunrisekcdeveloper.showtracker.features.progress.presentation.SetShowProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

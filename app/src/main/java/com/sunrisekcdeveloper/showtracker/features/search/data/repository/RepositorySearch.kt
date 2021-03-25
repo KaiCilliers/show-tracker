@@ -23,13 +23,17 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -37,8 +41,35 @@ import timber.log.Timber
 
 class RepositorySearch(
     @SourceSearch private val remote: RemoteDataSourceSearchContract,
+    private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {
+
+    override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
+        val movie = database.searchDao().unwatchedMovies()
+        val shows = database.searchDao().unwatchedShows()
+
+        Timber.e("movies: ${movie.map { it.details.title }}")
+        Timber.e("shows: ${shows.map { it.details.title }}")
+
+        val list = movie.map { it.asUiModelUnwatchedSearch() } + shows.map { it.asUiModelUnwatchedSearch() }
+
+        return Resource.Success(list.sortedBy { it.title })
+    }
+
+    fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+        id = status.id,
+        title = details.title,
+        backdropPath = details.backdropPath,
+        mediaType = MediaType.Movie
+    )
+
+    fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+        id = status.id,
+        title = details.title,
+        backdropPath = details.backdropPath,
+        mediaType = MediaType.Show
+    )
 
     override fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>> {
         return Pager(

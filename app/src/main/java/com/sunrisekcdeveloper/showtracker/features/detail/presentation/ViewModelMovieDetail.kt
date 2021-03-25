@@ -24,12 +24,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.application.*
+import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMovieToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMovieFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ViewModelMovieDetail @ViewModelInject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
@@ -37,31 +43,54 @@ class ViewModelMovieDetail @ViewModelInject constructor(
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
     private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCaseContract
 ) : ViewModel() {
-    private val _movieDetails = MutableLiveData<Resource<UIModelMovieDetail>>()
-    val movieDetails: LiveData<Resource<UIModelMovieDetail>>
-        get() = _movieDetails
+
+    private val eventChannel = Channel<EventDetailMovie>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    private val _state = MutableLiveData<StateDetailMovie>()
+    val state: LiveData<StateDetailMovie>
+        get() = _state
 
     fun movieDetails(id: String) = viewModelScope.launch {
-        fetchMovieDetailsUseCase(id).collect {
-            _movieDetails.value = it
+        fetchMovieDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailMovie.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailMovie.Error(Exception(resource.message))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailMovie.Loading
+                }
+            }
         }
     }
 
-    fun removeMovieFromWatchlist(movieId: String) = viewModelScope.launch {
-        removeMovieFromWatchlistUseCase(movieId)
-    }
-
-    fun markMovieAsWatched(movieId: String) = viewModelScope.launch {
-        Timber.e("mark as watched: $movieId")
-        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.Watched)
-    }
-
-    fun markMovieAsUnWatched(movieId: String) = viewModelScope.launch {
-        Timber.e("mark as not watched $movieId")
-        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.NotWatched)
-    }
-
-    fun addMovieToWatchlist(movieId: String) = viewModelScope.launch {
-        addMovieToWatchlistUseCase(movieId)
+    fun submitAction(action: ActionDetailMovie) = viewModelScope.launch {
+        when (action) {
+            is ActionDetailMovie.Load -> {
+                movieDetails(action.movieId)
+            }
+            is ActionDetailMovie.Add -> {
+                addMovieToWatchlistUseCase(action.movieId)
+            }
+            is ActionDetailMovie.Remove -> {
+                removeMovieFromWatchlistUseCase(action.movieId)
+            }
+            is ActionDetailMovie.SetWatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
+            }
+            is ActionDetailMovie.SetUnwatched -> {
+               updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
+            }
+            ActionDetailMovie.Close -> {
+                eventChannel.send(EventDetailMovie.Close)
+            }
+            is ActionDetailMovie.ShowToast -> {
+                eventChannel.send(EventDetailMovie.ShowToast("msg"))
+            }
+        }
     }
 }
+

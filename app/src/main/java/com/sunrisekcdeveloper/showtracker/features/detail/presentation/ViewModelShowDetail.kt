@@ -27,8 +27,10 @@ import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ViewModelShowDetail @ViewModelInject constructor(
@@ -36,26 +38,53 @@ class ViewModelShowDetail @ViewModelInject constructor(
     private val addShowToWatchlistUseCase: AddShowToWatchlistUseCaseContract,
     private val removeShowFromWatchlistUseCase: RemoveShowFromWatchlistUseCaseContract
 ) : ViewModel() {
-    private val _showDetails = MutableLiveData<Resource<UIModelShowDetail>>()
-    val showDetails: LiveData<Resource<UIModelShowDetail>>
-        get() = _showDetails
 
-    fun showDetails(id: String) = viewModelScope.launch {
-        fetchShowDetailsUseCase(id).collect {
-            _showDetails.value = it
+    private val eventChannel = Channel<EventDetailShow>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    private val _state = MutableLiveData<StateDetailShow>()
+    val state: LiveData<StateDetailShow>
+        get() = _state
+
+    fun submitAction(action: ActionDetailShow) = viewModelScope.launch {
+        when (action) {
+            is ActionDetailShow.Load -> {
+                showDetails(action.showId)
+            }
+            is ActionDetailShow.Add -> {
+                addShowToWatchlistUseCase(action.showId)
+            }
+            is ActionDetailShow.Remove -> {
+                removeShowFromWatchlistUseCase(action.showId)
+            }
+            ActionDetailShow.Close -> {
+                eventChannel.send(EventDetailShow.Close)
+            }
+            is ActionDetailShow.ShowToast -> {
+                eventChannel.send(EventDetailShow.ShowToast("msg"))
+            }
+            is ActionDetailShow.StartWatching -> {
+                eventChannel.send(EventDetailShow.LaunchStartWatching(action.showId))
+            }
+            is ActionDetailShow.UpdateProgress -> {
+                eventChannel.send(EventDetailShow.GoToShowInWatchlist(action.showId))
+            }
         }
     }
 
-    fun removeShowFromWatchlist(showId: String) = viewModelScope.launch {
-        removeShowFromWatchlistUseCase(showId)
+    fun showDetails(id: String) = viewModelScope.launch {
+        fetchShowDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailShow.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailShow.Error(Exception(resource.message))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailShow.Loading
+                }
+            }
+        }
     }
-
-    fun addShowToWatchlist(showId: String) = viewModelScope.launch {
-        addShowToWatchlistUseCase(showId)
-    }
-
-    fun updateShowProgress(showId: String) = viewModelScope.launch {
-
-    }
-
 }

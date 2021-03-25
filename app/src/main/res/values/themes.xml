@@ -1,16 +1,37 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.ShowTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">@color/colorAccent</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+    <style name="Theme.ShowTracker" parent="Base.Theme.ShowTracker"/>
+
+    <style name="Base.Theme.ShowTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--Light theme specific attributes here -->
+        <item name="colorPrimary">@color/blue_light_500</item>
+        <item name="colorPrimaryVariant">@color/blue_light_200</item>
+        <item name="colorSecondary">@color/blue_grey_500</item>
+        <item name="colorSecondaryVariant">@color/blue_grey_300</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:colorBackground">@color/blue_grey_300</item>
+        <item name="colorOnBackground">@color/black</item>
+
+<!--        <item name="android:background"></item>-->
+
+        <item name="bottomNavigationStyle">@color/bottom_nav_item</item>
+
+        <!--Material type attributes-->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.ShowTracker.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.ShowTracker.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.ShowTracker.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.ShowTracker.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.ShowTracker.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.ShowTracker.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.ShowTracker.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.ShowTracker.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.ShowTracker.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.ShowTracker.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.ShowTracker.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.ShowTracker.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.ShowTracker.Overline</item>
     </style>
+
 </resources>

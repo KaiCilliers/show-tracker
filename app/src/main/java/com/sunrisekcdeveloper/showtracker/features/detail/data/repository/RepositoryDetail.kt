@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
+import com.google.gson.annotations.SerializedName
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
@@ -282,10 +283,13 @@ fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
     id = "$id",
     title = title,
     overview = overview,
+    backdropPath = backdropPath ?: "",
     posterPath = posterPath ?: "",
     certification = "",
     releaseDate = releaseDate,
-    runTime = "$runtime"
+    runTime = "$runtime",
+    rating = rating,
+    popularityValue = popularityValue,
 )
 
 fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =

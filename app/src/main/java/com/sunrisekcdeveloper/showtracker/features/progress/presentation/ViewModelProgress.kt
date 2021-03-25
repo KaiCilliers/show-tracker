@@ -24,42 +24,52 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.EventProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
+import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.StateProgress
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ViewModelProgress @ViewModelInject constructor(
     private val fetchShowSeasonAndEpisodeTotalsUseCase: FetchShowSeasonAndEpisodeTotalsUseCaseContract,
     private val setShowProgressUseCase: SetShowProgressUseCaseContract
 ) : ViewModel() {
-    private val _showSeasonAndEpisodeCount = MutableLiveData<Resource<Map<Int, Int>>>()
-    val showSeasonAndEpisodeCount: LiveData<Resource<Map<Int, Int>>>
-        get() = _showSeasonAndEpisodeCount
 
-    fun getShowSeasonAndEpisodeCount(showId: String) = viewModelScope.launch {
-        val map = fetchShowSeasonAndEpisodeTotalsUseCase(showId)
-        _showSeasonAndEpisodeCount.value = map
-    }
+    private val eventChannel = Channel<EventProgress>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
-    fun setShowProgress(
-        showId: String,
-        seasonNumber: Int,
-        episodeNumber: Int
-    ) = viewModelScope.launch {
-        setShowProgressUseCase(SetShowProgress.Partial(showId, seasonNumber, episodeNumber))
-    }
+    private val _state = MutableLiveData<StateProgress>()
+    val state: LiveData<StateProgress>
+        get() = _state
 
-    fun setShowUpToDate(showId: String) = viewModelScope.launch {
-        setShowProgressUseCase(SetShowProgress.UpToDate(showId))
+    fun submitAction(action: ActionProgress) = viewModelScope.launch {
+        when (action) {
+            ActionProgress.NavigateBack -> {
+                eventChannel.send(EventProgress.ShowToast("nav back"))
+            }
+            is ActionProgress.CreateToast -> {
+                eventChannel.send(EventProgress.ShowToast(action.msg))
+            }
+            is ActionProgress.Load -> {
+                val resource = fetchShowSeasonAndEpisodeTotalsUseCase(action.showId)
+                when (resource) {
+                    is Resource.Success -> { _state.value = StateProgress.Success(resource.data) }
+                    is Resource.Error -> { _state.value = StateProgress.Error(Exception(resource.message)) }
+                    Resource.Loading -> { _state.value = StateProgress.Loading }
+                }
+            }
+            is ActionProgress.SetShowProgress -> {
+                setShowProgressUseCase(SetShowProgress.Partial(action.showId, action.seasonNumber, action.episodeNumber))
+            }
+            is ActionProgress.MarkShowUpToDate -> {
+                setShowProgressUseCase(SetShowProgress.UpToDate(action.showId))
+            }
+        }
     }
 }
 
-sealed class SetShowProgress {
-    data class Partial (
-        val showId: String,
-        val seasonNumber: Int,
-        val episodeNumber: Int
-    ): SetShowProgress()
-    data class UpToDate(val showId: String): SetShowProgress()
-}

@@ -113,7 +113,8 @@
         <argument
             android:name="movieId"
             app:argType="string" />
-        <argument android:name="movieTitle"
+        <argument
+            android:name="movieTitle"
             app:argType="string" />
         <argument
             android:name="posterPath"

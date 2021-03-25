@@ -34,8 +34,10 @@ import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowP
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.FetchShowSeasonAndEpisodeTotalsUseCase
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.SetShowProgressUseCase
+import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.LoadUnwatchedMediaUseCase
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
@@ -44,7 +46,6 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.R
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistShowsUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.UpdateShowProgressUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UpdateShowAction
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -93,6 +94,12 @@ object UseCaseModule {
         @RepoSearch searchRepo: RepositorySearchContract
     ): SearchMediaByTitleUseCaseContract =
         SearchMediaByTitleUseCase(searchRepo)
+
+    @Provides
+    fun provideLoadUnwatchedMediaUseCase(
+        @RepoSearch searchRepo: RepositorySearchContract
+    ) : LoadUnwatchedMediaUseCaseContract =
+        LoadUnwatchedMediaUseCase(searchRepo)
 
     // Detail
     @Provides

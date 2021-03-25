@@ -19,22 +19,21 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
-import kotlinx.coroutines.flow.collect
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.StateWatchlist
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ViewModelWatchlist @ViewModelInject constructor(
     private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
@@ -42,60 +41,116 @@ class ViewModelWatchlist @ViewModelInject constructor(
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
     private val updateShowProgressUseCase: UpdateShowProgressUseCaseContract
 ) : ViewModel() {
-    private val _watchlistMovies = MutableLiveData<Resource<List<UIModelWatchlisMovie>>>()
-    val watchlistMovies: LiveData<Resource<List<UIModelWatchlisMovie>>>
-        get() = _watchlistMovies
 
-    private val _watchlistShows = MutableLiveData<Resource<List<UIModelWatchlistShow>>>()
-    val watchlistShows: LiveData<Resource<List<UIModelWatchlistShow>>>
-        get() = _watchlistShows
+    private val eventChannel = Channel<EventWatchlist>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
-    init {
-        // todo problem with sort implementation is when updating items the sort gets reapplied and it is jarring with flickering
-        watchlistMovies(SortMovies.ByTitle)
-        watchlistShows(SortShows.ByTitle)
+    private val _state = MutableLiveData<StateWatchlist>()
+    val state: LiveData<StateWatchlist>
+        get() = _state
+
+    private var showSearchQuery = ""
+    private var movieSearchQuery = ""
+    private var movieSortOrder: SortMovies = SortMovies.ByTitle
+    private var showSortOrder: SortShows  = SortShows.ByTitle
+
+    fun showSearchQuery() = showSearchQuery
+    fun movieSearchQuery() = movieSearchQuery
+
+    fun updateShowSearchQuery(query: String) {
+        showSearchQuery = query
+        // todo not pretty but it works
+        if (query.isEmpty()) {
+            submitAction(ActionWatchlist.LoadWatchlistData)
+        }
+    }
+    fun updateMovieSearchQuery(query: String) {
+        movieSearchQuery = query
+        // todo not pretty but it works
+        if (query.isEmpty()) {
+            submitAction(ActionWatchlist.LoadWatchlistData)
+        }
+    }
+    fun updateShowSortBy(sortBy: SortShows) {
+        showSortOrder = sortBy
+        submitAction(ActionWatchlist.LoadWatchlistData)
+    }
+    fun updateMovieSortBy(sortBy: SortMovies) {
+        movieSortOrder = sortBy
+        submitAction(ActionWatchlist.LoadWatchlistData)
     }
 
-    fun updateShowProgress(action: UpdateShowAction) = viewModelScope.launch{
-        updateShowProgressUseCase(action)
-    }
-
-    fun markMovieAsWatched(movieId: String) = viewModelScope.launch {
-        Timber.e("mark as watched: $movieId")
-        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.Watched)
-    }
-
-    fun markMovieAsUnWatched(movieId: String) = viewModelScope.launch {
-        Timber.e("mark as not watched $movieId")
-        updateMovieWatchedStatusUseCase(movieId, MovieWatchedStatus.NotWatched)
-    }
-
-    fun watchlistMovies(sortBy: SortMovies) = viewModelScope.launch {
-        fetchWatchlistMoviesUseCase(sortBy).collect {
-            _watchlistMovies.value = it
+    fun submitAction(action: ActionWatchlist) = viewModelScope.launch {
+        when (action) {
+            ActionWatchlist.LoadWatchlistData -> {
+                watchlistData()
+            }
+            is ActionWatchlist.ShowToast -> {
+                eventChannel.send(EventWatchlist.ShowToast(action.msg))
+            }
+            is ActionWatchlist.MarkMovieWatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
+            }
+            is ActionWatchlist.MarkMovieUnWatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
+            }
+            is ActionWatchlist.UpdateShowProgress -> {
+                updateShowProgressUseCase(action.instructions)
+            }
+            is ActionWatchlist.StartWatchingShow -> {
+                eventChannel.send(EventWatchlist.ConfigureShow(action.showId))
+            }
+            is ActionWatchlist.LoadMediaDetails -> {
+                eventChannel.send(EventWatchlist.LoadMediaDetails(
+                    action.mediaId,
+                    action.title,
+                    action.posterPath,
+                    action.type
+                ))
+            }
         }
     }
 
-    fun watchlistShows(sortBy: SortShows) = viewModelScope.launch {
-        fetchWatchlistShowsUseCase(sortBy).collect {
-            _watchlistShows.value = it
+    private fun watchlistData() = viewModelScope.launch {
+        val moviesFlow = fetchWatchlistMoviesUseCase(movieSortOrder)
+        val showsFlow = fetchWatchlistShowsUseCase(showSortOrder)
+
+        // todo consider replacing with zip for less emissions
+        combine(moviesFlow, showsFlow) { resourceMovie, resourceShow ->
+            // If either are loading
+            if (resourceMovie is Resource.Loading || resourceShow is Resource.Loading) {
+                return@combine StateWatchlist.Loading
+            }
+
+            // If either throws an error
+            if (resourceMovie is Resource.Error || resourceShow is Resource.Error) {
+                return@combine StateWatchlist.Error(Exception("Error retrieving watchlist data"))
+            }
+
+            // If both are success
+            if (resourceMovie is Resource.Success && resourceShow is Resource.Success) {
+                return@combine StateWatchlist.Success(
+                    movies = resourceMovie.data.filter {
+                        if (movieSearchQuery.isEmpty()) {
+                            true
+                        } else {
+                            it.title.contains(movieSearchQuery, true)
+                        }
+                    },
+                    shows = resourceShow.data.filter {
+                        if (showSearchQuery.isEmpty()) {
+                            true
+                        } else {
+                            it.title.contains(showSearchQuery, true)
+                        }
+                    }
+                )
+            } else {
+                return@combine StateWatchlist.Error(Exception("Fetching watchlist data unkown state..."))
+            }
+            // todo consider adding conflate() to flow
+        }.collect {
+            _state.value = it
         }
     }
-}
-
-data class UIModelWatchlisMovie(
-    val id: String,
-    val title: String,
-    val overview: String,
-    val posterPath: String,
-    val watched: Boolean,
-    val dateAdded: Long,
-    val dateWatched: Long,
-    val lastUpdated: Long
-)
-
-sealed class UpdateShowAction {
-    data class IncrementEpisode(val showId: String) : UpdateShowAction()
-    data class CompleteSeason(val showId: String) : UpdateShowAction()
-    data class UpToDateWithShow(val showId: String) : UpdateShowAction()
 }

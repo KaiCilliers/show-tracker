@@ -42,11 +42,11 @@ object AdapterModule {
 
     @Provides
     fun provideTitlePosterListAdapter(): AdapterSimplePosterTitle {
-        return AdapterSimplePosterTitle(mutableListOf())
+        return AdapterSimplePosterTitle()
     }
 
     @Provides
     fun provideSimplePosterAdapter(): AdapterSimplePoster {
-        return AdapterSimplePoster(mutableListOf())
+        return AdapterSimplePoster()
     }
 }

@@ -19,7 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.common.util
 
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.LifecycleOwner
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
@@ -29,7 +31,8 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListTy
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -103,6 +106,22 @@ fun UIModelSearch.asUIModelPoster() = UIModelPoster(
     mediaType = mediaType
 )
 fun List<UIModelSearch>.asUIModelPosterListt() = this.map { it.asUIModelPoster() }
+
+fun TextView.setMaxLinesToEllipsize() {
+    val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
+    maxLines = visibleLines
+}
+
+
+// see more https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
+inline fun <reified T> Flow<T>.observeOnLifecycle(
+    lifecycleOwner: LifecycleOwner,
+    noinline collector: suspend (T) -> Unit
+) = FlowObserver(lifecycleOwner, this, collector)
+
+inline fun <reified T> Flow<T>.observeInLifecycle(
+    lifecycleOwner: LifecycleOwner
+) = FlowObserver(lifecycleOwner, this, {})
 
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")

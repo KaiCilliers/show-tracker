@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search.application
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import kotlinx.coroutines.flow.Flow
 
 interface SearchMediaByTitleUseCaseContract {

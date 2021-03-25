@@ -21,18 +21,10 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.asUIModelSearchh
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import timber.log.Timber
 import java.io.IOException
 

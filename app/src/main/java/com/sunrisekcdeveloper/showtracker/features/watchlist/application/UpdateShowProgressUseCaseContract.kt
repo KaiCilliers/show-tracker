@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UpdateShowAction
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
 
 interface UpdateShowProgressUseCaseContract {
     suspend operator fun invoke(action: UpdateShowAction)

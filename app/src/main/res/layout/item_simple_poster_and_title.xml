@@ -40,6 +40,7 @@
             android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/imgv_item_media_poster"
+                tools:src="@drawable/error_poster"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </RelativeLayout>
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_marginStart="16dp"
-        tools:text="asdlsjahdjsadksada"
+        tools:text="Ghostbusters"
         app:layout_constraintStart_toEndOf="@id/card_poster"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

@@ -36,37 +36,30 @@
 
             <TextView
                 android:id="@+id/tv_heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:text="@string/heading_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_sub_heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
+                android:text="@string/sub_heading_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular_shows" />
 
@@ -74,37 +67,30 @@
 
             <TextView
                 android:id="@+id/tv_heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:text="@string/heading_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_shows" />
 
             <TextView
                 android:id="@+id/tv_sub_heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
+                android:text="@string/sub_heading_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_top_rated_shows" />
 
@@ -112,37 +98,30 @@
 
             <TextView
                 android:id="@+id/tv_heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:text="@string/heading_airing_today_shows"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows" />
 
             <TextView
                 android:id="@+id/tv_sub_heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
+                android:text="@string/sub_heading_airing_today_shows"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_airing_today_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_airing_today_shows" />
 
@@ -158,7 +137,6 @@
             android:id="@+id/toolbar_discovery_shows"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:menu="@menu/menu_discovery_toolbar"
             app:navigationIcon="?homeAsUpIndicator"
