@@ -20,6 +20,8 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -30,53 +32,69 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
 
+@Deprecated("Replaced with PagingAdapterSimplePoster class")
 class AdapterSimplePoster(
-    private var data: MutableList<UIModelPoster>,
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
-) : RecyclerView.Adapter<AdapterSimplePoster.ViewHolderSimplePoster>() {
+) : ListAdapter<UIModelPoster, AdapterSimplePoster.ViewHolderSimplePoster>(POSTER_MODEL_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePoster =
-        ViewHolderSimplePoster.from(parent)
+        ViewHolderSimplePoster.from(parent, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderSimplePoster, position: Int) {
-        val item = data[position]
-        holder.bind(item)
-        holder.binding.imgvItemMoviePoster.click {
-            onPosterClickListener.onClick(
-                item.id,
-                "", "",
-                item.mediaType)
-        }
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = data.size
+//    @Deprecated("updated to ListAdapter, call it's submit function")
+//    fun updateList(data: List<UIModelPoster>) {
+//        this.data.addAll(data)
+//        notifyItemRangeInserted(
+//            this.data.size,
+//            data.size - 1
+//        )
+//    }
 
-    fun updateList(data: List<UIModelPoster>) {
-        this.data.addAll(data)
-        notifyItemRangeInserted(
-            this.data.size,
-            data.size - 1
-        )
-    }
+//    fun replaceList(data: List<UIModelPoster>) {
+//        this.data.clear()
+//        updateList(data)
+//        notifyDataSetChanged()
+//    }
 
-    fun replaceList(data: List<UIModelPoster>) {
-        this.data.clear()
-        updateList(data)
-        notifyDataSetChanged()
-    }
-
-    class ViewHolderSimplePoster(val binding: ItemSimplePosterBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolderSimplePoster(
+        val binding: ItemSimplePosterBinding,
+        val click: OnPosterClickListener
+        ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelPoster) {
+            // todo navigating from search activity to detail screen or watchlist is going to be hacky most likely
+            binding.imgvItemMoviePoster.click {
+                click.onClick(data.id, "todo Title", data.posterPath, data.mediaType)
+            }
             Glide.with(binding.root)
                 .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
                 .transform(CenterCrop())
                 .into(binding.imgvItemMoviePoster)
         }
         companion object {
-            fun from(parent: ViewGroup) : ViewHolderSimplePoster = ViewHolderSimplePoster(
+            fun from(
+                parent: ViewGroup,
+                posterClick: OnPosterClickListener
+            ) : ViewHolderSimplePoster = ViewHolderSimplePoster(
                 ItemSimplePosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                )
+                ), posterClick
             )
+        }
+    }
+    companion object {
+        private val POSTER_MODEL_COMPARATOR = object : DiffUtil.ItemCallback<UIModelPoster>() {
+            override fun areItemsTheSame(oldItem: UIModelPoster, newItem: UIModelPoster): Boolean = oldItem.id == newItem.id
+
+            override fun areContentsTheSame(
+                oldItem: UIModelPoster,
+                newItem: UIModelPoster
+            ): Boolean {
+                return (oldItem.id == newItem.id &&
+                        oldItem.mediaType == newItem.mediaType &&
+                        oldItem.posterPath == newItem.posterPath)
+            }
         }
     }
 }

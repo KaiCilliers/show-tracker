@@ -181,7 +181,7 @@ class FragmentSearch : Fragment() {
 
         binding.recyclerviewSearch.layoutManager = linearLayoutManager
         binding.recyclerviewSearch.adapter = adapterUnwatchedContent
-        adapterUnwatchedContent.updateList(list)
+        adapterUnwatchedContent.submitList(list)
         binding.recyclerviewSearch.isVisible = true
 
     }
