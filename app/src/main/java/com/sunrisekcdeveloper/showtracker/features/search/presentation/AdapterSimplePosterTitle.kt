@@ -23,9 +23,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.EndPointBackdrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
 import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelUnwatchedSearch
+import timber.log.Timber
 
 // todo DiffUtil
 class AdapterSimplePosterTitle(
@@ -55,7 +57,7 @@ class AdapterSimplePosterTitle(
     class ViewHolderSimplePosterTitle(val binding: ItemSimplePosterAndTitleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelUnwatchedSearch) {
             Glide.with(binding.root)
-                .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
+                .load(EndPointBackdrop.Standard.urlFromResource(data.backdropPath))
                 .transform(CenterCrop())
                 .into(binding.imgvItemMediaPoster)
             binding.tvMediaTitle.text = data.title

@@ -61,14 +61,14 @@ class RepositorySearch(
     fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
         id = status.id,
         title = details.title,
-        posterPath = details.posterPath,
+        backdropPath = details.backdropPath,
         mediaType = MediaType.Movie
     )
 
     fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
         id = status.id,
         title = details.title,
-        posterPath = details.posterPath,
+        backdropPath = details.backdropPath,
         mediaType = MediaType.Show
     )
 

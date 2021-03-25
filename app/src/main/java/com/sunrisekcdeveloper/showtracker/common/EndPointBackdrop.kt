@@ -16,23 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.domain
+package com.sunrisekcdeveloper.showtracker.common
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+enum class EndPointBackdrop(private val endpoint: String) {
+    Small("/w300"),
+    Standard("/w780"),
+    Large("/w1280"),
+    Original("/original");
 
-data class UIModelSearch(
-    val id: String,
-    val title: String,
-    val posterPath: String,
-    val mediaType: MediaType,
-    val rating: Float,
-    val popularity: Float,
-    val ratingVotes: Int
-)
+    fun urlFromResource(backdropPath: String): String {
+        return baseUrl + endpoint + backdropPath
+    }
 
-data class UIModelUnwatchedSearch(
-    val id: String,
-    val title: String,
-    val backdropPath: String,
-    val mediaType: MediaType
-)
+    private companion object {
+        // todo save this url somewhere like with api keys
+        //  access via BuildConfig
+        private const val baseUrl = "https://images.tmdb.org/t/p"
+    }
+}
