@@ -74,9 +74,15 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             cleanUI()
             when (state) {
-                StateDetailShow.Loading -> { stateLoading() }
-                is StateDetailShow.Success -> { stateSuccess(state.data) }
-                is StateDetailShow.Error -> { stateError() }
+                StateDetailShow.Loading -> {
+                    stateLoading()
+                }
+                is StateDetailShow.Success -> {
+                    stateSuccess(state.data)
+                }
+                is StateDetailShow.Error -> {
+                    stateError()
+                }
             }
         }
         viewModel.eventsFlow.onEach { event ->
@@ -93,7 +99,9 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                             .navigateFromDetailShowToWatchlistFragment(event.showId)
                     )
                 }
-                EventDetailShow.Close -> { dismissAllowingStateLoss() }
+                EventDetailShow.Close -> {
+                    dismissAllowingStateLoss()
+                }
                 is EventDetailShow.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
@@ -102,7 +110,6 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun setup() {
-        // Navigation - Close fragment
         binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.Close) }
         bindPriorityData()
     }
@@ -127,6 +134,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         binding.btnDetailShowAdd.isEnabled = false
         binding.btnDetailShowWatchStatus.isEnabled = false
     }
+
     private fun stateSuccess(data: UIModelShowDetail) {
         binding.tvDetailShowDescription.apply {
             text = data.overview
@@ -138,49 +146,19 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
             R.string.season_with_number, data.seasonsTotal.toString()
         )
 
-        // todo this is a mess FIX up to date shows not showing
-        if (data.watchlisted && !data.deleted) {
-            binding.btnDetailShowAdd.text = "Remove"
-            binding.btnDetailShowAdd.click {
-                viewModel.submitAction(ActionDetailShow.Remove(data.id))
-            }
-
-            if (!data.startedWatching) {
-                binding.btnDetailShowWatchStatus.text = "Start Watching"
-                binding.btnDetailShowWatchStatus.click {
-                    viewModel.submitAction(ActionDetailShow.StartWatching(data.id))
-                }
-            }
-
-            if (data.upToDate && !data.deleted) {
-                binding.btnDetailShowWatchStatus.text = "Up to date"
-                binding.btnDetailShowWatchStatus.click {
-                    Toast.makeText(requireContext(), "Show is up to date", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            if ((data.startedWatching) && (!data.upToDate) && !data.deleted) {
-                binding.btnDetailShowWatchStatus.text = "Update progress"
-                binding.btnDetailShowWatchStatus.click {
-                    viewModel.submitAction(ActionDetailShow.UpdateProgress(data.id))
-                }
-            } else {
-                binding.btnDetailShowWatchStatus.text = "Start Watching"
-                binding.btnDetailShowWatchStatus.click {
-                    // todo note duplicated 3 time - not cool man
-                    viewModel.submitAction(ActionDetailShow.StartWatching(data.id))
-                }
-            }
+        if (data.deleted || !data.watchlisted) {
+            stateNotOnWatchlist(data)
         } else {
-            binding.btnDetailShowAdd.text = "+ Add"
-            binding.btnDetailShowAdd.click {
-                viewModel.submitAction(ActionDetailShow.Add(data.id))
-            }
-            binding.btnDetailShowWatchStatus.text = "Start Watching"
-            binding.btnDetailShowWatchStatus.click {
-                viewModel.submitAction(ActionDetailShow.StartWatching(data.id))
+            stateAddedToWatchlist(data)
+            if (!data.startedWatching) {
+                stateNotStartedWatching(data)
+            } else if (data.upToDate) {
+                stateUpToDate()
+            } else {
+                stateInProgress(data)
             }
         }
+
         binding.tvDetailShowDescription.isVisible = true
         binding.tvDetailShowFirstAirDate.isVisible = true
         binding.tvDetailShowCertification.isVisible = true
@@ -190,10 +168,46 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         binding.btnDetailShowAdd.isEnabled = true
         binding.btnDetailShowWatchStatus.isEnabled = true
     }
+
+    private fun stateNotOnWatchlist(data: UIModelShowDetail) {
+        binding.btnDetailShowAdd.text = getString(R.string.show_add)
+        binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.Add(data.id)) }
+        stateNotStartedWatching(data)
+    }
+
+    private fun stateNotStartedWatching(data: UIModelShowDetail) {
+        binding.btnDetailShowWatchStatus.text = getString(R.string.show_start_watching)
+        binding.btnDetailShowWatchStatus.click {
+            viewModel.submitAction(ActionDetailShow.StartWatching(data.id))
+        }
+    }
+
+    private fun stateUpToDate() {
+        binding.btnDetailShowWatchStatus.text = getString(R.string.show_up_to_date)
+        binding.btnDetailShowWatchStatus.click {
+            viewModel.submitAction(ActionDetailShow.ShowToast("Show is up to date"))
+        }
+    }
+
+    private fun stateInProgress(data: UIModelShowDetail) {
+        binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
+        binding.btnDetailShowWatchStatus.click {
+            viewModel.submitAction(ActionDetailShow.UpdateProgress(data.id))
+        }
+    }
+
+    private fun stateAddedToWatchlist(data: UIModelShowDetail) {
+        binding.btnDetailShowAdd.text = getString(R.string.show_remove)
+        binding.btnDetailShowAdd.click {
+            viewModel.submitAction(ActionDetailShow.Remove(data.id))
+        }
+    }
+
     private fun stateLoading() {
         binding.layoutDetailShowSkeleton.isVisible = true
     }
+
     private fun stateError() {
-        Toast.makeText(requireContext(), "show error", Toast.LENGTH_SHORT).show()
+        viewModel.submitAction(ActionDetailShow.ShowToast("Show Detail Error"))
     }
 }
