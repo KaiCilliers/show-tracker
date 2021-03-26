@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.paging
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
@@ -28,6 +29,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 import java.io.IOException
 
 // todo this class remains as an example due to inexperience in Paging 3
+@ExperimentalPagingApi
 class PagingSourceDiscoveryPopularMovies(
     private val remote: RemoteDataSourceDiscoveryContract
 ) : PagingSource<Int, UIModelDiscovery>() {

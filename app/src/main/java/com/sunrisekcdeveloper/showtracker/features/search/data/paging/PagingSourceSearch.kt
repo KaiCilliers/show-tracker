@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.paging
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
@@ -37,6 +38,7 @@ class PagingSourceSearch(
         private const val SEARCH_STARTING_PAGE_INDEX = 1
     }
 
+    @ExperimentalPagingApi
     override fun getRefreshKey(state: PagingState<Int, UIModelSearch>): Int? {
         return SEARCH_STARTING_PAGE_INDEX
     }
