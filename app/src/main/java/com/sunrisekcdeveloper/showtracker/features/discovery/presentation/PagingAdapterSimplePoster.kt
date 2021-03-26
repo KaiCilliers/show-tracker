@@ -34,9 +34,13 @@ import timber.log.Timber
 
 class PagingAdapterSimplePoster(
     // todo better name and make private with method setter
-    var onClick: OnPosterClickListener = OnPosterClickListener { _, _, _ , _ ->  }
+    private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
     UIMODEL_DISCOVERY_COMPARATOR){
+
+    fun setPosterClickAction(clickListener: OnPosterClickListener) {
+        onPosterClick = clickListener
+    }
 
     override fun onBindViewHolder(holder: ViewHolderPagingSimplePoster, position: Int) {
         getItem(position)?.let { holder.bind(it) }
@@ -45,7 +49,7 @@ class PagingAdapterSimplePoster(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster.from(parent, onClick)
+    ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster.from(parent, onPosterClick)
 
     class ViewHolderPagingSimplePoster(
         val binding: ItemSimplePosterBinding,

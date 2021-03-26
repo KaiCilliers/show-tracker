@@ -21,7 +21,6 @@ package com.sunrisekcdeveloper.showtracker.features.search.presentation
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,14 +43,11 @@ import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -183,13 +179,13 @@ class FragmentSearch : Fragment() {
     }
 
     private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
+        binding.tvHeaderWatchlistContent.text = getString(R.string.results)
         binding.recyclerviewSearch.layoutManager = gridLayoutManager
         binding.recyclerviewSearch.adapter = adapterSearchResults
         binding.recyclerviewSearch.isVisible = true
         binding.tvHeaderWatchlistContent.isVisible = true
 
         adapterSearchResults.submitData(page)
-        binding.tvHeaderWatchlistContent.text = "Results"
 
         // Here we launch a coroutine which is responsible for scrolling the list to the top
         // when the list is refreshed from the network
@@ -215,7 +211,7 @@ class FragmentSearch : Fragment() {
     // todo handle case where unwatched movies and shows are empty
     //  perhaps show some image that says user should add stuff to their watchlist (along with same header as below)
     private fun stateEmpty(list: List<UIModelUnwatchedSearch>) {
-        binding.tvHeaderWatchlistContent.text = "Your Unwatched Movies and TV Shows"
+        binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
         binding.tvHeaderWatchlistContent.isVisible = true
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
@@ -269,11 +265,11 @@ class FragmentSearch : Fragment() {
             )
         }
 
-        adapterSearchResults.onClick = onClick
+        adapterSearchResults.setPosterClickAction(onClick)
 
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svSearch.getQueryTextChangedStateFlow()
-//                .debounce(100)
+                .debounce(300)
                 .filter { query ->
                     if (query.isEmpty()) {
                         adapterSearchResults.submitData(PagingData.empty())

@@ -75,6 +75,8 @@
     <string name="show_up_to_date">Up to date</string>
     <string name="show_update_progress">Update progress</string>
     <string name="show_remove">Remove</string>
+    <string name="results">Results</string>
+    <string name="unwatched_shows_movies">Your Unwatched Movies and TV Shows</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>
