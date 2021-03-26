@@ -50,7 +50,7 @@ class ViewModelProgress @ViewModelInject constructor(
     fun submitAction(action: ActionProgress) = viewModelScope.launch {
         when (action) {
             ActionProgress.NavigateBack -> {
-                eventChannel.send(EventProgress.ShowToast("nav back"))
+                eventChannel.send(EventProgress.PopBackStack)
             }
             is ActionProgress.CreateToast -> {
                 eventChannel.send(EventProgress.ShowToast(action.msg))

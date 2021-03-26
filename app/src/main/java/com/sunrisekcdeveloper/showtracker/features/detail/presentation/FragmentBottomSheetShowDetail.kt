@@ -117,6 +117,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun cleanUI() {
+        binding.layoutDetailShowSkeleton.isGone = true
         binding.tvDetailShowDescription.isGone = true
         binding.tvDetailShowFirstAirDate.isGone = true
         binding.tvDetailShowCertification.isGone = true
@@ -190,7 +191,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         binding.btnDetailShowWatchStatus.isEnabled = true
     }
     private fun stateLoading() {
-        Toast.makeText(requireContext(), "show loading", Toast.LENGTH_SHORT).show()
+        binding.layoutDetailShowSkeleton.isVisible = true
     }
     private fun stateError() {
         Toast.makeText(requireContext(), "show error", Toast.LENGTH_SHORT).show()
