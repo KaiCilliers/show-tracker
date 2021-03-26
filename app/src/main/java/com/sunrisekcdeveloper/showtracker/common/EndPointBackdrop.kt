@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.common
 
+import com.sunrisekcdeveloper.showtracker.BuildConfig
+
 enum class EndPointBackdrop(private val endpoint: String) {
     Small("/w300"),
     Standard("/w780"),
@@ -25,12 +27,6 @@ enum class EndPointBackdrop(private val endpoint: String) {
     Original("/original");
 
     fun urlFromResource(backdropPath: String): String {
-        return baseUrl + endpoint + backdropPath
-    }
-
-    private companion object {
-        // todo save this url somewhere like with api keys
-        //  access via BuildConfig
-        private const val baseUrl = "https://images.tmdb.org/t/p"
+        return BuildConfig.TMDB_POSTER_BASE_URL + endpoint + backdropPath
     }
 }
