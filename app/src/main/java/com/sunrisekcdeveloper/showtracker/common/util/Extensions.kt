@@ -37,32 +37,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-// todo save call to db then get entity to convert to UI
-fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
-    id = "$id",
-    title = title,
-    posterPath = posterPath ?: "",
-    overview = overview,
-    releaseYear = releaseDate,
-    certification = "N/A",
-    runtime = "$runtime",
-    watchlisted = false,
-    watched = false,
-    deleted = false
-)
-fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
-    id = "$id",
-    name = name,
-    posterPath = posterPath?: "",
-    overview = overview,
-    certification = "N/A",
-    firstAirDate = firstAirYear,
-    seasonsTotal = seasonCount,
-    watchlisted = false,
-    startedWatching = false,
-    upToDate = false,
-    deleted = false
-)
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaTitle = title,
@@ -95,19 +69,6 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     popularity = popularity,
     ratingVotes = voteCount
 )
-fun UIModelDiscovery.asUIModelPoster() = UIModelPoster(
-    id = id,
-    posterPath = posterPath,
-    mediaType = mediaType
-)
-fun List<UIModelDiscovery>.asUIModelPosterList() = this.map { it.asUIModelPoster() }
-fun UIModelSearch.asUIModelPoster() = UIModelPoster(
-    id = id,
-    posterPath = posterPath,
-    mediaType = mediaType
-)
-fun List<UIModelSearch>.asUIModelPosterListt() = this.map { it.asUIModelPoster() }
-
 fun TextView.setMaxLinesToEllipsize() {
     val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
     maxLines = visibleLines
