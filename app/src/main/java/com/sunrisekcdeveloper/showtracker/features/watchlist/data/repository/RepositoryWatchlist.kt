@@ -153,7 +153,7 @@ class RepositoryWatchlist(
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistMovie())
             } else {
-                Resource.Error("There is no results in the database...")
+                Resource.Error(Exception("There is no results in the database..."))
             }
         }
     }
@@ -163,7 +163,7 @@ class RepositoryWatchlist(
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistShow())
             } else {
-                Resource.Error("There is no results in the database...")
+                Resource.Error(Exception("There is no results in the database..."))
             }
         }
     }

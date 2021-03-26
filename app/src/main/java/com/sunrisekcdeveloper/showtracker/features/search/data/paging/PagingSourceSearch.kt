@@ -56,7 +56,7 @@ class PagingSourceSearch(
         val prevKey: Int?
 
         if (movieResponse is NetworkResult.Error && showResponse is NetworkResult.Error) {
-            return LoadResult.Error(IOException("${movieResponse.message} AND ${showResponse.message}"))
+            return LoadResult.Error(Exception("${movieResponse.exception}  AND ${showResponse.exception}"))
         }
 
         when (movieResponse) {
@@ -64,7 +64,8 @@ class PagingSourceSearch(
                 result.addAll(movieResponse.data.media.asUIModelSearch())
             }
             is NetworkResult.Error -> {
-                Timber.d("Error - movie search call was not successful: ${movieResponse.message}")
+                // todo dont swallow exceptions
+                Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
             }
         }
         when (showResponse) {
@@ -72,7 +73,7 @@ class PagingSourceSearch(
                 result.addAll(showResponse.data.media.asUIModelSearchh())
             }
             is NetworkResult.Error -> {
-                Timber.d("Error - show search call was not successful: ${showResponse.message}")
+                Timber.d("Error - show search call was not successful: ${showResponse.exception}")
             }
         }
 

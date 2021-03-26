@@ -79,7 +79,7 @@ class ViewModelShowDetail @ViewModelInject constructor(
                     _state.value = StateDetailShow.Success(resource.data)
                 }
                 is Resource.Error -> {
-                    _state.value = StateDetailShow.Error(Exception(resource.message))
+                    _state.value = StateDetailShow.Error(Exception(resource.exception))
                 }
                 Resource.Loading -> {
                     _state.value = StateDetailShow.Loading

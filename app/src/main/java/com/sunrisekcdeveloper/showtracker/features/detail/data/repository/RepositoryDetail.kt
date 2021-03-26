@@ -108,13 +108,15 @@ class RepositoryDetail(
                                 )
                             }
                             is NetworkResult.Error -> {
-                                Timber.e("Error fetching certification data for movie with ID: $id [${responseCertification.message}]")
+                                // todo log these somewhere
+                                //  dont swallow exception - bubble it up and handle it in UI to maybe retry
+                                Timber.e("Error fetching certification data for movie with ID: $id [${responseCertification.exception}]")
                             }
                         }
                         saveMovieDetails(result)
                     }
                     is NetworkResult.Error -> {
-                        Timber.e("Error fetching movie details for movie with ID: $id [${responseMovie.message}]")
+                        Timber.e("Error fetching movie details for movie with ID: $id [${responseMovie.exception}]")
                     }
                 }
             }
@@ -135,7 +137,7 @@ class RepositoryDetail(
                 deleted = s.deleted
             }
             return@combine if (d == null) {
-                Resource.Error("No movie with ID: $id exists in database")
+                Resource.Error(Exception("No movie with ID: $id exists in database"))
             } else {
                 Resource.Success(d.asUIModelMovieDetail(watchlisted, watched, deleted))
             }
@@ -192,7 +194,7 @@ class RepositoryDetail(
             }
 
             return@combine if (showDetails == null) {
-                Resource.Error("No show with ID: $id exists in database")
+                Resource.Error(Exception("No show with ID: $id exists in database"))
             } else {
                 Resource.Success(
                     showDetails.asUIModelShowDetail(

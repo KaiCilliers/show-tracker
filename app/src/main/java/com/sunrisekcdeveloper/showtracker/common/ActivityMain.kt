@@ -42,7 +42,7 @@ class ActivityMain : AppCompatActivity() {
 
     private fun setup() {
         binding.botnavHousing.setupWithNavController(
-            findNavController(R.id.nav_host_fragment_main) // todo rename nav_host_fragment
+            findNavController(R.id.nav_host_fragment_main)
         )
     }
 }

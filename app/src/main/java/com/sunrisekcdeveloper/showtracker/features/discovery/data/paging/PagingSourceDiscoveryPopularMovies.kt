@@ -69,8 +69,7 @@ class PagingSourceDiscoveryPopularMovies(
                 )
             }
             is NetworkResult.Error -> {
-                // todo NetworkResult.Error needs to encapsulate a throwable
-                LoadResult.Error(IOException(response.message))
+                LoadResult.Error(response.exception)
             }
         }
 

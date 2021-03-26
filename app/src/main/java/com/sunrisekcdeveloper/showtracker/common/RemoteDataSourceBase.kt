@@ -35,7 +35,7 @@ open class RemoteDataSourceBase(
                         return@withContext NetworkResult.success(data)
                     }
                 }
-                NetworkResult.error("${response.code()} ${response.message()}")
+                NetworkResult.error("Code: ${response.code()} | ${response.errorBody()}")
             } catch (e: Exception) {
                 NetworkResult.error((e.message ?: e.toString()))
             }

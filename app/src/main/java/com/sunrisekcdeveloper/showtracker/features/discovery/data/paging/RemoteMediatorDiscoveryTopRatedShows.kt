@@ -124,7 +124,7 @@ class RemoteMediatorDiscoveryTopRatedShows(
 
             }
             is NetworkResult.Error -> {
-                MediatorResult.Error(IOException(response.message))
+                MediatorResult.Error(response.exception)
             }
         }
     }

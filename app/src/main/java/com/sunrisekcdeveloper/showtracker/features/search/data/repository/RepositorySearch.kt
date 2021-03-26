@@ -97,7 +97,8 @@ class RepositorySearch(
                     result.addAll(movieResponse.data.media.asUIModelSearch())
                 }
                 is NetworkResult.Error -> {
-                    Timber.d("Error - movie search call was not successful: ${movieResponse.message}")
+                    // todo dont swallow exceptions
+                    Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
                 }
             }
             when (showResponse) {
@@ -105,7 +106,7 @@ class RepositorySearch(
                     result.addAll(showResponse.data.media.asUIModelSearchh())
                 }
                 is NetworkResult.Error -> {
-                    Timber.d("Error - show search call was not successful: ${showResponse.message}")
+                    Timber.d("Error - show search call was not successful: ${showResponse.exception}")
                 }
             }
 

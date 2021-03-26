@@ -108,13 +108,14 @@ class RepositoryProgress(
 
                                 }
                                 is NetworkResult.Error -> {
-                                    Timber.e("Error fetching season details with show_id: $showId and season number: ${it.number}. [${second.message}]")
+                                    // todo dont swallow exceptions
+                                    Timber.e("Error fetching season details with show_id: $showId and season number: ${it.number}. [${second.exception}]")
                                 }
                             }
                         }
                     }
                     is NetworkResult.Error -> {
-                        Timber.e("Error fetching details for show with ID: $showId. [${response.message}]")
+                        Timber.e("Error fetching details for show with ID: $showId. [${response.exception}]")
                     }
                 }
             }
