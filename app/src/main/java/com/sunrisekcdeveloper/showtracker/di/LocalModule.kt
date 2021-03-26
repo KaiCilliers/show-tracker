@@ -51,20 +51,4 @@ object LocalModule {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
-
-    @Singleton
-    @Provides
-    fun provideDaoProgress(db: TrackerDatabase): DaoProgress = db.progressDao()
-
-    @Singleton
-    @Provides
-    fun provideDaoDetail(db: TrackerDatabase): DaoDetail = db.detailDao()
-
-    @Singleton
-    @Provides
-    fun provideDaoWatchlist(db: TrackerDatabase): DaoWatchlist = db.watchlistDao()
-
-//    @Singleton
-//    @Provides
-//    fun provideWatchlistDao(db: TrackerDatabase): WatchlistDao = db.watchlistDao()
 }

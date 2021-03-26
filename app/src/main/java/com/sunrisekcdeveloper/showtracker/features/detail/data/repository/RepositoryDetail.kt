@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
@@ -41,52 +42,52 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class RepositoryDetail(
     @SourceDetail private val remote: RemoteDataSourceDetailContract,
-    private val local: DaoDetail,
+    private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
 
     // todo there needs some serious work to the business logic with the management of shows and movies
     override suspend fun addShowToWatchlist(id: String) {
-        val exists = local.watchlistShowExist(id)
+        val exists = database.detailDao().watchlistShowExist(id)
         if (exists) {
-            local.markWatchlistShowAsNotDeleted(id)
+            database.detailDao().markWatchlistShowAsNotDeleted(id)
         } else {
-            local.addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
+            database.detailDao().addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
         }
     }
 
     override suspend fun removeShowFromWatchlist(id: String) {
-        local.removeShowFromWatchlist(id)
+        database.detailDao().removeShowFromWatchlist(id)
     }
 
     override suspend fun removeMovieFromWatchlist(id: String) {
-        local.removeMovieFromWatchlist(id)
+        database.detailDao().removeMovieFromWatchlist(id)
     }
 
     override suspend fun updateWatchlistMovieAsWatched(id: String) {
         // todo better implementation possible
         insertWatchlistMovieIfNotExists(id)
-        local.setMovieAsWatched(id)
+        database.detailDao().setMovieAsWatched(id)
     }
 
     private suspend fun insertWatchlistMovieIfNotExists(id: String) {
-        val exists = local.watchlistMovieExist(id)
+        val exists = database.detailDao().watchlistMovieExist(id)
         if (!exists) {
-            local.insertWatchlistMovie(EntityWatchlistMovie.unWatchedfrom(id))
+            database.detailDao().insertWatchlistMovie(EntityWatchlistMovie.unWatchedfrom(id))
         }
     }
 
     override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
-        local.setMovieAsNotWatched(id)
+        database.detailDao().setMovieAsNotWatched(id)
     }
 
     override suspend fun addMovieToWatchlist(id: String) {
-        val exists = local.watchlistMovieExist(id)
+        val exists = database.detailDao().watchlistMovieExist(id)
         if (exists) {
-            local.markWatchlistMovieAsNotDeleted(id)
-            local.setMovieAsWatched(id)
+            database.detailDao().markWatchlistMovieAsNotDeleted(id)
+            database.detailDao().setMovieAsWatched(id)
         } else {
-            local.addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
+            database.detailDao().addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
         }
     }
 
@@ -124,8 +125,8 @@ class RepositoryDetail(
     }
 
     override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
-        val deets = local.distinctMovieDetailFlow(id)
-        val status = local.distinctWatchlistMovieFlow(id)
+        val deets = database.detailDao().distinctMovieDetailFlow(id)
+        val status = database.detailDao().distinctWatchlistMovieFlow(id)
 
         return combine(deets, status) { d, s ->
             var watchlisted = false
@@ -177,8 +178,8 @@ class RepositoryDetail(
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
 
-        val detailsFlow = local.distinctShowDetailFlow(id)
-        val statusFlow = local.distinctWatchlistShowFlow(id)
+        val detailsFlow = database.detailDao().distinctShowDetailFlow(id)
+        val statusFlow = database.detailDao().distinctWatchlistShowFlow(id)
 
         return combine(detailsFlow, statusFlow) { showDetails, status ->
             var watchlisted = false
@@ -209,7 +210,7 @@ class RepositoryDetail(
     }
 
     private suspend fun saveMovieDetails(entity: EntityMovie) {
-        local.addMovieDetails(entity)
+        database.detailDao().addMovieDetails(entity)
     }
 
     private fun movieCertificationUSIfPossible(data: List<ResponseMovieReleaseDates>): String {
@@ -232,7 +233,7 @@ class RepositoryDetail(
     }
 
     private suspend fun saveShowDetails(entity: EntityShow) {
-        local.addShowDetails(entity)
+        database.detailDao().addShowDetails(entity)
     }
 
     private fun showCertificationUSIfPossible(data: List<ResponseShowCertification>): String {

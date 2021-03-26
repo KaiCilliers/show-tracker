@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDiscovery
+import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceProgress
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
@@ -56,18 +57,18 @@ object RepositoryModule {
     @RepoProgress
     @Provides
     fun provideRepositoryProgress(
-        @NetworkModule.SourceProgress remote: RemoteDataSourceProgressContract,
-        local: DaoProgress
+        @SourceProgress remote: RemoteDataSourceProgressContract,
+        database: TrackerDatabase
     ) : RepositoryProgressContract =
-        RepositoryProgress(remote, local)
+        RepositoryProgress(remote, database)
 
     @ActivityRetainedScoped
     @RepoWatchlist
     @Provides
     fun provideRepositoryWatchlist(
-        local: DaoWatchlist
+        database: TrackerDatabase
     ) : RepositoryWatchlistContract =
-        RepositoryWatchlist(local)
+        RepositoryWatchlist(database)
 
     @ActivityRetainedScoped
     @RepoSearch
@@ -83,9 +84,9 @@ object RepositoryModule {
     @Provides
     fun provideRepositoryDetail(
         @SourceDetail remote: RemoteDataSourceDetailContract,
-        local: DaoDetail
+        database: TrackerDatabase
     ): RepositoryDetailContract =
-        RepositoryDetail(remote, local)
+        RepositoryDetail(remote, database)
 
     @ActivityRetainedScoped
     @RepoDiscovery
