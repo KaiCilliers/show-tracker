@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiSearch
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.ApiSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import kotlinx.coroutines.CoroutineDispatcher

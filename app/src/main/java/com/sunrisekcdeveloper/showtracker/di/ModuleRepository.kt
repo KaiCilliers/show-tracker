@@ -19,25 +19,22 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDiscovery
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceProgress
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
-import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDetail
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDiscovery
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceProgress
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceSearch
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
-import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.data.repository.RepositoryProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.RepositoryWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import dagger.Module
@@ -51,7 +48,7 @@ import javax.inject.Qualifier
 @ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object RepositoryModule {
+object ModuleRepository {
 
     @ActivityRetainedScoped
     @RepoProgress

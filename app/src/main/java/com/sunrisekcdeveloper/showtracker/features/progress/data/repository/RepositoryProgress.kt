@@ -21,8 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.progress.data.repository
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceProgress
-import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseSeason

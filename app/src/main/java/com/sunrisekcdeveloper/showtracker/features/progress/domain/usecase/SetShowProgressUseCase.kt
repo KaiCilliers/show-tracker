@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoProgress
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress

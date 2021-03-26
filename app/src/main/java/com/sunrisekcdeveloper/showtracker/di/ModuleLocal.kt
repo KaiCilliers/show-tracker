@@ -39,7 +39,7 @@ import javax.inject.Singleton
 // todo rename modules with format ModuleXXX
 @Module
 @InstallIn(ApplicationComponent::class)
-object LocalModule {
+object ModuleLocal {
 
     @Singleton
     @Provides

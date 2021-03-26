@@ -50,7 +50,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-object NetworkModule {
+object ModuleNetwork {
 
     @Singleton
     @SourceProgress

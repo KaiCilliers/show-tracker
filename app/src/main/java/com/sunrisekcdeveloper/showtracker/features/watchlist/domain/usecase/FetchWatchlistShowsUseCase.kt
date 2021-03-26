@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
