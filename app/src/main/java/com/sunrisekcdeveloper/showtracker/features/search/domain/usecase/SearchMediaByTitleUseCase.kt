@@ -25,8 +25,10 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSe
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 class SearchMediaByTitleUseCase(
     @RepoSearch private val searchRepo: RepositorySearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO

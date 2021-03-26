@@ -43,6 +43,7 @@ class RepositoryWatchlist(
     override suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int) {
         val watchlistEpisode = local.watchlistEpisode(showId, episode, season)
         Timber.d("episode to mark: $watchlistEpisode")
+        @Suppress("UNNECESSARY_SAFE_CALL")
         watchlistEpisode?.let {
             Timber.e("inside")
             local.updateWatchlistEpisode(
@@ -147,8 +148,8 @@ class RepositoryWatchlist(
         return local.watchlistShow(showId)
     }
 
-    override fun watchlistMovies(sortMovies: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
-        return local.distinctWatchlistMoviesDetailsFlow(sortMovies).map {
+    override fun watchlistMovies(sortBy: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
+        return local.distinctWatchlistMoviesDetailsFlow(sortBy).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistMovie())
             } else {

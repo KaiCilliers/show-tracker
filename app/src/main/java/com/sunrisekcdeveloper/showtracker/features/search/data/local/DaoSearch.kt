@@ -18,10 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.local
 
-import androidx.room.Dao
-import androidx.room.Embedded
-import androidx.room.Query
-import androidx.room.Relation
+import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
@@ -30,9 +27,11 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.En
 @Dao
 interface DaoSearch {
 
+    @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0 AND watch_movie_watched = 0")
     suspend fun unwatchedMovies(): List<WatchlistMovieWithDetails>
 
+    @Transaction
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0 AND watch_show_started = 0")
     suspend fun unwatchedShows(): List<WatchlistShowWithDetails>
 }

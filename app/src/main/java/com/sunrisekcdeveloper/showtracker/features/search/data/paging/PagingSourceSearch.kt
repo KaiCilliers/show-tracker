@@ -52,8 +52,8 @@ class PagingSourceSearch(
         val showResponse = remote.showsByTitle(query, position)
 
         val result = mutableListOf<UIModelSearch>()
-        var nextKey: Int? = null
-        var prevKey: Int? = null
+        val nextKey: Int?
+        val prevKey: Int?
 
         if (movieResponse is NetworkResult.Error && showResponse is NetworkResult.Error) {
             return LoadResult.Error(IOException("${movieResponse.message} AND ${showResponse.message}"))
@@ -77,7 +77,7 @@ class PagingSourceSearch(
         }
 
         // todo this can be done nicer
-        val filtered = result.filter { it.posterPath != "" }.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
+        val filtered = result.filter { it.posterPath != "" }.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
         val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
         { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
         )
@@ -93,7 +93,7 @@ class PagingSourceSearch(
         }
 
         return LoadResult.Page(
-            data = result,
+            data = sorted,
             prevKey = prevKey,
             nextKey = nextKey
         )

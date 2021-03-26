@@ -76,9 +76,11 @@ class RemoteMediatorDiscoveryPopularMovies(
             }
             LoadType.APPEND -> {
                 val remoteKeys = remoteKeysForLastItem(state)
-                if (remoteKeys == null || remoteKeys.nextKey == null) {
+                // This check is due to bug on first load PREPEND is called and RemoteKeys is null
+                // https://issuetracker.google.com/issues/162252536
+                if (remoteKeys?.nextKey == null) {
                     return MediatorResult.Success(endOfPaginationReached = false)
-                    throw InvalidObjectException("Remote key should not be null for $loadType")
+//                    throw InvalidObjectException("Remote key should not be null for $loadType")
                 }
                 remoteKeys.nextKey
             }

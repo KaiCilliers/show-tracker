@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
-import com.google.gson.annotations.SerializedName
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
@@ -176,10 +175,10 @@ class RepositoryDetail(
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
 
-        val showDetails = local.distinctShowDetailFlow(id)
-        val status = local.distinctWatchlistShowFlow(id)
+        val detailsFlow = local.distinctShowDetailFlow(id)
+        val statusFlow = local.distinctWatchlistShowFlow(id)
 
-        return combine(showDetails, status) { showDetails, status ->
+        return combine(detailsFlow, statusFlow) { showDetails, status ->
             var watchlisted = false
             var started = false
             var upToDate = false

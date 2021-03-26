@@ -38,21 +38,21 @@ class RepositoryProgress(
 ) : RepositoryProgressContract {
 
     override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
-        val episode = local.episode(showId, season, episode)
-        val season = local.season(showId, season)
+        val entityEpisode = local.episode(showId, season, episode)
+        val entitySeason = local.season(showId, season)
 
-        Timber.e("Episode: $episode")
-        Timber.e("Season: $season")
+        Timber.e("Episode: $entityEpisode")
+        Timber.e("Season: $entitySeason")
 
         local.setShowProgress(
-            episode = EntityWatchlistEpisode.notWatchedFrom(showId, season.number, episode.number),
-            season = EntityWatchlistSeason.partialFrom(showId, season.number, episode.number),
+            episode = EntityWatchlistEpisode.notWatchedFrom(showId, entitySeason.number, entityEpisode.number),
+            season = EntityWatchlistSeason.partialFrom(showId, entitySeason.number, entityEpisode.number),
             show = EntityWatchlistShow.partialFrom(
                 showId,
-                episode.number,
-                episode.name,
-                season.number,
-                season.episodeTotal
+                entityEpisode.number,
+                entityEpisode.name,
+                entitySeason.number,
+                entitySeason.episodeTotal
             )
         )
     }
