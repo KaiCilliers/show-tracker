@@ -28,9 +28,8 @@ import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-// todo rename to ActivtyMain
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class ActivityMain : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
