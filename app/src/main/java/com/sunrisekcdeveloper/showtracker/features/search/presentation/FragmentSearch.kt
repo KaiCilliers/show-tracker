@@ -283,7 +283,7 @@ class FragmentSearch : Fragment() {
                     viewModel.submitAction(ActionSearch.SearchForMedia(query))
                 }
         }
-        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.BackButtonPress) } // todo up button returns to discovery
+        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.BackButtonPress) }
     }
 
     companion object {

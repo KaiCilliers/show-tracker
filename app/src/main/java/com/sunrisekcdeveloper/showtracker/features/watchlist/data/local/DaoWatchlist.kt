@@ -89,33 +89,28 @@ abstract class DaoWatchlist {
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
-    open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> {
-        val flow = privateWatchlistMoviesWithDetailsFlow()
-        // todo you can call this when inside flow mapping
-        //  then simple run the appropriate mapping logic inside each
-        //  thus having single #map and single #distinctUntilChanged
-        return when (sortBy) {
-            SortMovies.ByTitle -> {
-                flow.map { list ->
+    open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> =
+        privateWatchlistMoviesWithDetailsFlow().map { list ->
+            when (sortBy) {
+                SortMovies.ByTitle -> {
                     list.sortedBy { it.details.title }
-                }.distinctUntilChanged()
+                }
+                SortMovies.ByRecentlyAdded -> {
+                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
+                        it.watchlist.dateAdded
+                    }.thenBy {
+                        it.details.title
+                    })
+                }
+                SortMovies.ByWatched -> {
+                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
+                        it.watchlist.watched
+                    }.thenBy {
+                        it.details.title
+                    })
+                }
             }
-            SortMovies.ByRecentlyAdded -> {
-                flow.map { list ->
-                    list.sortedWith(compareByDescending<WatchlistMovieDetails>
-                    { it.watchlist.dateAdded }.thenBy { it.details.title }
-                    )
-                }.distinctUntilChanged()
-            }
-            SortMovies.ByWatched -> {
-                flow.map { list ->
-                    list.sortedWith(compareByDescending<WatchlistMovieDetails>
-                    { it.watchlist.watched }.thenBy { it.details.title }
-                    )
-                }.distinctUntilChanged()
-            }
-        }
-    }
+        }.distinctUntilChanged()
 
     @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0")

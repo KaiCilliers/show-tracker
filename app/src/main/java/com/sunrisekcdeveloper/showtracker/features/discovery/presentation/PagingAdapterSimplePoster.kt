@@ -33,7 +33,6 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.Paging
 import timber.log.Timber
 
 class PagingAdapterSimplePoster(
-    // todo better name and make private with method setter
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
     UIMODEL_DISCOVERY_COMPARATOR){

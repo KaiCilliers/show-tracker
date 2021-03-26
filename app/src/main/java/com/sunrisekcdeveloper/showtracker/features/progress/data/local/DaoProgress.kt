@@ -41,7 +41,6 @@ abstract class DaoProgress {
     @Query("SELECT * FROM tbl_episode WHERE episode_show_id = :showId AND episode_season_number = :season AND episode_number = :episode")
     abstract suspend fun episode(showId: String, season: Int, episode: Int): EntityEpisode
 
-    // todo these with ABORT should only be available to shows not in watchlist
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertWatchlistEpisode(episode: EntityWatchlistEpisode)
 
