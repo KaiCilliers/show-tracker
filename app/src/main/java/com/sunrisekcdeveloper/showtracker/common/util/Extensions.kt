@@ -37,6 +37,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+fun View.gone() {
+    this.visibility = View.GONE
+}
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+fun View.enabled() {
+    this.isEnabled = true
+}
+fun View.disabled() {
+    this.isEnabled = false
+}
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaTitle = title,

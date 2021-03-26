@@ -112,7 +112,7 @@ abstract class DaoWatchlist {
             }
         }.distinctUntilChanged()
 
-    @Transaction // todo check that all such transactions are marked as Transaction (with return type objecct with @Relation tag)
+    @Transaction
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0")
     protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
 

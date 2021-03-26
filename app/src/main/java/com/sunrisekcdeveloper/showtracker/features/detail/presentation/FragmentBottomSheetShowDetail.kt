@@ -23,8 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -33,19 +31,14 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.common.util.setMaxLinesToEllipsize
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShowsDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
@@ -65,7 +58,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.submitAction(ActionDetailShow.Load(arguments.showId))
+        viewModel.submitAction(ActionDetailShow.load(arguments.showId))
         setup()
         observe()
     }
@@ -110,7 +103,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun setup() {
-        binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.Close) }
+        binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.close()) }
         bindPriorityData()
     }
 
@@ -124,15 +117,15 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun cleanUI() {
-        binding.layoutDetailShowSkeleton.isGone = true
-        binding.tvDetailShowDescription.isGone = true
-        binding.tvDetailShowFirstAirDate.isGone = true
-        binding.tvDetailShowCertification.isGone = true
-        binding.tvDetailShowSeasons.isGone = true
-        binding.tvShowSeparatorOne.isGone = true
-        binding.tvShowSeparatorTwo.isGone = true
-        binding.btnDetailShowAdd.isEnabled = false
-        binding.btnDetailShowWatchStatus.isEnabled = false
+        binding.layoutDetailShowSkeleton.gone()
+        binding.tvDetailShowDescription.gone()
+        binding.tvDetailShowFirstAirDate.gone()
+        binding.tvDetailShowCertification.gone()
+        binding.tvDetailShowSeasons.gone()
+        binding.tvShowSeparatorOne.gone()
+        binding.tvShowSeparatorTwo.gone()
+        binding.btnDetailShowAdd.disabled()
+        binding.btnDetailShowWatchStatus.disabled()
     }
 
     private fun stateSuccess(data: UIModelShowDetail) {
@@ -159,52 +152,52 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
             }
         }
 
-        binding.tvDetailShowDescription.isVisible = true
-        binding.tvDetailShowFirstAirDate.isVisible = true
-        binding.tvDetailShowCertification.isVisible = true
-        binding.tvDetailShowSeasons.isVisible = true
-        binding.tvShowSeparatorOne.isVisible = true
-        binding.tvShowSeparatorTwo.isVisible = true
-        binding.btnDetailShowAdd.isEnabled = true
-        binding.btnDetailShowWatchStatus.isEnabled = true
+        binding.tvDetailShowDescription.visible()
+        binding.tvDetailShowFirstAirDate.visible()
+        binding.tvDetailShowCertification.visible()
+        binding.tvDetailShowSeasons.visible()
+        binding.tvShowSeparatorOne.visible()
+        binding.tvShowSeparatorTwo.visible()
+        binding.btnDetailShowAdd.enabled()
+        binding.btnDetailShowWatchStatus.enabled()
     }
 
     private fun stateNotOnWatchlist(data: UIModelShowDetail) {
         binding.btnDetailShowAdd.text = getString(R.string.show_add)
-        binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.Add(data.id)) }
+        binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.add(data.id)) }
         stateNotStartedWatching(data)
     }
 
     private fun stateNotStartedWatching(data: UIModelShowDetail) {
         binding.btnDetailShowWatchStatus.text = getString(R.string.show_start_watching)
         binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.StartWatching(data.id))
+            viewModel.submitAction(ActionDetailShow.startWatching(data.id))
         }
     }
 
     private fun stateUpToDate() {
         binding.btnDetailShowWatchStatus.text = getString(R.string.show_up_to_date)
         binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.ShowToast("Show is up to date"))
+            viewModel.submitAction(ActionDetailShow.showToast("Show is up to date"))
         }
     }
 
     private fun stateInProgress(data: UIModelShowDetail) {
         binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
         binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.UpdateProgress(data.id))
+            viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
         }
     }
 
     private fun stateAddedToWatchlist(data: UIModelShowDetail) {
         binding.btnDetailShowAdd.text = getString(R.string.show_remove)
         binding.btnDetailShowAdd.click {
-            viewModel.submitAction(ActionDetailShow.Remove(data.id))
+            viewModel.submitAction(ActionDetailShow.remove(data.id))
         }
     }
 
     private fun stateLoading() {
-        binding.layoutDetailShowSkeleton.isVisible = true
+        binding.layoutDetailShowSkeleton.visible()
     }
 
     private fun stateError() {

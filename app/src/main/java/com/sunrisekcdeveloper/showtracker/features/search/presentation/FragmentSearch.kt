@@ -39,7 +39,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
+import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
+import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
@@ -81,7 +83,7 @@ class FragmentSearch : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
             binding.svSearch.setQuery(it, false)
-            viewModel.submitAction(ActionSearch.SearchForMedia(it))
+            viewModel.submitAction(ActionSearch.searchForMedia(it))
         }
         setup()
         observeViewModel()
@@ -105,9 +107,9 @@ class FragmentSearch : Fragment() {
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
                 ) {
-                    viewModel.submitAction(ActionSearch.DeviceIsOnline)
+                    viewModel.submitAction(ActionSearch.deviceIsOnline())
                 } else {
-                    viewModel.submitAction(ActionSearch.DeviceIsOffline)
+                    viewModel.submitAction(ActionSearch.deviceIsOffline())
                 }
             }
         } catch (exception: Exception) {
@@ -171,19 +173,19 @@ class FragmentSearch : Fragment() {
     }
 
     private fun stateError() {
-        binding.imageView.isVisible = true
+        binding.imageView.visible()
     }
 
     private fun stateLoading() {
-        binding.layoutSearchSkeleton.isVisible = true
+        binding.layoutSearchSkeleton.visible()
     }
 
     private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
         binding.tvHeaderWatchlistContent.text = getString(R.string.results)
         binding.recyclerviewSearch.layoutManager = gridLayoutManager
         binding.recyclerviewSearch.adapter = adapterSearchResults
-        binding.recyclerviewSearch.isVisible = true
-        binding.tvHeaderWatchlistContent.isVisible = true
+        binding.recyclerviewSearch.visible()
+        binding.tvHeaderWatchlistContent.visible()
 
         adapterSearchResults.submitData(page)
 
@@ -202,7 +204,7 @@ class FragmentSearch : Fragment() {
                 .collect {
                     binding.recyclerviewSearch.scrollToPosition(0)
                     if (adapterSearchResults.itemCount == 0) {
-                        viewModel.submitAction(ActionSearch.NotifyNoSearchResults)
+                        viewModel.submitAction(ActionSearch.notifyNoSearchResults())
                     }
                 }
         }
@@ -212,7 +214,7 @@ class FragmentSearch : Fragment() {
     //  perhaps show some image that says user should add stuff to their watchlist (along with same header as below)
     private fun stateEmpty(list: List<UIModelUnwatchedSearch>) {
         binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
-        binding.tvHeaderWatchlistContent.isVisible = true
+        binding.tvHeaderWatchlistContent.visible()
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             Timber.e("Media clicked: [id=$mediaId, title=$mediaTitle, imagePath=$posterPath, type=$mediaType]")
@@ -223,22 +225,22 @@ class FragmentSearch : Fragment() {
         binding.recyclerviewSearch.layoutManager = linearLayoutManager
         binding.recyclerviewSearch.adapter = adapterUnwatchedContent
         adapterUnwatchedContent.submitList(list)
-        binding.recyclerviewSearch.isVisible = true
+        binding.recyclerviewSearch.visible()
 
     }
 
     private fun stateNoResults() {
-        binding.tvHeaderNoResults.isVisible = true
-        binding.tvSubHeaderNoResults.isVisible = true
+        binding.tvHeaderNoResults.visible()
+        binding.tvSubHeaderNoResults.visible()
     }
 
     private fun cleanUI() {
-        binding.imageView.isGone = true
-        binding.layoutSearchSkeleton.isGone = true
-        binding.recyclerviewSearch.isGone = true
-        binding.tvHeaderNoResults.isGone = true
-        binding.tvSubHeaderNoResults.isGone = true
-        binding.tvHeaderWatchlistContent.isGone = true
+        binding.imageView.gone()
+        binding.layoutSearchSkeleton.gone()
+        binding.recyclerviewSearch.gone()
+        binding.tvHeaderNoResults.gone()
+        binding.tvSubHeaderNoResults.gone()
+        binding.tvHeaderWatchlistContent.gone()
     }
 
 
@@ -259,7 +261,7 @@ class FragmentSearch : Fragment() {
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             viewModel.submitAction(
-                ActionSearch.LoadMediaDetails(
+                ActionSearch.loadMediaDetails(
                     mediaId, mediaTitle, posterPath, mediaType
                 )
             )
@@ -273,17 +275,17 @@ class FragmentSearch : Fragment() {
                 .filter { query ->
                     if (query.isEmpty()) {
                         adapterSearchResults.submitData(PagingData.empty())
-                        viewModel.submitAction(ActionSearch.LoadUnwatchedContent)
+                        viewModel.submitAction(ActionSearch.loadUnwatchedContent())
                         return@filter false
                     }
                     return@filter true
                 }
                 .distinctUntilChanged()
                 .collect { query ->
-                    viewModel.submitAction(ActionSearch.SearchForMedia(query))
+                    viewModel.submitAction(ActionSearch.searchForMedia(query))
                 }
         }
-        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.BackButtonPress) }
+        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.backButtonPressed()) }
     }
 
     companion object {
