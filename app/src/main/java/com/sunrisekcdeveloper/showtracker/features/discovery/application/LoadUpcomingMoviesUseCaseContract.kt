@@ -18,9 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.application
 
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import kotlinx.coroutines.flow.Flow
 
-interface LoadUpcomingMoviesUseCaseContractUpdated {
-    suspend operator fun invoke(page: Int): Resource<List<UIModelDiscovery>>
+interface LoadUpcomingMoviesUseCaseContract {
+    operator fun invoke(): Flow<PagingData<UIModelDiscovery>>
 }

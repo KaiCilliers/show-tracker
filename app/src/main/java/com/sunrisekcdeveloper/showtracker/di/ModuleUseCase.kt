@@ -160,7 +160,7 @@ object ModuleUseCase {
     @Provides
     fun provideLoadUpcomingMoviesUseCase(
         @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
-    ): LoadUpcomingMoviesUseCaseContractUpdated =
+    ): LoadUpcomingMoviesUseCaseContract =
         LoadUpcomingMoviesUseCase(discoveryRepo)
 
     @Provides
