@@ -28,4 +28,13 @@ sealed class ActionProgress {
     data class MarkShowUpToDate(val showId: String) : ActionProgress()
     data class CreateToast(val msg: String) : ActionProgress()
     data class Load(val showId: String) : ActionProgress()
+
+    companion object {
+        fun navigateBack() = NavigateBack
+        fun setShowProgress(showId: String, seasonNumber: Int, episodeNumber: Int) =
+            SetShowProgress(showId, seasonNumber, episodeNumber)
+        fun markShowUpToDate(showId: String) = MarkShowUpToDate(showId)
+        fun createToast(message: String) = CreateToast(message)
+        fun load(showId: String) = Load(showId)
+    }
 }

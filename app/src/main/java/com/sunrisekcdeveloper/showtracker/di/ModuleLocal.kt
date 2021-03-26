@@ -36,7 +36,6 @@ import javax.inject.Singleton
  *
  * @constructor Create empty Local module
  */
-// todo rename modules with format ModuleXXX
 @Module
 @InstallIn(ApplicationComponent::class)
 object ModuleLocal {

@@ -22,4 +22,10 @@ sealed class UpdateShowAction {
     data class IncrementEpisode(val showId: String) : UpdateShowAction()
     data class CompleteSeason(val showId: String) : UpdateShowAction()
     data class UpToDateWithShow(val showId: String) : UpdateShowAction()
+
+    companion object {
+        fun incrementEpisode(showId: String) = IncrementEpisode(showId)
+        fun completeSeason(showId: String) = CompleteSeason(showId)
+        fun upToDateWithShow(showId: String) = UpToDateWithShow(showId)
+    }
 }

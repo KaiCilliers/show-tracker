@@ -26,4 +26,14 @@ sealed class ActionDetailShow {
     data class UpdateProgress(val showId: String) : ActionDetailShow()
     object Close : ActionDetailShow()
     data class ShowToast(val msg: String) : ActionDetailShow()
+
+    companion object {
+        fun load(showId: String) = Load(showId)
+        fun add(showId: String) = Add(showId)
+        fun remote(showId: String) = Remove(showId)
+        fun startWatching(showId: String) = StartWatching(showId)
+        fun updateProgress(showId: String) = UpdateProgress(showId)
+        fun close() = Close
+        fun showToast(message: String) = ShowToast(message)
+    }
 }

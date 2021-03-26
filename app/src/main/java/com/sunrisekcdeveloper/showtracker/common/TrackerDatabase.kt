@@ -47,7 +47,6 @@ import java.util.Date
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
 
-    // todo pass database instance to REPOS
     // todo refactor to have a dao for each table and not for each feature
     abstract fun remoteKeysDiscovery(): DaoRemoteKeys
     abstract fun discoveryDao(): DaoDiscovery

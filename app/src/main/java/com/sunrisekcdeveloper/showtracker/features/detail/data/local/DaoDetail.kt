@@ -102,9 +102,6 @@ abstract class DaoDetail {
         updateWatchlistMovieUpdatedAt(id, System.currentTimeMillis())
     }
 
-    // todo dont remove from watchlist, but add field indicating removed
-    //  so as to keep record for a while. You can clean up database of
-    //  these records later using work manager
     @Transaction
     open suspend fun removeMovieFromWatchlist(id: String) {
         privateRemoveMovieFromWatchlist(id, System.currentTimeMillis())

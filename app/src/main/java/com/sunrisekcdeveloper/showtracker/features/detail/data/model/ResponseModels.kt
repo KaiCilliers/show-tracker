@@ -65,9 +65,18 @@ data class ResponseMovieReleaseDates(
     @SerializedName("release_dates") val releaseDates: List<ResponseCertificationAndReleaseDate>
 )
 
-// todo get the rating based on the type (it seems type 2)
 data class ResponseCertificationAndReleaseDate(
     @SerializedName("certification") val certification: String,
     @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("type") val releaseType: Int, // todo limited values - sealed class
+    @SerializedName("type") val releaseType: Int
 )
+
+// To be used with ResponseCertificationAndReleaseDate
+sealed class ReleaseDateType {
+    object Premiere : ReleaseDateType() // 1
+    object TheatricalLimited : ReleaseDateType() // 2
+    object Theatrical : ReleaseDateType() // 3
+    object Digital : ReleaseDateType() // 4
+    object Physical : ReleaseDateType() // 5
+    object TV : ReleaseDateType() // 6
+}

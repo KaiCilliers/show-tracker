@@ -21,4 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 sealed class EventDetailMovie {
     object Close : EventDetailMovie()
     data class ShowToast(val msg: String) : EventDetailMovie()
+
+    companion object {
+        fun close() = Close
+        fun showToast(message: String) = ShowToast(message)
+    }
 }

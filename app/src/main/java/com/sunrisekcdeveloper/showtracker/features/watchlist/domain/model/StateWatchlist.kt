@@ -24,4 +24,11 @@ sealed class StateWatchlist {
     object Loading : StateWatchlist()
     data class Success(val movies: List<UIModelWatchlisMovie>, val shows: List<UIModelWatchlistShow>) : StateWatchlist()
     data class Error(val exception: Exception) : StateWatchlist()
+
+    companion object {
+        fun loading() = Loading
+        fun success(moviesList: List<UIModelWatchlisMovie>, showsList: List<UIModelWatchlistShow>) =
+            Success(moviesList, showsList)
+        fun error(errorMessage: String) = Error(Exception(errorMessage))
+    }
 }

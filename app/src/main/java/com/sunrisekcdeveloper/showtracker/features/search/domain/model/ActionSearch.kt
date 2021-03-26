@@ -29,4 +29,16 @@ sealed class ActionSearch {
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : ActionSearch()
     data class ShowToast(val msg: String) : ActionSearch()
     object LoadUnwatchedContent : ActionSearch()
+
+    companion object {
+        fun deviceIsOnline() = DeviceIsOnline
+        fun deviceIsOffline() = DeviceIsOffline
+        fun backButtonPressed() = BackButtonPress
+        fun notifyNoSearchResults() = NotifyNoSearchResults
+        fun searchForMedia(query: String) = SearchForMedia(query)
+        fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
+            LoadMediaDetails(mediaId, title, posterPath, type)
+        fun showToast(message: String) = ShowToast(message)
+        fun loadUnwatchedContent() = LoadUnwatchedContent
+    }
 }

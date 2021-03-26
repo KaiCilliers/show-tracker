@@ -21,4 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 sealed class MovieWatchedStatus {
     object Watched: MovieWatchedStatus()
     object NotWatched : MovieWatchedStatus()
+
+    companion object {
+        fun watched() = Watched
+        fun notWatched() = NotWatched
+    }
 }

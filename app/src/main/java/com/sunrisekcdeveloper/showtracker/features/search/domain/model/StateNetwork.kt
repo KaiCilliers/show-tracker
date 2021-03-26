@@ -18,9 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
+sealed class StateNetwork {
+    object Connected : StateNetwork()
+    object Disconnected : StateNetwork()
 
-sealed class ViewStateSearch<out T: List<UIModelSearch>> {
-    object SuggestedContent : ViewStateSearch<Nothing>()
-    object NoSearchResults : ViewStateSearch<Nothing>()
-    data class SearchResults(val data: List<UIModelSearch>) : ViewStateSearch<List<UIModelSearch>>()
+    companion object {
+        fun connected() = Connected
+        fun disconnected() = Disconnected
+    }
 }

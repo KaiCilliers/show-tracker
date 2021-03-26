@@ -27,9 +27,12 @@ sealed class StateSearch {
     object Loading : StateSearch()
     data class Success(val data: PagingData<UIModelDiscovery>) : StateSearch()
     data class Error(val exception: Exception) : StateSearch()
-}
 
-sealed class StateNetwork {
-    object Connected : StateNetwork()
-    object Disconnected : StateNetwork()
+    companion object {
+        fun emptySearch(unWatchedList: List<UIModelUnwatchedSearch>) = EmptySearch(unWatchedList)
+        fun noResultsFound() = NoResultsFound
+        fun loading() = Loading
+        fun success(pagingData: PagingData<UIModelDiscovery>) = Success(pagingData)
+        fun error(errorMessage: String) = Error(Exception(errorMessage))
+    }
 }

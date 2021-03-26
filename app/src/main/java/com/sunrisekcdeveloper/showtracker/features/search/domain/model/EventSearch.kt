@@ -24,4 +24,11 @@ sealed class EventSearch {
     object PopBackStack : EventSearch()
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : EventSearch()
     data class ShowToast(val msg: String) : EventSearch()
+
+    companion object {
+        fun popBackStack() = PopBackStack
+        fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
+            LoadMediaDetails(mediaId, title, posterPath, type)
+        fun showToast(message: String) = ShowToast(message)
+    }
 }
