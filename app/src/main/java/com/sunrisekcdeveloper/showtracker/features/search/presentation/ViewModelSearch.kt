@@ -55,9 +55,15 @@ class ViewModelSearch @ViewModelInject constructor(
     val state: LiveData<StateSearch>
         get() = _state
 
+    private val _stateNetwork = MutableLiveData<StateNetwork>()
+    val stateNetwork: LiveData<StateNetwork>
+        get() = _stateNetwork
+
+
     private val unwatchedMediaCache = mutableListOf<UIModelUnwatchedSearch>()
 
     fun submitAction(action: ActionSearch) = viewModelScope.launch {
+        Timber.e("ACTION: $action")
         when (action) {
             is ActionSearch.ShowToast -> {
                 eventChannel.send(EventSearch.ShowToast(action.msg))
@@ -73,9 +79,13 @@ class ViewModelSearch @ViewModelInject constructor(
                 )
             }
             is ActionSearch.SearchForMedia -> {
+                if(stateNetwork.value == StateNetwork.Connected) {
                 searchMedia(action.query).collectLatest { pagingData ->
                     _state.value = StateSearch.Success(pagingData)
                 }
+            } else {
+            _state.value = StateSearch.Error(Exception("No internet access..."))
+        }
             }
             ActionSearch.BackButtonPress -> {
                 eventChannel.send(EventSearch.PopBackStack)
@@ -102,6 +112,12 @@ class ViewModelSearch @ViewModelInject constructor(
                 } else {
                     _state.value = StateSearch.EmptySearch(unwatchedMediaCache)
                 }
+            }
+            ActionSearch.DeviceIsOnline -> {
+                _stateNetwork.value = StateNetwork.Connected
+            }
+            ActionSearch.DeviceIsOffline -> {
+                _stateNetwork.value = StateNetwork.Disconnected
             }
         }
     }

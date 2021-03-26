@@ -21,6 +21,8 @@ package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 sealed class ActionSearch {
+    object DeviceIsOnline : ActionSearch()
+    object DeviceIsOffline : ActionSearch()
     object BackButtonPress : ActionSearch()
     object NotifyNoSearchResults : ActionSearch()
     data class SearchForMedia(val query: String) : ActionSearch()

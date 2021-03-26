@@ -18,6 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -92,31 +96,48 @@ class FragmentSearch : Fragment() {
         outState.putString(LAST_SEARCH_QUERY, binding.svSearch.query.trim().toString())
     }
 
+    private fun isConnected() {
+
+        try {
+            val cm = requireContext().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+            val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+
+            capabilities?.let {
+                if (
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                ) {
+                    viewModel.submitAction(ActionSearch.DeviceIsOnline)
+                } else {
+                    viewModel.submitAction(ActionSearch.DeviceIsOffline)
+                }
+            }
+        } catch (exception: Exception) {
+        }
+    }
+
     private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             // todo this is bad, this causes UI flashing :(
             cleanUI()
             when (state) {
                 is StateSearch.EmptySearch -> {
-                    viewModel.submitAction(ActionSearch.ShowToast("Here is your unwatched shit"))
                     stateEmpty(state.data)
                 }
                 StateSearch.NoResultsFound -> {
-                    viewModel.submitAction(ActionSearch.ShowToast("No results found"))
                     stateNoResults()
                 }
                 StateSearch.Loading -> {
-                    viewModel.submitAction(ActionSearch.ShowToast("search Loading"))
                     stateLoading()
                 }
                 is StateSearch.Success -> {
-                    viewModel.submitAction(ActionSearch.ShowToast("Success"))
                     viewLifecycleOwner.lifecycleScope.launch {
                         stateSuccess(state.data)
                     }
                 }
                 is StateSearch.Error -> {
-                    viewModel.submitAction(ActionSearch.ShowToast("Eorrror"))
                     stateError()
                 }
             }
@@ -154,7 +175,7 @@ class FragmentSearch : Fragment() {
     }
 
     private fun stateError() {
-
+        binding.imageView.isVisible = true
     }
 
     private fun stateLoading() {
@@ -216,6 +237,7 @@ class FragmentSearch : Fragment() {
     }
 
     private fun cleanUI() {
+        binding.imageView.isGone = true
         binding.layoutSearchSkeleton.isGone = true
         binding.recyclerviewSearch.isGone = true
         binding.tvHeaderNoResults.isGone = true
@@ -225,6 +247,7 @@ class FragmentSearch : Fragment() {
 
 
     private fun setup() {
+        isConnected()
         linearLayoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
