@@ -25,6 +25,31 @@
     android:layout_height="match_parent"
     tools:context=".features.watchlist.presentation.FragmentWatchlist">
 
+    <LinearLayout
+        android:id="@+id/layout_watchlist_skeleton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:visibility="gone"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/item_skeleton"/>
+
+    </LinearLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

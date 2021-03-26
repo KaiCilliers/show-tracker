@@ -28,3 +28,8 @@ sealed class StateSearch {
     data class Success(val data: PagingData<UIModelDiscovery>) : StateSearch()
     data class Error(val exception: Exception) : StateSearch()
 }
+
+sealed class StateNetwork {
+    object Connected : StateNetwork()
+    object Disconnected : StateNetwork()
+}

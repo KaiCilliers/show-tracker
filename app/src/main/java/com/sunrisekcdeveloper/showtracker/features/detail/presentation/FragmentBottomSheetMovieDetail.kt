@@ -138,12 +138,13 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.btnDetailMovieWatchStatus.isEnabled = true
     }
     private fun stateLoading() {
-        Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT).show()
+        binding.layoutDetailMovieSkeleton.isVisible = true
     }
     private fun stateError() {
         Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
     }
     private fun cleanUI() {
+        binding.layoutDetailMovieSkeleton.isGone = true
         binding.tvSeparatorOne.isGone = true
         binding.tvSeparatorTwo.isGone = true
         binding.tvDetailMovieDescription.isGone = true

@@ -43,6 +43,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovi
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -139,7 +140,7 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun stateLoading() {
-        viewModel.submitAction(ActionWatchlist.ShowToast("state Loading"))
+        binding.layoutWatchlistSkeleton.isVisible = true
     }
 
     private fun stateError() {
@@ -147,6 +148,7 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun cleanUi() {
+        binding.layoutWatchlistSkeleton.isGone = true
         binding.imgvFilterWatchlist.isGone = true
         binding.recyclerviewWatchlist.isGone = true
     }
