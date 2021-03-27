@@ -81,7 +81,8 @@
         <action
             android:id="@+id/navigate_from_discovery_movies_to_discovery_shows_fragment"
             app:destination="@id/destination_discovery_shows_fragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/destination_main_discovery_movies_fragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
@@ -97,7 +98,8 @@
         <action
             android:id="@+id/navigate_from_discovery_shows_to_discovery_movies_fragment"
             app:destination="@id/destination_main_discovery_movies_fragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/destination_discovery_shows_fragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />
