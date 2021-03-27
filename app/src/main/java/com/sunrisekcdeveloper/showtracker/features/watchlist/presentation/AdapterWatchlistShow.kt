@@ -125,6 +125,10 @@ class AdapterWatchlistShow(
             }
 
             if (item.upToDate) {
+                binding.tvWatchlistShowProgressCurrentEpisode.gone()
+                binding.tvWatchlistShowSeperator.gone()
+                binding.tvWatchlistShowProgressMaxEpisodes.gone()
+                binding.progressWatchlistShowSeasonProgress.gone()
                 binding.tvWatchlistShowUpToDate.visible()
                 binding.btnWatchlistShowStartWatching.gone()
                 binding.btnWatchlistShowCurrentEpisode.gone()
@@ -138,10 +142,21 @@ class AdapterWatchlistShow(
                     binding.btnWatchlistShowMarkAsWatched.gone()
                     binding.tvWatchlistShowEpisodeName.gone()
                 } else {
+                    binding.progressWatchlistShowSeasonProgress.visible()
+                    binding.tvWatchlistShowProgressCurrentEpisode.visible()
+                    binding.tvWatchlistShowSeperator.visible()
+                    binding.tvWatchlistShowProgressMaxEpisodes.visible()
                     binding.btnWatchlistShowStartWatching.gone()
                     binding.btnWatchlistShowCurrentEpisode.visible()
                     binding.btnWatchlistShowMarkAsWatched.visible()
                     binding.tvWatchlistShowEpisodeName.visible()
+
+                    // Progress indicator
+                    val progress = binding.progressWatchlistShowSeasonProgress
+                    progress.max = item.episodesInSeason
+                    progress.progress = item.currentEpisodeNumber
+                    binding.tvWatchlistShowProgressCurrentEpisode.text = item.currentEpisodeNumber.toString()
+                    binding.tvWatchlistShowProgressMaxEpisodes.text = item.episodesInSeason.toString()
 
                     binding.btnWatchlistShowCurrentEpisode.text =
                         "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"
