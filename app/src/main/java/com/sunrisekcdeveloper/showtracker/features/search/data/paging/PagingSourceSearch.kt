@@ -78,14 +78,14 @@ class PagingSourceSearch(
         }
 
         // todo this can be done nicer
-        val filtered = result.filter { it.posterPath != "" }
-            .filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
+        val filtered = result.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
         val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
         { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
         )
 
         nextKey = when {
-            result.isEmpty() -> {
+            // some business logic to improve search experience
+            sorted.isEmpty() || (sorted.size < 5 && position > 20) -> {
                 null
             }
             else -> {
@@ -97,7 +97,7 @@ class PagingSourceSearch(
             SEARCH_STARTING_PAGE_INDEX -> null
             else -> position + 1
         }
-        
+        Timber.e("xxxxx [$query] Page: ${nextKey?.minus(1)} with ${sorted.size} items")
         return LoadResult.Page(
             data = sorted,
             prevKey = prevKey,
