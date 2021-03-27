@@ -43,8 +43,7 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class ViewModelSearch @ViewModelInject constructor(
     private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract,
-    private val loadUnwatchedMediaUseCase: LoadUnwatchedMediaUseCaseContract,
-    @RepoSearch private val repo: RepositorySearchContract
+    private val loadUnwatchedMediaUseCase: LoadUnwatchedMediaUseCaseContract
 ) : ViewModel() {
 
     private val eventChannel = Channel<EventSearch>(Channel.BUFFERED)
@@ -55,7 +54,7 @@ class ViewModelSearch @ViewModelInject constructor(
         get() = _state
 
     private val _stateNetwork = MutableLiveData<StateNetwork>()
-    val stateNetwork: LiveData<StateNetwork>
+    private val stateNetwork: LiveData<StateNetwork>
         get() = _stateNetwork
 
 
@@ -127,13 +126,13 @@ class ViewModelSearch @ViewModelInject constructor(
 
     // todo returning different UIModel due to pagingadapter requirements
     //  the adapter needs to have its own data type
-    fun searchMedia(query: String): Flow<PagingData<UIModelDiscovery>> {
+    private fun searchMedia(query: String): Flow<PagingData<UIModelDiscovery>> {
         val lastResult = currentSearchResult
         if (query == currentQuery && lastResult != null) {
             return lastResult
         }
         currentQuery = query
-        val newResult: Flow<PagingData<UIModelDiscovery>> = repo.searchMediaByTitlePage(query)
+        val newResult: Flow<PagingData<UIModelDiscovery>> = searchMediaByTitleUseCase(query)
             .map {
                 it.map { model ->
                     model.asUIModelDiscovery()

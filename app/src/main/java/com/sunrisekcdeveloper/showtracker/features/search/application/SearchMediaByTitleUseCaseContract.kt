@@ -18,10 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.application
 
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import kotlinx.coroutines.flow.Flow
 
 interface SearchMediaByTitleUseCaseContract {
-    suspend operator fun invoke(page: Int, query: String) : Flow<Resource<List<UIModelSearch>>>
+    operator fun invoke(query: String) : Flow<PagingData<UIModelSearch>>
 }
