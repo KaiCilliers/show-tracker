@@ -70,7 +70,7 @@ class FragmentProgress : Fragment() {
         binding.toolbarProgress.setNavigationOnClickListener {
             viewModel.submitAction(ActionProgress.navigateBack())
         }
-        viewModel.submitAction(ActionProgress.load(arguments.showIdTest))
+        viewModel.submitAction(ActionProgress.load(arguments.showId))
         observeViewModel()
     }
 
@@ -172,14 +172,14 @@ class FragmentProgress : Fragment() {
         binding.btnProgressConfirm.click {
             Timber.e("Selected: S${binding.spinProgressSeason.selectedItem}E${binding.spinProgressEpisode.selectedItem}")
             viewModel.submitAction(ActionProgress.SetShowProgress(
-                arguments.showIdTest,
+                arguments.showId,
                 binding.spinProgressSeason.selectedItem.toString().toInt(),
                 binding.spinProgressEpisode.selectedItem.toString().toInt()
             ))
         }
 
         binding.btnProgressUpToDate.click {
-            viewModel.submitAction(ActionProgress.MarkShowUpToDate(arguments.showIdTest))
+            viewModel.submitAction(ActionProgress.MarkShowUpToDate(arguments.showId))
         }
     }
 }

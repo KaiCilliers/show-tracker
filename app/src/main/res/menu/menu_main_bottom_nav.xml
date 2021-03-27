@@ -34,4 +34,9 @@
         android:title="@string/statistics_title_updated"
         android:icon="@drawable/ic_notifications_black_24dp"/>
 
+    <item
+        android:id="@+id/destination_main_search_fragment"
+        android:title="@string/search"
+        android:icon="@drawable/ic_baseline_search_24"/>
+
 </menu>

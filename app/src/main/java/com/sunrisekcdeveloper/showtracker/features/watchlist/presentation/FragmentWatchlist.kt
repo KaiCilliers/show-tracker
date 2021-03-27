@@ -345,7 +345,7 @@ class FragmentWatchlist : Fragment() {
                 }
                 is EventWatchlist.ConfigureShow -> {
                     findNavController().navigate(
-                        FragmentWatchlistDirections.navigateFromWatchlistToNavGraphProgress(event.showId)
+                        FragmentWatchlistDirections.navigateFromWatchlistFragmentToSetProgressFragment(event.showId)
                     )
                 }
             }

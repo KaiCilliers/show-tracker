@@ -132,7 +132,7 @@ class FragmentDiscoveryShows : Fragment() {
         binding.toolbarDiscoveryShows.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToNavGraphSearch()
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToFragmentSearch()
                 )
                 true
             }

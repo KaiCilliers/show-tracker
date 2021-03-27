@@ -79,7 +79,7 @@ class FragmentDiscoveryMovies : Fragment() {
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToNavGraphSearch()
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToFragmentSearch()
                 )
                 true
             }

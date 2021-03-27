@@ -42,8 +42,8 @@
             android:id="@+id/navigate_from_discovery_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />
         <action
-            android:id="@+id/navigate_from_discovery_to_nav_graph_search"
-            app:destination="@id/nav_graph_search" />
+            android:id="@+id/navigate_from_discovery_to_fragment_search"
+            app:destination="@id/destination_main_search_fragment" />
     </fragment>
     <fragment
         android:id="@+id/destination_main_watchlist_fragment"
@@ -55,18 +55,14 @@
             app:argType="string"
             android:defaultValue="none" />
         <action
-            android:id="@+id/navigate_from_watchlist_to_nav_graph_progress"
-            app:destination="@id/nav_graph_progress" >
-            <argument
-                android:name="showIdTest"
-                app:argType="string" />
-        </action>
-        <action
             android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />
         <action
             android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
+        <action
+            android:id="@+id/navigate_from_watchlist_fragment_to_set_progress_fragment"
+            app:destination="@id/destination_main_progress_fragment" />
     </fragment>
     <fragment
         android:id="@+id/destination_main_statistics_fragment"
@@ -87,8 +83,8 @@
             android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
         <action
-            android:id="@+id/navigate_from_discovery_movies_to_nav_graph_search"
-            app:destination="@id/nav_graph_search" />
+            android:id="@+id/navigate_from_discovery_movies_to_fragment_search"
+            app:destination="@id/destination_main_search_fragment" />
     </fragment>
     <fragment
         android:id="@+id/destination_discovery_shows_fragment"
@@ -104,8 +100,8 @@
             android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />
         <action
-            android:id="@+id/navigate_from_discovery_shows_to_nav_graph_search"
-            app:destination="@id/nav_graph_search" />
+            android:id="@+id/navigate_from_discovery_shows_to_fragment_search"
+            app:destination="@id/destination_main_search_fragment" />
     </fragment>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_movie"
@@ -131,14 +127,6 @@
             android:name="showId"
             app:argType="string" />
         <action
-            android:id="@+id/navigate_from_detail_show_to_nav_graph_progress"
-            app:destination="@id/nav_graph_progress">
-
-            <argument
-                android:name="showIdTest"
-                app:argType="string" />
-        </action>
-        <action
             android:id="@+id/navigate_from_detail_show_to_watchlist_fragment"
             app:destination="@id/destination_main_watchlist_fragment" />
         <argument android:name="showTitle"
@@ -146,7 +134,29 @@
         <argument
             android:name="posterPath"
             app:argType="string" />
+        <action
+            android:id="@+id/navigate_from_detail_show_to_set_progress_fragment"
+            app:destination="@id/destination_main_progress_fragment" />
     </dialog>
-    <include app:graph="@navigation/nav_graph_search" />
-    <include app:graph="@navigation/nav_graph_progress" />
+    <fragment
+        android:id="@+id/destination_main_search_fragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.FragmentSearch"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/navigate_from_search_to_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
+        <action
+            android:id="@+id/navigate_from_search_to_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_main_progress_fragment"
+        android:name="com.sunrisekcdeveloper.showtracker.features.progress.presentation.FragmentProgress"
+        android:label="fragment_set_progress"
+        tools:layout="@layout/fragment_set_progress" >
+        <argument
+            android:name="showId"
+            app:argType="string" />
+    </fragment>
 </navigation>
