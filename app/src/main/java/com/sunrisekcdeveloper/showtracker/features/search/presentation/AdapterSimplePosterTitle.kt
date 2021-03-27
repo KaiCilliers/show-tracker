@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndPointBackdrop
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -54,7 +56,8 @@ class AdapterSimplePosterTitle(
                 onPosterClickListener.onClick(data.id, data.title, data.backdropPath, data.mediaType)
             }
             glide.load(EndPointBackdrop.Standard.urlFromResource(data.backdropPath))
-                .transform(CenterCrop())
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade(150))
                 .into(binding.imgvItemMediaPoster)
             binding.tvMediaTitle.text = data.title
         }
