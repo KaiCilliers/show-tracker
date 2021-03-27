@@ -28,7 +28,7 @@
         android:id="@+id/card_poster"
         android:layout_width="172dp"
         android:layout_height="128dp"
-        android:layout_marginEnd="@dimen/margin_8"
+        android:layout_margin="@dimen/margin_medium"
         android:clickable="true"
         android:focusable="true"
         android:checkable="true"
@@ -48,13 +48,14 @@
 
     <TextView
         android:id="@+id/tv_media_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginStart="16dp"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:layout_margin="@dimen/margin_small"
         tools:text="Ghostbusters"
         app:layout_constraintStart_toEndOf="@id/card_poster"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
