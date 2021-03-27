@@ -38,9 +38,4 @@ object ModuleAdapter {
     fun provideWatchlistMovieAdapter(): AdapterWatchlistMovie {
         return AdapterWatchlistMovie()
     }
-
-    @Provides
-    fun provideTitlePosterListAdapter(): AdapterSimplePosterTitle {
-        return AdapterSimplePosterTitle()
-    }
 }

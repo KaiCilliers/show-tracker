@@ -34,6 +34,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
@@ -61,7 +62,6 @@ class FragmentSearch : Fragment() {
 
     private val adapterSearchResults = PagingAdapterSimplePosterMedium()
 
-    @Inject
     lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
 
     lateinit var linearLayoutManager: LinearLayoutManager
@@ -243,6 +243,8 @@ class FragmentSearch : Fragment() {
 
     private fun setup() {
         isConnected()
+        // todo consider injecting Glide to get the fragment context, thus glide attaching to its lifecycle
+        adapterUnwatchedContent = AdapterSimplePosterTitle(Glide.with(this)) { _, _, _, _ -> }
         linearLayoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
