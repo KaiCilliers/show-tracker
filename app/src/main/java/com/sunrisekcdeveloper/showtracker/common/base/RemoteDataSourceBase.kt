@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common
+package com.sunrisekcdeveloper.showtracker.common.base
 
+import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response

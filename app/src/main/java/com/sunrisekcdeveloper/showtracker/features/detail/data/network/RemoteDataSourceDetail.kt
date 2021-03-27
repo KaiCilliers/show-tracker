@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
+import com.sunrisekcdeveloper.showtracker.common.base.RemoteDataSourceBase
 import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.ApiDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification

@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.common.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
 import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow

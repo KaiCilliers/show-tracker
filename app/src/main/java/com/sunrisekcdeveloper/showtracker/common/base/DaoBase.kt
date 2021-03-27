@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common.dao
+package com.sunrisekcdeveloper.showtracker.common.base
 
 import androidx.room.*
 
