@@ -214,10 +214,14 @@ class FragmentSearch : Fragment() {
         binding.tvHeaderWatchlistContent.visible()
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            Timber.e("Media clicked: [id=$mediaId, title=$mediaTitle, imagePath=$posterPath, type=$mediaType]")
+            viewModel.submitAction(
+                ActionSearch.loadMediaDetails(
+                    mediaId, mediaTitle, posterPath, mediaType
+                )
+            )
         }
 
-        adapterUnwatchedContent.onPosterClickListener = onClick
+        adapterUnwatchedContent.setPosterClickAction(onClick)
 
         binding.recyclerviewSearch.layoutManager = linearLayoutManager
         binding.recyclerviewSearch.adapter = adapterUnwatchedContent

@@ -36,11 +36,15 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUn
 
 class AdapterSimplePosterTitle(
     private val glide: RequestManager,
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
+    private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : ListAdapter<UIModelUnwatchedSearch, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(
     UNWATCHED_SEARCH_MODEL_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
         ViewHolderSimplePosterTitle.from(parent, glide, onPosterClickListener)
+
+    fun setPosterClickAction(clickListener: OnPosterClickListener) {
+        onPosterClickListener = clickListener
+    }
 
     override fun onBindViewHolder(holder: ViewHolderSimplePosterTitle, position: Int) {
         holder.bind((getItem(position)))
@@ -52,8 +56,8 @@ class AdapterSimplePosterTitle(
         private val onPosterClickListener: OnPosterClickListener
         ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelUnwatchedSearch) {
-            binding.imgvItemMediaPoster.click {
-                onPosterClickListener.onClick(data.id, data.title, data.backdropPath, data.mediaType)
+            binding.root.click {
+                onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
             }
             glide.load(EndPointBackdrop.Standard.urlFromResource(data.backdropPath))
                 .centerCrop()
