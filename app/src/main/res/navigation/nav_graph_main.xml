@@ -65,11 +65,6 @@
             app:destination="@id/destination_main_progress_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/destination_main_statistics_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.statistics.FragmentStatistics"
-        android:label="fragment_statistics"
-        tools:layout="@layout/fragment_statistics" />
-    <fragment
         android:id="@+id/destination_main_discovery_movies_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies"
         android:label="fragment_discovery_movies"
