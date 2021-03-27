@@ -25,6 +25,7 @@ import androidx.room.Query
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 
+// todo incorporate into table based DAO style that extends DaoBase
 @Dao
 interface DaoRemoteKeys {
 

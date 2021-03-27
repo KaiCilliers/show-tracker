@@ -25,9 +25,8 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.Wat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
-import java.sql.Timestamp
 
+@Deprecated("Extracted all methods to new table specific Dao's")
 @Dao
 abstract class DaoWatchlist {
 
@@ -145,18 +144,4 @@ abstract class DaoWatchlist {
                 }
             }
         }.distinctUntilChanged()
-}
-
-sealed class SortMovies {
-    object ByTitle : SortMovies()
-    object ByRecentlyAdded : SortMovies()
-    object ByWatched : SortMovies()
-}
-
-sealed class SortShows {
-    object ByTitle : SortShows()
-    object ByEpisodesLeftInSeason : SortShows()
-    object ByRecentlyWatched : SortShows()
-    object ByRecentlyAdded : SortShows()
-    object ByNotStarted : SortShows()
 }

@@ -18,12 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.local
 
-import androidx.room.*
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
+import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
 
+@Deprecated("Extracted all methods to new table specific Dao's")
 @Dao
 interface DaoSearch {
 
@@ -35,21 +36,3 @@ interface DaoSearch {
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0 AND watch_show_started = 0")
     suspend fun unwatchedShows(): List<WatchlistShowWithDetails>
 }
-
-data class WatchlistShowWithDetails(
-    @Embedded val status: EntityWatchlistShow,
-    @Relation(
-        parentColumn = "watch_show_id",
-        entityColumn = "show_id"
-    )
-    val details : EntityShow
-)
-
-data class WatchlistMovieWithDetails(
-    @Embedded val status: EntityWatchlistMovie,
-    @Relation(
-        parentColumn = "watch_movie_id",
-        entityColumn = "movie_id"
-    )
-    val details : EntityMovie
-)

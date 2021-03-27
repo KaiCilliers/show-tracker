@@ -28,8 +28,8 @@ import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch

@@ -26,6 +26,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.En
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+@Deprecated("Extracted all methods to new table specific Dao's")
 @Dao
 abstract class DaoDetail {
 

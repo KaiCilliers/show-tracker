@@ -21,10 +21,12 @@ package com.sunrisekcdeveloper.showtracker.features.progress.data.local
 import androidx.room.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 
+@Deprecated("Extracted all methods to new table specific Dao's")
 @Dao
 abstract class DaoProgress {
 
     @Transaction
+    @Deprecated("Utilize database.witTransaction to do this")
     open suspend fun setShowProgress(
         show: EntityWatchlistShow,
         season: EntityWatchlistSeason,

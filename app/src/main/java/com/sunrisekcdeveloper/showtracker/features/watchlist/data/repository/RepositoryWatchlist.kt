@@ -202,6 +202,7 @@ fun List<WatchlistMovieDetails>.asListUIModelWatchlistMovie(): List<UIModelWatch
     return this.map { it.asUIModelWatchlistMovie() }
 }
 
+@Deprecated("Duplicate class WatchlistShowWithDetails")
 data class WatchlistShowDetails(
     @Embedded val watchlist: EntityWatchlistShow,
     @Relation(
@@ -211,6 +212,7 @@ data class WatchlistShowDetails(
     val details: EntityShow
 )
 
+@Deprecated("Duplicate class WatchlistMovieWithDetails")
 data class WatchlistMovieDetails(
     @Embedded val watchlist: EntityWatchlistMovie,
     @Relation(
