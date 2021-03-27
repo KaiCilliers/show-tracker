@@ -19,16 +19,13 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
-import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.common.dao.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoRemoteKeys
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
-import com.sunrisekcdeveloper.showtracker.features.search.data.local.DaoSearch
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import java.util.Date
 
@@ -47,14 +44,17 @@ import java.util.Date
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
 
+    abstract fun episodeDao(): DaoEpisode
+    abstract fun movieDao(): DaoMovie
+    abstract fun seasonDao(): DaoSeason
+    abstract fun showDao(): DaoShow
+    abstract fun watchlistEpisodeDao(): DaoWatchlistEpisode
+    abstract fun watchlistMovieDao(): DaoWatchlistMovie
+    abstract fun watchlistSeasonDao(): DaoWatchlistSeason
+    abstract fun watchlistShowDao(): DaoWatchlistShow
     // todo refactor to have a dao for each table and not for each feature
     abstract fun remoteKeysDiscovery(): DaoRemoteKeys
     abstract fun discoveryDao(): DaoDiscovery
-    abstract fun progressDao(): DaoProgress
-    abstract fun detailDao(): DaoDetail
-    abstract fun watchlistDao(): DaoWatchlist
-    abstract fun searchDao(): DaoSearch
-
 }
 
 /**

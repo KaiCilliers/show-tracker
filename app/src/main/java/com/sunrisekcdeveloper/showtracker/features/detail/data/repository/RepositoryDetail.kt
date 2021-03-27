@@ -47,46 +47,46 @@ class RepositoryDetail(
 
     // todo there needs some serious work to the business logic with the management of shows and movies
     override suspend fun addShowToWatchlist(id: String) {
-        val exists = database.detailDao().watchlistShowExist(id)
+        val exists = database.watchlistShowDao().watchlistShowExist(id)
         if (exists) {
-            database.detailDao().markWatchlistShowAsNotDeleted(id)
+            database.watchlistShowDao().markWatchlistShowAsNotDeleted(id)
         } else {
-            database.detailDao().addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
+            database.watchlistShowDao().insert(EntityWatchlistShow.freshBareEntryFrom(id))
         }
     }
 
     override suspend fun removeShowFromWatchlist(id: String) {
-        database.detailDao().removeShowFromWatchlist(id)
+        database.watchlistShowDao().removeShowFromWatchlist(id)
     }
 
     override suspend fun removeMovieFromWatchlist(id: String) {
-        database.detailDao().removeMovieFromWatchlist(id)
+        database.watchlistMovieDao().removeMovieFromWatchlist(id)
     }
 
     override suspend fun updateWatchlistMovieAsWatched(id: String) {
         // todo better implementation possible
         insertWatchlistMovieIfNotExists(id)
-        database.detailDao().setMovieAsWatched(id)
+        database.watchlistMovieDao().setMovieAsWatched(id)
     }
 
     private suspend fun insertWatchlistMovieIfNotExists(id: String) {
-        val exists = database.detailDao().watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
         if (!exists) {
-            database.detailDao().insertWatchlistMovie(EntityWatchlistMovie.unWatchedfrom(id))
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
         }
     }
 
     override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
-        database.detailDao().setMovieAsNotWatched(id)
+        database.watchlistMovieDao().setMovieAsNotWatched(id)
     }
 
     override suspend fun addMovieToWatchlist(id: String) {
-        val exists = database.detailDao().watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
         if (exists) {
-            database.detailDao().markWatchlistMovieAsNotDeleted(id)
-            database.detailDao().setMovieAsWatched(id)
+            database.watchlistMovieDao().markWatchlistMovieAsNotDeleted(id)
+            database.watchlistMovieDao().setMovieAsWatched(id)
         } else {
-            database.detailDao().addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
         }
     }
 
@@ -124,8 +124,8 @@ class RepositoryDetail(
     }
 
     override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
-        val deets = database.detailDao().distinctMovieDetailFlow(id)
-        val status = database.detailDao().distinctWatchlistMovieFlow(id)
+        val deets = database.movieDao().distinctMovieDetailFlow(id)
+        val status = database.watchlistMovieDao().distinctWatchlistMovieFlow(id)
 
         return combine(deets, status) { d, s ->
             var watchlisted = false
@@ -177,8 +177,8 @@ class RepositoryDetail(
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
 
-        val detailsFlow = database.detailDao().distinctShowDetailFlow(id)
-        val statusFlow = database.detailDao().distinctWatchlistShowFlow(id)
+        val detailsFlow = database.showDao().distinctShowDetailFlow(id)
+        val statusFlow = database.watchlistShowDao().distinctWatchlistShowFlow(id)
 
         return combine(detailsFlow, statusFlow) { showDetails, status ->
             var watchlisted = false
@@ -209,7 +209,7 @@ class RepositoryDetail(
     }
 
     private suspend fun saveMovieDetails(entity: EntityMovie) {
-        database.detailDao().addMovieDetails(entity)
+        database.movieDao().insert(entity)
     }
 
     private fun movieCertificationUSIfPossible(data: List<ResponseMovieReleaseDates>): String {
@@ -232,7 +232,7 @@ class RepositoryDetail(
     }
 
     private suspend fun saveShowDetails(entity: EntityShow) {
-        database.detailDao().addShowDetails(entity)
+        database.showDao().insert(entity)
     }
 
     private fun showCertificationUSIfPossible(data: List<ResponseShowCertification>): String {
@@ -246,6 +246,7 @@ class RepositoryDetail(
     }
 }
 
+// todo move these extension functions
 fun EntityShow.asUIModelShowDetail(
     watchlisted: Boolean = false,
     started: Boolean = false,

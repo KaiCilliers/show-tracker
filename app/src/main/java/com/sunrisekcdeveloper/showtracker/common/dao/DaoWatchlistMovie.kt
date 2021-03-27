@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.common.dao
 
+import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
+@Dao
 abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
     /**
      * Unwatched movies

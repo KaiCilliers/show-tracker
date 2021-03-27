@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.common.dao
 
+import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
@@ -28,7 +29,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-abstract class DaoWatchlistShow {
+@Dao
+abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
     /**
      * Unwatched shows
      *

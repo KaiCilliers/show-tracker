@@ -18,9 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.common.dao
 
+import androidx.room.Dao
 import androidx.room.Query
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
 
+@Dao
 interface DaoEpisode : DaoBase<EntityEpisode> {
     /**
      * Episode
@@ -33,7 +35,7 @@ interface DaoEpisode : DaoBase<EntityEpisode> {
      * @return
      */
     @Query("SELECT * FROM tbl_episode WHERE episode_show_id = :showId AND episode_season_number = :season AND episode_number = :episode")
-    abstract suspend fun episode(showId: String, season: Int, episode: Int): EntityEpisode?
+    abstract suspend fun episode(showId: String, season: Int, episode: Int): EntityEpisode
 
     /**
      * Last episode of show

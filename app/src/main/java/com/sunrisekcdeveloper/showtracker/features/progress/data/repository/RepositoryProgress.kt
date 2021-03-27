@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.data.repository
 
+import androidx.room.withTransaction
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
@@ -38,40 +39,40 @@ class RepositoryProgress(
 ) : RepositoryProgressContract {
 
     override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
-        val entityEpisode = database.progressDao().episode(showId, season, episode)
-        val entitySeason = database.progressDao().season(showId, season)
+        val entityEpisode = database.episodeDao().episode(showId, season, episode)
+        val entitySeason = database.seasonDao().season(showId, season)
 
         Timber.e("Episode: $entityEpisode")
         Timber.e("Season: $entitySeason")
 
-        database.progressDao().setShowProgress(
-            episode = EntityWatchlistEpisode.notWatchedFrom(showId, entitySeason.number, entityEpisode.number),
-            season = EntityWatchlistSeason.partialFrom(showId, entitySeason.number, entityEpisode.number),
-            show = EntityWatchlistShow.partialFrom(
+        database.withTransaction {
+            database.watchlistEpisodeDao().insert(EntityWatchlistEpisode.notWatchedFrom(showId, entitySeason.number, entityEpisode.number))
+            database.watchlistSeasonDao().insert(EntityWatchlistSeason.partialFrom(showId, entitySeason.number, entityEpisode.number))
+            database.watchlistShowDao().insert(EntityWatchlistShow.partialFrom(
                 showId,
                 entityEpisode.number,
                 entityEpisode.name,
                 entitySeason.number,
                 entitySeason.episodeTotal
-            )
-        )
+            ))
+        }
     }
 
     override suspend fun setNewShowAsUpToDate(showId: String) {
-        val season = database.progressDao().lastSeasonOfShow(showId)
-        val episode = database.progressDao().lastEpisodeOfShow(showId, season.number)
+        val season = database.seasonDao().lastSeasonOfShow(showId)
+        val episode = database.episodeDao().lastEpisodeOfShow(showId, season.number)
 
-        database.progressDao().setShowProgress(
-            episode = EntityWatchlistEpisode.completedFrom(showId, season.number, episode.number),
-            season = EntityWatchlistSeason.upToDateSeasonFrom(showId, season.number, episode.number),
-            show = EntityWatchlistShow.upToDateEntryFrom(
+        database.withTransaction {
+            database.watchlistEpisodeDao().insert(EntityWatchlistEpisode.completedFrom(showId, season.number, episode.number))
+            database.watchlistSeasonDao().insert(EntityWatchlistSeason.upToDateSeasonFrom(showId, season.number, episode.number))
+            database.watchlistShowDao().insert(EntityWatchlistShow.upToDateEntryFrom(
                 showId,
                 episode.number,
                 episode.name,
                 season.number,
                 season.episodeTotal
-            )
-        )
+            ))
+        }
     }
 
 
@@ -94,7 +95,7 @@ class RepositoryProgress(
                                 showId, it.number
                             )
 
-                            database.progressDao().addSeason(it.asEntitySeason(showId))
+                            database.seasonDao().insert(it.asEntitySeason(showId))
 
                             when (second) {
                                 is NetworkResult.Success -> {
@@ -103,7 +104,7 @@ class RepositoryProgress(
                                     Timber.e("Episodes: ${second.data.episodes.size}")
 
                                     second.data.episodes.forEach { episode ->
-                                        database.progressDao().addEpisode(episode.asEntityEpisode(showId))
+                                        database.episodeDao().insert(episode.asEntityEpisode(showId))
                                     }
 
                                 }
@@ -122,6 +123,7 @@ class RepositoryProgress(
         }
     }
 
+    // todo move these extension functions out
     fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(
         showId = showId,
         seasonNumber = seasonNumber,
@@ -147,7 +149,7 @@ class RepositoryProgress(
 
     @ExperimentalStdlibApi
     override suspend fun showSeasons(showId: String): Resource<Map<Int, Int>> {
-        val seasons = database.progressDao().seasonsOfShow(showId)
+        val seasons = database.seasonDao().seasonsOfShow(showId)
         // todo handle if list is empty
         // todo handle check to ensure this is all the seasons
 

@@ -46,8 +46,8 @@ class RepositorySearch(
 ) : RepositorySearchContract {
 
     override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
-        val movie = database.searchDao().unwatchedMovies()
-        val shows = database.searchDao().unwatchedShows()
+        val movie = database.watchlistMovieDao().unwatchedMovies()
+        val shows = database.watchlistShowDao().unwatchedShows()
 
         Timber.e("movies: ${movie.map { it.details.title }}")
         Timber.e("shows: ${shows.map { it.details.title }}")
@@ -57,6 +57,7 @@ class RepositorySearch(
         return Resource.Success(list.sortedBy { it.title })
     }
 
+    // todo move these extension out
     fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
         id = status.id,
         title = details.title,

@@ -18,13 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.common.dao
 
+import androidx.room.Dao
 import androidx.room.Query
-import androidx.room.Transaction
-import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+@Dao
 abstract class DaoShow : DaoBase<EntityShow> {
 
     /**
