@@ -23,29 +23,25 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
-// todo use usecases to load data and not repository directly
 @ExperimentalCoroutinesApi
 class ViewModelDiscoveryMovies @ViewModelInject constructor(
-    private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
-    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
-    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
-    @RepoDiscovery repo: RepositoryDiscoveryContract,
+    loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
+    loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
+    loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
     @Assisted private val savedStateHandle: SavedStateHandle // todo find out how to use this to store flow results...perhaps utilize StateFlow?
 ) : ViewModel() {
 
-    val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = repo.popularMoviesStream()
+    val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamTopRatedMovies: Flow<PagingData<UIModelDiscovery>> = repo.topRatedMoviesStream()
+    val streamTopRatedMovies: Flow<PagingData<UIModelDiscovery>> = loadTopRatedMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamUpcomingMovies: Flow<PagingData<UIModelDiscovery>> = repo.upcomingMoviesStream()
+    val streamUpcomingMovies: Flow<PagingData<UIModelDiscovery>> = loadUpcomingMoviesUseCase()
         .cachedIn(viewModelScope)
 }

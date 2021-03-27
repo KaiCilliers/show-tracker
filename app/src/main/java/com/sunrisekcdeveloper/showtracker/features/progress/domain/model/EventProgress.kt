@@ -21,4 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 sealed class EventProgress {
     object PopBackStack : EventProgress()
     data class ShowToast(val msg: String) : EventProgress()
+
+    companion object {
+        fun popBackStack() = PopBackStack
+        fun showToast(message: String) = ShowToast(message)
+    }
 }

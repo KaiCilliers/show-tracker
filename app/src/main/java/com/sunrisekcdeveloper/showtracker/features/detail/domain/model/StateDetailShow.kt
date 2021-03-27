@@ -22,4 +22,10 @@ sealed class StateDetailShow {
     object Loading : StateDetailShow()
     data class Success(val data: UIModelShowDetail) : StateDetailShow()
     data class Error(val exception: Exception) : StateDetailShow()
+
+    companion object {
+        fun loading() = Loading
+        fun success(data: UIModelShowDetail) = Success(data)
+        fun error(errorMessage: String) = Error(Exception(errorMessage))
+    }
 }

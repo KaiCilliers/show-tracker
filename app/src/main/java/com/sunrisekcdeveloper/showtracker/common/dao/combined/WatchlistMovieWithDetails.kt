@@ -16,35 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.data.local
+package com.sunrisekcdeveloper.showtracker.common.dao.combined
 
-import androidx.room.Dao
 import androidx.room.Embedded
-import androidx.room.Query
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
-
-@Dao
-interface DaoSearch {
-
-    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0 AND watch_movie_watched = 0")
-    suspend fun unwatchedMovies(): List<WatchlistMovieWithDetails>
-
-    @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0 AND watch_show_started = 0")
-    suspend fun unwatchedShows(): List<WatchlistShowWithDetails>
-}
-
-data class WatchlistShowWithDetails(
-    @Embedded val status: EntityWatchlistShow,
-    @Relation(
-        parentColumn = "watch_show_id",
-        entityColumn = "show_id"
-    )
-    val details : EntityShow
-)
 
 data class WatchlistMovieWithDetails(
     @Embedded val status: EntityWatchlistMovie,

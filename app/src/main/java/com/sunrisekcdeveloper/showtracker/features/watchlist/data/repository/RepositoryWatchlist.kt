@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
@@ -33,19 +33,20 @@ import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 class RepositoryWatchlist(
-    private val local: DaoWatchlist
+    private val database: TrackerDatabase
 ) : RepositoryWatchlistContract {
 
     override suspend fun currentShow(showId: String): EntityShow {
-        return local.show(showId)
+        return database.showDao().show(showId)
     }
 
     override suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int) {
-        val watchlistEpisode = local.watchlistEpisode(showId, episode, season)
+        val watchlistEpisode = database.watchlistEpisodeDao().watchlistEpisode(showId, episode, season)
         Timber.d("episode to mark: $watchlistEpisode")
+        @Suppress("UNNECESSARY_SAFE_CALL")
         watchlistEpisode?.let {
             Timber.e("inside")
-            local.updateWatchlistEpisode(
+            database.watchlistEpisodeDao().update(
                 watchlistEpisode.copy(
                     watched = true,
                     dateWatched = System.currentTimeMillis(),
@@ -56,7 +57,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun insertNewWatchlistEpisode(showId: String, season: Int, episode: Int) {
-        local.insertWatchlistEpisode(
+        database.watchlistEpisodeDao().insert(
             EntityWatchlistEpisode.notWatchedFrom(
                 showId, season, episode
             )
@@ -64,9 +65,9 @@ class RepositoryWatchlist(
     }
 
     override suspend fun incrementSeasonCurrentEpisode(showId: String, currentSeason: Int) {
-        val season = local.watchlistSeason(showId, currentSeason)
+        val season = database.watchlistSeasonDao().watchlistSeason(showId, currentSeason)
         val currentEpisode = season.currentEpisode
-        local.updateWatchlistSeason(
+        database.watchlistSeasonDao().update(
             season.copy(
                 currentEpisode = (currentEpisode + 1),
                 lastUpdated = System.currentTimeMillis()
@@ -75,8 +76,8 @@ class RepositoryWatchlist(
     }
 
     override suspend fun incrementWatchlistShowCurrentEpisode(showId: String) {
-        val watchlistShow = local.watchlistShow(showId)
-        val newEpisode = local.episode(
+        val watchlistShow = database.watchlistShowDao().watchlistShow(showId)
+        val newEpisode = database.episodeDao().episode(
             showId,
             watchlistShow.currentSeasonNumber,
             watchlistShow.currentEpisodeNumber + 1
@@ -84,7 +85,7 @@ class RepositoryWatchlist(
         Timber.e("OK - here is some data")
         Timber.e("show: $watchlistShow")
         Timber.e("next episode: $newEpisode")
-        local.updateWatchlistShow(
+        database.watchlistShowDao().update(
             watchlistShow.copy(
                 currentEpisodeNumber = newEpisode?.number?: -1,
                 currentEpisodeName = newEpisode?.name?: "oops",
@@ -94,8 +95,8 @@ class RepositoryWatchlist(
     }
 
     override suspend fun updateSeasonAsWatched(showId: String, season: Int) {
-        val watchlistSeason = local.watchlistSeason(showId, season)
-        local.updateWatchlistSeason(
+        val watchlistSeason = database.watchlistSeasonDao().watchlistSeason(showId, season)
+        database.watchlistSeasonDao().update(
             watchlistSeason.copy(
                 completed = true,
                 dateCompleted = System.currentTimeMillis(),
@@ -105,7 +106,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun insertNewWatchlistSeason(showId: String, season: Int, episode: Int) {
-        local.insertWatchlistSeason(
+        database.watchlistSeasonDao().insert(
             EntityWatchlistSeason.partialFrom(
                 showId, season, episode
             )
@@ -113,16 +114,16 @@ class RepositoryWatchlist(
     }
 
     override suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int) {
-        val watchlistShow = local.watchlistShow(showId)
-        val episode = local.episode(showId, newSeason, newEpisode)
-        val season = local.season(showId, newSeason)
+        val watchlistShow = database.watchlistShowDao().watchlistShow(showId)
+        val episode = database.episodeDao().episode(showId, newSeason, newEpisode)
+        val season = database.seasonDao().season(showId, newSeason)
         // todo if null objects are returned then try fetch from netowrk and if failed then you need to handle
         //  consider making room return nullable objects to form handle these null cases
         // todo some shows return seasons which have zero episodes... handle that case (example is Simpsons last two seasons)
         Timber.d("show $watchlistShow")
         Timber.d("episode: $episode")
         Timber.d("season: $season")
-        local.updateWatchlistShow(
+        database.watchlistShowDao().update(
             watchlistShow.copy(
                 currentEpisodeNumber = episode?.number?: 1,
                 currentEpisodeName = episode?.name?: "Episode 1 :)",
@@ -134,8 +135,8 @@ class RepositoryWatchlist(
     }
 
     override suspend fun updateWatchlistShowAsUpToDate(showId: String) {
-        val show = local.watchlistShow(showId)
-        local.updateWatchlistShow(
+        val show = database.watchlistShowDao().watchlistShow(showId)
+        database.watchlistShowDao().update(
             show.copy(
                 upToDate = true,
                 lastUpdated = System.currentTimeMillis()
@@ -144,30 +145,31 @@ class RepositoryWatchlist(
     }
 
     override suspend fun currentWatchlistShow(showId: String): EntityWatchlistShow {
-        return local.watchlistShow(showId)
+        return database.watchlistShowDao().watchlistShow(showId)
     }
 
-    override fun watchlistMovies(sortMovies: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
-        return local.distinctWatchlistMoviesDetailsFlow(sortMovies).map {
+    override fun watchlistMovies(sortBy: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
+        return database.watchlistMovieDao().distinctWatchlistMoviesDetailsFlow(sortBy).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistMovie())
             } else {
-                Resource.Error("There is no results in the database...")
+                Resource.Error(Exception("There is no results in the database.watchlistDao()..."))
             }
         }
     }
 
     override fun watchlistShows(sortBy: SortShows): Flow<Resource<List<UIModelWatchlistShow>>> {
-        return local.distinctWatchlistShowsDetailsFlow(sortBy).map {
+        return database.watchlistShowDao().distinctWatchlistShowsDetailsFlow(sortBy).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistShow())
             } else {
-                Resource.Error("There is no results in the database...")
+                Resource.Error(Exception("There is no results in the database.watchlistDao()..."))
             }
         }
     }
 }
 
+// todo move these extenstion functions out
 fun WatchlistShowDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
     id = details.id,
     title = details.title,
@@ -200,6 +202,7 @@ fun List<WatchlistMovieDetails>.asListUIModelWatchlistMovie(): List<UIModelWatch
     return this.map { it.asUIModelWatchlistMovie() }
 }
 
+@Deprecated("Duplicate class WatchlistShowWithDetails")
 data class WatchlistShowDetails(
     @Embedded val watchlist: EntityWatchlistShow,
     @Relation(
@@ -209,6 +212,7 @@ data class WatchlistShowDetails(
     val details: EntityShow
 )
 
+@Deprecated("Duplicate class WatchlistMovieWithDetails")
 data class WatchlistMovieDetails(
     @Embedded val watchlist: EntityWatchlistMovie,
     @Relation(

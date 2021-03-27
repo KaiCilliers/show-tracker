@@ -18,9 +18,14 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
-// todo create companion objects to make it easier to create these classes
 sealed class StateDetailMovie {
     object Loading : StateDetailMovie()
     data class Success(val data: UIModelMovieDetail) : StateDetailMovie()
     data class Error(val exception: Exception) : StateDetailMovie()
+
+    companion object {
+        fun loading() = Loading
+        fun success(data: UIModelMovieDetail) = Success(data)
+        fun error(errorMessage: String) = Error(Exception(errorMessage))
+    }
 }

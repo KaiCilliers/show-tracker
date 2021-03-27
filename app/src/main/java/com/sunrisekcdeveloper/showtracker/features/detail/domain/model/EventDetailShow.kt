@@ -23,4 +23,11 @@ sealed class EventDetailShow {
     data class GoToShowInWatchlist(val showId: String) : EventDetailShow()
     object Close : EventDetailShow()
     data class ShowToast(val msg: String) : EventDetailShow()
+
+    companion object {
+        fun launchStartWatching(showId: String) = LaunchStartWatching(showId)
+        fun goToShowInWatchlist(showId: String) = GoToShowInWatchlist(showId)
+        fun close() = Close
+        fun showToast(message: String) = ShowToast(message)
+    }
 }

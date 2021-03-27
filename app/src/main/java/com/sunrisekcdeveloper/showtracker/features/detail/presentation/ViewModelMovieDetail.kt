@@ -58,7 +58,7 @@ class ViewModelMovieDetail @ViewModelInject constructor(
                     _state.value = StateDetailMovie.Success(resource.data)
                 }
                 is Resource.Error -> {
-                    _state.value = StateDetailMovie.Error(Exception(resource.message))
+                    _state.value = StateDetailMovie.Error(Exception(resource.exception))
                 }
                 Resource.Loading -> {
                     _state.value = StateDetailMovie.Loading

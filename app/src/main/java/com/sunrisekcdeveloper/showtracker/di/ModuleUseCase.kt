@@ -18,11 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoProgress
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoWatchlist
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDetail
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDiscovery
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoProgress
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoSearch
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.detail.application.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.*
@@ -55,7 +55,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object UseCaseModule {
+object ModuleUseCase {
     // Progress
     @Provides
     fun provideFetchShowSeasonAndEpisodeTotalsUseCase(
@@ -160,7 +160,7 @@ object UseCaseModule {
     @Provides
     fun provideLoadUpcomingMoviesUseCase(
         @RepoDiscovery discoveryRepo: RepositoryDiscoveryContract
-    ): LoadUpcomingMoviesUseCaseContractUpdated =
+    ): LoadUpcomingMoviesUseCaseContract =
         LoadUpcomingMoviesUseCase(discoveryRepo)
 
     @Provides

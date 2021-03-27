@@ -32,36 +32,23 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-// todo save call to db then get entity to convert to UI
-fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
-    id = "$id",
-    title = title,
-    posterPath = posterPath ?: "",
-    overview = overview,
-    releaseYear = releaseDate,
-    certification = "N/A",
-    runtime = "$runtime",
-    watchlisted = false,
-    watched = false,
-    deleted = false
-)
-fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
-    id = "$id",
-    name = name,
-    posterPath = posterPath?: "",
-    overview = overview,
-    certification = "N/A",
-    firstAirDate = firstAirYear,
-    seasonsTotal = seasonCount,
-    watchlisted = false,
-    startedWatching = false,
-    upToDate = false,
-    deleted = false
-)
+fun View.gone() {
+    this.visibility = View.GONE
+}
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+fun View.enabled() {
+    this.isEnabled = true
+}
+fun View.disabled() {
+    this.isEnabled = false
+}
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaTitle = title,
@@ -94,19 +81,6 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     popularity = popularity,
     ratingVotes = voteCount
 )
-fun UIModelDiscovery.asUIModelPoster() = UIModelPoster(
-    id = id,
-    posterPath = posterPath,
-    mediaType = mediaType
-)
-fun List<UIModelDiscovery>.asUIModelPosterList() = this.map { it.asUIModelPoster() }
-fun UIModelSearch.asUIModelPoster() = UIModelPoster(
-    id = id,
-    posterPath = posterPath,
-    mediaType = mediaType
-)
-fun List<UIModelSearch>.asUIModelPosterListt() = this.map { it.asUIModelPoster() }
-
 fun TextView.setMaxLinesToEllipsize() {
     val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
     maxLines = visibleLines
@@ -123,6 +97,7 @@ inline fun <reified T> Flow<T>.observeInLifecycle(
     lifecycleOwner: LifecycleOwner
 ) = FlowObserver(lifecycleOwner, this, {})
 
+@ExperimentalCoroutinesApi
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
 

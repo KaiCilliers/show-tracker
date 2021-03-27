@@ -19,14 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoSearch
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoSearch
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 class SearchMediaByTitleUseCase(
     @RepoSearch private val searchRepo: RepositorySearchContract,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO

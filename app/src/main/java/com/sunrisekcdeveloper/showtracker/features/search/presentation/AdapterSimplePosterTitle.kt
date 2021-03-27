@@ -31,7 +31,6 @@ import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 
-// todo DiffUtil
 class AdapterSimplePosterTitle(
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : ListAdapter<UIModelUnwatchedSearch, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(

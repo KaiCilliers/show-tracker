@@ -28,9 +28,8 @@ import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-// todo rename to ActivtyMain
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class ActivityMain : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setup() {
         binding.botnavHousing.setupWithNavController(
-            findNavController(R.id.nav_host_fragment_main) // todo rename nav_host_fragment
+            findNavController(R.id.nav_host_fragment_main)
         )
     }
 }

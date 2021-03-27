@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.AdapterSimplePosterTitle
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.AdapterWatchlistMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.AdapterWatchlistShow
@@ -29,7 +28,7 @@ import dagger.hilt.android.components.ActivityComponent
 
 @Module
 @InstallIn(ActivityComponent::class)
-object AdapterModule {
+object ModuleAdapter {
 
     @Provides
     fun provideWatchlistShowAdapter(): AdapterWatchlistShow {
@@ -43,10 +42,5 @@ object AdapterModule {
     @Provides
     fun provideTitlePosterListAdapter(): AdapterSimplePosterTitle {
         return AdapterSimplePosterTitle()
-    }
-
-    @Provides
-    fun provideSimplePosterAdapter(): AdapterSimplePoster {
-        return AdapterSimplePoster()
     }
 }

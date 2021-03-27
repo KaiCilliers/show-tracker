@@ -125,7 +125,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MoviePopular) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -136,7 +136,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MovieTopRated) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -147,7 +147,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MovieUpcoming) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -158,7 +158,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowPopular) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -169,7 +169,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowTopRated) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -180,7 +180,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowAiringToday) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }

@@ -27,8 +27,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.gone
+import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -69,7 +72,7 @@ class AdapterWatchlistShow(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlistShow) {
             Glide.with(binding.root.context)
-                .load("https://image.tmdb.org/t/p/w342${item.posterPath}")
+                .load(EndpointPoster.Standard.urlWithResource(item.posterPath))
                 .transform(CenterCrop())
                 .into(binding.imgvWatchlistShowPoster)
 
@@ -122,25 +125,23 @@ class AdapterWatchlistShow(
             }
 
             if (item.upToDate) {
-                binding.tvWatchlistShowUpToDate.visibility = View.VISIBLE
-                binding.btnWatchlistShowStartWatching.visibility = View.GONE
-                binding.btnWatchlistShowCurrentEpisode.visibility = View.GONE
-                binding.btnWatchlistShowMarkAsWatched.visibility = View.GONE
-                binding.tvWatchlistShowEpisodeName.visibility = View.GONE
+                binding.tvWatchlistShowUpToDate.visible()
+                binding.btnWatchlistShowStartWatching.gone()
+                binding.btnWatchlistShowCurrentEpisode.gone()
+                binding.btnWatchlistShowMarkAsWatched.gone()
+                binding.tvWatchlistShowEpisodeName.gone()
             } else {
-                binding.tvWatchlistShowUpToDate.visibility = View.GONE
+                binding.tvWatchlistShowUpToDate.gone()
                 if (!item.started) {
-                    binding.btnWatchlistShowStartWatching.visibility =
-                        View.VISIBLE // todo make extension function
-                    binding.btnWatchlistShowCurrentEpisode.visibility = View.GONE
-                    binding.btnWatchlistShowMarkAsWatched.visibility = View.GONE
-                    binding.tvWatchlistShowEpisodeName.visibility = View.GONE
+                    binding.btnWatchlistShowStartWatching.visible()
+                    binding.btnWatchlistShowCurrentEpisode.gone()
+                    binding.btnWatchlistShowMarkAsWatched.gone()
+                    binding.tvWatchlistShowEpisodeName.gone()
                 } else {
-                    binding.btnWatchlistShowStartWatching.visibility =
-                        View.GONE // todo make extension function
-                    binding.btnWatchlistShowCurrentEpisode.visibility = View.VISIBLE
-                    binding.btnWatchlistShowMarkAsWatched.visibility = View.VISIBLE
-                    binding.tvWatchlistShowEpisodeName.visibility = View.VISIBLE
+                    binding.btnWatchlistShowStartWatching.gone()
+                    binding.btnWatchlistShowCurrentEpisode.visible()
+                    binding.btnWatchlistShowMarkAsWatched.visible()
+                    binding.tvWatchlistShowEpisodeName.visible()
 
                     binding.btnWatchlistShowCurrentEpisode.text =
                         "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"

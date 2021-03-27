@@ -16,11 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.model
+package com.sunrisekcdeveloper.showtracker.common.dao.combined
 
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 
-sealed class ViewStateSearch<out T: List<UIModelSearch>> {
-    object SuggestedContent : ViewStateSearch<Nothing>()
-    object NoSearchResults : ViewStateSearch<Nothing>()
-    data class SearchResults(val data: List<UIModelSearch>) : ViewStateSearch<List<UIModelSearch>>()
-}
+// todo extract
+data class WatchlistShowWithDetails(
+    @Embedded val status: EntityWatchlistShow,
+    @Relation(
+        parentColumn = "watch_show_id",
+        entityColumn = "show_id"
+    )
+    val details : EntityShow
+)

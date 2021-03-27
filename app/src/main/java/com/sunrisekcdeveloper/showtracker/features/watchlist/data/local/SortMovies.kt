@@ -16,11 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-
-interface LoadUpcomingMoviesUseCaseContractUpdated {
-    suspend operator fun invoke(page: Int): Resource<List<UIModelDiscovery>>
+sealed class SortMovies {
+    object ByTitle : SortMovies()
+    object ByRecentlyAdded : SortMovies()
+    object ByWatched : SortMovies()
 }

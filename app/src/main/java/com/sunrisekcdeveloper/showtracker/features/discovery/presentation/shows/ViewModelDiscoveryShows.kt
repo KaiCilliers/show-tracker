@@ -18,34 +18,28 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows
 
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadAiringTodayShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
-// todo use usecases to load data and not repository directly
 @ExperimentalCoroutinesApi
 class ViewModelDiscoveryShows @ViewModelInject constructor(
-    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
-    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
-    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract,
-    @RepoDiscovery private val repo: RepositoryDiscoveryContract,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
+    loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
+    loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
 ) : ViewModel() {
 
-    val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = repo.popularShowsStream()
+    val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = loadPopularShowsUseCase()
         .cachedIn(viewModelScope)
-    val streamTopRatedShows: Flow<PagingData<UIModelDiscovery>> = repo.topRatedShowsStream()
+    val streamTopRatedShows: Flow<PagingData<UIModelDiscovery>> = loadTopRatedShowsUseCase()
         .cachedIn(viewModelScope)
-    val streamAiringTodayShows: Flow<PagingData<UIModelDiscovery>> = repo.airingTodayShowsStream()
+    val streamAiringTodayShows: Flow<PagingData<UIModelDiscovery>> = loadAiringTodayShowsUseCase()
         .cachedIn(viewModelScope)
 }

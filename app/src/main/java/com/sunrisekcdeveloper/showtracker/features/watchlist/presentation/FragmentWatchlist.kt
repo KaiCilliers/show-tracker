@@ -33,9 +33,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
+import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
+import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -43,11 +46,15 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovi
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class FragmentWatchlist : Fragment() {
 
@@ -94,8 +101,7 @@ class FragmentWatchlist : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.submitAction(ActionWatchlist.LoadWatchlistData)
-//        setup()
+        viewModel.submitAction(ActionWatchlist.loadWatchlistData())
         setup()
         binding()
         observeViewModel()
@@ -115,12 +121,12 @@ class FragmentWatchlist : Fragment() {
                 tab?.let {
                     when (it.position) {
                         0 -> {
-                            binding.svWatchlist.queryHint = "Search TV shows by title"
+                            binding.svWatchlist.queryHint = getString(R.string.search_shows_by_title)
                             binding.svWatchlist.setQuery("", true)
                             binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
                         }
                         1 -> {
-                            binding.svWatchlist.queryHint = "Search movies by title"
+                            binding.svWatchlist.queryHint = getString(R.string.search_movie_by_title)
                             binding.svWatchlist.setQuery("", true)
                             binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
                         }
@@ -135,22 +141,22 @@ class FragmentWatchlist : Fragment() {
             }
         })
 
-        binding.imgvFilterWatchlist.isVisible = true
-        binding.recyclerviewWatchlist.isVisible = true
+        binding.imgvFilterWatchlist.visible()
+        binding.recyclerviewWatchlist.visible()
     }
 
     private fun stateLoading() {
-        binding.layoutWatchlistSkeleton.isVisible = true
+        binding.layoutWatchlistSkeleton.visible()
     }
 
     private fun stateError() {
-        viewModel.submitAction(ActionWatchlist.ShowToast("state Error"))
+        viewModel.submitAction(ActionWatchlist.showToast("state Error"))
     }
 
     private fun cleanUi() {
-        binding.layoutWatchlistSkeleton.isGone = true
-        binding.imgvFilterWatchlist.isGone = true
-        binding.recyclerviewWatchlist.isGone = true
+        binding.layoutWatchlistSkeleton.gone()
+        binding.imgvFilterWatchlist.gone()
+        binding.recyclerviewWatchlist.gone()
     }
 
     private fun setup() {
@@ -167,20 +173,20 @@ class FragmentWatchlist : Fragment() {
             when (action) {
                 is ShowAdapterAction.MarkEpisode -> {
                     viewModel.submitAction(
-                        ActionWatchlist.UpdateShowProgress(
-                            UpdateShowAction.IncrementEpisode(action.showId)
+                        ActionWatchlist.updateShowProgress(
+                            UpdateShowAction.incrementEpisode(action.showId)
                         )
                     )
                 }
                 is ShowAdapterAction.MarkSeason -> {
                     viewModel.submitAction(
-                        ActionWatchlist.UpdateShowProgress(
-                            UpdateShowAction.CompleteSeason(action.showId)
+                        ActionWatchlist.updateShowProgress(
+                            UpdateShowAction.completeSeason(action.showId)
                         )
                     )
                 }
                 is ShowAdapterAction.StartWatchingShow -> {
-                    viewModel.submitAction(ActionWatchlist.StartWatchingShow(action.showId))
+                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId))
                 }
             }
         }
@@ -189,38 +195,13 @@ class FragmentWatchlist : Fragment() {
         watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, status ->
             when (status) {
                 MovieWatchedStatus.Watched -> {
-                    viewModel.submitAction(ActionWatchlist.MarkMovieUnWatched(id))
+                    viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(id))
                 }
                 MovieWatchedStatus.NotWatched -> {
-                    viewModel.submitAction(ActionWatchlist.MarkMovieWatched(id))
+                    viewModel.submitAction(ActionWatchlist.markMovieAsWatched(id))
                 }
             }
         }
-
-        binding.tabBarWatchlist.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    when (it.position) {
-                        0 -> {
-                            binding.svWatchlist.queryHint = "Search TV shows by title"
-                            binding.svWatchlist.setQuery(viewModel.showSearchQuery(), true)
-                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
-                        }
-                        1 -> {
-                            binding.svWatchlist.queryHint = "Search movies by title"
-                            binding.svWatchlist.setQuery(viewModel.movieSearchQuery(), true)
-                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
-                        }
-                    }
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-        })
 
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svWatchlist.getQueryTextChangedStateFlow()

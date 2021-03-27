@@ -25,11 +25,11 @@ import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.features.search.data.local.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
@@ -46,8 +46,8 @@ class RepositorySearch(
 ) : RepositorySearchContract {
 
     override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
-        val movie = database.searchDao().unwatchedMovies()
-        val shows = database.searchDao().unwatchedShows()
+        val movie = database.watchlistMovieDao().unwatchedMovies()
+        val shows = database.watchlistShowDao().unwatchedShows()
 
         Timber.e("movies: ${movie.map { it.details.title }}")
         Timber.e("shows: ${shows.map { it.details.title }}")
@@ -57,6 +57,7 @@ class RepositorySearch(
         return Resource.Success(list.sortedBy { it.title })
     }
 
+    // todo move these extension out
     fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
         id = status.id,
         title = details.title,
@@ -97,7 +98,8 @@ class RepositorySearch(
                     result.addAll(movieResponse.data.media.asUIModelSearch())
                 }
                 is NetworkResult.Error -> {
-                    Timber.d("Error - movie search call was not successful: ${movieResponse.message}")
+                    // todo dont swallow exceptions
+                    Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
                 }
             }
             when (showResponse) {
@@ -105,7 +107,7 @@ class RepositorySearch(
                     result.addAll(showResponse.data.media.asUIModelSearchh())
                 }
                 is NetworkResult.Error -> {
-                    Timber.d("Error - show search call was not successful: ${showResponse.message}")
+                    Timber.d("Error - show search call was not successful: ${showResponse.exception}")
                 }
             }
 

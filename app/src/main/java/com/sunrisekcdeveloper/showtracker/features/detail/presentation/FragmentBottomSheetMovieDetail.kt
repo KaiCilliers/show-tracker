@@ -30,10 +30,9 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.common.util.setMaxLinesToEllipsize
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
@@ -60,7 +59,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.submitAction(ActionDetailMovie.Load(arguments.movieId))
+        viewModel.submitAction(ActionDetailMovie.load(arguments.movieId))
         setup()
         observe()
     }
@@ -87,7 +86,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     private fun setup() {
         // Navigation - Close fragment
         binding.imgDetailMovieClose.setOnClickListener {
-            viewModel.submitAction(ActionDetailMovie.Close)
+            viewModel.submitAction(ActionDetailMovie.close())
         }
         // bind poster and movie title
         bindPriorityData()
@@ -112,47 +111,46 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.tvDetailMovieCertification.text = data.certification
 
         if (data.watchlisted && !data.deleted) {
-            binding.btnDetailMovieAdd.text = "Remove"
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.Remove(data.id)) }
+            binding.btnDetailMovieAdd.text = getString(R.string.remove)
+            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.remove(data.id)) }
         } else {
-            binding.btnDetailMovieAdd.text = "+ add"
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.Add(data.id)) }
+            binding.btnDetailMovieAdd.text = getString(R.string.add_button)
+            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id)) }
         }
 
         // todo some business logic regarding the watched status of movies "deleted" and then
         //  re-added
         if (data.watched && !data.deleted) {
-            binding.btnDetailMovieWatchStatus.text = "YOU'VE WATCHED THIS"
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.SetUnwatched(data.id)) }
+            binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
+            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.setUnwatched(data.id)) }
         } else {
-            binding.btnDetailMovieWatchStatus.text = "MARK AS WATCHED"
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.SetWatched(data.id)) }
+            binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
+            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.setWatched(data.id)) }
         }
-        binding.tvDetailMovieDescription.isVisible = true
-        binding.tvDetailMovieRuntime.isVisible = true
-        binding.tvDetailMovieReleaseYear.isVisible = true
-        binding.tvSeparatorOne.isVisible = true
-        binding.tvSeparatorTwo.isVisible = true
-        binding.tvDetailMovieCertification.isVisible = true
-        binding.btnDetailMovieAdd.isEnabled = true
-        binding.btnDetailMovieWatchStatus.isEnabled = true
+        binding.tvDetailMovieDescription.visible()
+        binding.tvDetailMovieRuntime.visible()
+        binding.tvDetailMovieReleaseYear.visible()
+        binding.tvSeparatorOne.visible()
+        binding.tvSeparatorTwo.visible()
+        binding.tvDetailMovieCertification.visible()
+        binding.btnDetailMovieAdd.enabled()
+        binding.btnDetailMovieWatchStatus.enabled()
     }
     private fun stateLoading() {
-        binding.layoutDetailMovieSkeleton.isVisible = true
+        binding.layoutDetailMovieSkeleton.visible()
     }
     private fun stateError() {
-        Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+        viewModel.submitAction(ActionDetailMovie.showToast("error"))
     }
     private fun cleanUI() {
-        binding.layoutDetailMovieSkeleton.isGone = true
-        binding.tvSeparatorOne.isGone = true
-        binding.tvSeparatorTwo.isGone = true
-        binding.tvDetailMovieDescription.isGone = true
-        binding.tvDetailMovieRuntime.isGone = true
-        binding.tvDetailMovieReleaseYear.isGone = true
-        binding.tvDetailMovieCertification.isGone = true
-        binding.btnDetailMovieAdd.isEnabled = false
-        binding.btnDetailMovieWatchStatus.isEnabled = false
+        binding.layoutDetailMovieSkeleton.gone()
+        binding.tvSeparatorOne.gone()
+        binding.tvSeparatorTwo.gone()
+        binding.tvDetailMovieDescription.gone()
+        binding.tvDetailMovieRuntime.gone()
+        binding.tvDetailMovieReleaseYear.gone()
+        binding.tvDetailMovieCertification.gone()
+        binding.btnDetailMovieAdd.disabled()
+        binding.btnDetailMovieWatchStatus.disabled()
     }
-
 }

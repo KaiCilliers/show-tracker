@@ -21,4 +21,9 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 sealed class MediaType {
     object Movie: MediaType()
     object Show: MediaType()
+
+    companion object {
+        fun movie() = Movie
+        fun show() = Show
+    }
 }

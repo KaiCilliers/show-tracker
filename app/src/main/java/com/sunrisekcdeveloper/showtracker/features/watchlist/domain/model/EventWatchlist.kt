@@ -24,4 +24,11 @@ sealed class EventWatchlist{
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : EventWatchlist()
     data class ConfigureShow(val showId: String) : EventWatchlist()
     data class ShowToast(val msg: String) : EventWatchlist()
+
+    companion object {
+        fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
+            LoadMediaDetails(mediaId, title, posterPath, type)
+        fun configureShow(showId: String) = ConfigureShow(showId)
+        fun showToast(message: String) = ShowToast(message)
+    }
 }

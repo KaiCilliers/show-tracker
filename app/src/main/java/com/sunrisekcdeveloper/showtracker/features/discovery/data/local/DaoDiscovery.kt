@@ -26,6 +26,8 @@ import androidx.room.Query
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
+// todo change model to EntityDiscovery or something similar
+// todo replace DAO with a table specific DAO
 @Dao
 interface DaoDiscovery {
 

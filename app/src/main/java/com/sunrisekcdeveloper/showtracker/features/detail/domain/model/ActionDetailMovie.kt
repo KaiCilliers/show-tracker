@@ -26,4 +26,14 @@ sealed class ActionDetailMovie {
     data class SetUnwatched(val movieId: String) : ActionDetailMovie()
     object Close : ActionDetailMovie()
     data class ShowToast(val msg: String) : ActionDetailMovie()
+
+    companion object {
+        fun load(movieId: String) = Load(movieId)
+        fun add(movieId: String) = Add(movieId)
+        fun remove(movieId: String) = Remove(movieId)
+        fun setWatched(movieId: String) = SetWatched(movieId)
+        fun setUnwatched(movieId: String) = SetUnwatched(movieId)
+        fun close() = Close
+        fun showToast(message: String) = ShowToast(message)
+    }
 }

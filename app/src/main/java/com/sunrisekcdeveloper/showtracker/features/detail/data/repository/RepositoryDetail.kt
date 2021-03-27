@@ -18,11 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
-import com.google.gson.annotations.SerializedName
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
@@ -42,52 +41,52 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class RepositoryDetail(
     @SourceDetail private val remote: RemoteDataSourceDetailContract,
-    private val local: DaoDetail,
+    private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
 
     // todo there needs some serious work to the business logic with the management of shows and movies
     override suspend fun addShowToWatchlist(id: String) {
-        val exists = local.watchlistShowExist(id)
+        val exists = database.watchlistShowDao().watchlistShowExist(id)
         if (exists) {
-            local.markWatchlistShowAsNotDeleted(id)
+            database.watchlistShowDao().markWatchlistShowAsNotDeleted(id)
         } else {
-            local.addShowToWatchlist(EntityWatchlistShow.freshBareEntryFrom(id))
+            database.watchlistShowDao().insert(EntityWatchlistShow.freshBareEntryFrom(id))
         }
     }
 
     override suspend fun removeShowFromWatchlist(id: String) {
-        local.removeShowFromWatchlist(id)
+        database.watchlistShowDao().removeShowFromWatchlist(id)
     }
 
     override suspend fun removeMovieFromWatchlist(id: String) {
-        local.removeMovieFromWatchlist(id)
+        database.watchlistMovieDao().removeMovieFromWatchlist(id)
     }
 
     override suspend fun updateWatchlistMovieAsWatched(id: String) {
         // todo better implementation possible
         insertWatchlistMovieIfNotExists(id)
-        local.setMovieAsWatched(id)
+        database.watchlistMovieDao().setMovieAsWatched(id)
     }
 
     private suspend fun insertWatchlistMovieIfNotExists(id: String) {
-        val exists = local.watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
         if (!exists) {
-            local.insertWatchlistMovie(EntityWatchlistMovie.unWatchedfrom(id))
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
         }
     }
 
     override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
-        local.setMovieAsNotWatched(id)
+        database.watchlistMovieDao().setMovieAsNotWatched(id)
     }
 
     override suspend fun addMovieToWatchlist(id: String) {
-        val exists = local.watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
         if (exists) {
-            local.markWatchlistMovieAsNotDeleted(id)
-            local.setMovieAsWatched(id)
+            database.watchlistMovieDao().markWatchlistMovieAsNotDeleted(id)
+            database.watchlistMovieDao().setMovieAsWatched(id)
         } else {
-            local.addMovieToWatchlist(EntityWatchlistMovie.unWatchedfrom(id))
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
         }
     }
 
@@ -109,13 +108,15 @@ class RepositoryDetail(
                                 )
                             }
                             is NetworkResult.Error -> {
-                                Timber.e("Error fetching certification data for movie with ID: $id [${responseCertification.message}]")
+                                // todo log these somewhere
+                                //  dont swallow exception - bubble it up and handle it in UI to maybe retry
+                                Timber.e("Error fetching certification data for movie with ID: $id [${responseCertification.exception}]")
                             }
                         }
                         saveMovieDetails(result)
                     }
                     is NetworkResult.Error -> {
-                        Timber.e("Error fetching movie details for movie with ID: $id [${responseMovie.message}]")
+                        Timber.e("Error fetching movie details for movie with ID: $id [${responseMovie.exception}]")
                     }
                 }
             }
@@ -123,8 +124,8 @@ class RepositoryDetail(
     }
 
     override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
-        val deets = local.distinctMovieDetailFlow(id)
-        val status = local.distinctWatchlistMovieFlow(id)
+        val deets = database.movieDao().distinctMovieDetailFlow(id)
+        val status = database.watchlistMovieDao().distinctWatchlistMovieFlow(id)
 
         return combine(deets, status) { d, s ->
             var watchlisted = false
@@ -136,7 +137,7 @@ class RepositoryDetail(
                 deleted = s.deleted
             }
             return@combine if (d == null) {
-                Resource.Error("No movie with ID: $id exists in database")
+                Resource.Error(Exception("No movie with ID: $id exists in database"))
             } else {
                 Resource.Success(d.asUIModelMovieDetail(watchlisted, watched, deleted))
             }
@@ -176,10 +177,10 @@ class RepositoryDetail(
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
 
-        val showDetails = local.distinctShowDetailFlow(id)
-        val status = local.distinctWatchlistShowFlow(id)
+        val detailsFlow = database.showDao().distinctShowDetailFlow(id)
+        val statusFlow = database.watchlistShowDao().distinctWatchlistShowFlow(id)
 
-        return combine(showDetails, status) { showDetails, status ->
+        return combine(detailsFlow, statusFlow) { showDetails, status ->
             var watchlisted = false
             var started = false
             var upToDate = false
@@ -193,7 +194,7 @@ class RepositoryDetail(
             }
 
             return@combine if (showDetails == null) {
-                Resource.Error("No show with ID: $id exists in database")
+                Resource.Error(Exception("No show with ID: $id exists in database"))
             } else {
                 Resource.Success(
                     showDetails.asUIModelShowDetail(
@@ -208,7 +209,7 @@ class RepositoryDetail(
     }
 
     private suspend fun saveMovieDetails(entity: EntityMovie) {
-        local.addMovieDetails(entity)
+        database.movieDao().insert(entity)
     }
 
     private fun movieCertificationUSIfPossible(data: List<ResponseMovieReleaseDates>): String {
@@ -231,7 +232,7 @@ class RepositoryDetail(
     }
 
     private suspend fun saveShowDetails(entity: EntityShow) {
-        local.addShowDetails(entity)
+        database.showDao().insert(entity)
     }
 
     private fun showCertificationUSIfPossible(data: List<ResponseShowCertification>): String {
@@ -245,6 +246,7 @@ class RepositoryDetail(
     }
 }
 
+// todo move these extension functions
 fun EntityShow.asUIModelShowDetail(
     watchlisted: Boolean = false,
     started: Boolean = false,

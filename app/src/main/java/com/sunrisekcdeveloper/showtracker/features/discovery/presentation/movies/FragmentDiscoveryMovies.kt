@@ -151,9 +151,9 @@ class FragmentDiscoveryMovies : Fragment() {
             }
         }
 
-        adapterPopularMovies.onClick = onClick
-        adapterTopRatedMovies.onClick = onClick
-        adaptedUpcomingMovies.onClick = onClick
+        adapterPopularMovies.setPosterClickAction(onClick)
+        adapterTopRatedMovies.setPosterClickAction(onClick)
+        adaptedUpcomingMovies.setPosterClickAction(onClick)
 
         binding.rcPopularMovies.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

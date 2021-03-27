@@ -24,7 +24,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
@@ -59,7 +58,7 @@ class ViewModelProgress @ViewModelInject constructor(
                 val resource = fetchShowSeasonAndEpisodeTotalsUseCase(action.showId)
                 when (resource) {
                     is Resource.Success -> { _state.value = StateProgress.Success(resource.data) }
-                    is Resource.Error -> { _state.value = StateProgress.Error(Exception(resource.message)) }
+                    is Resource.Error -> { _state.value = StateProgress.Error(Exception(resource.exception)) }
                     Resource.Loading -> { _state.value = StateProgress.Loading }
                 }
             }

@@ -18,11 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
+import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class RemoveShowFromWatchlistUseCase(
     @RepoDetail private val detailRepo: RepositoryDetailContract
 ) : RemoveShowFromWatchlistUseCaseContract {

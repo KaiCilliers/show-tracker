@@ -70,6 +70,17 @@
     <string name="action_set_watched">Set as watched</string>
     <string name="action_start_watching">Start Watching Now</string>
     <string name="info_up_to_date_show">You are up to date with this show</string>
+    <string name="show_add">+ Add</string>
+    <string name="show_start_watching">Start Watching</string>
+    <string name="show_up_to_date">Up to date</string>
+    <string name="show_update_progress">Update progress</string>
+    <string name="show_remove">Remove</string>
+    <string name="results">Results</string>
+    <string name="unwatched_shows_movies">Your Unwatched Movies and TV Shows</string>
+    <string name="already_watched">YOU\'VE WATCHED THIS</string>
+    <string name="mark_watched">MARK AS WATCHED</string>
+    <string name="search_shows_by_title">Search TV shows by title</string>
+    <string name="search_movie_by_title">Search movies by title</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>

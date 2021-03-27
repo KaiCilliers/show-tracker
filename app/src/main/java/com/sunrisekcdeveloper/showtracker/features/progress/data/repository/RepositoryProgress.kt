@@ -18,10 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.data.repository
 
+import androidx.room.withTransaction
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceProgress
-import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseSeason
@@ -33,45 +34,45 @@ import timber.log.Timber
 // todo determine if the annotation is needed at remote source
 class RepositoryProgress(
     @SourceProgress private val remote: RemoteDataSourceProgressContract,
-    private val local: DaoProgress,
+    private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryProgressContract {
 
     override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
-        val episode = local.episode(showId, season, episode)
-        val season = local.season(showId, season)
+        val entityEpisode = database.episodeDao().episode(showId, season, episode)
+        val entitySeason = database.seasonDao().season(showId, season)
 
-        Timber.e("Episode: $episode")
-        Timber.e("Season: $season")
+        Timber.e("Episode: $entityEpisode")
+        Timber.e("Season: $entitySeason")
 
-        local.setShowProgress(
-            episode = EntityWatchlistEpisode.notWatchedFrom(showId, season.number, episode.number),
-            season = EntityWatchlistSeason.partialFrom(showId, season.number, episode.number),
-            show = EntityWatchlistShow.partialFrom(
+        database.withTransaction {
+            database.watchlistEpisodeDao().insert(EntityWatchlistEpisode.notWatchedFrom(showId, entitySeason.number, entityEpisode.number))
+            database.watchlistSeasonDao().insert(EntityWatchlistSeason.partialFrom(showId, entitySeason.number, entityEpisode.number))
+            database.watchlistShowDao().insert(EntityWatchlistShow.partialFrom(
                 showId,
-                episode.number,
-                episode.name,
-                season.number,
-                season.episodeTotal
-            )
-        )
+                entityEpisode.number,
+                entityEpisode.name,
+                entitySeason.number,
+                entitySeason.episodeTotal
+            ))
+        }
     }
 
     override suspend fun setNewShowAsUpToDate(showId: String) {
-        val season = local.lastSeasonOfShow(showId)
-        val episode = local.lastEpisodeOfShow(showId, season.number)
+        val season = database.seasonDao().lastSeasonOfShow(showId)
+        val episode = database.episodeDao().lastEpisodeOfShow(showId, season.number)
 
-        local.setShowProgress(
-            episode = EntityWatchlistEpisode.completedFrom(showId, season.number, episode.number),
-            season = EntityWatchlistSeason.upToDateSeasonFrom(showId, season.number, episode.number),
-            show = EntityWatchlistShow.upToDateEntryFrom(
+        database.withTransaction {
+            database.watchlistEpisodeDao().insert(EntityWatchlistEpisode.completedFrom(showId, season.number, episode.number))
+            database.watchlistSeasonDao().insert(EntityWatchlistSeason.upToDateSeasonFrom(showId, season.number, episode.number))
+            database.watchlistShowDao().insert(EntityWatchlistShow.upToDateEntryFrom(
                 showId,
                 episode.number,
                 episode.name,
                 season.number,
                 season.episodeTotal
-            )
-        )
+            ))
+        }
     }
 
 
@@ -94,7 +95,7 @@ class RepositoryProgress(
                                 showId, it.number
                             )
 
-                            local.addSeason(it.asEntitySeason(showId))
+                            database.seasonDao().insert(it.asEntitySeason(showId))
 
                             when (second) {
                                 is NetworkResult.Success -> {
@@ -103,24 +104,26 @@ class RepositoryProgress(
                                     Timber.e("Episodes: ${second.data.episodes.size}")
 
                                     second.data.episodes.forEach { episode ->
-                                        local.addEpisode(episode.asEntityEpisode(showId))
+                                        database.episodeDao().insert(episode.asEntityEpisode(showId))
                                     }
 
                                 }
                                 is NetworkResult.Error -> {
-                                    Timber.e("Error fetching season details with show_id: $showId and season number: ${it.number}. [${second.message}]")
+                                    // todo dont swallow exceptions
+                                    Timber.e("Error fetching season details with show_id: $showId and season number: ${it.number}. [${second.exception}]")
                                 }
                             }
                         }
                     }
                     is NetworkResult.Error -> {
-                        Timber.e("Error fetching details for show with ID: $showId. [${response.message}]")
+                        Timber.e("Error fetching details for show with ID: $showId. [${response.exception}]")
                     }
                 }
             }
         }
     }
 
+    // todo move these extension functions out
     fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(
         showId = showId,
         seasonNumber = seasonNumber,
@@ -146,7 +149,7 @@ class RepositoryProgress(
 
     @ExperimentalStdlibApi
     override suspend fun showSeasons(showId: String): Resource<Map<Int, Int>> {
-        val seasons = local.seasonsOfShow(showId)
+        val seasons = database.seasonDao().seasonsOfShow(showId)
         // todo handle if list is empty
         // todo handle check to ensure this is all the seasons
 

@@ -112,7 +112,6 @@ class FragmentDiscovery : Fragment() {
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
-                        // todo replace global navigation
                         FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
                             movieId = mediaId,
                             movieTitle = mediaTitle,
@@ -132,12 +131,12 @@ class FragmentDiscovery : Fragment() {
             }
         }
 
-        adapterPopularMovies.onClick = onClick
-        adapterPopularShows.onClick = onClick
-        adapterTopRatedMovies.onClick = onClick
-        adapterTopRatedShows.onClick = onClick
-        adapterUpcomingMovies.onClick = onClick
-        adapterAiringTodayShows.onClick = onClick
+        adapterPopularMovies.setPosterClickAction(onClick)
+        adapterPopularShows.setPosterClickAction(onClick)
+        adapterTopRatedMovies.setPosterClickAction(onClick)
+        adapterTopRatedShows.setPosterClickAction(onClick)
+        adapterUpcomingMovies.setPosterClickAction(onClick)
+        adapterAiringTodayShows.setPosterClickAction(onClick)
 
         binding.rcPopularMovies.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -195,7 +194,6 @@ class FragmentDiscovery : Fragment() {
         // Movie Tab
         if (position == 0) {
             findNavController().navigate(
-                // todo rename this awful action functions
                 FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryMoviesFragment()
             )
             // TV Show Tab

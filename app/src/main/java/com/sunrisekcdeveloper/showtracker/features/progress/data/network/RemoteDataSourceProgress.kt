@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
+import com.sunrisekcdeveloper.showtracker.common.base.RemoteDataSourceBase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

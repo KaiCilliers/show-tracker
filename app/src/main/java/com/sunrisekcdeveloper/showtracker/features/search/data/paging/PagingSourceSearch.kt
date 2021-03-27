@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.paging
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
@@ -37,6 +38,7 @@ class PagingSourceSearch(
         private const val SEARCH_STARTING_PAGE_INDEX = 1
     }
 
+    @ExperimentalPagingApi
     override fun getRefreshKey(state: PagingState<Int, UIModelSearch>): Int? {
         return SEARCH_STARTING_PAGE_INDEX
     }
@@ -50,11 +52,11 @@ class PagingSourceSearch(
         val showResponse = remote.showsByTitle(query, position)
 
         val result = mutableListOf<UIModelSearch>()
-        var nextKey: Int? = null
-        var prevKey: Int? = null
+        val nextKey: Int?
+        val prevKey: Int?
 
         if (movieResponse is NetworkResult.Error && showResponse is NetworkResult.Error) {
-            return LoadResult.Error(IOException("${movieResponse.message} AND ${showResponse.message}"))
+            return LoadResult.Error(Exception("${movieResponse.exception}  AND ${showResponse.exception}"))
         }
 
         when (movieResponse) {
@@ -62,7 +64,8 @@ class PagingSourceSearch(
                 result.addAll(movieResponse.data.media.asUIModelSearch())
             }
             is NetworkResult.Error -> {
-                Timber.d("Error - movie search call was not successful: ${movieResponse.message}")
+                // todo dont swallow exceptions
+                Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
             }
         }
         when (showResponse) {
@@ -70,12 +73,12 @@ class PagingSourceSearch(
                 result.addAll(showResponse.data.media.asUIModelSearchh())
             }
             is NetworkResult.Error -> {
-                Timber.d("Error - show search call was not successful: ${showResponse.message}")
+                Timber.d("Error - show search call was not successful: ${showResponse.exception}")
             }
         }
 
         // todo this can be done nicer
-        val filtered = result.filter { it.posterPath != "" }.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
+        val filtered = result.filter { it.posterPath != "" }.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
         val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
         { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
         )
@@ -91,7 +94,7 @@ class PagingSourceSearch(
         }
 
         return LoadResult.Page(
-            data = result,
+            data = sorted,
             prevKey = prevKey,
             nextKey = nextKey
         )

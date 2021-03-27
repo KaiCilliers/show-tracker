@@ -21,9 +21,6 @@ package com.sunrisekcdeveloper.showtracker.di
 import android.content.Context
 import androidx.room.Room
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.features.detail.data.local.DaoDetail
-import com.sunrisekcdeveloper.showtracker.features.progress.data.local.DaoProgress
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.DaoWatchlist
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,10 +33,9 @@ import javax.inject.Singleton
  *
  * @constructor Create empty Local module
  */
-// todo rename modules with format ModuleXXX
 @Module
 @InstallIn(ApplicationComponent::class)
-object LocalModule {
+object ModuleLocal {
 
     @Singleton
     @Provides
@@ -51,20 +47,4 @@ object LocalModule {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
-
-    @Singleton
-    @Provides
-    fun provideDaoProgress(db: TrackerDatabase): DaoProgress = db.progressDao()
-
-    @Singleton
-    @Provides
-    fun provideDaoDetail(db: TrackerDatabase): DaoDetail = db.detailDao()
-
-    @Singleton
-    @Provides
-    fun provideDaoWatchlist(db: TrackerDatabase): DaoWatchlist = db.watchlistDao()
-
-//    @Singleton
-//    @Provides
-//    fun provideWatchlistDao(db: TrackerDatabase): WatchlistDao = db.watchlistDao()
 }

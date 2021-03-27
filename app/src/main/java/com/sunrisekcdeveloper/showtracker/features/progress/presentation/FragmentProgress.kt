@@ -31,6 +31,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.disabled
+import com.sunrisekcdeveloper.showtracker.common.util.enabled
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSetProgressBinding
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
@@ -66,25 +68,25 @@ class FragmentProgress : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setup()
         binding.toolbarProgress.setNavigationOnClickListener {
-            viewModel.submitAction(ActionProgress.NavigateBack)
+            viewModel.submitAction(ActionProgress.navigateBack())
         }
-        viewModel.submitAction(ActionProgress.Load(arguments.showIdTest))
+        viewModel.submitAction(ActionProgress.load(arguments.showIdTest))
         observeViewModel()
     }
 
     private fun stateError() {
-        viewModel.submitAction(ActionProgress.CreateToast("progress error state"))
+        viewModel.submitAction(ActionProgress.createToast("progress error state"))
     }
 
     private fun stateLoading() {
-        viewModel.submitAction(ActionProgress.CreateToast("progress loading state"))
+        viewModel.submitAction(ActionProgress.createToast("progress loading state"))
     }
 
     private fun cleanUI() {
-        binding.btnProgressConfirm.isEnabled = false
-        binding.btnProgressUpToDate.isEnabled = false
-        binding.spinProgressEpisode.isEnabled = false
-        binding.spinProgressSeason.isEnabled = false
+        binding.btnProgressConfirm.disabled()
+        binding.btnProgressUpToDate.disabled()
+        binding.spinProgressEpisode.disabled()
+        binding.spinProgressSeason.disabled()
     }
 
     private fun stateSuccess(data: Map<Int, Int>) {
@@ -101,10 +103,10 @@ class FragmentProgress : Fragment() {
             *(1..map.getValue(1)).toList().toTypedArray()
         )
 
-        binding.spinProgressSeason.isEnabled = true
-        binding.spinProgressEpisode.isEnabled = true
-        binding.btnProgressConfirm.isEnabled = true
-        binding.btnProgressUpToDate.isEnabled = true
+        binding.spinProgressSeason.enabled()
+        binding.spinProgressEpisode.enabled()
+        binding.btnProgressConfirm.enabled()
+        binding.btnProgressUpToDate.enabled()
     }
 
     private fun observeViewModel() {
@@ -122,15 +124,15 @@ class FragmentProgress : Fragment() {
                     findNavController().popBackStack()
                 }
                 is EventProgress.ShowToast -> {
-                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT)
+                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
     }
 
     private fun setup() {
-        binding.btnProgressConfirm.isEnabled = false
-        binding.btnProgressUpToDate.isEnabled = false
+        binding.btnProgressConfirm.disabled()
+        binding.btnProgressUpToDate.disabled()
 
         adapterSeason = ArrayAdapter(
             requireContext(),

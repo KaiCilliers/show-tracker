@@ -85,9 +85,9 @@ class FragmentDiscoveryShows : Fragment() {
             }
         }
 
-        adapterPopularShows.onClick = onClick
-        adapterTopRatedShows.onClick = onClick
-        adapterAiringShows.onClick = onClick
+        adapterPopularShows.setPosterClickAction(onClick)
+        adapterTopRatedShows.setPosterClickAction(onClick)
+        adapterAiringShows.setPosterClickAction(onClick)
 
         binding.rcPopularShows.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
