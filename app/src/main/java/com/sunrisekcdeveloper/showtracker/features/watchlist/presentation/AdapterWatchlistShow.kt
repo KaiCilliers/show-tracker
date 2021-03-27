@@ -51,8 +51,6 @@ class AdapterWatchlistShow(
 
     fun positionOfItem(showId: String): Int {
         val data = currentList
-        Timber.e("adapter show id: $showId")
-        Timber.e("data: ${data}")
         val item = data.find {
             it.id == showId
         }

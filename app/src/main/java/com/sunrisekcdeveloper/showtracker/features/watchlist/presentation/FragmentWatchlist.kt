@@ -50,6 +50,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -69,6 +70,8 @@ class FragmentWatchlist : Fragment() {
     lateinit var watchlistShowAdapter: AdapterWatchlistShow
 
     private val arguments: FragmentWatchlistArgs by navArgs()
+
+    private var scrolledOnce = false
 
     private var showSortCheckedItem = 0
     private var movieSortCheckedItem = 0
@@ -121,12 +124,14 @@ class FragmentWatchlist : Fragment() {
                 tab?.let {
                     when (it.position) {
                         0 -> {
-                            binding.svWatchlist.queryHint = getString(R.string.search_shows_by_title)
+                            binding.svWatchlist.queryHint =
+                                getString(R.string.search_shows_by_title)
                             binding.svWatchlist.setQuery("", true)
                             binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
                         }
                         1 -> {
-                            binding.svWatchlist.queryHint = getString(R.string.search_movie_by_title)
+                            binding.svWatchlist.queryHint =
+                                getString(R.string.search_movie_by_title)
                             binding.svWatchlist.setQuery("", true)
                             binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
                         }
@@ -143,6 +148,19 @@ class FragmentWatchlist : Fragment() {
 
         binding.imgvFilterWatchlist.visible()
         binding.recyclerviewWatchlist.visible()
+        arguments.showId?.let { if (!scrolledOnce) scrollToShow() }
+    }
+
+    private fun scrollToShow() = viewLifecycleOwner.lifecycleScope.launch {
+        delay(1000)
+        scrolledOnce = true
+        val position = watchlistShowAdapter.positionOfItem(arguments.showId)
+        binding.recyclerviewWatchlist.getChildAt(position)?.let {
+            val y = binding.recyclerviewWatchlist.y + binding.recyclerviewWatchlist.getChildAt(
+                position
+            ).y
+            binding.scrollWatchlist.smoothScrollTo(0, y.toInt())
+        }
     }
 
     private fun stateLoading() {
@@ -309,7 +327,6 @@ class FragmentWatchlist : Fragment() {
     private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             cleanUi()
-            Timber.e("state: $state")
             when (state) {
                 StateWatchlist.Loading -> {
                     stateLoading()
@@ -345,7 +362,9 @@ class FragmentWatchlist : Fragment() {
                 }
                 is EventWatchlist.ConfigureShow -> {
                     findNavController().navigate(
-                        FragmentWatchlistDirections.navigateFromWatchlistFragmentToSetProgressFragment(event.showId)
+                        FragmentWatchlistDirections.navigateFromWatchlistFragmentToSetProgressFragment(
+                            event.showId
+                        )
                     )
                 }
             }
