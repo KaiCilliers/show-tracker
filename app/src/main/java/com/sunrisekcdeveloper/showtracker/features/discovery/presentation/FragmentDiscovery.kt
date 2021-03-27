@@ -165,7 +165,7 @@ class FragmentDiscovery : Fragment() {
         binding.toolbarDiscovery.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToNavGraphSearch()
+                    FragmentDiscoveryDirections.navigateFromDiscoveryToFragmentSearch()
                 )
                 true
             }

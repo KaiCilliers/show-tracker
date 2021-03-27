@@ -83,7 +83,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                 is EventDetailShow.LaunchStartWatching -> {
                     findNavController().navigate(
                         FragmentBottomSheetShowDetailDirections
-                            .navigateFromDetailShowToNavGraphProgress(event.showId)
+                            .navigateFromDetailShowToSetProgressFragment(event.showId)
                     )
                 }
                 is EventDetailShow.GoToShowInWatchlist -> {
