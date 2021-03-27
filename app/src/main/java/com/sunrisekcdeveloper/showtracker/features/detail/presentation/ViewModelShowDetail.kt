@@ -72,7 +72,7 @@ class ViewModelShowDetail @ViewModelInject constructor(
         }
     }
 
-    fun showDetails(id: String) = viewModelScope.launch {
+    private fun showDetails(id: String) = viewModelScope.launch {
         fetchShowDetailsUseCase(id).collect { resource ->
             when (resource) {
                 is Resource.Success -> {
