@@ -53,9 +53,11 @@ class ViewModelShowDetail @ViewModelInject constructor(
             }
             is ActionDetailShow.Add -> {
                 addShowToWatchlistUseCase(action.showId)
+                eventChannel.send(EventDetailShow.Close)
             }
             is ActionDetailShow.Remove -> {
                 removeShowFromWatchlistUseCase(action.showId)
+                eventChannel.send(EventDetailShow.Close)
             }
             ActionDetailShow.Close -> {
                 eventChannel.send(EventDetailShow.Close)

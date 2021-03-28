@@ -74,9 +74,15 @@ class ViewModelMovieDetail @ViewModelInject constructor(
             }
             is ActionDetailMovie.Add -> {
                 addMovieToWatchlistUseCase(action.movieId)
+                eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.Remove -> {
                 removeMovieFromWatchlistUseCase(action.movieId)
+                // this is not ideal, but it works for now
+                // i want the dialog to dismiss when the user has selected an action
+                // a snackbar must then appear on the screen the user was previously describing
+                // the action the user just made
+                eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.SetWatched -> {
                 updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
@@ -85,7 +91,7 @@ class ViewModelMovieDetail @ViewModelInject constructor(
                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
             }
             ActionDetailMovie.Close -> {
-                eventChannel.send(EventDetailMovie.Close)
+                eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.ShowToast -> {
                 eventChannel.send(EventDetailMovie.ShowToast("msg"))

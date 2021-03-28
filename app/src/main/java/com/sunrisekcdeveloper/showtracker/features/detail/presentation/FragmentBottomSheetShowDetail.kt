@@ -31,6 +31,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
@@ -96,6 +97,8 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     )
                 }
                 EventDetailShow.Close -> {
+                    // todo this property needs to be set somewhere else
+                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
                     dismissAllowingStateLoss()
                 }
                 is EventDetailShow.ShowToast -> {

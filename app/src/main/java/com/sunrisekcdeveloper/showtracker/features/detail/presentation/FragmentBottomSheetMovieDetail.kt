@@ -32,6 +32,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
@@ -88,7 +89,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         viewModel.eventsFlow.onEach { event ->
             when (event) {
                 EventDetailMovie.Close -> {
-                    dismissAllowingStateLoss()
+                    // todo this property needs to be set somewhere else
+                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
+                    dismiss()
                 }
                 is EventDetailMovie.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
