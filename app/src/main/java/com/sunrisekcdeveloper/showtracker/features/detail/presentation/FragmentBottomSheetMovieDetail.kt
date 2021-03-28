@@ -129,7 +129,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.tvDetailMovieCertification.text = data.certification
 
         if (data.watchlisted && !data.deleted) {
-            binding.btnDetailMovieAdd.setBackgroundColor(Color.RED)
+            binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.remove)
             binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.remove(data.id)) }
         } else {

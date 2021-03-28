@@ -205,7 +205,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun stateAddedToWatchlist(data: UIModelShowDetail) {
-        binding.btnDetailShowAdd.setBackgroundColor(Color.RED)
+        binding.btnDetailShowAdd.setBackgroundColor(fetchErrorColor(requireContext()))
         binding.btnDetailShowAdd.text = getString(R.string.show_remove)
         binding.btnDetailShowAdd.click {
             viewModel.submitAction(ActionDetailShow.remove(data.id))

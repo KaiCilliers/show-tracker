@@ -51,6 +51,14 @@ fun fetchPrimaryColor(context: Context): Int {
     a.recycle()
     return color
 }
+fun fetchErrorColor(context: Context): Int {
+    val typedValue = TypedValue()
+    val a: TypedArray =
+        context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorError))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
+}
 fun View.gone() {
     this.visibility = View.GONE
 }
