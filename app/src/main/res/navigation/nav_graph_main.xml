@@ -132,6 +132,10 @@
         <action
             android:id="@+id/navigate_from_detail_show_to_set_progress_fragment"
             app:destination="@id/destination_main_progress_fragment" />
+        <argument
+            android:name="fromWatchlist"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </dialog>
     <fragment
         android:id="@+id/destination_main_search_fragment"

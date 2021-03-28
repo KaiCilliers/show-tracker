@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -186,9 +187,15 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun stateInProgress(data: UIModelShowDetail) {
-        binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
-        binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
+        // i dont want to show this button on the detail screen when user navigates from watchlist
+        // better implementation would be to just dismiss detail screen and flash/highlight the item
+        if (!arguments.fromWatchlist) {
+            binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
+            binding.btnDetailShowWatchStatus.click {
+                viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
+            }
+        } else {
+            binding.btnDetailShowWatchStatus.isVisible = false
         }
     }
 

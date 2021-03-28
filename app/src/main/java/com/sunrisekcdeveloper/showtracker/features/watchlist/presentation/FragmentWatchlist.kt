@@ -355,7 +355,8 @@ class FragmentWatchlist : Fragment() {
                             MediaType.Show -> FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailShow(
                                 event.mediaId,
                                 event.title,
-                                event.posterPath
+                                event.posterPath,
+                                fromWatchlist = true
                             )
                         }
                     )
