@@ -50,9 +50,9 @@ class FragmentDiscoveryShows : Fragment() {
     @ExperimentalCoroutinesApi
     private val viewModel: ViewModelDiscoveryShows by viewModels()
 
-    private val adapterPopularShows = PagingAdapterSimplePoster()
-    private val adapterTopRatedShows = PagingAdapterSimplePoster()
-    private val adapterAiringShows = PagingAdapterSimplePoster()
+    private val adapterPopularShows = PagingAdapterSimplePoster(null)
+    private val adapterTopRatedShows = PagingAdapterSimplePoster(null)
+    private val adapterAiringShows = PagingAdapterSimplePoster(null)
 
     private var job: Job? = null
 

@@ -49,9 +49,9 @@ class FragmentDiscoveryMovies : Fragment() {
 
     private val viewModel: ViewModelDiscoveryMovies by viewModels()
 
-    private val adapterPopularMovies = PagingAdapterSimplePoster()
-    private val adapterTopRatedMovies = PagingAdapterSimplePoster()
-    private val adaptedUpcomingMovies = PagingAdapterSimplePoster()
+    private val adapterPopularMovies = PagingAdapterSimplePoster(null)
+    private val adapterTopRatedMovies = PagingAdapterSimplePoster(null)
+    private val adaptedUpcomingMovies = PagingAdapterSimplePoster(null)
 
     private var job: Job? = null
 

@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.showtracker.common.ActivityMain
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -43,12 +44,12 @@ class FragmentDiscovery : Fragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private val viewModel: ViewModelDiscovery by viewModels()
 
-    private val adapterPopularMovies = PagingAdapterSimplePoster()
-    private val adapterPopularShows = PagingAdapterSimplePoster()
-    private val adapterTopRatedMovies = PagingAdapterSimplePoster()
-    private val adapterTopRatedShows = PagingAdapterSimplePoster()
-    private val adapterUpcomingMovies = PagingAdapterSimplePoster()
-    private val adapterAiringTodayShows = PagingAdapterSimplePoster()
+    private val adapterPopularMovies = PagingAdapterSimplePoster(activity = null)
+    private val adapterPopularShows = PagingAdapterSimplePoster(activity = null)
+    private val adapterTopRatedMovies = PagingAdapterSimplePoster(activity = null)
+    private val adapterTopRatedShows = PagingAdapterSimplePoster(activity = null)
+    private val adapterUpcomingMovies = PagingAdapterSimplePoster(activity = null)
+    private val adapterAiringTodayShows = PagingAdapterSimplePoster(activity = null)
 
     private var job: Job? = null
 
@@ -62,6 +63,12 @@ class FragmentDiscovery : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        adapterPopularMovies.activity = requireActivity() as ActivityMain
+        adapterPopularShows.activity = requireActivity() as ActivityMain
+        adapterTopRatedMovies.activity = requireActivity() as ActivityMain
+        adapterTopRatedShows.activity = requireActivity() as ActivityMain
+        adapterUpcomingMovies.activity = requireActivity() as ActivityMain
+        adapterAiringTodayShows.activity = requireActivity() as ActivityMain
         setup()
         setupBinding()
         observeViewModel()

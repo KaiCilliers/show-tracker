@@ -19,7 +19,11 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation
 
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.view.ActionMode
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -27,22 +31,27 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.ActivityMain
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
 sealed class MultiSelectMode {
     object Activated : MultiSelectMode()
     object Inactivated : MultiSelectMode()
 }
+// todo big issue is passing activity reference
+@ExperimentalCoroutinesApi
 class PagingAdapterSimplePoster(
+    var activity: ActivityMain?,
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
-    UIMODEL_DISCOVERY_COMPARATOR){
+    UIMODEL_DISCOVERY_COMPARATOR), ActionMode.Callback{
 
     private var multiSelectMode: MultiSelectMode = MultiSelectMode.Inactivated
     private val selectedItems = arrayListOf<Int>()
@@ -79,9 +88,11 @@ class PagingAdapterSimplePoster(
             holder.binding.imgvItemMoviePoster.setOnLongClickListener {
                 if (multiSelectMode is MultiSelectMode.Inactivated) {
                     multiSelectMode = MultiSelectMode.Activated
+                    activity?.startSupportActionMode(this)
                     selectItem(holder, position)
-                }
-                true
+                    true
+                }else
+                false
             }
         }
     }
@@ -142,5 +153,36 @@ class PagingAdapterSimplePoster(
                         oldItem.listType == newItem.listType)
             }
         }
+    }
+
+    // Called when the menu was created i.e. when the user starts multi-select mode
+    // Inflate your menu xml here
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        val inflater = mode?.menuInflater
+        inflater?.inflate(R.menu.menu_discovery_contextual_toolbar, menu)
+        return true
+    }
+
+    // Called to refresh an action mode's action menu
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        // here you will update the toolbar text
+        return false
+    }
+
+    // Called when a menu item was clicked
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.delete) {
+            Timber.d("$selectedItems")
+            mode?.finish()
+        }
+        return true
+    }
+
+    // Called when the Context ActionBar disappears i.e. when the user leaves the multi-select mode
+    override fun onDestroyActionMode(mode: ActionMode?) {
+        // finished multi selection
+        multiSelectMode = MultiSelectMode.Inactivated
+        selectedItems.clear()
+        notifyDataSetChanged()
     }
 }
