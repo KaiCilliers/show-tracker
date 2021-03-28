@@ -18,7 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
+import android.content.Context
+import android.content.res.TypedArray
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,12 +44,15 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
+
 @AndroidEntryPoint
 class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetMovieDetailBinding
     private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
     private val viewModel: ViewModelMovieDetail by viewModels()
+
+    private lateinit var tempButtonColor: Drawable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,14 +74,22 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             cleanUI()
             when (state) {
-                StateDetailMovie.Loading -> { stateLoading() }
-                is StateDetailMovie.Success -> { stateSuccess(state.data) }
-                is StateDetailMovie.Error -> { stateError() }
+                StateDetailMovie.Loading -> {
+                    stateLoading()
+                }
+                is StateDetailMovie.Success -> {
+                    stateSuccess(state.data)
+                }
+                is StateDetailMovie.Error -> {
+                    stateError()
+                }
             }
         }
         viewModel.eventsFlow.onEach { event ->
             when (event) {
-                EventDetailMovie.Close -> { dismissAllowingStateLoss() }
+                EventDetailMovie.Close -> {
+                    dismissAllowingStateLoss()
+                }
                 is EventDetailMovie.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
@@ -110,9 +126,12 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.tvDetailMovieCertification.text = data.certification
 
         if (data.watchlisted && !data.deleted) {
+            binding.btnDetailMovieAdd.setBackgroundColor(Color.RED)
             binding.btnDetailMovieAdd.text = getString(R.string.remove)
             binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.remove(data.id)) }
         } else {
+
+            binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.add_button)
             binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id)) }
         }
@@ -121,10 +140,18 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         //  re-added
         if (data.watched && !data.deleted) {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.setUnwatched(data.id)) }
+            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
+                ActionDetailMovie.setUnwatched(
+                    data.id
+                )
+            ) }
         } else {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.setWatched(data.id)) }
+            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
+                ActionDetailMovie.setWatched(
+                    data.id
+                )
+            ) }
         }
         binding.tvDetailMovieDescription.visible()
         binding.tvDetailMovieRuntime.visible()

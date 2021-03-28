@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -167,6 +168,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun stateNotOnWatchlist(data: UIModelShowDetail) {
+        binding.btnDetailShowAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
         binding.btnDetailShowAdd.text = getString(R.string.show_add)
         binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.add(data.id)) }
         stateNotStartedWatching(data)
@@ -200,6 +202,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun stateAddedToWatchlist(data: UIModelShowDetail) {
+        binding.btnDetailShowAdd.setBackgroundColor(Color.RED)
         binding.btnDetailShowAdd.text = getString(R.string.show_remove)
         binding.btnDetailShowAdd.click {
             viewModel.submitAction(ActionDetailShow.remove(data.id))

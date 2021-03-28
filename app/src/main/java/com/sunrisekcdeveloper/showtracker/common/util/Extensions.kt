@@ -18,10 +18,14 @@
 
 package com.sunrisekcdeveloper.showtracker.common.util
 
+import android.content.Context
+import android.content.res.TypedArray
+import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
@@ -38,6 +42,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
+// hacky way of changing button colors depending on the action it represents
+fun fetchPrimaryColor(context: Context): Int {
+    val typedValue = TypedValue()
+    val a: TypedArray =
+        context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorPrimary))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
+}
 fun View.gone() {
     this.visibility = View.GONE
 }
