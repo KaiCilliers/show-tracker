@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -90,8 +89,8 @@ class FragmentWatchlist : Fragment() {
     private val filterOptionMovie = arrayOf(
         "No Filters",
         "Watched",
-        "Not Watched"
-//        "Added Today"
+        "Not Watched",
+        "Added Today"
     )
 
     override fun onCreateView(
@@ -267,7 +266,7 @@ class FragmentWatchlist : Fragment() {
             when (binding.tabBarWatchlist.selectedTabPosition) {
                 0 -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Sort TV Shows by:")
+                        .setTitle("Filter TV Shows by:")
                         .setSingleChoiceItems(
                             sortOptionsShow,
                             showSortCheckedItem
@@ -314,9 +313,9 @@ class FragmentWatchlist : Fragment() {
                                     2 -> {
                                         FilterMovies.Unwatched
                                     }
-//                                    3 -> {
-//                                        FilterMovies.AddedToday
-//                                    }
+                                    3 -> {
+                                        FilterMovies.AddedToday
+                                    }
                                     else -> {
                                         FilterMovies.NoFilters
                                     }
