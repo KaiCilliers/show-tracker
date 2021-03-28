@@ -23,12 +23,13 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
 import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 @Dao
 abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
@@ -48,31 +49,32 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
      *
      * Return a sorted flow of watchlisted movies
      *
-     * @param sortBy : SortMovies sealed class
+     * @param filterOption : SortMovies sealed class
      * @return sorted Flow emitting lists of WatchlistMovieDetails
      */
-    open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> =
+    open fun distinctWatchlistMoviesDetailsFlow(filterOption: FilterMovies): Flow<List<WatchlistMovieDetails>> =
         privateWatchlistMoviesWithDetailsFlow().map { list ->
-            when (sortBy) {
-                SortMovies.ByTitle -> {
-                    list.sortedBy { it.details.title }
+            when (filterOption) {
+                FilterMovies.NoFilters -> {
+                    list
                 }
-                SortMovies.ByRecentlyAdded -> {
-                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
-                        it.watchlist.dateAdded
-                    }.thenBy {
-                        it.details.title
-                    })
+                FilterMovies.Watched -> {
+                    list.filter { it.watchlist.watched }
                 }
-                SortMovies.ByWatched -> {
-                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
-                        it.watchlist.watched
-                    }.thenBy {
-                        it.details.title
-                    })
+                FilterMovies.Unwatched -> {
+                    list.filter { !it.watchlist.watched }
+                }
+                FilterMovies.AddedToday -> {
+                    val dayLong = 86400000
+                    val now = System.currentTimeMillis()
+                    list.filter {
+                        Timber.d("Added today: ${now%dayLong} and lastUpdated ${it.watchlist.dateLastUpdated%dayLong}" +
+                                " same=${now%dayLong == it.watchlist.dateLastUpdated%dayLong}")
+                        now%dayLong == it.watchlist.dateLastUpdated%dayLong
+                    }
                 }
             }
-        }.distinctUntilChanged()
+        }.map { it.sortedBy { it.details.title } }.distinctUntilChanged()
 
     /**
      * Private watchlist movies with details flow

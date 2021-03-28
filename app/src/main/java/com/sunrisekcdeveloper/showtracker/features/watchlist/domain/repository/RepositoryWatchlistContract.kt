@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
@@ -28,7 +28,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIMode
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryWatchlistContract {
-    fun watchlistMovies(sortBy: SortMovies): Flow<Resource<List<UIModelWatchlisMovie>>>
+    fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>>
     fun watchlistShows(sortBy: SortShows): Flow<Resource<List<UIModelWatchlistShow>>>
 
     // todo this is not ideal to return value like this

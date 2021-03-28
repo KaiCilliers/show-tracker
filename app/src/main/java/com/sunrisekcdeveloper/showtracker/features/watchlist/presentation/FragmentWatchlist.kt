@@ -22,9 +22,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -42,7 +41,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,6 +78,7 @@ class FragmentWatchlist : Fragment() {
     private var allMovies: List<UIModelWatchlisMovie> = listOf()
     private var allShows: List<UIModelWatchlistShow> = listOf()
 
+    // todo extract array
     private val sortOptionsShow = arrayOf(
         "Title",
         "Episodes left in season",
@@ -87,10 +87,11 @@ class FragmentWatchlist : Fragment() {
         "Not Started"
     )
 
-    private val sortOptionsMovie = arrayOf(
-        "Title",
-        "Recently Added",
-        "Watched"
+    private val filterOptionMovie = arrayOf(
+        "No Filters",
+        "Watched",
+        "Not Watched"
+//        "Added Today"
     )
 
     override fun onCreateView(
@@ -297,23 +298,27 @@ class FragmentWatchlist : Fragment() {
                 }
                 else -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Sort Movies by:")
+                        // todo extract string
+                        .setTitle("Filter Movies by:")
                         .setSingleChoiceItems(
-                            sortOptionsMovie,
+                            filterOptionMovie,
                             movieSortCheckedItem
                         ) { dialog, which ->
-                            Timber.e("Sort chosen: ${sortOptionsMovie[which]}")
+                            Timber.e("Sort chosen: ${filterOptionMovie[which]}")
                             movieSortCheckedItem = which
                             viewModel.updateMovieSortBy(
                                 when (movieSortCheckedItem) {
                                     1 -> {
-                                        SortMovies.ByRecentlyAdded
+                                        FilterMovies.Watched
                                     }
                                     2 -> {
-                                        SortMovies.ByWatched
+                                        FilterMovies.Unwatched
                                     }
+//                                    3 -> {
+//                                        FilterMovies.AddedToday
+//                                    }
                                     else -> {
-                                        SortMovies.ByTitle
+                                        FilterMovies.NoFilters
                                     }
                                 }
                             )

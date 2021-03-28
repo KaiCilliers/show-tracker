@@ -26,13 +26,12 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatc
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.StateWatchlist
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -53,7 +52,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
 
     private var showSearchQuery = ""
     private var movieSearchQuery = ""
-    private var movieSortOrder: SortMovies = SortMovies.ByTitle
+    private var movieFilterOption: FilterMovies = FilterMovies.NoFilters
     private var showSortOrder: SortShows  = SortShows.ByTitle
 
     fun showSearchQuery() = showSearchQuery
@@ -77,8 +76,8 @@ class ViewModelWatchlist @ViewModelInject constructor(
         showSortOrder = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }
-    fun updateMovieSortBy(sortBy: SortMovies) {
-        movieSortOrder = sortBy
+    fun updateMovieSortBy(sortBy: FilterMovies) {
+        movieFilterOption = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }
 
@@ -115,7 +114,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
     }
 
     private fun watchlistData() = viewModelScope.launch {
-        val moviesFlow = fetchWatchlistMoviesUseCase(movieSortOrder)
+        val moviesFlow = fetchWatchlistMoviesUseCase(movieFilterOption)
         val showsFlow = fetchWatchlistShowsUseCase(showSortOrder)
 
         // todo consider replacing with zip for less emissions
