@@ -83,6 +83,12 @@
     <string name="search_movie_by_title">Search movies by title</string>
     <string name="separator_left_to_right">/</string>
     <string name="search">Search</string>
+    <string name="share">Share</string>
+    <string name="content_description_share">share</string>
+    <string name="delete">delete</string>
+    <string name="content_description_delete">delete</string>
+    <string name="more">more</string>
+    <string name="content_description_more">more</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>

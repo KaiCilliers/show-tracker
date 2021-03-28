@@ -19,6 +19,12 @@
 
 <resources>
 
+    <style name="Widget.ShowTracker.ActionBar.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">?attr/textAppearanceHeadline6</item>
+        <item name="subtitleTextStyle">?attr/textAppearanceSubtitle1</item>
+        <item name="background">@color/black</item>
+    </style>
+
     <style name="Widget.ShowTracker.BottomNavigationView"
         parent="Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
         <item name="labelVisibilityMode">selected</item>
