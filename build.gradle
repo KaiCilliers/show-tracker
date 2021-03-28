@@ -37,6 +37,7 @@ buildscript {
         nav_version = "2.3.4"
         okhttp_version = "4.7.2"
         paging_version = "3.0.0-alpha07"
+        recycler_advanced = "1.0.0"
         recycler_version = "1.2.0-alpha06"
         retrofit_converter_gson_version = "2.5.0"
         retrofit_version = "2.9.0"
