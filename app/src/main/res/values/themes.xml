@@ -4,7 +4,7 @@
 
     <style name="Base.Theme.ShowTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!--Light theme specific attributes here -->
-        <item name="colorPrimary">@color/blue_light_500</item>
+        <item name="colorPrimary">@color/asd114</item>
         <item name="colorPrimaryVariant">@color/blue_light_200</item>
         <item name="colorSecondary">@color/blue_grey_500</item>
         <item name="colorSecondaryVariant">@color/blue_grey_300</item>

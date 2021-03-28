@@ -112,6 +112,7 @@
         android:layout_margin="4dp"
         tools:visibility="gone"
         android:visibility="gone"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tv_watchlist_show_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
@@ -123,6 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         tools:text="S02E11"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tv_watchlist_show_title"
         app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"/>
 
@@ -143,6 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
+        android:textColor="@color/white"
         android:text="@string/action_set_watched"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
