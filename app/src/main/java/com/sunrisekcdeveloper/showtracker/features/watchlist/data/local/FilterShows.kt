@@ -18,10 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
-sealed class SortShows {
-    object ByTitle : SortShows()
-    object ByEpisodesLeftInSeason : SortShows()
-    object ByRecentlyWatched : SortShows()
-    object ByRecentlyAdded : SortShows()
-    object ByNotStarted : SortShows()
+sealed class FilterShows {
+    object NoFilters : FilterShows()
+    object AddedToday : FilterShows()
+    object WatchedToday : FilterShows()
+    object Started : FilterShows()
+    object NotStarted :FilterShows()
 }

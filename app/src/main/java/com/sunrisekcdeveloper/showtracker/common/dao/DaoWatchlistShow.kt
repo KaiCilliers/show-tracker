@@ -23,12 +23,14 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
 import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
+import com.sunrisekcdeveloper.showtracker.common.util.isDateSame
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistShowDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import java.util.*
 
 @Dao
 abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
@@ -74,35 +76,35 @@ abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
      * @param sortShows : SortShows sealed class
      * @return sorted Flow emitting lists of WatchlistShowDetails
      */
-    open fun distinctWatchlistShowsDetailsFlow(sortShows: SortShows): Flow<List<WatchlistShowDetails>> =
+    // TODO placing this filter logic in DAO is questionable
+    open fun distinctWatchlistShowsDetailsFlow(sortShows: FilterShows): Flow<List<WatchlistShowDetails>> =
         privateWatchlistShowsWithDetailsFlow().map { list ->
             when (sortShows) {
-                SortShows.ByTitle -> {
-                    list.sortedBy { it.details.title }
+                FilterShows.NoFilters -> {
+                    list
                 }
-                SortShows.ByEpisodesLeftInSeason -> {
-                    list.sortedWith(compareBy<WatchlistShowDetails>
-                    { it.watchlist.currentSeasonEpisodeTotal - it.watchlist.currentEpisodeNumber }
-                        .thenBy { it.details.title }
-                    )
+                FilterShows.AddedToday -> {
+                    val now = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+                    list.filter {
+                        val added = Calendar.getInstance().apply { timeInMillis = it.watchlist.dateAdded }
+                        isDateSame(now, added)
+                    }
                 }
-                SortShows.ByRecentlyWatched -> {
-                    list.sortedWith(compareByDescending<WatchlistShowDetails>
-                    { it.watchlist.lastUpdated }.thenBy { it.details.title }
-                    )
+                FilterShows.WatchedToday -> {
+                    val now = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+                    list.filter {
+                        val lastUpdated = Calendar.getInstance().apply { timeInMillis = it.watchlist.lastUpdated }
+                        isDateSame(now, lastUpdated)
+                    }
                 }
-                SortShows.ByRecentlyAdded -> {
-                    list.sortedWith(compareByDescending<WatchlistShowDetails>
-                    { it.watchlist.dateAdded }.thenBy { it.details.title }
-                    )
+                FilterShows.Started -> {
+                    list.filter { it.watchlist.started && !it.watchlist.upToDate}
                 }
-                SortShows.ByNotStarted -> {
-                    list.sortedWith(compareBy<WatchlistShowDetails>
-                    { it.watchlist.started }.thenBy { it.details.title }
-                    )
+                FilterShows.NotStarted -> {
+                    list.filter { !it.watchlist.started }
                 }
             }
-        }.distinctUntilChanged()
+        }.map { it.sortedBy { it.details.title } }.distinctUntilChanged()
 
     /**
      * Watchlist show exist

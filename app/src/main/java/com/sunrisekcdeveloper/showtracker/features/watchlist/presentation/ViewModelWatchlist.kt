@@ -27,7 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWa
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.StateWatchlist
@@ -53,7 +53,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
     private var showSearchQuery = ""
     private var movieSearchQuery = ""
     private var movieFilterOption: FilterMovies = FilterMovies.NoFilters
-    private var showSortOrder: SortShows  = SortShows.ByTitle
+    private var showSortOrder: FilterShows  = FilterShows.NoFilters
 
     fun showSearchQuery() = showSearchQuery
     fun movieSearchQuery() = movieSearchQuery
@@ -72,7 +72,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
             submitAction(ActionWatchlist.LoadWatchlistData)
         }
     }
-    fun updateShowSortBy(sortBy: SortShows) {
+    fun updateShowSortBy(sortBy: FilterShows) {
         showSortOrder = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }

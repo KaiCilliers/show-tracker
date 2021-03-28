@@ -41,7 +41,7 @@ import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -79,10 +79,10 @@ class FragmentWatchlist : Fragment() {
 
     // todo extract array
     private val sortOptionsShow = arrayOf(
-        "Title",
-        "Episodes left in season",
-        "Recently Watched",
-        "Recently Added",
+        "No Filters",
+        "Added Today",
+        "Watched Today",
+        "Started",
         "Not Started"
     )
 
@@ -276,19 +276,19 @@ class FragmentWatchlist : Fragment() {
                             viewModel.updateShowSortBy(
                                 when (showSortCheckedItem) {
                                     1 -> {
-                                        SortShows.ByEpisodesLeftInSeason
+                                        FilterShows.AddedToday
                                     }
                                     2 -> {
-                                        SortShows.ByRecentlyWatched
+                                        FilterShows.WatchedToday
                                     }
                                     3 -> {
-                                        SortShows.ByRecentlyWatched
+                                        FilterShows.Started
                                     }
                                     4 -> {
-                                        SortShows.ByNotStarted
+                                        FilterShows.NotStarted
                                     }
                                     else -> {
-                                        SortShows.ByTitle
+                                        FilterShows.NoFilters
                                     }
                                 }
                             )

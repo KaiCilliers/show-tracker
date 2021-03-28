@@ -23,7 +23,7 @@ import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
@@ -158,8 +158,8 @@ class RepositoryWatchlist(
         }
     }
 
-    override fun watchlistShows(sortBy: SortShows): Flow<Resource<List<UIModelWatchlistShow>>> {
-        return database.watchlistShowDao().distinctWatchlistShowsDetailsFlow(sortBy).map {
+    override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
+        return database.watchlistShowDao().distinctWatchlistShowsDetailsFlow(filterOption).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistShow())
             } else {
