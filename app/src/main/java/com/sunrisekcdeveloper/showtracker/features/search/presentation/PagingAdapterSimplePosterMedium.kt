@@ -25,6 +25,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemMediumPosterBinding
@@ -58,21 +61,11 @@ class PagingAdapterSimplePosterMedium(
         ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelDiscovery) {
             Glide.with(binding.root)
-                .load("https://image.tmdb.org/t/p/w342${data.posterPath}")
-                .transform(CenterCrop())
+                .load(EndpointPoster.Standard.urlWithResource(data.posterPath))
+                .centerCrop()
+                .error(R.drawable.error_poster)
+                .transition(DrawableTransitionOptions.withCrossFade(100))
                 .into(binding.imgvItemMoviePosterMedium)
-
-            (0..20).random().apply {
-                when(this) {
-                    1 -> {
-                        Timber.d("https://image.tmdb.org/t/p/w92${data.posterPath}")
-                        Timber.d("https://image.tmdb.org/t/p/w154${data.posterPath}")
-                        Timber.d("https://image.tmdb.org/t/p/w342${data.posterPath}")
-                        Timber.d("https://image.tmdb.org/t/p/w780${data.posterPath}")
-                    }
-                    else -> {}
-                }
-            }
 
             binding.root.click {
                 onClick.onClick(

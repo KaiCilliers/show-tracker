@@ -23,6 +23,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 data class UIModelUnwatchedSearch(
     val id: String,
     val title: String,
+    val posterPath: String,
     val backdropPath: String,
     val mediaType: MediaType
 )

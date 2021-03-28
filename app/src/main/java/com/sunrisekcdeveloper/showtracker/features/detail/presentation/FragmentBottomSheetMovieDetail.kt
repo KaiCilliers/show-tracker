@@ -23,12 +23,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
@@ -93,11 +91,12 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     }
 
     private fun bindPriorityData() {
-        viewModel.movieDetails(arguments.movieId)
         binding.tvDetailMovieTitle.text = arguments.movieTitle
-        Glide.with(binding.root)
+        Glide.with(this)
             .load(EndpointPoster.Standard.urlWithResource(arguments.posterPath))
-            .transform(CenterCrop())
+            .centerCrop()
+            .error(R.drawable.error_poster)
+            .transition(DrawableTransitionOptions.withCrossFade(100))
             .into(binding.imgDetailMoviePoster)
     }
 

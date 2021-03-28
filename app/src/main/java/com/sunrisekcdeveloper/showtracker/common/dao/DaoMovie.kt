@@ -32,6 +32,11 @@ import kotlinx.coroutines.flow.map
 @Dao
 abstract class DaoMovie : DaoBase<EntityMovie> {
 
+    // todo all room functions need to either return nullable values (record might not be there)
+    //  or return a List - thus an empty list is returned when no records are found
+    @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
+    abstract suspend fun movie(id: String): EntityMovie?
+
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>

@@ -51,7 +51,7 @@ class ViewModelMovieDetail @ViewModelInject constructor(
     val state: LiveData<StateDetailMovie>
         get() = _state
 
-    fun movieDetails(id: String) = viewModelScope.launch {
+    private fun movieDetails(id: String) = viewModelScope.launch {
         fetchMovieDetailsUseCase(id).collect { resource ->
             when (resource) {
                 is Resource.Success -> {

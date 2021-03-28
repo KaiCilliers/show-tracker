@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
+import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoSearch
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
@@ -34,7 +35,7 @@ class SearchMediaByTitleUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SearchMediaByTitleUseCaseContract {
 
-    override suspend fun invoke(page: Int, query: String): Flow<Resource<List<UIModelSearch>>> {
-        return searchRepo.searchMediaByTitle(page, query)
+    override fun invoke(query: String): Flow<PagingData<UIModelSearch>> {
+        return searchRepo.searchMediaByTitlePage(query)
     }
 }

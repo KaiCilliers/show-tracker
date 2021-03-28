@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -69,9 +71,11 @@ class AdapterWatchlistShow(
         private val onPosterClickListener: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlistShow) {
-            Glide.with(binding.root.context)
+            Glide.with(binding.root)
                 .load(EndpointPoster.Standard.urlWithResource(item.posterPath))
-                .transform(CenterCrop())
+                .centerCrop()
+                .error(R.drawable.error_poster)
+                .transition(DrawableTransitionOptions.withCrossFade(100))
                 .into(binding.imgvWatchlistShowPoster)
 
             binding.imgvWatchlistShowPoster.click {
