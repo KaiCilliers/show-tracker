@@ -18,6 +18,9 @@
 
         <item name="bottomNavigationStyle">@color/bottom_nav_item</item>
 
+        <!-- Actionbar -->
+        <item name="windowActionModeOverlay">true</item>
+
         <!--Material type attributes-->
         <item name="textAppearanceHeadline1">@style/TextAppearance.ShowTracker.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.ShowTracker.Headline2</item>

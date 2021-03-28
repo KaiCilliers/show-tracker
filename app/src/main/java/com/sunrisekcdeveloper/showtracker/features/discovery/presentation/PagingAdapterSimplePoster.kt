@@ -35,17 +35,67 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 import timber.log.Timber
 
+sealed class MultiSelectMode {
+    object Activated : MultiSelectMode()
+    object Inactivated : MultiSelectMode()
+}
 class PagingAdapterSimplePoster(
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
     UIMODEL_DISCOVERY_COMPARATOR){
+
+    private var multiSelectMode: MultiSelectMode = MultiSelectMode.Inactivated
+    private val selectedItems = arrayListOf<Int>()
 
     fun setPosterClickAction(clickListener: OnPosterClickListener) {
         onPosterClick = clickListener
     }
 
     override fun onBindViewHolder(holder: ViewHolderPagingSimplePoster, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        val data = getItem(position)
+        data?.let {
+            holder.bind(it)
+
+            if (selectedItems.contains(position)) {
+                Timber.d("${getItem(position)?.id} is selected")
+                holder.binding.imgvItemMoviePoster.alpha = 0.3f
+            } else {
+                holder.binding.imgvItemMoviePoster.alpha = 1.0f
+            }
+
+            holder.binding.imgvItemMoviePoster.click {
+                if (multiSelectMode is MultiSelectMode.Activated) {
+                    selectItem(holder, position)
+                } else {
+                    onPosterClick.onClick(
+                        it.id,
+                        it.mediaTitle,
+                        it.posterPath,
+                        it.mediaType
+                    )
+                }
+            }
+
+            holder.binding.imgvItemMoviePoster.setOnLongClickListener {
+                if (multiSelectMode is MultiSelectMode.Inactivated) {
+                    multiSelectMode = MultiSelectMode.Activated
+                    selectItem(holder, position)
+                }
+                true
+            }
+        }
+    }
+
+    private fun selectItem(holder: ViewHolderPagingSimplePoster, position: Int) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position)
+            Timber.d("Removed item with position: $position")
+            holder.binding.imgvItemMoviePoster.alpha = 1.0f
+        } else {
+            selectedItems.add(position)
+            Timber.d("Added item with position: $position")
+            holder.binding.imgvItemMoviePoster.alpha = 0.3f
+        }
     }
 
     override fun onCreateViewHolder(
@@ -64,15 +114,8 @@ class PagingAdapterSimplePoster(
                 .error(R.drawable.error_poster)
                 .transition(DrawableTransitionOptions.withCrossFade(100))
                 .into(binding.imgvItemMoviePoster)
-
-            binding.root.click {
-                onClick.onClick(
-                    data.id,
-                    data.mediaTitle,
-                    data.posterPath,
-                    data.mediaType)
-            }
         }
+
         companion object {
             fun from(parent: ViewGroup, onClick: OnPosterClickListener) : ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster(
                 ItemSimplePosterBinding.inflate(
