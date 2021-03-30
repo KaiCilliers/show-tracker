@@ -25,7 +25,6 @@ import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
@@ -40,7 +39,7 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
 class RepositorySearch(
-    @SourceSearch private val remote: RemoteDataSourceSearchContract,
+    private val remote: RemoteDataSourceSearchContract,
     private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {

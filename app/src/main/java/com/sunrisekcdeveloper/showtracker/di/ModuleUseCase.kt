@@ -18,11 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDetail
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDiscovery
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoProgress
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoSearch
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoWatchlist
+import com.sunrisekcdeveloper.showtracker.common.*
 import com.sunrisekcdeveloper.showtracker.features.detail.application.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.*

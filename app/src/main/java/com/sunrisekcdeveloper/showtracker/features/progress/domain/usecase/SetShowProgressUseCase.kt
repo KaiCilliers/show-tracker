@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
@@ -26,7 +25,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class SetShowProgressUseCase(
-    @RepoProgress private val repo: RepositoryProgressContract
+    private val repo: RepositoryProgressContract
 ) : SetShowProgressUseCaseContract {
     override suspend fun invoke(progress: SetShowProgress) {
         when (progress) {

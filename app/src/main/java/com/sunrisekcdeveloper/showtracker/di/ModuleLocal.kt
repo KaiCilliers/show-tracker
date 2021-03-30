@@ -28,11 +28,6 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
-/**
- * Local module
- *
- * @constructor Create empty Local module
- */
 @Module
 @InstallIn(ApplicationComponent::class)
 object ModuleLocal {

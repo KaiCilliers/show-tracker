@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
@@ -27,7 +26,7 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class UpdateShowProgressUseCase(
-    @RepoWatchlist private val repo: RepositoryWatchlistContract
+    private val repo: RepositoryWatchlistContract
 ) : UpdateShowProgressUseCaseContract {
     // todo this implementation and accompanying repository is bad
     //  requires refactoring and streamline design

@@ -22,9 +22,6 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
-/**
- * App Extension of [Application]
- */
 @HiltAndroidApp
 class App : Application() {
     override fun onCreate() {

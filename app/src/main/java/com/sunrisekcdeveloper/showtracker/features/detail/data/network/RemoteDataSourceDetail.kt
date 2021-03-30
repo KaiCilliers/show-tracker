@@ -20,7 +20,6 @@ package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.base.RemoteDataSourceBase
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.ApiDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
@@ -30,7 +29,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class RemoteDataSourceDetail(
-    @ApiDetail private val api: ServiceDetailContract,
+    private val api: ServiceDetailContract,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RemoteDataSourceDetailContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {

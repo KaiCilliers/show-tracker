@@ -63,11 +63,9 @@ class FragmentWatchlist : Fragment() {
 
     private val viewModel: ViewModelWatchlist by viewModels()
 
-    @Inject
-    lateinit var watchlistMovieAdapter: AdapterWatchlistMovie
+    private val watchlistMovieAdapter = AdapterWatchlistMovie()
 
-    @Inject
-    lateinit var watchlistShowAdapter: AdapterWatchlistShow
+    private val watchlistShowAdapter = AdapterWatchlistShow()
 
     private val arguments: FragmentWatchlistArgs by navArgs()
 

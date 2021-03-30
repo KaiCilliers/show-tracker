@@ -21,7 +21,6 @@ package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
@@ -40,7 +39,7 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class RepositoryDetail(
-    @SourceDetail private val remote: RemoteDataSourceDetailContract,
+    private val remote: RemoteDataSourceDetailContract,
     private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {

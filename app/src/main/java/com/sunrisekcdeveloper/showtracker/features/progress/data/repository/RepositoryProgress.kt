@@ -22,7 +22,6 @@ import androidx.room.withTransaction
 import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseSeason
@@ -33,7 +32,7 @@ import timber.log.Timber
 
 // todo determine if the annotation is needed at remote source
 class RepositoryProgress(
-    @SourceProgress private val remote: RemoteDataSourceProgressContract,
+    private val remote: RemoteDataSourceProgressContract,
     private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryProgressContract {

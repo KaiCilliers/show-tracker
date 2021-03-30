@@ -18,11 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDetail
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDiscovery
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceProgress
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceSearch
+import com.sunrisekcdeveloper.showtracker.common.*
 import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
@@ -70,7 +66,7 @@ object ModuleRepository {
     @ActivityRetainedScoped
     @RepoSearch
     @Provides
-    fun provideSearchRepositoryUpdated(
+    fun provideSearchRepository(
         @SourceSearch remote: RemoteDataSourceSearchContract,
         db: TrackerDatabase
     ): RepositorySearchContract =
@@ -93,25 +89,4 @@ object ModuleRepository {
         database: TrackerDatabase
     ): RepositoryDiscoveryContract =
         RepositoryDiscovery(remote, database)
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class RepoProgress
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class RepoDetail
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class RepoDiscovery
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class RepoWatchlist
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class RepoSearch
-
 }
