@@ -30,6 +30,8 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.fetchErrorColor
+import com.sunrisekcdeveloper.showtracker.common.util.fetchPrimaryColor
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -59,11 +61,13 @@ class AdapterWatchlistMovie(
             binding.tvWatchlistMovieOverview.text = item.overview
             if (item.watched) {
                 binding.btnWatchlistWatchedStatus.text = "Already Watched"
+                binding.btnWatchlistWatchedStatus.setBackgroundColor(fetchErrorColor(binding.root.context))
                 binding.btnWatchlistWatchedStatus.click {
                     onButtonClicked.onClick(item.id, MovieWatchedStatus.Watched)
                 }
             } else {
                 binding.btnWatchlistWatchedStatus.text = "Mark as Watched"
+                binding.btnWatchlistWatchedStatus.setBackgroundColor(fetchPrimaryColor(binding.root.context))
                 binding.btnWatchlistWatchedStatus.click {
                     onButtonClicked.onClick(item.id, MovieWatchedStatus.NotWatched)
                 }
