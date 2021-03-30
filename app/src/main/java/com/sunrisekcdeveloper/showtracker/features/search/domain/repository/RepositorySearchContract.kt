@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.search.domain.repository
 
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import kotlinx.coroutines.flow.Flow

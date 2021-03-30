@@ -24,18 +24,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemMediumPosterBinding
-import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium
-import timber.log.Timber
 
 class PagingAdapterSimplePosterMedium(
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }

@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract

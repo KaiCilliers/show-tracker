@@ -19,8 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.data.repository
 
 import androidx.room.withTransaction
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ResponseEpisode

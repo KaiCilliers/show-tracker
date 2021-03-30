@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 

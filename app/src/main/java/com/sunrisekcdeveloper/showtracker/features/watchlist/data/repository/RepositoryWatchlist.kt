@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows

@@ -16,17 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common
+package com.sunrisekcdeveloper.showtracker.common.util
 
-import com.sunrisekcdeveloper.showtracker.BuildConfig
-
-enum class EndPointBackdrop(private val endpoint: String) {
-    Small("/w300"),
-    Standard("/w780"),
-    Large("/w1280"),
-    Original("/original");
-
-    fun urlFromResource(backdropPath: String): String {
-        return BuildConfig.TMDB_POSTER_BASE_URL + endpoint + backdropPath
-    }
+sealed class Resource<out T> {
+    data class Success<out T>(val data: T): Resource<T>()
+    data class Error(val exception: Exception): Resource<Nothing>()
+    object Loading: Resource<Nothing>()
 }

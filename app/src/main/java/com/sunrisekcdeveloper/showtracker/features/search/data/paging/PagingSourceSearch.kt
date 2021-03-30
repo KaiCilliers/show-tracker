@@ -21,13 +21,12 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.paging
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.asUIModelSearchh
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import timber.log.Timber
-import java.io.IOException
 
 class PagingSourceSearch(
     private val remote: RemoteDataSourceSearchContract,

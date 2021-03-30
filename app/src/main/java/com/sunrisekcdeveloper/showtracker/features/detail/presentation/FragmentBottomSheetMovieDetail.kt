@@ -18,12 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
@@ -45,7 +41,6 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 
 @AndroidEntryPoint

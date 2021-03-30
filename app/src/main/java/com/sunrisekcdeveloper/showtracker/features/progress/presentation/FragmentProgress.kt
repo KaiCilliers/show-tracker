@@ -18,26 +18,20 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.presentation
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.progressindicator.BaseProgressIndicator
 import com.google.android.material.snackbar.Snackbar
-import com.sunrisekcdeveloper.showtracker.common.Resource
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSetProgressBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailShow
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.EventProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.StateProgress

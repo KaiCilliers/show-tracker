@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import kotlinx.coroutines.flow.Flow

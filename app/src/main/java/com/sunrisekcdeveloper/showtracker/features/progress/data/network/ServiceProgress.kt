@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.data.network
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

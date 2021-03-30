@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 
 interface RepositoryProgressContract {
     suspend fun cacheEntireShow(showId: String)

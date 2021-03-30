@@ -18,22 +18,19 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.paging
 
-import android.provider.MediaStore
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.RemoteKeys
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import kotlinx.coroutines.delay
 import timber.log.Timber
-import java.io.IOException
 import java.io.InvalidObjectException
 
 // TODO Refactor all the RemoteMediator business logic boilerplate
