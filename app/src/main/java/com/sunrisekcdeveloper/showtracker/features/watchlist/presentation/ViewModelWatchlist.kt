@@ -26,13 +26,12 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatc
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.StateWatchlist
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -53,8 +52,8 @@ class ViewModelWatchlist @ViewModelInject constructor(
 
     private var showSearchQuery = ""
     private var movieSearchQuery = ""
-    private var movieSortOrder: SortMovies = SortMovies.ByTitle
-    private var showSortOrder: SortShows  = SortShows.ByTitle
+    private var movieFilterOption: FilterMovies = FilterMovies.NoFilters
+    private var showSortOrder: FilterShows  = FilterShows.NoFilters
 
     fun showSearchQuery() = showSearchQuery
     fun movieSearchQuery() = movieSearchQuery
@@ -73,12 +72,12 @@ class ViewModelWatchlist @ViewModelInject constructor(
             submitAction(ActionWatchlist.LoadWatchlistData)
         }
     }
-    fun updateShowSortBy(sortBy: SortShows) {
+    fun updateShowSortBy(sortBy: FilterShows) {
         showSortOrder = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }
-    fun updateMovieSortBy(sortBy: SortMovies) {
-        movieSortOrder = sortBy
+    fun updateMovieSortBy(sortBy: FilterMovies) {
+        movieFilterOption = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }
 
@@ -101,7 +100,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
                 updateShowProgressUseCase(action.instructions)
             }
             is ActionWatchlist.StartWatchingShow -> {
-                eventChannel.send(EventWatchlist.ConfigureShow(action.showId))
+                eventChannel.send(EventWatchlist.ConfigureShow(action.showId, action.title))
             }
             is ActionWatchlist.LoadMediaDetails -> {
                 eventChannel.send(EventWatchlist.LoadMediaDetails(
@@ -111,11 +110,17 @@ class ViewModelWatchlist @ViewModelInject constructor(
                     action.type
                 ))
             }
+            is ActionWatchlist.ShowSnackbar -> {
+                eventChannel.send(EventWatchlist.showSnackbar(action.msg))
+            }
+            is ActionWatchlist.AttemptUnwatch -> {
+                eventChannel.send(EventWatchlist.showConfirmationDialog(action.movieId, action.title))
+            }
         }
     }
 
     private fun watchlistData() = viewModelScope.launch {
-        val moviesFlow = fetchWatchlistMoviesUseCase(movieSortOrder)
+        val moviesFlow = fetchWatchlistMoviesUseCase(movieFilterOption)
         val showsFlow = fetchWatchlistShowsUseCase(showSortOrder)
 
         // todo consider replacing with zip for less emissions

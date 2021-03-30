@@ -53,21 +53,26 @@ class ViewModelShowDetail @ViewModelInject constructor(
             }
             is ActionDetailShow.Add -> {
                 addShowToWatchlistUseCase(action.showId)
+                eventChannel.send(EventDetailShow.Close)
             }
             is ActionDetailShow.Remove -> {
                 removeShowFromWatchlistUseCase(action.showId)
+                eventChannel.send(EventDetailShow.Close)
             }
             ActionDetailShow.Close -> {
                 eventChannel.send(EventDetailShow.Close)
             }
             is ActionDetailShow.ShowToast -> {
-                eventChannel.send(EventDetailShow.ShowToast("msg"))
+                eventChannel.send(EventDetailShow.ShowToast(action.msg))
             }
             is ActionDetailShow.StartWatching -> {
-                eventChannel.send(EventDetailShow.LaunchStartWatching(action.showId))
+                eventChannel.send(EventDetailShow.LaunchStartWatching(action.showId, action.title))
             }
             is ActionDetailShow.UpdateProgress -> {
                 eventChannel.send(EventDetailShow.GoToShowInWatchlist(action.showId))
+            }
+            is ActionDetailShow.AttemptRemove -> {
+                eventChannel.send(EventDetailShow.showConfirmationDialog(action.showId, action.title))
             }
         }
     }

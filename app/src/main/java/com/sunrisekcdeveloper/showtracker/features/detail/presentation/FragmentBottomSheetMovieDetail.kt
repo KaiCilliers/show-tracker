@@ -18,7 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
+import android.content.Context
+import android.content.res.TypedArray
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +32,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
@@ -38,6 +45,8 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
+
 
 @AndroidEntryPoint
 class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
@@ -45,6 +54,8 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetMovieDetailBinding
     private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
     private val viewModel: ViewModelMovieDetail by viewModels()
+
+    private lateinit var tempButtonColor: Drawable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,19 +77,53 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             cleanUI()
             when (state) {
-                StateDetailMovie.Loading -> { stateLoading() }
-                is StateDetailMovie.Success -> { stateSuccess(state.data) }
-                is StateDetailMovie.Error -> { stateError() }
+                StateDetailMovie.Loading -> {
+                    stateLoading()
+                }
+                is StateDetailMovie.Success -> {
+                    stateSuccess(state.data)
+                }
+                is StateDetailMovie.Error -> {
+                    stateError()
+                }
             }
         }
         viewModel.eventsFlow.onEach { event ->
             when (event) {
-                EventDetailMovie.Close -> { dismissAllowingStateLoss() }
+                EventDetailMovie.Close -> {
+                    // todo this property needs to be set somewhere else
+                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
+                    dismiss()
+                }
                 is EventDetailMovie.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
+                is EventDetailMovie.ShowConfirmationDialog -> {
+                    showConfirmationDialog(event.movieId, event.title)
+                }
+                is EventDetailMovie.ShowConfirmationDialogUnwatch -> {
+                    showConfirmationDialogUnwatch(event.movieId, event.title)
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showConfirmationDialogUnwatch(movieId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unwatch Movie?")
+            .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
+            .setNegativeButton("Cancel") { _, _ ->}
+            .setPositiveButton("Unwatch") { _,_ -> viewModel.submitAction(ActionDetailMovie.setUnwatched(movieId)) }
+            .show()
+    }
+
+    private fun showConfirmationDialog(movieId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Remove Movie?")
+            .setMessage("This will remove \"$title\" from your watchlist")
+            .setNegativeButton("Keep") { _, _ ->}
+            .setPositiveButton("Remove") { _,_ -> viewModel.submitAction(ActionDetailMovie.remove(movieId)) }
+            .show()
     }
 
     private fun setup() {
@@ -110,9 +155,12 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.tvDetailMovieCertification.text = data.certification
 
         if (data.watchlisted && !data.deleted) {
+            binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.remove)
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.remove(data.id)) }
+            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.attemptRemove(data.id, data.title)) }
         } else {
+
+            binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.add_button)
             binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id)) }
         }
@@ -121,10 +169,16 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         //  re-added
         if (data.watched && !data.deleted) {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.setUnwatched(data.id)) }
+            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
+                ActionDetailMovie.attemptUnwatch(data.id, data.title)
+            ) }
         } else {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(ActionDetailMovie.setWatched(data.id)) }
+            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
+                ActionDetailMovie.setWatched(
+                    data.id
+                )
+            ) }
         }
         binding.tvDetailMovieDescription.visible()
         binding.tvDetailMovieRuntime.visible()

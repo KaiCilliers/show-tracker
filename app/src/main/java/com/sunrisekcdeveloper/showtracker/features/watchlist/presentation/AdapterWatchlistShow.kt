@@ -91,7 +91,7 @@ class AdapterWatchlistShow(
 
             binding.btnWatchlistShowStartWatching.click {
                 Timber.e("adapter - start watching...")
-                onButtonClicked.onClick(ShowAdapterAction.StartWatchingShow(item.id))
+                onButtonClicked.onClick(ShowAdapterAction.StartWatchingShow(item.id, item.title))
             }
 
             binding.btnWatchlistShowCurrentEpisode.click {
@@ -237,6 +237,7 @@ sealed class ShowAdapterAction {
     ) : ShowAdapterAction()
 
     data class StartWatchingShow(
-        val showId: String
+        val showId: String,
+        val title: String
     ) : ShowAdapterAction()
 }

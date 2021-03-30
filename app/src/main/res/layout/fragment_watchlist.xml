@@ -30,23 +30,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_medium"
         tools:visibility="gone"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
-        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
+        <include layout="@layout/skeleton_watchlist_item"/>
 
     </LinearLayout>
 
@@ -64,7 +65,7 @@
                 android:id="@+id/imgv_filter_watchlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_sort_by_size"
+                android:src="@drawable/ic_baseline_filter_list_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 

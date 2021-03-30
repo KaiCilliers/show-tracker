@@ -30,13 +30,15 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.fetchErrorColor
+import com.sunrisekcdeveloper.showtracker.common.util.fetchPrimaryColor
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 
 class AdapterWatchlistMovie(
-    var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _ -> },
+    var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _,_ -> },
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener {_, _, _, _ -> }
 ) : ListAdapter<UIModelWatchlisMovie, AdapterWatchlistMovie.ViewHolderWatchlistMovie>(WATCHLIST_MOVIE_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistMovie =
@@ -59,13 +61,15 @@ class AdapterWatchlistMovie(
             binding.tvWatchlistMovieOverview.text = item.overview
             if (item.watched) {
                 binding.btnWatchlistWatchedStatus.text = "Already Watched"
+                binding.btnWatchlistWatchedStatus.setBackgroundColor(fetchErrorColor(binding.root.context))
                 binding.btnWatchlistWatchedStatus.click {
-                    onButtonClicked.onClick(item.id, MovieWatchedStatus.Watched)
+                    onButtonClicked.onClick(item.id, item.title, MovieWatchedStatus.Watched)
                 }
             } else {
                 binding.btnWatchlistWatchedStatus.text = "Mark as Watched"
+                binding.btnWatchlistWatchedStatus.setBackgroundColor(fetchPrimaryColor(binding.root.context))
                 binding.btnWatchlistWatchedStatus.click {
-                    onButtonClicked.onClick(item.id, MovieWatchedStatus.NotWatched)
+                    onButtonClicked.onClick(item.id, item.title, MovieWatchedStatus.NotWatched)
                 }
             }
             Glide.with(binding.root)
@@ -124,5 +128,5 @@ class AdapterWatchlistMovie(
 
 // todo better name
 fun interface OnMovieStatusClickListener {
-    fun onClick(mediaId: String, watchStatus: MovieWatchedStatus)
+    fun onClick(mediaId: String, title: String, watchStatus: MovieWatchedStatus)
 }

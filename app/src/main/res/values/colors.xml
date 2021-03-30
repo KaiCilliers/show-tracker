@@ -8,5 +8,8 @@
     <color name="blue_light_800">#007ac1</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="skeleton">#9E9E9E</color>
+    <color name="skeleton">#CCCCCC</color>
+
+    <color name="asd114">#01579B</color>
+
 </resources>

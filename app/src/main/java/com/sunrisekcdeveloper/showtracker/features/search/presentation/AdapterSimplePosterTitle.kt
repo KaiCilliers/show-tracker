@@ -59,6 +59,9 @@ class AdapterSimplePosterTitle(
             binding.root.click {
                 onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
             }
+            binding.cardPoster.click {
+                onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
+            }
             glide.load(EndPointBackdrop.Standard.urlFromResource(data.backdropPath))
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade(150))

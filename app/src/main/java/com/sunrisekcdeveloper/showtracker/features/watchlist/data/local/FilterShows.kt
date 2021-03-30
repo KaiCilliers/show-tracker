@@ -18,8 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.local
 
-sealed class SortMovies {
-    object ByTitle : SortMovies()
-    object ByRecentlyAdded : SortMovies()
-    object ByWatched : SortMovies()
+sealed class FilterShows {
+    object NoFilters : FilterShows()
+    object AddedToday : FilterShows()
+    object WatchedToday : FilterShows()
+    object Started : FilterShows()
+    object NotStarted :FilterShows()
 }

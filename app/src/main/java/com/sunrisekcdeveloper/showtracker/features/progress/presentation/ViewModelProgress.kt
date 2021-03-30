@@ -46,6 +46,10 @@ class ViewModelProgress @ViewModelInject constructor(
     val state: LiveData<StateProgress>
         get() = _state
 
+    init {
+        _state.value = StateProgress.loading()
+    }
+
     fun submitAction(action: ActionProgress) = viewModelScope.launch {
         when (action) {
             ActionProgress.NavigateBack -> {
@@ -64,9 +68,17 @@ class ViewModelProgress @ViewModelInject constructor(
             }
             is ActionProgress.SetShowProgress -> {
                 setShowProgressUseCase(SetShowProgress.Partial(action.showId, action.seasonNumber, action.episodeNumber))
+                eventChannel.send(EventProgress.popBackStack())
             }
             is ActionProgress.MarkShowUpToDate -> {
                 setShowProgressUseCase(SetShowProgress.UpToDate(action.showId))
+                eventChannel.send(EventProgress.popBackStack())
+            }
+            is ActionProgress.AttemptSetProgress -> {
+                eventChannel.send(EventProgress.showConfirmationDialogSetProgress(action.showId, action.seasonNumber, action.episodeNumber, action.title))
+            }
+            is ActionProgress.AttemptMarkUpToDate -> {
+                eventChannel.send(EventProgress.showConfirmationDialogUpToDate(action.showId, action.title))
             }
         }
     }

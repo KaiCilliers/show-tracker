@@ -174,7 +174,7 @@ class FragmentSearch : Fragment() {
     }
 
     private fun stateLoading() {
-        binding.layoutSearchSkeleton.visible()
+
     }
 
     private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
@@ -237,7 +237,6 @@ class FragmentSearch : Fragment() {
 
     private fun cleanUI() {
         binding.imageView.gone()
-        binding.layoutSearchSkeleton.gone()
         binding.recyclerviewSearch.gone()
         binding.tvHeaderNoResults.gone()
         binding.tvSubHeaderNoResults.gone()

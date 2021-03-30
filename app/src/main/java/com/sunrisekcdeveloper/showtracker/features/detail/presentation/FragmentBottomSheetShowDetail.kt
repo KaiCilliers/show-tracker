@@ -23,21 +23,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailShow
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailShow
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailShow
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
@@ -84,7 +84,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                 is EventDetailShow.LaunchStartWatching -> {
                     findNavController().navigate(
                         FragmentBottomSheetShowDetailDirections
-                            .navigateFromDetailShowToSetProgressFragment(event.showId)
+                            .navigateFromDetailShowToSetProgressFragment(event.showId, event.title)
                     )
                 }
                 is EventDetailShow.GoToShowInWatchlist -> {
@@ -94,13 +94,28 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     )
                 }
                 EventDetailShow.Close -> {
+                    // todo this property needs to be set somewhere else
+                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
                     dismissAllowingStateLoss()
                 }
                 is EventDetailShow.ShowToast -> {
+                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
+                }
+                is EventDetailShow.ShowConfirmationDialog -> {
+                    showConfirmationDialog(event.showId, event.title)
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showConfirmationDialog(showId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Remove TV Show?")
+            .setMessage("This will remove \"$title\" from your watchlist")
+            .setNegativeButton("Keep") { _, _ ->}
+            .setPositiveButton("Remove") { _,_ -> viewModel.submitAction(ActionDetailShow.remove(showId)) }
+            .show()
     }
 
     private fun setup() {
@@ -166,6 +181,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun stateNotOnWatchlist(data: UIModelShowDetail) {
+        binding.btnDetailShowAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
         binding.btnDetailShowAdd.text = getString(R.string.show_add)
         binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.add(data.id)) }
         stateNotStartedWatching(data)
@@ -174,7 +190,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     private fun stateNotStartedWatching(data: UIModelShowDetail) {
         binding.btnDetailShowWatchStatus.text = getString(R.string.show_start_watching)
         binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.startWatching(data.id))
+            viewModel.submitAction(ActionDetailShow.startWatching(data.id, data.name))
         }
     }
 
@@ -186,16 +202,23 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun stateInProgress(data: UIModelShowDetail) {
-        binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
-        binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
+        // i dont want to show this button on the detail screen when user navigates from watchlist
+        // better implementation would be to just dismiss detail screen and flash/highlight the item
+        if (!arguments.fromWatchlist) {
+            binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
+            binding.btnDetailShowWatchStatus.click {
+                viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
+            }
+        } else {
+            binding.btnDetailShowWatchStatus.isVisible = false
         }
     }
 
     private fun stateAddedToWatchlist(data: UIModelShowDetail) {
+        binding.btnDetailShowAdd.setBackgroundColor(fetchErrorColor(requireContext()))
         binding.btnDetailShowAdd.text = getString(R.string.show_remove)
         binding.btnDetailShowAdd.click {
-            viewModel.submitAction(ActionDetailShow.remove(data.id))
+            viewModel.submitAction(ActionDetailShow.attemptRemove(data.id, data.name))
         }
     }
 

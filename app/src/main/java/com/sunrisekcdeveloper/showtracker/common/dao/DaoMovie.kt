@@ -22,7 +22,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
 import kotlinx.coroutines.flow.Flow
@@ -41,28 +41,28 @@ abstract class DaoMovie : DaoBase<EntityMovie> {
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
 
-    open fun distinctWatchlistMoviesDetailsFlow(sortBy: SortMovies): Flow<List<WatchlistMovieDetails>> =
-        privateWatchlistMoviesWithDetailsFlow().map { list ->
-            when (sortBy) {
-                SortMovies.ByTitle -> {
-                    list.sortedBy { it.details.title }
-                }
-                SortMovies.ByRecentlyAdded -> {
-                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
-                        it.watchlist.dateAdded
-                    }.thenBy {
-                        it.details.title
-                    })
-                }
-                SortMovies.ByWatched -> {
-                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
-                        it.watchlist.watched
-                    }.thenBy {
-                        it.details.title
-                    })
-                }
-            }
-        }.distinctUntilChanged()
+//    open fun distinctWatchlistMoviesDetailsFlow(sortBy: FilterMovies): Flow<List<WatchlistMovieDetails>> =
+//        privateWatchlistMoviesWithDetailsFlow().map { list ->
+//            when (sortBy) {
+//                FilterMovies.ByTitle -> {
+//                    list.sortedBy { it.details.title }
+//                }
+//                FilterMovies.ByRecentlyAdded -> {
+//                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
+//                        it.watchlist.dateAdded
+//                    }.thenBy {
+//                        it.details.title
+//                    })
+//                }
+//                FilterMovies.ByWatched -> {
+//                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
+//                        it.watchlist.watched
+//                    }.thenBy {
+//                        it.details.title
+//                    })
+//                }
+//            }
+//        }.distinctUntilChanged()
 
     /**
      * Movie detail

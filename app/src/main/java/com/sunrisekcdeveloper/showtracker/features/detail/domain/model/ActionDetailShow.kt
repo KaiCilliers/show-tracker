@@ -19,19 +19,21 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
 sealed class ActionDetailShow {
+    data class AttemptRemove(val showId: String, val title: String) : ActionDetailShow()
     data class Load(val showId: String) : ActionDetailShow()
     data class Add(val showId: String) : ActionDetailShow()
     data class Remove(val showId: String) : ActionDetailShow()
-    data class StartWatching(val showId: String) : ActionDetailShow()
+    data class StartWatching(val showId: String, val title: String) : ActionDetailShow()
     data class UpdateProgress(val showId: String) : ActionDetailShow()
     object Close : ActionDetailShow()
     data class ShowToast(val msg: String) : ActionDetailShow()
 
     companion object {
+        fun attemptRemove(showId: String, title: String) = AttemptRemove(showId, title)
         fun load(showId: String) = Load(showId)
         fun add(showId: String) = Add(showId)
         fun remove(showId: String) = Remove(showId)
-        fun startWatching(showId: String) = StartWatching(showId)
+        fun startWatching(showId: String, title: String) = StartWatching(showId, title)
         fun updateProgress(showId: String) = UpdateProgress(showId)
         fun close() = Close
         fun showToast(message: String) = ShowToast(message)

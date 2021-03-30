@@ -18,26 +18,47 @@
 
 package com.sunrisekcdeveloper.showtracker.common.util
 
+import android.content.Context
+import android.content.res.TypedArray
+import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import timber.log.Timber
+import java.util.*
 
+fun isDateSame(c1: Calendar, c2: Calendar): Boolean {
+    return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) && c1.get(Calendar.MONTH) == c2.get(
+        Calendar.MONTH
+    ) && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH)
+}
+// hacky way of changing button colors depending on the action it represents
+fun fetchPrimaryColor(context: Context): Int {
+    val typedValue = TypedValue()
+    val a: TypedArray =
+        context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorPrimary))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
+}
+fun fetchErrorColor(context: Context): Int {
+    val typedValue = TypedValue()
+    val a: TypedArray =
+        context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorError))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
+}
 fun View.gone() {
     this.visibility = View.GONE
 }

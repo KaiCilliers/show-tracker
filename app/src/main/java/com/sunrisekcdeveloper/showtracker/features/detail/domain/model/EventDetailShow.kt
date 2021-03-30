@@ -19,13 +19,15 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
 sealed class EventDetailShow {
-    data class LaunchStartWatching(val showId: String) : EventDetailShow()
+    data class ShowConfirmationDialog(val showId: String, val title: String) : EventDetailShow()
+    data class LaunchStartWatching(val showId: String, val title: String) : EventDetailShow()
     data class GoToShowInWatchlist(val showId: String) : EventDetailShow()
     object Close : EventDetailShow()
     data class ShowToast(val msg: String) : EventDetailShow()
 
     companion object {
-        fun launchStartWatching(showId: String) = LaunchStartWatching(showId)
+        fun showConfirmationDialog(showId: String, title: String) = ShowConfirmationDialog(showId, title)
+        fun launchStartWatching(showId: String, title: String) = LaunchStartWatching(showId, title)
         fun goToShowInWatchlist(showId: String) = GoToShowInWatchlist(showId)
         fun close() = Close
         fun showToast(message: String) = ShowToast(message)

@@ -21,22 +21,26 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 sealed class ActionWatchlist{
+    data class AttemptUnwatch(val movieId: String, val title: String) : ActionWatchlist()
+    data class ShowSnackbar(val msg: String) : ActionWatchlist()
     object LoadWatchlistData : ActionWatchlist()
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : ActionWatchlist()
     data class MarkMovieWatched(val movieId: String) : ActionWatchlist()
     data class MarkMovieUnWatched(val movieId: String) : ActionWatchlist()
     data class UpdateShowProgress(val instructions: UpdateShowAction) : ActionWatchlist()
-    data class StartWatchingShow(val showId: String): ActionWatchlist()
+    data class StartWatchingShow(val showId: String, val title: String): ActionWatchlist()
     data class ShowToast(val msg: String) : ActionWatchlist()
 
     companion object {
+        fun attemptUnwatch(movieId: String, title: String) = AttemptUnwatch(movieId, title)
+        fun showSnackbar(msg: String) = ShowSnackbar(msg)
         fun loadWatchlistData() = LoadWatchlistData
         fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
             LoadMediaDetails(mediaId, title, posterPath, type)
         fun markMovieAsWatched(movieId: String) = MarkMovieWatched(movieId)
         fun markMovieAsUnwatched(movieId: String) = MarkMovieUnWatched(movieId)
         fun updateShowProgress(instructions: UpdateShowAction) = UpdateShowProgress(instructions)
-        fun startWatchingShow(showId: String) = StartWatchingShow(showId)
+        fun startWatchingShow(showId: String, title: String) = StartWatchingShow(showId, title)
         fun showToast(message: String) = ShowToast(message)
     }
 }

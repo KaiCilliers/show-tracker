@@ -23,8 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +30,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
@@ -40,10 +39,11 @@ import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortMovies
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.SortShows
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -79,18 +79,20 @@ class FragmentWatchlist : Fragment() {
     private var allMovies: List<UIModelWatchlisMovie> = listOf()
     private var allShows: List<UIModelWatchlistShow> = listOf()
 
+    // todo extract array
     private val sortOptionsShow = arrayOf(
-        "Title",
-        "Episodes left in season",
-        "Recently Watched",
-        "Recently Added",
+        "No Filters",
+        "Added Today",
+        "Watched Today",
+        "Started",
         "Not Started"
     )
 
-    private val sortOptionsMovie = arrayOf(
-        "Title",
-        "Recently Added",
-        "Watched"
+    private val filterOptionMovie = arrayOf(
+        "No Filters",
+        "Watched",
+        "Not Watched",
+        "Added Today"
     )
 
     override fun onCreateView(
@@ -204,19 +206,20 @@ class FragmentWatchlist : Fragment() {
                     )
                 }
                 is ShowAdapterAction.StartWatchingShow -> {
-                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId))
+                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId, action.title))
                 }
             }
         }
 
         // todo better onclick implementation needed
-        watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, status ->
+        watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, title, status ->
             when (status) {
                 MovieWatchedStatus.Watched -> {
-                    viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(id))
+                    viewModel.submitAction(ActionWatchlist.attemptUnwatch(id, title))
                 }
                 MovieWatchedStatus.NotWatched -> {
                     viewModel.submitAction(ActionWatchlist.markMovieAsWatched(id))
+                    viewModel.submitAction(ActionWatchlist.showSnackbar("You've watched \"$title\"!"))
                 }
             }
         }
@@ -266,7 +269,7 @@ class FragmentWatchlist : Fragment() {
             when (binding.tabBarWatchlist.selectedTabPosition) {
                 0 -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Sort TV Shows by:")
+                        .setTitle("Filter TV Shows by:")
                         .setSingleChoiceItems(
                             sortOptionsShow,
                             showSortCheckedItem
@@ -276,19 +279,19 @@ class FragmentWatchlist : Fragment() {
                             viewModel.updateShowSortBy(
                                 when (showSortCheckedItem) {
                                     1 -> {
-                                        SortShows.ByEpisodesLeftInSeason
+                                        FilterShows.AddedToday
                                     }
                                     2 -> {
-                                        SortShows.ByRecentlyWatched
+                                        FilterShows.WatchedToday
                                     }
                                     3 -> {
-                                        SortShows.ByRecentlyWatched
+                                        FilterShows.Started
                                     }
                                     4 -> {
-                                        SortShows.ByNotStarted
+                                        FilterShows.NotStarted
                                     }
                                     else -> {
-                                        SortShows.ByTitle
+                                        FilterShows.NoFilters
                                     }
                                 }
                             )
@@ -297,23 +300,27 @@ class FragmentWatchlist : Fragment() {
                 }
                 else -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Sort Movies by:")
+                        // todo extract string
+                        .setTitle("Filter Movies by:")
                         .setSingleChoiceItems(
-                            sortOptionsMovie,
+                            filterOptionMovie,
                             movieSortCheckedItem
                         ) { dialog, which ->
-                            Timber.e("Sort chosen: ${sortOptionsMovie[which]}")
+                            Timber.e("Sort chosen: ${filterOptionMovie[which]}")
                             movieSortCheckedItem = which
                             viewModel.updateMovieSortBy(
                                 when (movieSortCheckedItem) {
                                     1 -> {
-                                        SortMovies.ByRecentlyAdded
+                                        FilterMovies.Watched
                                     }
                                     2 -> {
-                                        SortMovies.ByWatched
+                                        FilterMovies.Unwatched
+                                    }
+                                    3 -> {
+                                        FilterMovies.AddedToday
                                     }
                                     else -> {
-                                        SortMovies.ByTitle
+                                        FilterMovies.NoFilters
                                     }
                                 }
                             )
@@ -355,7 +362,8 @@ class FragmentWatchlist : Fragment() {
                             MediaType.Show -> FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailShow(
                                 event.mediaId,
                                 event.title,
-                                event.posterPath
+                                event.posterPath,
+                                fromWatchlist = true
                             )
                         }
                     )
@@ -363,12 +371,30 @@ class FragmentWatchlist : Fragment() {
                 is EventWatchlist.ConfigureShow -> {
                     findNavController().navigate(
                         FragmentWatchlistDirections.navigateFromWatchlistFragmentToSetProgressFragment(
-                            event.showId
+                            event.showId, event.title
                         )
                     )
                 }
+                is EventWatchlist.ShowSnackbar -> {
+                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
+                }
+                is EventWatchlist.ShowConfirmationDialog -> {
+                    showConfirmationDialogUnwatch(event.movieId, event.title)
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showConfirmationDialogUnwatch(movieId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unwatch Movie?")
+            .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
+            .setNegativeButton("Cancel") { _, _ ->}
+            .setPositiveButton("Unwatch") { _,_ ->
+                viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(movieId))
+                viewModel.submitAction(ActionWatchlist.showSnackbar("\"$title\" set as unwatched"))
+            }
+            .show()
     }
 
     private fun binding() {

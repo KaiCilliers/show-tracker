@@ -40,6 +40,7 @@
         android:id="@+id/btn_detail_movie_add"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:text="@string/media_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_detail_movie_watch_status"
@@ -50,6 +51,7 @@
         android:id="@+id/btn_detail_movie_watch_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:text="@string/movie_watched_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/img_detail_movie_poster">
 
-        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/skeleton_detail"/>
 
     </LinearLayout>
 
@@ -158,6 +160,6 @@
         android:layout_margin="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        app:srcCompat="@drawable/ic_baseline_close_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
