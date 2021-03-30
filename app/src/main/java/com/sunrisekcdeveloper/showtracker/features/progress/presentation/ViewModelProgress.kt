@@ -59,15 +59,26 @@ class ViewModelProgress @ViewModelInject constructor(
                 eventChannel.send(EventProgress.ShowToast(action.msg))
             }
             is ActionProgress.Load -> {
-                val resource = fetchShowSeasonAndEpisodeTotalsUseCase(action.showId)
-                when (resource) {
-                    is Resource.Success -> { _state.value = StateProgress.Success(resource.data) }
-                    is Resource.Error -> { _state.value = StateProgress.Error(Exception(resource.exception)) }
-                    Resource.Loading -> { _state.value = StateProgress.Loading }
+                when (val resource = fetchShowSeasonAndEpisodeTotalsUseCase(action.showId)) {
+                    is Resource.Success -> {
+                        _state.value = StateProgress.Success(resource.data)
+                    }
+                    is Resource.Error -> {
+                        _state.value = StateProgress.Error(Exception(resource.exception))
+                    }
+                    Resource.Loading -> {
+                        _state.value = StateProgress.Loading
+                    }
                 }
             }
             is ActionProgress.SetShowProgress -> {
-                setShowProgressUseCase(SetShowProgress.Partial(action.showId, action.seasonNumber, action.episodeNumber))
+                setShowProgressUseCase(
+                    SetShowProgress.Partial(
+                        action.showId,
+                        action.seasonNumber,
+                        action.episodeNumber
+                    )
+                )
                 eventChannel.send(EventProgress.popBackStack())
             }
             is ActionProgress.MarkShowUpToDate -> {
@@ -75,10 +86,22 @@ class ViewModelProgress @ViewModelInject constructor(
                 eventChannel.send(EventProgress.popBackStack())
             }
             is ActionProgress.AttemptSetProgress -> {
-                eventChannel.send(EventProgress.showConfirmationDialogSetProgress(action.showId, action.seasonNumber, action.episodeNumber, action.title))
+                eventChannel.send(
+                    EventProgress.showConfirmationDialogSetProgress(
+                        action.showId,
+                        action.seasonNumber,
+                        action.episodeNumber,
+                        action.title
+                    )
+                )
             }
             is ActionProgress.AttemptMarkUpToDate -> {
-                eventChannel.send(EventProgress.showConfirmationDialogUpToDate(action.showId, action.title))
+                eventChannel.send(
+                    EventProgress.showConfirmationDialogUpToDate(
+                        action.showId,
+                        action.title
+                    )
+                )
             }
         }
     }

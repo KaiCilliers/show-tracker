@@ -19,6 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeasonDetailWithEpisodes
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseShowDetailWithSeasons
 
 interface RemoteDataSourceProgressContract {
     suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons>

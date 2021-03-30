@@ -25,18 +25,27 @@ sealed class EventProgress {
         val episodeNumber: Int,
         val title: String
     ) : EventProgress()
+
     data class ShowConfirmationDialogUpToDate(
         val showId: String,
         val title: String
     ) : EventProgress()
+
     object PopBackStack : EventProgress()
     data class ShowToast(val msg: String) : EventProgress()
 
     companion object {
-        fun showConfirmationDialogSetProgress(showId: String, seasonNumber: Int, episodeNumber: Int, title: String) =
+        fun showConfirmationDialogSetProgress(
+            showId: String,
+            seasonNumber: Int,
+            episodeNumber: Int,
+            title: String
+        ) =
             ShowConfirmationDialogSetProgress(showId, seasonNumber, episodeNumber, title)
+
         fun showConfirmationDialogUpToDate(showId: String, title: String) =
             ShowConfirmationDialogUpToDate(showId, title)
+
         fun popBackStack() = PopBackStack
         fun showToast(message: String) = ShowToast(message)
     }

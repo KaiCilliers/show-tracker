@@ -34,8 +34,12 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseEpisode
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeason
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -169,6 +173,28 @@ fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, del
         watchlisted = watchlisted,
         watched = watched
     )
+fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(
+    showId = showId,
+    seasonNumber = seasonNumber,
+    number = number,
+    name = name,
+    overview = overview,
+    airDate = -1L, // todo date string to date Long
+    stillPath = stillPath ?: "",
+    lastUpdated = System.currentTimeMillis()
+)
+
+fun ResponseSeason.asEntitySeason(showId: String) = EntitySeason(
+    showId = showId,
+    id = id,
+    number = number,
+    name = name,
+    overview = overview,
+    posterPath = posterPath?: "",
+    airDate = -1L, // todo conversion function to take string date and return Long version
+    episodeTotal = episodeCount,
+    lastUpdated = System.currentTimeMillis()
+)
 fun TextView.setMaxLinesToEllipsize() {
     val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
     maxLines = visibleLines

@@ -18,8 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.data.network
 
-import com.google.gson.annotations.SerializedName
 import com.sunrisekcdeveloper.showtracker.BuildConfig
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeasonDetailWithEpisodes
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseShowDetailWithSeasons
 import retrofit2.Response
 
 interface ServiceProgressContract {
@@ -34,51 +35,3 @@ interface ServiceProgressContract {
         apiKey: String = BuildConfig.TMDB_API_KEY
     ) : Response<ResponseSeasonDetailWithEpisodes>
 }
-
-data class ResponseSeasonDetailWithEpisodes(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String?,
-    @SerializedName("season_number") val number: Int,
-    @SerializedName("air_date") val dateAired: String?,
-    @SerializedName("episodes") val episodes: List<ResponseEpisode>
-)
-
-// todo roughly made
-data class ResponseEpisode(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("episode_number") val number: Int,
-    @SerializedName("air_date") val dateAired: String?,
-    @SerializedName("season_number") val seasonNumber: Int,
-    @SerializedName("still_path") val stillPath: String?,
-    @SerializedName("vote_average") val rating: Float,
-    @SerializedName("vote_count") val voteCount: Int
-)
-
-// todo this should not be a separate class
-data class ResponseShowDetailWithSeasons(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("backdrop_path") val backdropPath: String?,
-    @SerializedName("poster_path") val posterPath: String?,
-    @SerializedName("vote_average") val rating: Float,
-    @SerializedName("first_air_date") val firstAirYear: String,
-    @SerializedName("number_of_episodes") val episodeCount: Int,
-    @SerializedName("number_of_seasons") val seasonCount: Int,
-    @SerializedName("popularity") val popularityValue: Float,
-    @SerializedName("seasons") val seasons: List<ResponseSeason>
-)
-
-data class ResponseSeason(
-    @SerializedName("id") val id: Int,
-    @SerializedName("season_number") val number: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String?,
-    @SerializedName("episode_count") val episodeCount: Int,
-    @SerializedName("air_date") val dateAired: String
-)
