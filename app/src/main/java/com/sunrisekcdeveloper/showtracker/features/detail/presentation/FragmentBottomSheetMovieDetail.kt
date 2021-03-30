@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
@@ -44,6 +45,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -96,8 +98,20 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                 is EventDetailMovie.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
+                is EventDetailMovie.ShowConfirmationDialog -> {
+                    showConfirmationDialog(event.movieId, event.title)
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showConfirmationDialog(movieId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Remove Movie?")
+            .setMessage("This will remove \"$title\" from your watchlist")
+            .setNegativeButton("Keep") { _, _ ->}
+            .setPositiveButton("Remove") { _,_ -> viewModel.submitAction(ActionDetailMovie.remove(movieId)) }
+            .show()
     }
 
     private fun setup() {
@@ -131,7 +145,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         if (data.watchlisted && !data.deleted) {
             binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.remove)
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.remove(data.id)) }
+            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.attemptRemove(data.id, data.title)) }
         } else {
 
             binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))

@@ -94,7 +94,10 @@ class ViewModelMovieDetail @ViewModelInject constructor(
                 eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.ShowToast -> {
-                eventChannel.send(EventDetailMovie.ShowToast("msg"))
+                eventChannel.send(EventDetailMovie.ShowToast(action.msg))
+            }
+            is ActionDetailMovie.AttemptRemove -> {
+                eventChannel.send(EventDetailMovie.showConfirmationDialog(action.movieId, action.title))
             }
         }
     }
