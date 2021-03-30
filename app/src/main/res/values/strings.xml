@@ -77,8 +77,8 @@
     <string name="show_remove">Remove</string>
     <string name="results">Results</string>
     <string name="unwatched_shows_movies">Your Unwatched Movies and TV Shows</string>
-    <string name="already_watched">YOU\'VE WATCHED THIS</string>
-    <string name="mark_watched">MARK AS WATCHED</string>
+    <string name="already_watched">WATCHED</string>
+    <string name="mark_watched">SET AS WATCHED</string>
     <string name="search_shows_by_title">Search TV shows by title</string>
     <string name="search_movie_by_title">Search movies by title</string>
     <string name="separator_left_to_right">/</string>
