@@ -46,6 +46,10 @@ class ViewModelProgress @ViewModelInject constructor(
     val state: LiveData<StateProgress>
         get() = _state
 
+    init {
+        _state.value = StateProgress.loading()
+    }
+
     fun submitAction(action: ActionProgress) = viewModelScope.launch {
         when (action) {
             ActionProgress.NavigateBack -> {

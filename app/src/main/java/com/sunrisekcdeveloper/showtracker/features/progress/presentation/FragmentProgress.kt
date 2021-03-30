@@ -18,22 +18,23 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.presentation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.progressindicator.BaseProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.disabled
-import com.sunrisekcdeveloper.showtracker.common.util.enabled
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSetProgressBinding
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.EventProgress
@@ -79,14 +80,19 @@ class FragmentProgress : Fragment() {
     }
 
     private fun stateLoading() {
-        viewModel.submitAction(ActionProgress.createToast("progress loading state"))
+        binding.progressIndicator.visible()
+        binding.tvLoading.visible()
     }
 
     private fun cleanUI() {
-        binding.btnProgressConfirm.disabled()
-        binding.btnProgressUpToDate.disabled()
-        binding.spinProgressEpisode.disabled()
-        binding.spinProgressSeason.disabled()
+        binding.tvLoading.gone()
+        binding.progressIndicator.gone()
+        binding.btnProgressConfirm.gone()
+        binding.btnProgressUpToDate.gone()
+        binding.spinProgressEpisode.gone()
+        binding.spinProgressSeason.gone()
+        binding.tvProgressEpisode.gone()
+        binding.tvProgressSeason.gone()
     }
 
     private fun stateSuccess(data: Map<Int, Int>) {
@@ -103,10 +109,12 @@ class FragmentProgress : Fragment() {
             *(1..map.getValue(1)).toList().toTypedArray()
         )
 
-        binding.spinProgressSeason.enabled()
-        binding.spinProgressEpisode.enabled()
-        binding.btnProgressConfirm.enabled()
-        binding.btnProgressUpToDate.enabled()
+        binding.tvProgressSeason.visible()
+        binding.tvProgressEpisode.visible()
+        binding.spinProgressSeason.visible()
+        binding.spinProgressEpisode.visible()
+        binding.btnProgressConfirm.visible()
+        binding.btnProgressUpToDate.visible()
     }
 
     private fun observeViewModel() {
@@ -131,9 +139,6 @@ class FragmentProgress : Fragment() {
     }
 
     private fun setup() {
-        binding.btnProgressConfirm.disabled()
-        binding.btnProgressUpToDate.disabled()
-
         adapterSeason = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
