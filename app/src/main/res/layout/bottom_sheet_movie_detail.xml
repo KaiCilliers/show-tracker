@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/img_detail_movie_poster">
 
-        <include layout="@layout/item_skeleton"/>
+        <include layout="@layout/skeleton_detail"/>
 
     </LinearLayout>
 
