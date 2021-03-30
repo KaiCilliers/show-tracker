@@ -86,9 +86,11 @@ class ViewModelMovieDetail @ViewModelInject constructor(
             }
             is ActionDetailMovie.SetWatched -> {
                 updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
+                eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.SetUnwatched -> {
                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
+                eventChannel.send(EventDetailMovie.close())
             }
             ActionDetailMovie.Close -> {
                 eventChannel.send(EventDetailMovie.close())
