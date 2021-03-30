@@ -84,7 +84,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                 is EventDetailShow.LaunchStartWatching -> {
                     findNavController().navigate(
                         FragmentBottomSheetShowDetailDirections
-                            .navigateFromDetailShowToSetProgressFragment(event.showId)
+                            .navigateFromDetailShowToSetProgressFragment(event.showId, event.title)
                     )
                 }
                 is EventDetailShow.GoToShowInWatchlist -> {
@@ -190,7 +190,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     private fun stateNotStartedWatching(data: UIModelShowDetail) {
         binding.btnDetailShowWatchStatus.text = getString(R.string.show_start_watching)
         binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.startWatching(data.id))
+            viewModel.submitAction(ActionDetailShow.startWatching(data.id, data.name))
         }
     }
 

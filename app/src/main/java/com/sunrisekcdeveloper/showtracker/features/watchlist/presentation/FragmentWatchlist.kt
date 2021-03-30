@@ -204,7 +204,7 @@ class FragmentWatchlist : Fragment() {
                     )
                 }
                 is ShowAdapterAction.StartWatchingShow -> {
-                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId))
+                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId, action.title))
                 }
             }
         }
@@ -368,7 +368,7 @@ class FragmentWatchlist : Fragment() {
                 is EventWatchlist.ConfigureShow -> {
                     findNavController().navigate(
                         FragmentWatchlistDirections.navigateFromWatchlistFragmentToSetProgressFragment(
-                            event.showId
+                            event.showId, event.title
                         )
                     )
                 }

@@ -66,7 +66,7 @@ class ViewModelShowDetail @ViewModelInject constructor(
                 eventChannel.send(EventDetailShow.ShowToast(action.msg))
             }
             is ActionDetailShow.StartWatching -> {
-                eventChannel.send(EventDetailShow.LaunchStartWatching(action.showId))
+                eventChannel.send(EventDetailShow.LaunchStartWatching(action.showId, action.title))
             }
             is ActionDetailShow.UpdateProgress -> {
                 eventChannel.send(EventDetailShow.GoToShowInWatchlist(action.showId))

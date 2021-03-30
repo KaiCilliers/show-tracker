@@ -26,7 +26,7 @@ sealed class ActionWatchlist{
     data class MarkMovieWatched(val movieId: String) : ActionWatchlist()
     data class MarkMovieUnWatched(val movieId: String) : ActionWatchlist()
     data class UpdateShowProgress(val instructions: UpdateShowAction) : ActionWatchlist()
-    data class StartWatchingShow(val showId: String): ActionWatchlist()
+    data class StartWatchingShow(val showId: String, val title: String): ActionWatchlist()
     data class ShowToast(val msg: String) : ActionWatchlist()
 
     companion object {
@@ -36,7 +36,7 @@ sealed class ActionWatchlist{
         fun markMovieAsWatched(movieId: String) = MarkMovieWatched(movieId)
         fun markMovieAsUnwatched(movieId: String) = MarkMovieUnWatched(movieId)
         fun updateShowProgress(instructions: UpdateShowAction) = UpdateShowProgress(instructions)
-        fun startWatchingShow(showId: String) = StartWatchingShow(showId)
+        fun startWatchingShow(showId: String, title: String) = StartWatchingShow(showId, title)
         fun showToast(message: String) = ShowToast(message)
     }
 }

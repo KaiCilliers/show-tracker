@@ -100,7 +100,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
                 updateShowProgressUseCase(action.instructions)
             }
             is ActionWatchlist.StartWatchingShow -> {
-                eventChannel.send(EventWatchlist.ConfigureShow(action.showId))
+                eventChannel.send(EventWatchlist.ConfigureShow(action.showId, action.title))
             }
             is ActionWatchlist.LoadMediaDetails -> {
                 eventChannel.send(EventWatchlist.LoadMediaDetails(

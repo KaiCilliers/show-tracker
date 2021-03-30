@@ -19,6 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
 sealed class ActionProgress {
+    data class AttemptSetProgress(
+        val showId: String,
+        val seasonNumber: Int,
+        val episodeNumber: Int,
+        val title: String
+    ) : ActionProgress()
+    data class AttemptMarkUpToDate(
+        val showId: String,
+        val title: String
+    ) : ActionProgress()
     object NavigateBack : ActionProgress()
     data class SetShowProgress(
         val showId: String,
@@ -31,6 +41,10 @@ sealed class ActionProgress {
 
     companion object {
         fun navigateBack() = NavigateBack
+        fun attemptSetProgress(showId: String, seasonNumber: Int, episodeNumber: Int, title: String) =
+            AttemptSetProgress(showId, seasonNumber, episodeNumber, title)
+        fun attemptMarkUpToDate(showId: String, title: String) =
+            AttemptMarkUpToDate(showId, title)
         fun setShowProgress(showId: String, seasonNumber: Int, episodeNumber: Int) =
             SetShowProgress(showId, seasonNumber, episodeNumber)
         fun markShowUpToDate(showId: String) = MarkShowUpToDate(showId)
