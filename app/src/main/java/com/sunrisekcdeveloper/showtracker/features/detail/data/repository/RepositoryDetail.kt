@@ -100,6 +100,7 @@ class RepositoryDetail(
             database.withTransaction {
                 database.watchlistMovieDao().update(
                     movie.copy(
+                        deleted = false,
                         watched = true,
                         dateWatched = System.currentTimeMillis(),
                         dateLastUpdated = System.currentTimeMillis()
