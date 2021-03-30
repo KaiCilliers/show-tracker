@@ -46,7 +46,7 @@ class RepositorySearch(
 
     override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
         val movie = database.watchlistMovieDao().unwatched()
-        val shows = database.watchlistShowDao().unwatchedShows()
+        val shows = database.watchlistShowDao().unwatched()
 
         Timber.e("movies: ${movie.map { it.details.title }}")
         Timber.e("shows: ${shows.map { it.details.title }}")

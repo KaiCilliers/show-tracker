@@ -25,20 +25,11 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.En
 
 @Dao
 interface DaoWatchlistSeason : DaoBase<EntityWatchlistSeason> {
-    /**
-     * Watchlist season
-     *
-     * Find and return watchlisted show's season with matching show ID and season number
-     *
-     * @param showId : String
-     * @param season : Int
-     * @return
-     */
     @Query(
         """
         SELECT * FROM tbl_watchlist_season WHERE watch_season_show_id = :showId
         AND watch_season_number = :season
     """
     )
-    abstract suspend fun watchlistSeason(showId: String, season: Int): EntityWatchlistSeason
+    suspend fun withId(showId: String, season: Int): EntityWatchlistSeason
 }

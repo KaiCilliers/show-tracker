@@ -65,7 +65,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun incrementSeasonCurrentEpisode(showId: String, currentSeason: Int) {
-        val season = database.watchlistSeasonDao().watchlistSeason(showId, currentSeason)
+        val season = database.watchlistSeasonDao().withId(showId, currentSeason)
         val currentEpisode = season.currentEpisode
         database.watchlistSeasonDao().update(
             season.copy(
@@ -76,7 +76,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun incrementWatchlistShowCurrentEpisode(showId: String) {
-        val watchlistShow = database.watchlistShowDao().watchlistShow(showId)
+        val watchlistShow = database.watchlistShowDao().withId(showId)
         val newEpisode = database.episodeDao().withId(
             showId,
             watchlistShow.currentSeasonNumber,
@@ -95,7 +95,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun updateSeasonAsWatched(showId: String, season: Int) {
-        val watchlistSeason = database.watchlistSeasonDao().watchlistSeason(showId, season)
+        val watchlistSeason = database.watchlistSeasonDao().withId(showId, season)
         database.watchlistSeasonDao().update(
             watchlistSeason.copy(
                 completed = true,
@@ -114,7 +114,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int) {
-        val watchlistShow = database.watchlistShowDao().watchlistShow(showId)
+        val watchlistShow = database.watchlistShowDao().withId(showId)
         val episode = database.episodeDao().withId(showId, newSeason, newEpisode)
         val season = database.seasonDao().withId(showId, newSeason)
         // todo if null objects are returned then try fetch from netowrk and if failed then you need to handle
@@ -135,7 +135,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun updateWatchlistShowAsUpToDate(showId: String) {
-        val show = database.watchlistShowDao().watchlistShow(showId)
+        val show = database.watchlistShowDao().withId(showId)
         database.watchlistShowDao().update(
             show.copy(
                 upToDate = true,
@@ -145,7 +145,7 @@ class RepositoryWatchlist(
     }
 
     override suspend fun currentWatchlistShow(showId: String): EntityWatchlistShow {
-        return database.watchlistShowDao().watchlistShow(showId)
+        return database.watchlistShowDao().withId(showId)
     }
 
     override fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
@@ -159,7 +159,7 @@ class RepositoryWatchlist(
     }
 
     override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
-        return database.watchlistShowDao().distinctWatchlistShowsDetailsFlow(filterOption).map {
+        return database.watchlistShowDao().distinctWithDetailsFlow(filterOption).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistShow())
             } else {

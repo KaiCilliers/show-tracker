@@ -47,16 +47,34 @@ class RepositoryDetail(
 
     // todo there needs some serious work to the business logic with the management of shows and movies
     override suspend fun addShowToWatchlist(id: String) {
-        val exists = database.watchlistShowDao().watchlistShowExist(id)
+        val exists = database.watchlistShowDao().exist(id)
         if (exists) {
-            database.watchlistShowDao().markWatchlistShowAsNotDeleted(id)
+            val show = database.watchlistShowDao().withId(id)
+            database.withTransaction {
+                database.watchlistShowDao().update(show.copy(
+                    deleted = false,
+                    started = false,
+                    upToDate = false,
+                    lastUpdated = System.currentTimeMillis()
+                ))
+            }
         } else {
             database.watchlistShowDao().insert(EntityWatchlistShow.freshBareEntryFrom(id))
         }
     }
 
     override suspend fun removeShowFromWatchlist(id: String) {
-        database.watchlistShowDao().removeShowFromWatchlist(id)
+        val exists = database.watchlistShowDao().exist(id)
+        if (exists) {
+            val show = database.watchlistShowDao().withId(id)
+            database.withTransaction {
+                database.watchlistShowDao().update(show.copy(
+                    deleted = true,
+                    dateDeleted = System.currentTimeMillis(),
+                    lastUpdated = System.currentTimeMillis()
+                ))
+            }
+        }
     }
 
     override suspend fun removeMovieFromWatchlist(id: String) {

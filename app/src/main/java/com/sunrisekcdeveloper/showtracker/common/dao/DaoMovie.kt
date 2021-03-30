@@ -33,24 +33,8 @@ abstract class DaoMovie : DaoBase<EntityMovie> {
     @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
     abstract suspend fun withId(id: String): EntityMovie?
 
-    /**
-     * Movie detail
-     *
-     * Internal use only
-     *
-     * @param id : String
-     * @return Flow emitting EntityMovie
-     */
     @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
     protected abstract fun movieFlow(id: String): Flow<EntityMovie?>
 
-    /**
-     * Distinct movie detail flow
-     *
-     * Return Flow to receive latest record that matches ID provided
-     *
-     * @param id : String
-     * @return Flow emitting distinct EntityMovie
-     */
     open fun distinctMovieFlow(id: String): Flow<EntityMovie?> = movieFlow(id).distinctUntilChanged()
 }
