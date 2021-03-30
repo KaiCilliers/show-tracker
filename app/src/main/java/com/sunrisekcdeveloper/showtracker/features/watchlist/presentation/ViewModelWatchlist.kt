@@ -113,6 +113,9 @@ class ViewModelWatchlist @ViewModelInject constructor(
             is ActionWatchlist.ShowSnackbar -> {
                 eventChannel.send(EventWatchlist.showSnackbar(action.msg))
             }
+            is ActionWatchlist.AttemptUnwatch -> {
+                eventChannel.send(EventWatchlist.showConfirmationDialog(action.movieId, action.title))
+            }
         }
     }
 

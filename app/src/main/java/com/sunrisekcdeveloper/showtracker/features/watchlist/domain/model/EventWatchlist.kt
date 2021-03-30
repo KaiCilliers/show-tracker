@@ -21,12 +21,14 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 sealed class EventWatchlist{
+    data class ShowConfirmationDialog(val movieId: String, val title: String) : EventWatchlist()
     data class ShowSnackbar(val msg: String) : EventWatchlist()
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : EventWatchlist()
     data class ConfigureShow(val showId: String, val title: String) : EventWatchlist()
     data class ShowToast(val msg: String) : EventWatchlist()
 
     companion object {
+        fun showConfirmationDialog(movieId: String, title: String) = ShowConfirmationDialog(movieId, title)
         fun showSnackbar(msg: String) = ShowSnackbar(msg)
         fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
             LoadMediaDetails(mediaId, title, posterPath, type)

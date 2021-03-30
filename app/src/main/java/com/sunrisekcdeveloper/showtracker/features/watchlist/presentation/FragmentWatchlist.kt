@@ -39,6 +39,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
@@ -214,8 +215,7 @@ class FragmentWatchlist : Fragment() {
         watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, title, status ->
             when (status) {
                 MovieWatchedStatus.Watched -> {
-                    viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(id))
-                    viewModel.submitAction(ActionWatchlist.showSnackbar("\"$title\" set as unwatched"))
+                    viewModel.submitAction(ActionWatchlist.attemptUnwatch(id, title))
                 }
                 MovieWatchedStatus.NotWatched -> {
                     viewModel.submitAction(ActionWatchlist.markMovieAsWatched(id))
@@ -378,8 +378,23 @@ class FragmentWatchlist : Fragment() {
                 is EventWatchlist.ShowSnackbar -> {
                     Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
                 }
+                is EventWatchlist.ShowConfirmationDialog -> {
+                    showConfirmationDialogUnwatch(event.movieId, event.title)
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showConfirmationDialogUnwatch(movieId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unwatch Movie?")
+            .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
+            .setNegativeButton("Cancel") { _, _ ->}
+            .setPositiveButton("Unwatch") { _,_ ->
+                viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(movieId))
+                viewModel.submitAction(ActionWatchlist.showSnackbar("\"$title\" set as unwatched"))
+            }
+            .show()
     }
 
     private fun binding() {
