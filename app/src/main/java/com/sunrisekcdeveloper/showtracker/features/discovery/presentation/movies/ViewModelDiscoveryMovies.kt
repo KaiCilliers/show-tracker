@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies
 
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
@@ -27,15 +26,12 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPop
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
-@ExperimentalCoroutinesApi
 class ViewModelDiscoveryMovies @ViewModelInject constructor(
     loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
-    loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
-    @Assisted private val savedStateHandle: SavedStateHandle // todo find out how to use this to store flow results...perhaps utilize StateFlow?
+    loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
 ) : ViewModel() {
 
     val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()

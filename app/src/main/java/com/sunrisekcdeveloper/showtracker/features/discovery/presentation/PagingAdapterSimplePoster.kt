@@ -34,9 +34,10 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 
 class PagingAdapterSimplePoster(
-    private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
+    private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
-    UIMODEL_DISCOVERY_COMPARATOR){
+    UIMODEL_DISCOVERY_COMPARATOR
+) {
 
     fun setPosterClickAction(clickListener: OnPosterClickListener) {
         onPosterClick = clickListener
@@ -54,7 +55,7 @@ class PagingAdapterSimplePoster(
     class ViewHolderPagingSimplePoster(
         val binding: ItemSimplePosterBinding,
         val onClick: OnPosterClickListener
-        ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelDiscovery) {
             Glide.with(binding.root)
                 .load(EndpointPoster.Standard.urlWithResource(data.posterPath))
@@ -68,34 +69,41 @@ class PagingAdapterSimplePoster(
                     data.id,
                     data.mediaTitle,
                     data.posterPath,
-                    data.mediaType)
+                    data.mediaType
+                )
             }
         }
+
         companion object {
-            fun from(parent: ViewGroup, onClick: OnPosterClickListener) : ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster(
+            fun from(
+                parent: ViewGroup,
+                onClick: OnPosterClickListener
+            ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster(
                 ItemSimplePosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 ), onClick
             )
         }
     }
-    companion object {
-        private val UIMODEL_DISCOVERY_COMPARATOR = object : DiffUtil.ItemCallback<UIModelDiscovery>() {
-            override fun areItemsTheSame(
-                oldItem: UIModelDiscovery,
-                newItem: UIModelDiscovery
-            ): Boolean = oldItem.id == newItem.id
 
-            override fun areContentsTheSame(
-                oldItem: UIModelDiscovery,
-                newItem: UIModelDiscovery
-            ): Boolean {
-                return (oldItem.id == newItem.id &&
-                        oldItem.mediaTitle == newItem.mediaTitle &&
-                        oldItem.mediaType == newItem.mediaType &&
-                        oldItem.posterPath == newItem.posterPath &&
-                        oldItem.listType == newItem.listType)
+    companion object {
+        private val UIMODEL_DISCOVERY_COMPARATOR =
+            object : DiffUtil.ItemCallback<UIModelDiscovery>() {
+                override fun areItemsTheSame(
+                    oldItem: UIModelDiscovery,
+                    newItem: UIModelDiscovery
+                ): Boolean = oldItem.id == newItem.id
+
+                override fun areContentsTheSame(
+                    oldItem: UIModelDiscovery,
+                    newItem: UIModelDiscovery
+                ): Boolean {
+                    return (oldItem.id == newItem.id &&
+                            oldItem.mediaTitle == newItem.mediaTitle &&
+                            oldItem.mediaType == newItem.mediaType &&
+                            oldItem.posterPath == newItem.posterPath &&
+                            oldItem.listType == newItem.listType)
+                }
             }
-        }
     }
 }

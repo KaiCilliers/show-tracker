@@ -78,9 +78,7 @@ class RemoteMediatorDiscoveryTopRatedMovies(
             }
         }
 
-        val response = remote.topRatedMovies(page)
-
-        return when (response) {
+        return when (val response = remote.topRatedMovies(page)) {
             is NetworkResult.Success -> {
 
                 val uiModels =

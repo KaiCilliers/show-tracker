@@ -78,9 +78,7 @@ class RemoteMediatorDiscoveryPopularShows(
             }
         }
 
-        val response = remote.popularShows(page)
-
-        return when (response) {
+        return when (val response = remote.popularShows(page)) {
             is NetworkResult.Success -> {
 
                 val uiModels =

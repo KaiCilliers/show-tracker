@@ -41,13 +41,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class FragmentDiscoveryShows : Fragment() {
 
     private lateinit var binding: FragmentDiscoveryOnlyShowsBinding
-
-    @ExperimentalCoroutinesApi
     private val viewModel: ViewModelDiscoveryShows by viewModels()
 
     private val adapterPopularShows = PagingAdapterSimplePoster()

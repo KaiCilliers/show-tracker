@@ -78,9 +78,7 @@ class RemoteMediatorDiscoveryAiringShows(
             }
         }
 
-        val response = remote.airingTodayShows(page)
-
-        return when (response) {
+        return when (val response = remote.airingTodayShows(page)) {
             is NetworkResult.Success -> {
 
                 val uiModels =

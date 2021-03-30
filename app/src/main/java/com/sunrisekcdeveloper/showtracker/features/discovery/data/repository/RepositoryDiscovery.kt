@@ -61,7 +61,7 @@ class RepositoryDiscovery(
             initialLoadSize = 40,
             enablePlaceholders = false
         ),
-        remoteMediator = RemoteMediatorDiscoveryPopularShows(remote,database),
+        remoteMediator = RemoteMediatorDiscoveryPopularShows(remote, database),
         pagingSourceFactory = {
             database.discoveryDao().mediaList(ListType.ShowPopular)
         }
@@ -74,7 +74,7 @@ class RepositoryDiscovery(
             initialLoadSize = 40,
             enablePlaceholders = false
         ),
-        remoteMediator = RemoteMediatorDiscoveryTopRatedMovies(remote,database),
+        remoteMediator = RemoteMediatorDiscoveryTopRatedMovies(remote, database),
         pagingSourceFactory = {
             database.discoveryDao().mediaList(ListType.MovieTopRated)
         }
@@ -87,7 +87,7 @@ class RepositoryDiscovery(
             initialLoadSize = 40,
             enablePlaceholders = false
         ),
-        remoteMediator = RemoteMediatorDiscoveryTopRatedShows(remote,database),
+        remoteMediator = RemoteMediatorDiscoveryTopRatedShows(remote, database),
         pagingSourceFactory = {
             database.discoveryDao().mediaList(ListType.ShowTopRated)
         }
@@ -100,7 +100,7 @@ class RepositoryDiscovery(
             initialLoadSize = 40,
             enablePlaceholders = false
         ),
-        remoteMediator = RemoteMediatorDiscoveryUpcomingMovies(remote,database),
+        remoteMediator = RemoteMediatorDiscoveryUpcomingMovies(remote, database),
         pagingSourceFactory = {
             database.discoveryDao().mediaList(ListType.MovieUpcoming)
         }
@@ -113,7 +113,7 @@ class RepositoryDiscovery(
             initialLoadSize = 40,
             enablePlaceholders = false
         ),
-        remoteMediator = RemoteMediatorDiscoveryAiringShows(remote,database),
+        remoteMediator = RemoteMediatorDiscoveryAiringShows(remote, database),
         pagingSourceFactory = {
             database.discoveryDao().mediaList(ListType.ShowAiringToday)
         }
