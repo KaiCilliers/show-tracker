@@ -30,10 +30,10 @@ class UpdateMovieWatchedStatusUseCase(
     override suspend fun invoke(movieId: String, watchedStatus: MovieWatchedStatus) {
         when (watchedStatus) {
             MovieWatchedStatus.Watched -> {
-                detailRepo.updateWatchlistMovieAsWatched(movieId)
+                detailRepo.watchMovie(movieId)
             }
             MovieWatchedStatus.NotWatched -> {
-                detailRepo.updateWatchlistMovieAsNotWatched(movieId)
+                detailRepo.unwatchMovie(movieId)
             }
         }
     }

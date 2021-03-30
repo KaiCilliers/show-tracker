@@ -27,6 +27,6 @@ class AddMovieToWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : AddMovieToWatchlistUseCaseContract {
     override suspend fun invoke(movieId: String) {
-        detailRepo.addMovieToWatchlist(movieId)
+        detailRepo.addMovie(movieId)
     }
 }

@@ -26,7 +26,8 @@ sealed class EventDetailShow {
     data class ShowToast(val msg: String) : EventDetailShow()
 
     companion object {
-        fun showConfirmationDialog(showId: String, title: String) = ShowConfirmationDialog(showId, title)
+        fun showConfirmationDialog(showId: String, title: String) =
+            ShowConfirmationDialog(showId, title)
         fun launchStartWatching(showId: String, title: String) = LaunchStartWatching(showId, title)
         fun goToShowInWatchlist(showId: String) = GoToShowInWatchlist(showId)
         fun close() = Close

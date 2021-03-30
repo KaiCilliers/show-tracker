@@ -29,25 +29,25 @@ import retrofit2.http.Query
 
 interface ServiceDetail : ServiceDetailContract {
     @GET("movie/{id}")
-    override suspend fun movieDetail(
+    override suspend fun movieDetails(
         @Path("id") id: String,
         @Query("api_key") apiKey: String
     ): Response<ResponseMovieDetail>
 
     @GET("movie/{id}/release_dates")
-    override suspend fun movieCertification(
+    override suspend fun movieCertifications(
         @Path("id") id: String,
         @Query("api_key") apiKey: String
     ): Response<EnvelopeMovieReleaseDates>
 
     @GET("tv/{id}")
-    override suspend fun showDetail(
+    override suspend fun showDetails(
         @Path("id") id: String,
         @Query("api_key") apiKey: String
     ): Response<ResponseShowDetail>
 
     @GET("tv/{id}/content_ratings")
-    override suspend fun showCertification(
+    override suspend fun showCertifications(
         @Path("id" )id: String,
         @Query("api_key") apiKey: String
     ): Response<EnvelopeShowCertification>

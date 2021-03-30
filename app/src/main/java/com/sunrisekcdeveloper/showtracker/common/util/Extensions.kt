@@ -26,11 +26,17 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,6 +109,66 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     popularity = popularity,
     ratingVotes = voteCount
 )
+fun EntityShow.asUIModelShowDetail(
+    watchlisted: Boolean = false,
+    started: Boolean = false,
+    upToDate: Boolean = false,
+    deleted: Boolean
+) = UIModelShowDetail(
+    id = id,
+    name = title,
+    posterPath = posterPath,
+    overview = overview,
+    certification = certification,
+    firstAirDate = firstAirDate,
+    seasonsTotal = seasonTotal,
+    deleted = deleted,
+    watchlisted = watchlisted,
+    startedWatching = started,
+    upToDate = upToDate
+)
+
+fun ResponseShowDetail.asEntityShow() = EntityShow(
+    id = "$id",
+    title = name,
+    overview = overview,
+    certification = "N/A",
+    posterPath = posterPath ?: "",
+    backdropPath = backdropPath ?: "",
+    popularityValue = popularityValue,
+    firstAirDate = firstAirYear,
+    rating = rating,
+    episodeTotal = episodeCount,
+    seasonTotal = seasonCount,
+    lastUpdated = System.currentTimeMillis()
+)
+
+fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
+    id = "$id",
+    title = title,
+    overview = overview,
+    backdropPath = backdropPath ?: "",
+    posterPath = posterPath ?: "",
+    certification = "",
+    releaseDate = releaseDate,
+    runTime = "$runtime",
+    rating = rating,
+    popularityValue = popularityValue,
+)
+
+fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =
+    UIModelMovieDetail(
+        id = id,
+        title = title,
+        posterPath = posterPath,
+        overview = overview,
+        releaseYear = releaseDate,
+        certification = certification,
+        runtime = runTime,
+        deleted = deleted,
+        watchlisted = watchlisted,
+        watched = watched
+    )
 fun TextView.setMaxLinesToEllipsize() {
     val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
     maxLines = visibleLines

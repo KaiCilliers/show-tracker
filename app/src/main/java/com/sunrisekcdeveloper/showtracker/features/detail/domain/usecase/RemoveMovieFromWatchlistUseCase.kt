@@ -27,6 +27,6 @@ class RemoveMovieFromWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : RemoveMovieFromWatchlistUseCaseContract {
     override suspend fun invoke(movieId: String) {
-        detailRepo.removeMovieFromWatchlist(movieId)
+        detailRepo.removeMovie(movieId)
     }
 }

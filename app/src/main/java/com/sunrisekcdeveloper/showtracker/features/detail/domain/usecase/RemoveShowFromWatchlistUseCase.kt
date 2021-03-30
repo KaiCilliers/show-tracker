@@ -27,6 +27,6 @@ class RemoveShowFromWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : RemoveShowFromWatchlistUseCaseContract {
     override suspend fun invoke(showId: String) {
-        detailRepo.removeShowFromWatchlist(showId)
+        detailRepo.removeShow(showId)
     }
 }

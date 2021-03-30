@@ -30,6 +30,6 @@ class AddShowToWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : AddShowToWatchlistUseCaseContract {
     override suspend fun invoke(showId: String) {
-        detailRepo.addShowToWatchlist(showId)
+        detailRepo.addShow(showId)
     }
 }

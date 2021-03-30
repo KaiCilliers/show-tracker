@@ -24,7 +24,6 @@ import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMov
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -33,18 +32,18 @@ class RemoteDataSourceDetail(
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RemoteDataSourceDetailContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
-        api.movieDetail(id = id)
+        api.movieDetails(id = id)
     }
 
     override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> = safeApiCall {
-        api.movieCertification(id = id)
+        api.movieCertifications(id = id)
     }
 
     override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> = safeApiCall {
-        api.showDetail(id = id)
+        api.showDetails(id = id)
     }
 
     override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = safeApiCall {
-        api.showCertification(id = id)
+        api.showCertifications(id = id)
     }
 }
