@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 sealed class ActionWatchlist{
+    data class ShowSnackbar(val msg: String) : ActionWatchlist()
     object LoadWatchlistData : ActionWatchlist()
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : ActionWatchlist()
     data class MarkMovieWatched(val movieId: String) : ActionWatchlist()
@@ -30,6 +31,7 @@ sealed class ActionWatchlist{
     data class ShowToast(val msg: String) : ActionWatchlist()
 
     companion object {
+        fun showSnackbar(msg: String) = ShowSnackbar(msg)
         fun loadWatchlistData() = LoadWatchlistData
         fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
             LoadMediaDetails(mediaId, title, posterPath, type)

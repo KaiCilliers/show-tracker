@@ -110,6 +110,9 @@ class ViewModelWatchlist @ViewModelInject constructor(
                     action.type
                 ))
             }
+            is ActionWatchlist.ShowSnackbar -> {
+                eventChannel.send(EventWatchlist.showSnackbar(action.msg))
+            }
         }
     }
 

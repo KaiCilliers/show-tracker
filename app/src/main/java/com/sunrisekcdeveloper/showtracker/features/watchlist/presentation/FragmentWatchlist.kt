@@ -30,6 +30,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
@@ -210,13 +211,15 @@ class FragmentWatchlist : Fragment() {
         }
 
         // todo better onclick implementation needed
-        watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, status ->
+        watchlistMovieAdapter.onButtonClicked = OnMovieStatusClickListener { id, title, status ->
             when (status) {
                 MovieWatchedStatus.Watched -> {
                     viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(id))
+                    viewModel.submitAction(ActionWatchlist.showSnackbar("\"$title\" set as unwatched"))
                 }
                 MovieWatchedStatus.NotWatched -> {
                     viewModel.submitAction(ActionWatchlist.markMovieAsWatched(id))
+                    viewModel.submitAction(ActionWatchlist.showSnackbar("You've watched \"$title\"!"))
                 }
             }
         }
@@ -371,6 +374,9 @@ class FragmentWatchlist : Fragment() {
                             event.showId, event.title
                         )
                     )
+                }
+                is EventWatchlist.ShowSnackbar -> {
+                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
