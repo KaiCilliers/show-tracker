@@ -18,10 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 
-import androidx.room.Embedded
-import androidx.room.Relation
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
@@ -149,7 +149,7 @@ class RepositoryWatchlist(
     }
 
     override fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
-        return database.watchlistMovieDao().distinctWatchlistMoviesDetailsFlow(filterOption).map {
+        return database.watchlistMovieDao().distinctWithDetailsFlow(filterOption).map {
             if (it.isNotEmpty()) {
                 Resource.Success(it.asListUIModelWatchlistMovie())
             } else {
@@ -170,54 +170,34 @@ class RepositoryWatchlist(
 }
 
 // todo move these extenstion functions out
-fun WatchlistShowDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
+fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
     id = details.id,
     title = details.title,
     posterPath = details.posterPath,
-    currentEpisodeNumber = watchlist.currentEpisodeNumber,
-    currentEpisodeName = watchlist.currentEpisodeName,
-    currentSeasonNumber = watchlist.currentSeasonNumber,
-    episodesInSeason = watchlist.currentSeasonEpisodeTotal,
-    started = watchlist.started,
-    upToDate = watchlist.upToDate,
-    dateAdded = watchlist.dateAdded
+    currentEpisodeNumber = status.currentEpisodeNumber,
+    currentEpisodeName = status.currentEpisodeName,
+    currentSeasonNumber = status.currentSeasonNumber,
+    episodesInSeason = status.currentSeasonEpisodeTotal,
+    started = status.started,
+    upToDate = status.upToDate,
+    dateAdded = status.dateAdded
 )
 
-fun List<WatchlistShowDetails>.asListUIModelWatchlistShow(): List<UIModelWatchlistShow> {
+fun List<WatchlistShowWithDetails>.asListUIModelWatchlistShow(): List<UIModelWatchlistShow> {
     return this.map { it.asUIModelWatchlistShow() }
 }
 
-fun WatchlistMovieDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
+fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
     id = details.id,
     title = details.title,
     overview = details.overview,
     posterPath = details.posterPath,
-    watched = watchlist.watched,
-    dateAdded = watchlist.dateAdded,
-    dateWatched = watchlist.dateWatched,
-    lastUpdated = watchlist.dateLastUpdated
+    watched = status.watched,
+    dateAdded = status.dateAdded,
+    dateWatched = status.dateWatched,
+    lastUpdated = status.dateLastUpdated
 )
 
-fun List<WatchlistMovieDetails>.asListUIModelWatchlistMovie(): List<UIModelWatchlisMovie> {
+fun List<WatchlistMovieWithDetails>.asListUIModelWatchlistMovie(): List<UIModelWatchlisMovie> {
     return this.map { it.asUIModelWatchlistMovie() }
 }
-
-@Deprecated("Duplicate class WatchlistShowWithDetails")
-data class WatchlistShowDetails(
-    @Embedded val watchlist: EntityWatchlistShow,
-    @Relation(
-        parentColumn = "watch_show_id",
-        entityColumn = "show_id"
-    )
-    val details: EntityShow
-)
-
-@Deprecated("Duplicate class WatchlistMovieWithDetails")
-data class WatchlistMovieDetails(
-    @Embedded val watchlist: EntityWatchlistMovie,
-    @Relation(
-        parentColumn = "watch_movie_id",
-        entityColumn = "movie_id"
-    )
-    val details: EntityMovie
-)

@@ -26,7 +26,6 @@ import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWit
 import com.sunrisekcdeveloper.showtracker.common.util.isDateSame
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -38,43 +37,28 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
     abstract suspend fun withId(id: String): EntityWatchlistMovie
 
-    /**
-     * Unwatched movies
-     *
-     * Returns all watchlisted movies with their details
-     *
-     * @return List of WatchlistMovieWithDetails
-     */
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0 AND watch_movie_watched = 0")
     abstract suspend fun unwatched(): List<WatchlistMovieWithDetails>
 
-    /**
-     * Distinct watchlist movies details flow
-     *
-     * Return a sorted flow of watchlisted movies
-     *
-     * @param filterOption : SortMovies sealed class
-     * @return sorted Flow emitting lists of WatchlistMovieDetails
-     */
-    open fun distinctWatchlistMoviesDetailsFlow(filterOption: FilterMovies): Flow<List<WatchlistMovieDetails>> =
-        privateWatchlistMoviesWithDetailsFlow().map { list ->
+    open fun distinctWithDetailsFlow(filterOption: FilterMovies): Flow<List<WatchlistMovieWithDetails>> =
+        privateWithDetailsFlow().map { list ->
             when (filterOption) {
                 FilterMovies.NoFilters -> {
                     list
                 }
                 FilterMovies.Watched -> {
-                    list.filter { it.watchlist.watched }
+                    list.filter { it.status.watched }
                 }
                 FilterMovies.Unwatched -> {
-                    list.filter { !it.watchlist.watched }
+                    list.filter { !it.status.watched }
                 }
                 FilterMovies.AddedToday -> {
                     val now = Calendar.getInstance()
                     now.timeInMillis = System.currentTimeMillis()
                     list.filter {
                         val lastUpdatedDate = Calendar.getInstance()
-                        lastUpdatedDate.timeInMillis = it.watchlist.dateLastUpdated
+                        lastUpdatedDate.timeInMillis = it.status.dateLastUpdated
                         isDateSame(
                             now,
                             lastUpdatedDate
@@ -82,75 +66,18 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
                     }
                 }
             }
-        }.map { it.sortedBy { it.details.title } }.distinctUntilChanged()
+        }.map { list -> list.sortedBy { it.details.title } }.distinctUntilChanged()
 
-    /**
-     * Private watchlist movies with details flow
-     *
-     * Return a Flow of all watchlisted movies with their details. Internal use only and is
-     * accompanied with a public accessor method
-     *
-     * @return Flow emitting lists of WatchlistMovieWithDetails
-     */
+
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
-    protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
+    protected abstract fun privateWithDetailsFlow(): Flow<List<WatchlistMovieWithDetails>>
 
-    /**
-     * Watchlist movie exist
-     *
-     * @param id : String
-     * @return Boolean that indicates if record exists with matching ID
-     */
     @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id)")
-    abstract suspend fun watchlistMovieExist(id: String): Boolean
+    abstract suspend fun exist(id: String): Boolean
 
-    /**
-     * Private remove movie from watchlist
-     *
-     * Update record by marking it as deleted by updated the deleted flag and date deleted
-     *
-     * @param id : String
-     * @param timeStamp : Long
-     */
-    @Deprecated("use simple @Update function (even internally in open function to update last_updated field)")
-    @Query("UPDATE tbl_watchlist_movie SET watch_movie_deleted = 1, watch_movie_deleted_date = :timeStamp WHERE watch_movie_id = :id")
-    protected abstract suspend fun privateRemoveMovieFromWatchlist(id: String, timeStamp: Long)
-
-    /**
-     * Watchlist movie flow
-     *
-     * Internal use only
-     *
-     * @param id : String
-     * @return Flow emitting EntityWatchlistMovie
-     */
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
     protected abstract fun watchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?>
 
-    /**
-     * Distinct watchlist movie flow
-     *
-     * Return Flow to receive latest record that matches ID provided
-     *
-     * @param id : String
-     * @return Flow emitting distinct EntityWatchlistMovie
-     */
     open fun distinctWatchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?> = watchlistMovieFlow(id).distinctUntilChanged()
-
-    @Deprecated("Use basic @Update function")
-    @Query("UPDATE tbl_watchlist_movie SET watch_movie_watched = 1  WHERE watch_movie_id = :id")
-    protected abstract suspend fun privateSetMovieAsWatched(id: String)
-
-    @Deprecated("Use basic @Update function")
-    @Query("UPDATE tbl_watchlist_movie SET watch_movie_watched = 0  WHERE watch_movie_id = :id")
-    protected abstract suspend fun privateSetMovieAsNotWatched(id: String)
-
-    @Deprecated("Use basic @Update function")
-    @Query("UPDATE tbl_watchlist_movie SET watch_movie_deleted = 0 WHERE watch_movie_id = :id")
-    abstract suspend fun markWatchlistMovieAsNotDeleted(id: String)
-
-    @Deprecated("Use basic @Update function")
-    @Query("UPDATE tbl_watchlist_movie SET watch_movie_last_updated = :timeStamp WHERE watch_movie_id = :id")
-    abstract suspend fun updateWatchlistMovieUpdatedAt(id: String, timeStamp: Long)
 }

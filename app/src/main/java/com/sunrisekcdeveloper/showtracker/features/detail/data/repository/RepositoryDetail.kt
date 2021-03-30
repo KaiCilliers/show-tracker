@@ -60,7 +60,7 @@ class RepositoryDetail(
     }
 
     override suspend fun removeMovieFromWatchlist(id: String) {
-        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().exist(id)
         if (exists) {
             val movie = database.watchlistMovieDao().withId(id)
             database.withTransaction {
@@ -74,7 +74,7 @@ class RepositoryDetail(
     }
 
     override suspend fun updateWatchlistMovieAsWatched(id: String) {
-        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().exist(id)
         if (exists) {
             val movie = database.watchlistMovieDao().withId(id)
             database.withTransaction {
@@ -90,7 +90,7 @@ class RepositoryDetail(
     }
 
     override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
-        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().exist(id)
         if (exists) {
             val movie = database.watchlistMovieDao().withId(id)
             database.withTransaction {
@@ -105,7 +105,7 @@ class RepositoryDetail(
     }
 
     override suspend fun addMovieToWatchlist(id: String) {
-        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+        val exists = database.watchlistMovieDao().exist(id)
         if (exists) {
             val movie = database.watchlistMovieDao().withId(id)
             database.withTransaction {

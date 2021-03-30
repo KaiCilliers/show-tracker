@@ -26,7 +26,6 @@ import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWith
 import com.sunrisekcdeveloper.showtracker.common.util.isDateSame
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistShowDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -66,7 +65,7 @@ abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
      */
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0")
-    protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowDetails>>
+    protected abstract fun privateWatchlistShowsWithDetailsFlow(): Flow<List<WatchlistShowWithDetails>>
 
     /**
      * Distinct watchlist shows details flow
@@ -77,7 +76,7 @@ abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
      * @return sorted Flow emitting lists of WatchlistShowDetails
      */
     // TODO placing this filter logic in DAO is questionable
-    open fun distinctWatchlistShowsDetailsFlow(sortShows: FilterShows): Flow<List<WatchlistShowDetails>> =
+    open fun distinctWatchlistShowsDetailsFlow(sortShows: FilterShows): Flow<List<WatchlistShowWithDetails>> =
         privateWatchlistShowsWithDetailsFlow().map { list ->
             when (sortShows) {
                 FilterShows.NoFilters -> {
@@ -86,22 +85,22 @@ abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
                 FilterShows.AddedToday -> {
                     val now = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
                     list.filter {
-                        val added = Calendar.getInstance().apply { timeInMillis = it.watchlist.dateAdded }
+                        val added = Calendar.getInstance().apply { timeInMillis = it.status.dateAdded }
                         isDateSame(now, added)
                     }
                 }
                 FilterShows.WatchedToday -> {
                     val now = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
                     list.filter {
-                        val lastUpdated = Calendar.getInstance().apply { timeInMillis = it.watchlist.lastUpdated }
+                        val lastUpdated = Calendar.getInstance().apply { timeInMillis = it.status.lastUpdated }
                         isDateSame(now, lastUpdated)
                     }
                 }
                 FilterShows.Started -> {
-                    list.filter { it.watchlist.started && !it.watchlist.upToDate}
+                    list.filter { it.status.started && !it.status.upToDate}
                 }
                 FilterShows.NotStarted -> {
-                    list.filter { !it.watchlist.started }
+                    list.filter { !it.status.started }
                 }
             }
         }.map { it.sortedBy { it.details.title } }.distinctUntilChanged()
