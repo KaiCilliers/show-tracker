@@ -50,8 +50,6 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
     private val viewModel: ViewModelMovieDetail by viewModels()
 
-    private lateinit var tempButtonColor: Drawable
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -107,8 +105,14 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Unwatch Movie?")
             .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
-            .setNegativeButton("Cancel") { _, _ ->}
-            .setPositiveButton("Unwatch") { _,_ -> viewModel.submitAction(ActionDetailMovie.setUnwatched(movieId)) }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .setPositiveButton("Unwatch") { _, _ ->
+                viewModel.submitAction(
+                    ActionDetailMovie.setUnwatched(
+                        movieId
+                    )
+                )
+            }
             .show()
     }
 
@@ -116,8 +120,14 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Remove Movie?")
             .setMessage("This will remove \"$title\" from your watchlist")
-            .setNegativeButton("Keep") { _, _ ->}
-            .setPositiveButton("Remove") { _,_ -> viewModel.submitAction(ActionDetailMovie.remove(movieId)) }
+            .setNegativeButton("Keep") { _, _ -> }
+            .setPositiveButton("Remove") { _, _ ->
+                viewModel.submitAction(
+                    ActionDetailMovie.remove(
+                        movieId
+                    )
+                )
+            }
             .show()
     }
 
@@ -152,7 +162,14 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         if (data.watchlisted && !data.deleted) {
             binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.remove)
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.attemptRemove(data.id, data.title)) }
+            binding.btnDetailMovieAdd.click {
+                viewModel.submitAction(
+                    ActionDetailMovie.attemptRemove(
+                        data.id,
+                        data.title
+                    )
+                )
+            }
         } else {
 
             binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
@@ -164,16 +181,20 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         //  re-added
         if (data.watched && !data.deleted) {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
-                ActionDetailMovie.attemptUnwatch(data.id, data.title)
-            ) }
+            binding.btnDetailMovieWatchStatus.click {
+                viewModel.submitAction(
+                    ActionDetailMovie.attemptUnwatch(data.id, data.title)
+                )
+            }
         } else {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
-                ActionDetailMovie.setWatched(
-                    data.id
+            binding.btnDetailMovieWatchStatus.click {
+                viewModel.submitAction(
+                    ActionDetailMovie.setWatched(
+                        data.id
+                    )
                 )
-            ) }
+            }
         }
         binding.tvDetailMovieDescription.visible()
         binding.tvDetailMovieRuntime.visible()
@@ -184,12 +205,15 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.btnDetailMovieAdd.enabled()
         binding.btnDetailMovieWatchStatus.enabled()
     }
+
     private fun stateLoading() {
         binding.layoutDetailMovieSkeleton.visible()
     }
+
     private fun stateError() {
         viewModel.submitAction(ActionDetailMovie.showToast("error"))
     }
+
     private fun cleanUI() {
         binding.layoutDetailMovieSkeleton.gone()
         binding.tvSeparatorOne.gone()

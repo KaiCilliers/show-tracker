@@ -113,8 +113,14 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Remove TV Show?")
             .setMessage("This will remove \"$title\" from your watchlist")
-            .setNegativeButton("Keep") { _, _ ->}
-            .setPositiveButton("Remove") { _,_ -> viewModel.submitAction(ActionDetailShow.remove(showId)) }
+            .setNegativeButton("Keep") { _, _ -> }
+            .setPositiveButton("Remove") { _, _ ->
+                viewModel.submitAction(
+                    ActionDetailShow.remove(
+                        showId
+                    )
+                )
+            }
             .show()
     }
 
