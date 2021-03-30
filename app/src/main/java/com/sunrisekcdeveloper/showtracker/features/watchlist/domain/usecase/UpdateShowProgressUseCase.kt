@@ -22,7 +22,6 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateS
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class UpdateShowProgressUseCase(
@@ -31,64 +30,54 @@ class UpdateShowProgressUseCase(
     // todo this implementation and accompanying repository is bad
     //  requires refactoring and streamline design
     override suspend fun invoke(action: UpdateShowAction) {
-        Timber.e("use case $action")
         when (action) {
             is UpdateShowAction.IncrementEpisode -> {
                 val show = repo.currentWatchlistShow(action.showId)
 
-                Timber.e("marking episode1")
                 repo.markEpisodeAsWatched(
                     show.id,
                     show.currentSeasonNumber,
                     show.currentEpisodeNumber
                 )
-                Timber.e("inserting new episode")
                 repo.insertNewWatchlistEpisode(
                     show.id,
                     show.currentSeasonNumber,
                     show.currentEpisodeNumber + 1
                 )
-                Timber.e("incrementing season current episode")
                 repo.incrementSeasonCurrentEpisode(
                     show.id,
                     show.currentSeasonNumber
                 )
 
-                Timber.e("incrementing show current episode")
                 repo.incrementWatchlistShowCurrentEpisode(show.id)
             }
             is UpdateShowAction.CompleteSeason -> {
                 val justShow = repo.currentShow(action.showId)
                 val show = repo.currentWatchlistShow(action.showId)
                 if (justShow.seasonTotal == show.currentSeasonNumber) {
-                    noDups(show.id)
+                    setShowUpToDate(show.id)
                 } else {
 
-                    Timber.e("marking episode as watched...")
                     repo.markEpisodeAsWatched(
                         show.id,
                         show.currentSeasonNumber,
                         show.currentEpisodeNumber
                     )
-                    Timber.e("marking season as watched...")
                     repo.updateSeasonAsWatched(
                         show.id,
                         show.currentSeasonNumber
                     )
 
-                    Timber.e("inserting next episode...")
                     repo.insertNewWatchlistEpisode(
                         show.id,
                         show.currentSeasonNumber+1,
                         1
                     )
-                    Timber.e("inserting next season...")
                     repo.insertNewWatchlistSeason(
                         show.id,
                         show.currentSeasonNumber + 1,
                         1
                     )
-                    Timber.e("updating show episode and season...")
                     repo.updateWatchlistShowEpisodeAndSeason(
                         show.id,
                         show.currentSeasonNumber + 1,
@@ -98,25 +87,22 @@ class UpdateShowProgressUseCase(
 
             }
             is UpdateShowAction.UpToDateWithShow -> {
-                noDups(action.showId)
+                setShowUpToDate(action.showId)
             }
         }
     }
 
-    private suspend fun noDups(showId: String) {
+    private suspend fun setShowUpToDate(showId: String) {
         val show = repo.currentWatchlistShow(showId)
-        Timber.e("marking episode as watched...")
         repo.markEpisodeAsWatched(
             show.id,
             show.currentSeasonNumber,
             show.currentEpisodeNumber
         )
-        Timber.e("marking season as watched...")
         repo.updateSeasonAsWatched(
             show.id,
             show.currentSeasonNumber
         )
-        Timber.e("marking show as up to date...")
         repo.updateWatchlistShowAsUpToDate(showId)
     }
 }

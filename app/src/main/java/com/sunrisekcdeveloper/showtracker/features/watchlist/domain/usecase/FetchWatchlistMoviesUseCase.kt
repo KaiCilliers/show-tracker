@@ -34,7 +34,6 @@ class FetchWatchlistMoviesUseCase(
     private val repoWatchlist: RepositoryWatchlistContract
 ) : FetchWatchlistMoviesUseCaseContract {
     override suspend fun invoke(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
-        Timber.e("use case with $filterOption")
         return flow {
             emit(Resource.Loading)
             emitAll(repoWatchlist.watchlistMovies(filterOption))

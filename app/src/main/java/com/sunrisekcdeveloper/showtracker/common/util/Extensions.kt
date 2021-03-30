@@ -44,6 +44,8 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.En
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -233,6 +235,30 @@ fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch
     posterPath = details.posterPath,
     backdropPath = details.backdropPath,
     mediaType = MediaType.Show
+)
+
+fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
+    id = details.id,
+    title = details.title,
+    posterPath = details.posterPath,
+    currentEpisodeNumber = status.currentEpisodeNumber,
+    currentEpisodeName = status.currentEpisodeName,
+    currentSeasonNumber = status.currentSeasonNumber,
+    episodesInSeason = status.currentSeasonEpisodeTotal,
+    started = status.started,
+    upToDate = status.upToDate,
+    dateAdded = status.dateAdded
+)
+
+fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
+    id = details.id,
+    title = details.title,
+    overview = details.overview,
+    posterPath = details.posterPath,
+    watched = status.watched,
+    dateAdded = status.dateAdded,
+    dateWatched = status.dateWatched,
+    lastUpdated = status.dateLastUpdated
 )
 
 fun TextView.setMaxLinesToEllipsize() {

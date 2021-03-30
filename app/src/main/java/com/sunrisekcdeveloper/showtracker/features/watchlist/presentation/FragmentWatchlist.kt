@@ -58,17 +58,13 @@ import timber.log.Timber
 class FragmentWatchlist : Fragment() {
 
     private lateinit var binding: FragmentWatchlistBinding
-
     private val viewModel: ViewModelWatchlist by viewModels()
-
-    private val watchlistMovieAdapter = AdapterWatchlistMovie()
-
-    private val watchlistShowAdapter = AdapterWatchlistShow()
-
     private val arguments: FragmentWatchlistArgs by navArgs()
 
-    private var scrolledOnce = false
+    private val watchlistMovieAdapter = AdapterWatchlistMovie()
+    private val watchlistShowAdapter = AdapterWatchlistShow()
 
+    private var scrolledOnce = false
     private var showSortCheckedItem = 0
     private var movieSortCheckedItem = 0
 
@@ -83,7 +79,6 @@ class FragmentWatchlist : Fragment() {
         "Started",
         "Not Started"
     )
-
     private val filterOptionMovie = arrayOf(
         "No Filters",
         "Watched",
@@ -202,7 +197,12 @@ class FragmentWatchlist : Fragment() {
                     )
                 }
                 is ShowAdapterAction.StartWatchingShow -> {
-                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId, action.title))
+                    viewModel.submitAction(
+                        ActionWatchlist.startWatchingShow(
+                            action.showId,
+                            action.title
+                        )
+                    )
                 }
             }
         }
@@ -385,8 +385,8 @@ class FragmentWatchlist : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Unwatch Movie?")
             .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
-            .setNegativeButton("Cancel") { _, _ ->}
-            .setPositiveButton("Unwatch") { _,_ ->
+            .setNegativeButton("Cancel") { _, _ -> }
+            .setPositiveButton("Unwatch") { _, _ ->
                 viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(movieId))
                 viewModel.submitAction(ActionWatchlist.showSnackbar("\"$title\" set as unwatched"))
             }

@@ -53,7 +53,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
     private var showSearchQuery = ""
     private var movieSearchQuery = ""
     private var movieFilterOption: FilterMovies = FilterMovies.NoFilters
-    private var showSortOrder: FilterShows  = FilterShows.NoFilters
+    private var showSortOrder: FilterShows = FilterShows.NoFilters
 
     fun showSearchQuery() = showSearchQuery
     fun movieSearchQuery() = movieSearchQuery
@@ -65,6 +65,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
             submitAction(ActionWatchlist.LoadWatchlistData)
         }
     }
+
     fun updateMovieSearchQuery(query: String) {
         movieSearchQuery = query
         // todo not pretty but it works
@@ -72,10 +73,12 @@ class ViewModelWatchlist @ViewModelInject constructor(
             submitAction(ActionWatchlist.LoadWatchlistData)
         }
     }
+
     fun updateShowSortBy(sortBy: FilterShows) {
         showSortOrder = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }
+
     fun updateMovieSortBy(sortBy: FilterMovies) {
         movieFilterOption = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
@@ -103,18 +106,25 @@ class ViewModelWatchlist @ViewModelInject constructor(
                 eventChannel.send(EventWatchlist.ConfigureShow(action.showId, action.title))
             }
             is ActionWatchlist.LoadMediaDetails -> {
-                eventChannel.send(EventWatchlist.LoadMediaDetails(
-                    action.mediaId,
-                    action.title,
-                    action.posterPath,
-                    action.type
-                ))
+                eventChannel.send(
+                    EventWatchlist.LoadMediaDetails(
+                        action.mediaId,
+                        action.title,
+                        action.posterPath,
+                        action.type
+                    )
+                )
             }
             is ActionWatchlist.ShowSnackbar -> {
                 eventChannel.send(EventWatchlist.showSnackbar(action.msg))
             }
             is ActionWatchlist.AttemptUnwatch -> {
-                eventChannel.send(EventWatchlist.showConfirmationDialog(action.movieId, action.title))
+                eventChannel.send(
+                    EventWatchlist.showConfirmationDialog(
+                        action.movieId,
+                        action.title
+                    )
+                )
             }
         }
     }

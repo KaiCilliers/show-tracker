@@ -22,6 +22,8 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelWatchlistMovie
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelWatchlistShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
@@ -42,10 +44,9 @@ class RepositoryWatchlist(
 
     override suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int) {
         val watchlistEpisode = database.watchlistEpisodeDao().withId(showId, episode, season)
-        Timber.d("episode to mark: $watchlistEpisode")
+
         @Suppress("UNNECESSARY_SAFE_CALL")
         watchlistEpisode?.let {
-            Timber.e("inside")
             database.watchlistEpisodeDao().update(
                 watchlistEpisode.copy(
                     watched = true,
@@ -82,9 +83,6 @@ class RepositoryWatchlist(
             watchlistShow.currentSeasonNumber,
             watchlistShow.currentEpisodeNumber + 1
         )
-        Timber.e("OK - here is some data")
-        Timber.e("show: $watchlistShow")
-        Timber.e("next episode: $newEpisode")
         database.watchlistShowDao().update(
             watchlistShow.copy(
                 currentEpisodeNumber = newEpisode?.number?: -1,
@@ -117,12 +115,9 @@ class RepositoryWatchlist(
         val watchlistShow = database.watchlistShowDao().withId(showId)
         val episode = database.episodeDao().withId(showId, newSeason, newEpisode)
         val season = database.seasonDao().withId(showId, newSeason)
-        // todo if null objects are returned then try fetch from netowrk and if failed then you need to handle
+        // todo if null objects are returned then try fetch from network and if failed then you need to handle
         //  consider making room return nullable objects to form handle these null cases
         // todo some shows return seasons which have zero episodes... handle that case (example is Simpsons last two seasons)
-        Timber.d("show $watchlistShow")
-        Timber.d("episode: $episode")
-        Timber.d("season: $season")
         database.watchlistShowDao().update(
             watchlistShow.copy(
                 currentEpisodeNumber = episode?.number?: 1,
@@ -151,7 +146,7 @@ class RepositoryWatchlist(
     override fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
         return database.watchlistMovieDao().distinctWithDetailsFlow(filterOption).map {
             if (it.isNotEmpty()) {
-                Resource.Success(it.asListUIModelWatchlistMovie())
+                Resource.Success(it.map { it.asUIModelWatchlistMovie() })
             } else {
                 Resource.Error(Exception("There is no results in the database.watchlistDao()..."))
             }
@@ -161,43 +156,10 @@ class RepositoryWatchlist(
     override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
         return database.watchlistShowDao().distinctWithDetailsFlow(filterOption).map {
             if (it.isNotEmpty()) {
-                Resource.Success(it.asListUIModelWatchlistShow())
+                Resource.Success(it.map { it.asUIModelWatchlistShow() })
             } else {
                 Resource.Error(Exception("There is no results in the database.watchlistDao()..."))
             }
         }
     }
-}
-
-// todo move these extenstion functions out
-fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
-    id = details.id,
-    title = details.title,
-    posterPath = details.posterPath,
-    currentEpisodeNumber = status.currentEpisodeNumber,
-    currentEpisodeName = status.currentEpisodeName,
-    currentSeasonNumber = status.currentSeasonNumber,
-    episodesInSeason = status.currentSeasonEpisodeTotal,
-    started = status.started,
-    upToDate = status.upToDate,
-    dateAdded = status.dateAdded
-)
-
-fun List<WatchlistShowWithDetails>.asListUIModelWatchlistShow(): List<UIModelWatchlistShow> {
-    return this.map { it.asUIModelWatchlistShow() }
-}
-
-fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
-    id = details.id,
-    title = details.title,
-    overview = details.overview,
-    posterPath = details.posterPath,
-    watched = status.watched,
-    dateAdded = status.dateAdded,
-    dateWatched = status.dateWatched,
-    lastUpdated = status.dateLastUpdated
-)
-
-fun List<WatchlistMovieWithDetails>.asListUIModelWatchlistMovie(): List<UIModelWatchlisMovie> {
-    return this.map { it.asUIModelWatchlistMovie() }
 }
