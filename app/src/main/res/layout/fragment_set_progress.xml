@@ -61,7 +61,7 @@
         android:id="@+id/tv_progress_instructions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/input_last_episode_watched"
         android:textAlignment="center"
         android:textAppearance="?attr/textAppearanceHeadline5"

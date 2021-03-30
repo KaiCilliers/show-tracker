@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_8">8dp</dimen>
-    <dimen name="padding_8">8dp</dimen>
-    <dimen name="text_24">24sp</dimen>
-    <dimen name="padding_2">2dp</dimen>
-    <dimen name="margin_2">2dp</dimen>
-    <dimen name="margin_24">24dp</dimen>
-    <dimen name="poster_small_width">42dp</dimen>
-    <dimen name="poster_small_height">60dp</dimen>
-    <dimen name="text_36">36sp</dimen>
-    <dimen name="text_18">18sp</dimen>
     <dimen name="margin_small">4dp</dimen>
     <dimen name="margin_medium">8dp</dimen>
     <dimen name="margin_large">16dp</dimen>
-    <dimen name="skeleton_icon">56dp</dimen>
 </resources>

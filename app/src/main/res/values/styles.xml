@@ -18,27 +18,6 @@
   -->
 
 <resources>
-
-    <style name="Widget.ShowTracker.BottomNavigationView"
-        parent="Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
-        <item name="labelVisibilityMode">selected</item>
-        <item name="itemIconTint">@color/bottom_nav_item</item>
-        <item name="itemTextColor">@color/bottom_nav_item</item>
-        <item name="itemTextAppearanceActive">@style/TextAppearance.ShowTracker.BottomNavigation</item>
-    </style>
-
-    <!-- Filter Radio Button -->
-    <style name="radio_filter_item_style">
-        <item name="android:background">@drawable/radio_flat_selector</item>
-        <item name="android:button">@android:color/transparent</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">3dp</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/radio_flat_text_selector</item>
-    </style>
-
     <style name="Widget.ShowTracker.TextView.HeaderMediaList"
         parent="Widget.AppCompat.TextView">
         <item name="android:layout_marginStart">16dp</item>
@@ -61,32 +40,4 @@
         <item name="android:paddingStart">4dp</item>
         <item name="android:paddingEnd">16dp</item>
     </style>
-
-    <!-- Toolbar -->
-<!--    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-<!--        &lt;!&ndash; android:textColorPrimary is the color of the title text in the Toolbar  &ndash;&gt;-->
-<!--        <item name="android:textColorPrimary">@android:color/white</item>-->
-<!--        &lt;!&ndash; actionMenuTextColor is the color of the text of action (menu) items  &ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="actionMenuTextColor">@android:color/holo_green_light</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        &lt;!&ndash; Tints the input fields like checkboxes and text fields &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="colorAccent">@color/cursorAccent</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        &lt;!&ndash; Applies to views in their normal state. &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="colorControlNormal">@color/controlNormal</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        &lt;!&ndash; Applies to views in their activated state (i.e checked or switches) &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="colorControlActivated">@color/controlActivated</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        &lt;!&ndash; Applied to framework control highlights (i.e ripples or list selectors) &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="colorControlHighlight">@color/controlActivated</item>&ndash;&gt;-->
-
-<!--        &lt;!&ndash; Enable these below if you want clicking icons to trigger a ripple effect &ndash;&gt;-->
-<!--        &lt;!&ndash;-->
-<!--        <item name="selectableItemBackground">?android:selectableItemBackground</item>-->
-<!--        <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>-->
-<!--        &ndash;&gt;-->
-<!--    </style>-->
-
-    <!-- This configures the styles for the title within the Toolbar  -->
-<!--    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
-<!--        <item name="android:textSize">21sp</item>-->
-<!--        <item name="android:textStyle">italic</item>-->
-<!--    </style>-->
 </resources>
