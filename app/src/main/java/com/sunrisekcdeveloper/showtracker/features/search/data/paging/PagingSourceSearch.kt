@@ -22,9 +22,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
-import com.sunrisekcdeveloper.showtracker.features.search.data.repository.asUIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.search.data.repository.asUIModelSearchh
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import timber.log.Timber
 
@@ -60,7 +59,7 @@ class PagingSourceSearch(
 
         when (movieResponse) {
             is NetworkResult.Success -> {
-                result.addAll(movieResponse.data.media.asUIModelSearch())
+                result.addAll(movieResponse.data.media.map { it.asUIModelSearch() })
             }
             is NetworkResult.Error -> {
                 // todo dont swallow exceptions
@@ -69,7 +68,7 @@ class PagingSourceSearch(
         }
         when (showResponse) {
             is NetworkResult.Success -> {
-                result.addAll(showResponse.data.media.asUIModelSearchh())
+                result.addAll(showResponse.data.media.map { it.asUIModelSearch() })
             }
             is NetworkResult.Error -> {
                 Timber.d("Error - show search call was not successful: ${showResponse.exception}")
@@ -77,7 +76,8 @@ class PagingSourceSearch(
         }
 
         // todo this can be done nicer
-        val filtered = result.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
+        val filtered =
+            result.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
         val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
         { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
         )
@@ -96,7 +96,7 @@ class PagingSourceSearch(
             SEARCH_STARTING_PAGE_INDEX -> null
             else -> position + 1
         }
-        Timber.e("xxxxx [$query] Page: ${nextKey?.minus(1)} with ${sorted.size} items")
+
         return LoadResult.Page(
             data = sorted,
             prevKey = prevKey,

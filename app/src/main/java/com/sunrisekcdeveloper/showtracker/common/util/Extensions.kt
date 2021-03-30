@@ -26,6 +26,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
@@ -37,6 +39,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeason
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
@@ -52,6 +55,7 @@ fun isDateSame(c1: Calendar, c2: Calendar): Boolean {
         Calendar.MONTH
     ) && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH)
 }
+
 // hacky way of changing button colors depending on the action it represents
 fun fetchPrimaryColor(context: Context): Int {
     val typedValue = TypedValue()
@@ -61,6 +65,7 @@ fun fetchPrimaryColor(context: Context): Int {
     a.recycle()
     return color
 }
+
 fun fetchErrorColor(context: Context): Int {
     val typedValue = TypedValue()
     val a: TypedArray =
@@ -69,18 +74,23 @@ fun fetchErrorColor(context: Context): Int {
     a.recycle()
     return color
 }
+
 fun View.gone() {
     this.visibility = View.GONE
 }
+
 fun View.visible() {
     this.visibility = View.VISIBLE
 }
+
 fun View.enabled() {
     this.isEnabled = true
 }
+
 fun View.disabled() {
     this.isEnabled = false
 }
+
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaTitle = title,
@@ -88,6 +98,7 @@ fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) =
     posterPath = posterPath ?: "",
     listType = listType
 )
+
 fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaTitle = name,
@@ -95,24 +106,7 @@ fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = 
     posterPath = posterPath ?: "",
     listType = listType
 )
-fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
-    id = "$id",
-    title = title,
-    mediaType = MediaType.Movie,
-    posterPath = posterPath ?: "",
-    rating = rating,
-    popularity = popularity,
-    ratingVotes = voteCount
-)
-fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
-    id = "$id",
-    title = name,
-    mediaType = MediaType.Show,
-    posterPath = posterPath ?: "",
-    rating = rating,
-    popularity = popularity,
-    ratingVotes = voteCount
-)
+
 fun EntityShow.asUIModelShowDetail(
     watchlisted: Boolean = false,
     started: Boolean = false,
@@ -173,6 +167,7 @@ fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, del
         watchlisted = watchlisted,
         watched = watched
     )
+
 fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(
     showId = showId,
     seasonNumber = seasonNumber,
@@ -190,11 +185,56 @@ fun ResponseSeason.asEntitySeason(showId: String) = EntitySeason(
     number = number,
     name = name,
     overview = overview,
-    posterPath = posterPath?: "",
+    posterPath = posterPath ?: "",
     airDate = -1L, // todo conversion function to take string date and return Long version
     episodeTotal = episodeCount,
     lastUpdated = System.currentTimeMillis()
 )
+
+fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
+    id = "$id",
+    title = title,
+    mediaType = MediaType.Movie,
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
+)
+
+fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
+    id = "$id",
+    title = name,
+    mediaType = MediaType.Show,
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
+)
+
+fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
+    id = id,
+    mediaTitle = title,
+    mediaType = mediaType,
+    listType = ListType.MoviePopular,
+    posterPath = posterPath
+)
+
+fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+    id = status.id,
+    title = details.title,
+    posterPath = details.posterPath,
+    backdropPath = details.backdropPath,
+    mediaType = MediaType.Movie
+)
+
+fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+    id = status.id,
+    title = details.title,
+    posterPath = details.posterPath,
+    backdropPath = details.backdropPath,
+    mediaType = MediaType.Show
+)
+
 fun TextView.setMaxLinesToEllipsize() {
     val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
     maxLines = visibleLines

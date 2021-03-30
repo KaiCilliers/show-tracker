@@ -27,7 +27,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
@@ -55,6 +55,8 @@ class ViewModelSearch @ViewModelInject constructor(
     private val stateNetwork: LiveData<StateNetwork>
         get() = _stateNetwork
 
+    private var currentQuery: String? = null
+    private var currentSearchResult: Flow<PagingData<UIModelDiscovery>>? = null
 
     private val unwatchedMediaCache = mutableListOf<UIModelUnwatchedSearch>()
 
@@ -75,13 +77,13 @@ class ViewModelSearch @ViewModelInject constructor(
                 )
             }
             is ActionSearch.SearchForMedia -> {
-                if(stateNetwork.value == StateNetwork.Connected) {
-                searchMedia(action.query).collectLatest { pagingData ->
-                    _state.value = StateSearch.Success(pagingData)
+                if (stateNetwork.value == StateNetwork.Connected) {
+                    searchMedia(action.query).collectLatest { pagingData ->
+                        _state.value = StateSearch.Success(pagingData)
+                    }
+                } else {
+                    _state.value = StateSearch.Error(Exception("No internet access..."))
                 }
-            } else {
-            _state.value = StateSearch.Error(Exception("No internet access..."))
-        }
             }
             ActionSearch.BackButtonPress -> {
                 eventChannel.send(EventSearch.PopBackStack)
@@ -118,10 +120,6 @@ class ViewModelSearch @ViewModelInject constructor(
         }
     }
 
-    private var currentQuery: String? = null
-
-    private var currentSearchResult: Flow<PagingData<UIModelDiscovery>>? = null
-
     // todo returning different UIModel due to pagingadapter requirements
     //  the adapter needs to have its own data type
     private fun searchMedia(query: String): Flow<PagingData<UIModelDiscovery>> {
@@ -133,6 +131,7 @@ class ViewModelSearch @ViewModelInject constructor(
         val newResult: Flow<PagingData<UIModelDiscovery>> = searchMediaByTitleUseCase(query)
             .map {
                 it.map { model ->
+                    // todo this is temp fix (adapter needs its own data type)
                     model.asUIModelDiscovery()
                 }
             }
@@ -141,12 +140,3 @@ class ViewModelSearch @ViewModelInject constructor(
         return newResult
     }
 }
-
-// todo this is temp fix (adapter needs its own data type)
-private fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
-    id = id,
-    mediaTitle = title,
-    mediaType = mediaType,
-    listType = ListType.MoviePopular,
-    posterPath = posterPath
-)

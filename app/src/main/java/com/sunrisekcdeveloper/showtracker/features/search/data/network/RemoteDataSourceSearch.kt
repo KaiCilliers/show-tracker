@@ -34,7 +34,6 @@ class RemoteDataSourceSearch(
         query: String,
         page: Int
     ): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
-        Timber.e("inside datasource...")
         api.searchMoviesByTitle(query = query, page = page)
     }
 

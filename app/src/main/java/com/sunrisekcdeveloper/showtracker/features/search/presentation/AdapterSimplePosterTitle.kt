@@ -33,9 +33,10 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUn
 
 class AdapterSimplePosterTitle(
     private val glide: RequestManager,
-    private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
+    private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : ListAdapter<UIModelUnwatchedSearch, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(
-    UNWATCHED_SEARCH_MODEL_COMPARATOR) {
+    UNWATCHED_SEARCH_MODEL_COMPARATOR
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
         ViewHolderSimplePosterTitle.from(parent, glide, onPosterClickListener)
 
@@ -51,7 +52,7 @@ class AdapterSimplePosterTitle(
         val binding: ItemSimplePosterAndTitleBinding,
         private val glide: RequestManager,
         private val onPosterClickListener: OnPosterClickListener
-        ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelUnwatchedSearch) {
             binding.root.click {
                 onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
@@ -65,6 +66,7 @@ class AdapterSimplePosterTitle(
                 .into(binding.imgvItemMediaPoster)
             binding.tvMediaTitle.text = data.title
         }
+
         companion object {
             fun from(
                 parent: ViewGroup,
@@ -77,6 +79,7 @@ class AdapterSimplePosterTitle(
             )
         }
     }
+
     companion object {
         private val UNWATCHED_SEARCH_MODEL_COMPARATOR =
             object : DiffUtil.ItemCallback<UIModelUnwatchedSearch>() {
