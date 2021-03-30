@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
 sealed class EventDetailMovie {
+    data class ShowConfirmationDialogUnwatch(val movieId: String, val title: String) : EventDetailMovie()
     object Close : EventDetailMovie()
     data class ShowToast(val msg: String) : EventDetailMovie()
     data class ShowConfirmationDialog(val movieId: String, val title: String) : EventDetailMovie()
@@ -27,5 +28,6 @@ sealed class EventDetailMovie {
         fun close() = Close
         fun showToast(message: String) = ShowToast(message)
         fun showConfirmationDialog(movieId: String, title: String) = ShowConfirmationDialog(movieId, title)
+        fun showConfirmationDialogUnwatch(movieId: String, title: String) = ShowConfirmationDialogUnwatch(movieId, title)
     }
 }

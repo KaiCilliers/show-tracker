@@ -101,6 +101,9 @@ class ViewModelMovieDetail @ViewModelInject constructor(
             is ActionDetailMovie.AttemptRemove -> {
                 eventChannel.send(EventDetailMovie.showConfirmationDialog(action.movieId, action.title))
             }
+            is ActionDetailMovie.AttemptUnwatch -> {
+                eventChannel.send(EventDetailMovie.showConfirmationDialogUnwatch(action.movieId, action.title))
+            }
         }
     }
 }

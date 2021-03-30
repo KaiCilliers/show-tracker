@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
 sealed class ActionDetailMovie {
+    data class AttemptUnwatch(val movieId: String, val title: String) : ActionDetailMovie()
     data class AttemptRemove(val movieId: String, val title: String) : ActionDetailMovie()
     data class Load(val movieId: String) : ActionDetailMovie()
     data class Add(val movieId: String) : ActionDetailMovie()
@@ -29,6 +30,7 @@ sealed class ActionDetailMovie {
     data class ShowToast(val msg: String) : ActionDetailMovie()
 
     companion object {
+        fun attemptUnwatch(movieId: String, title: String) = AttemptUnwatch(movieId, title)
         fun attemptRemove(movieId: String, title: String) = AttemptRemove(movieId, title)
         fun load(movieId: String) = Load(movieId)
         fun add(movieId: String) = Add(movieId)

@@ -101,8 +101,20 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                 is EventDetailMovie.ShowConfirmationDialog -> {
                     showConfirmationDialog(event.movieId, event.title)
                 }
+                is EventDetailMovie.ShowConfirmationDialogUnwatch -> {
+                    showConfirmationDialogUnwatch(event.movieId, event.title)
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showConfirmationDialogUnwatch(movieId: String, title: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unwatch Movie?")
+            .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
+            .setNegativeButton("Cancel") { _, _ ->}
+            .setPositiveButton("Unwatch") { _,_ -> viewModel.submitAction(ActionDetailMovie.setUnwatched(movieId)) }
+            .show()
     }
 
     private fun showConfirmationDialog(movieId: String, title: String) {
@@ -158,9 +170,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         if (data.watched && !data.deleted) {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
             binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
-                ActionDetailMovie.setUnwatched(
-                    data.id
-                )
+                ActionDetailMovie.attemptUnwatch(data.id, data.title)
             ) }
         } else {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
