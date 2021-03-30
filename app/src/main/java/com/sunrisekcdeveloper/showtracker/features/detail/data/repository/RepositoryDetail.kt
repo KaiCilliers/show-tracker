@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
+import androidx.room.withTransaction
 import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
@@ -59,33 +60,64 @@ class RepositoryDetail(
     }
 
     override suspend fun removeMovieFromWatchlist(id: String) {
-        database.watchlistMovieDao().removeMovieFromWatchlist(id)
+        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+        if (exists) {
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(movie.copy(
+                    deleted = true,
+                    dateDeleted = System.currentTimeMillis(),
+                    dateLastUpdated = System.currentTimeMillis()
+                ))
+            }
+        }
     }
 
     override suspend fun updateWatchlistMovieAsWatched(id: String) {
-        // todo better implementation possible
-        insertWatchlistMovieIfNotExists(id)
-        database.watchlistMovieDao().setMovieAsWatched(id)
-    }
-
-    private suspend fun insertWatchlistMovieIfNotExists(id: String) {
         val exists = database.watchlistMovieDao().watchlistMovieExist(id)
-        if (!exists) {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
+        if (exists) {
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(movie.copy(
+                    watched = true,
+                    dateWatched = System.currentTimeMillis(),
+                    dateLastUpdated = System.currentTimeMillis()
+                ))
+            }
+        } else {
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.watchedFrom(id))
         }
     }
 
     override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
-        database.watchlistMovieDao().setMovieAsNotWatched(id)
+        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+        if (exists) {
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(movie.copy(
+                    watched = false,
+                    dateLastUpdated = System.currentTimeMillis()
+                ))
+            }
+        } else {
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.watchedFrom(id))
+        }
     }
 
     override suspend fun addMovieToWatchlist(id: String) {
         val exists = database.watchlistMovieDao().watchlistMovieExist(id)
         if (exists) {
-            database.watchlistMovieDao().markWatchlistMovieAsNotDeleted(id)
-            database.watchlistMovieDao().setMovieAsWatched(id)
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(
+                    movie.copy(
+                        deleted = false,
+                        dateLastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
         } else {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.unwatchedFrom(id))
         }
     }
 
@@ -123,7 +155,7 @@ class RepositoryDetail(
     }
 
     override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
-        val deets = database.movieDao().distinctMovieDetailFlow(id)
+        val deets = database.movieDao().distinctMovieFlow(id)
         val status = database.watchlistMovieDao().distinctWatchlistMovieFlow(id)
 
         return combine(deets, status) { d, s ->
@@ -176,7 +208,7 @@ class RepositoryDetail(
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
 
-        val detailsFlow = database.showDao().distinctShowDetailFlow(id)
+        val detailsFlow = database.showDao().distinctShowFlow(id)
         val statusFlow = database.watchlistShowDao().distinctWatchlistShowFlow(id)
 
         return combine(detailsFlow, statusFlow) { showDetails, status ->

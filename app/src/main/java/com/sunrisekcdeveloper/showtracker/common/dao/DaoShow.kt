@@ -37,7 +37,7 @@ abstract class DaoShow : DaoBase<EntityShow> {
      * @return
      */
     @Query("SELECT * FROM tbl_show WHERE show_id = :showId")
-    abstract suspend fun show(showId: String): EntityShow
+    abstract suspend fun withId(showId: String): EntityShow
 
     /**
      * Show details
@@ -48,7 +48,7 @@ abstract class DaoShow : DaoBase<EntityShow> {
      * @return Flow emitting shows with matching ID
      */
     @Query("SELECT * FROM tbl_show WHERE show_id = :id")
-    protected abstract fun showDetails(id: String): Flow<EntityShow?>
+    protected abstract fun showFlow(id: String): Flow<EntityShow?>
 
     /**
      * Distinct show detail flow
@@ -58,5 +58,5 @@ abstract class DaoShow : DaoBase<EntityShow> {
      * @param id : String
      * @return Flow emitting distinct shows with matching ID
      */
-    open fun distinctShowDetailFlow(id: String): Flow<EntityShow?> = showDetails(id).distinctUntilChanged()
+    open fun distinctShowFlow(id: String): Flow<EntityShow?> = showFlow(id).distinctUntilChanged()
 }

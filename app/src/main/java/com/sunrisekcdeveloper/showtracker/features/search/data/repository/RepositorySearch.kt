@@ -27,8 +27,8 @@ import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
@@ -45,7 +45,7 @@ class RepositorySearch(
 ) : RepositorySearchContract {
 
     override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
-        val movie = database.watchlistMovieDao().unwatchedMovies()
+        val movie = database.watchlistMovieDao().unwatched()
         val shows = database.watchlistShowDao().unwatchedShows()
 
         Timber.e("movies: ${movie.map { it.details.title }}")

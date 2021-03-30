@@ -22,7 +22,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
-import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
 import com.sunrisekcdeveloper.showtracker.common.util.isDateSame
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
@@ -30,11 +30,14 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.Wat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import java.util.*
 
 @Dao
 abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
+
+    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
+    abstract suspend fun withId(id: String): EntityWatchlistMovie
+
     /**
      * Unwatched movies
      *
@@ -44,7 +47,7 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
      */
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0 AND watch_movie_watched = 0")
-    abstract suspend fun unwatchedMovies(): List<WatchlistMovieWithDetails>
+    abstract suspend fun unwatched(): List<WatchlistMovieWithDetails>
 
     /**
      * Distinct watchlist movies details flow
@@ -150,37 +153,4 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
     @Deprecated("Use basic @Update function")
     @Query("UPDATE tbl_watchlist_movie SET watch_movie_last_updated = :timeStamp WHERE watch_movie_id = :id")
     abstract suspend fun updateWatchlistMovieUpdatedAt(id: String, timeStamp: Long)
-
-    /**
-     * Set movie as watched
-     *
-     * @param id : String
-     */
-    @Transaction
-    open suspend fun setMovieAsWatched(id: String) {
-        privateSetMovieAsWatched(id)
-        updateWatchlistMovieUpdatedAt(id, System.currentTimeMillis())
-    }
-
-    /**
-     * Set movie as not watched
-     *
-     * @param id : String
-     */
-    @Transaction
-    open suspend fun setMovieAsNotWatched(id: String) {
-        privateSetMovieAsNotWatched(id)
-        updateWatchlistMovieUpdatedAt(id, System.currentTimeMillis())
-    }
-
-    /**
-     * Remove movie from watchlist
-     *
-     * @param id : String
-     */
-    @Transaction
-    open suspend fun removeMovieFromWatchlist(id: String) {
-        privateRemoveMovieFromWatchlist(id, System.currentTimeMillis())
-        updateWatchlistMovieUpdatedAt(id, System.currentTimeMillis())
-    }
 }

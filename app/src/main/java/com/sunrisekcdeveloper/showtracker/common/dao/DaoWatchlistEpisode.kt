@@ -43,7 +43,7 @@ interface DaoWatchlistEpisode : DaoBase<EntityWatchlistEpisode> {
         AND watch_episode_episode_number = :episode 
     """
     )
-    abstract suspend fun watchlistEpisode(
+    suspend fun withId(
         showId: String,
         episode: Int,
         season: Int

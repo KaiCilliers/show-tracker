@@ -50,7 +50,14 @@ data class EntityWatchlistMovie(
     @ColumnInfo(name = "watch_movie_last_updated") val dateLastUpdated: Long = System.currentTimeMillis()
 ) {
     companion object {
-        fun unWatchedfrom(id: String) = EntityWatchlistMovie(
+        fun watchedFrom(id: String) = EntityWatchlistMovie(
+            id = id,
+            watched = true,
+            dateAdded = System.currentTimeMillis(),
+            dateWatched = System.currentTimeMillis(),
+            dateLastUpdated = System.currentTimeMillis()
+        )
+        fun unwatchedFrom(id: String) = EntityWatchlistMovie(
             id = id,
             watched = false,
             dateAdded = System.currentTimeMillis(),

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common.dao.combined
+package com.sunrisekcdeveloper.showtracker.common.dao.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation

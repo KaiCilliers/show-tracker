@@ -38,8 +38,8 @@ class RepositoryProgress(
 ) : RepositoryProgressContract {
 
     override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
-        val entityEpisode = database.episodeDao().episode(showId, season, episode)
-        val entitySeason = database.seasonDao().season(showId, season)
+        val entityEpisode = database.episodeDao().withId(showId, season, episode)
+        val entitySeason = database.seasonDao().withId(showId, season)
 
         Timber.e("Episode: $entityEpisode")
         Timber.e("Season: $entitySeason")
@@ -58,8 +58,8 @@ class RepositoryProgress(
     }
 
     override suspend fun setNewShowAsUpToDate(showId: String) {
-        val season = database.seasonDao().lastSeasonOfShow(showId)
-        val episode = database.episodeDao().lastEpisodeOfShow(showId, season.number)
+        val season = database.seasonDao().lastInShow(showId)
+        val episode = database.episodeDao().lastInSeason(showId, season.number)
 
         database.withTransaction {
             database.watchlistEpisodeDao().insert(EntityWatchlistEpisode.completedFrom(showId, season.number, episode.number))
@@ -148,7 +148,7 @@ class RepositoryProgress(
 
     @ExperimentalStdlibApi
     override suspend fun showSeasons(showId: String): Resource<Map<Int, Int>> {
-        val seasons = database.seasonDao().seasonsOfShow(showId)
+        val seasons = database.seasonDao().allFromShow(showId)
         // todo handle if list is empty
         // todo handle check to ensure this is all the seasons
 

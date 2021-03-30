@@ -37,11 +37,11 @@ class RepositoryWatchlist(
 ) : RepositoryWatchlistContract {
 
     override suspend fun currentShow(showId: String): EntityShow {
-        return database.showDao().show(showId)
+        return database.showDao().withId(showId)
     }
 
     override suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int) {
-        val watchlistEpisode = database.watchlistEpisodeDao().watchlistEpisode(showId, episode, season)
+        val watchlistEpisode = database.watchlistEpisodeDao().withId(showId, episode, season)
         Timber.d("episode to mark: $watchlistEpisode")
         @Suppress("UNNECESSARY_SAFE_CALL")
         watchlistEpisode?.let {
@@ -77,7 +77,7 @@ class RepositoryWatchlist(
 
     override suspend fun incrementWatchlistShowCurrentEpisode(showId: String) {
         val watchlistShow = database.watchlistShowDao().watchlistShow(showId)
-        val newEpisode = database.episodeDao().episode(
+        val newEpisode = database.episodeDao().withId(
             showId,
             watchlistShow.currentSeasonNumber,
             watchlistShow.currentEpisodeNumber + 1
@@ -115,8 +115,8 @@ class RepositoryWatchlist(
 
     override suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int) {
         val watchlistShow = database.watchlistShowDao().watchlistShow(showId)
-        val episode = database.episodeDao().episode(showId, newSeason, newEpisode)
-        val season = database.seasonDao().season(showId, newSeason)
+        val episode = database.episodeDao().withId(showId, newSeason, newEpisode)
+        val season = database.seasonDao().withId(showId, newSeason)
         // todo if null objects are returned then try fetch from netowrk and if failed then you need to handle
         //  consider making room return nullable objects to form handle these null cases
         // todo some shows return seasons which have zero episodes... handle that case (example is Simpsons last two seasons)

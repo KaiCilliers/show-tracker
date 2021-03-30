@@ -35,7 +35,7 @@ interface DaoSeason : DaoBase<EntitySeason> {
      * @return
      */
     @Query("SELECT * FROM tbl_season WHERE season_show_id = :showId AND season_number = :season")
-    abstract suspend fun season(showId: String, season: Int): EntitySeason
+    suspend fun withId(showId: String, season: Int): EntitySeason
 
     /**
      * Seasons of show
@@ -51,7 +51,7 @@ interface DaoSeason : DaoBase<EntitySeason> {
         AND season_number != 0 ORDER BY season_number
     """
     )
-    abstract suspend fun seasonsOfShow(showId: String): List<EntitySeason>
+    suspend fun allFromShow(showId: String): List<EntitySeason>
 
     /**
      * Last season of show
@@ -64,5 +64,5 @@ interface DaoSeason : DaoBase<EntitySeason> {
         SELECT * FROM tbl_season WHERE season_show_id = :showId ORDER BY season_number DESC LIMIT 1
     """
     )
-    abstract suspend fun lastSeasonOfShow(showId: String): EntitySeason
+    suspend fun lastInShow(showId: String): EntitySeason
 }
