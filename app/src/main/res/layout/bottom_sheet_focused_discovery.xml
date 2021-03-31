@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright © 2021. The Android Open Source Project
   ~
   ~ @author Kai Cilliers
@@ -17,34 +16,41 @@
   ~ limitations under the License.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.discovery.presentation.focused.FragmentBottomSheetFocused">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:textAppearance="?attr/textAppearanceHeadline4"
+            tools:text="Popular Movies" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline4"
-                android:text="TextView"
-                android:layout_margin="@dimen/margin_small"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_focused_discovery"
-            android:layout_width="match_parent"
-            android:layout_height="700dp"/>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rc_focused_discovery"
+                    android:layout_width="match_parent"
+                    android:layout_height="700dp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

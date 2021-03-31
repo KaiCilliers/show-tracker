@@ -165,7 +165,7 @@ class FragmentDiscovery : Fragment() {
 
         binding.tvHeadingPopular.click {
             findNavController().navigate(
-                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused()
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(4)
             )
         }
 

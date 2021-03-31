@@ -25,25 +25,26 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetFocusedDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.ViewModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAdapterSimplePosterMedium
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetFocusedDiscoveryBinding
     private val viewModel: ViewModelDiscovery by viewModels()
+    private val arguments: FragmentBottomSheetFocusedArgs by navArgs()
 
     private val pagingAdapter = PagingAdapterSimplePosterMedium()
     private var job: Job? = null
@@ -68,7 +69,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
+                        FragmentBottomSheetFocusedDirections.actionDestinationBottomSheetFocusedToDestinationBottomSheetDetailMovie(
                             movieId = mediaId,
                             movieTitle = mediaTitle,
                             posterPath = posterPath
@@ -77,25 +78,60 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
                 }
                 MediaType.Show -> {
                     findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
-                            mediaId,
-                            mediaTitle,
-                            posterPath
+                        FragmentBottomSheetFocusedDirections.actionDestinationBottomSheetFocusedToDestinationBottomSheetDetailShow(
+                            showId = mediaId,
+                            showTitle = mediaTitle,
+                            posterPath = posterPath
                         )
                     )
                 }
             }
         }
         pagingAdapter.setPosterClickAction(onClick)
-        binding.rcFocusedDiscovery.layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+        binding.rcFocusedDiscovery.layoutManager =
+            GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
         binding.rcFocusedDiscovery.adapter = pagingAdapter
     }
 
     private fun observeViewModel() {
         job = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.streamPopularMovies.collectLatest {
-                Timber.e("gotit: $it")
-                pagingAdapter.submitData(it)
+            when (arguments.listType) {
+                1 -> {
+                    binding.textView.text = getString(R.string.heading_popular_movies)
+                    viewModel.streamPopularMovies.collectLatest {
+                        pagingAdapter.submitData(it)
+                    }
+                }
+                2 -> {
+                    binding.textView.text = getString(R.string.heading_popular_shows)
+                    viewModel.streamPopularShows.collectLatest {
+                        pagingAdapter.submitData(it)
+                    }
+                }
+                3 -> {
+                    viewModel.streamTopRatedMovies.collectLatest {
+                        binding.textView.text = getString(R.string.heading_top_rated_movies)
+                        pagingAdapter.submitData(it)
+                    }
+                }
+                4 -> {
+                    viewModel.streamTopRatedShows.collectLatest {
+                        binding.textView.text = getString(R.string.heading_top_rated_shows)
+                        pagingAdapter.submitData(it)
+                    }
+                }
+                5 -> {
+                    viewModel.streamUpcomingMovies.collectLatest {
+                        binding.textView.text = getString(R.string.heading_upcoming_movies)
+                        pagingAdapter.submitData(it)
+                    }
+                }
+                6 -> {
+                    viewModel.streamAiringTodayShows.collectLatest {
+                        binding.textView.text = getString(R.string.heading_airing_today_shows)
+                        pagingAdapter.submitData(it)
+                    }
+                }
             }
         }
     }

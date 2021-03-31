@@ -168,5 +168,15 @@
         android:id="@+id/destination_bottom_sheet_focused"
         android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.FragmentBottomSheetFocused"
         android:label="bottom_sheet_focused_discovery"
-        tools:layout="@layout/bottom_sheet_focused_discovery" />
+        tools:layout="@layout/bottom_sheet_focused_discovery" >
+        <argument
+            android:name="listType"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_destination_bottom_sheet_focused_to_destination_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+        <action
+            android:id="@+id/action_destination_bottom_sheet_focused_to_destination_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
+    </dialog>
 </navigation>
