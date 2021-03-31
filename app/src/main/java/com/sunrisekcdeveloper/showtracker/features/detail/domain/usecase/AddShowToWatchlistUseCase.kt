@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,9 +27,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 //  movie or show and then call the appropriate repo methods
 @ExperimentalCoroutinesApi
 class AddShowToWatchlistUseCase(
-    @RepoDetail private val detailRepo: RepositoryDetailContract
+    private val detailRepo: RepositoryDetailContract
 ) : AddShowToWatchlistUseCaseContract {
     override suspend fun invoke(showId: String) {
-        detailRepo.addShowToWatchlist(showId)
+        detailRepo.addShow(showId)
     }
 }

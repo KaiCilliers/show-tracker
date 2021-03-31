@@ -29,7 +29,6 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
-@ExperimentalCoroutinesApi
 class ViewModelDiscoveryShows @ViewModelInject constructor(
     loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
     loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,

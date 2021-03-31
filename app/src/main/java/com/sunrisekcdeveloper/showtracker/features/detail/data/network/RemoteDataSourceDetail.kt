@@ -18,34 +18,32 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.base.RemoteDataSourceBase
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.ApiDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class RemoteDataSourceDetail(
-    @ApiDetail private val api: ServiceDetailContract,
+    private val api: ServiceDetailContract,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RemoteDataSourceDetailContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
-        api.movieDetail(id = id)
+        api.movieDetails(id = id)
     }
 
     override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> = safeApiCall {
-        api.movieCertification(id = id)
+        api.movieCertifications(id = id)
     }
 
     override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> = safeApiCall {
-        api.showDetail(id = id)
+        api.showDetails(id = id)
     }
 
     override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = safeApiCall {
-        api.showCertification(id = id)
+        api.showCertifications(id = id)
     }
 }

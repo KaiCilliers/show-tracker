@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common
+package com.sunrisekcdeveloper.showtracker.common.util
 
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 

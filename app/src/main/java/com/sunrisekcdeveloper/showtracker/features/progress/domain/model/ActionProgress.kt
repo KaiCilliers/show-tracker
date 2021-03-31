@@ -25,28 +25,39 @@ sealed class ActionProgress {
         val episodeNumber: Int,
         val title: String
     ) : ActionProgress()
+
     data class AttemptMarkUpToDate(
         val showId: String,
         val title: String
     ) : ActionProgress()
+
     object NavigateBack : ActionProgress()
     data class SetShowProgress(
         val showId: String,
         val seasonNumber: Int,
         val episodeNumber: Int
     ) : ActionProgress()
+
     data class MarkShowUpToDate(val showId: String) : ActionProgress()
     data class CreateToast(val msg: String) : ActionProgress()
     data class Load(val showId: String) : ActionProgress()
 
     companion object {
         fun navigateBack() = NavigateBack
-        fun attemptSetProgress(showId: String, seasonNumber: Int, episodeNumber: Int, title: String) =
+        fun attemptSetProgress(
+            showId: String,
+            seasonNumber: Int,
+            episodeNumber: Int,
+            title: String
+        ) =
             AttemptSetProgress(showId, seasonNumber, episodeNumber, title)
+
         fun attemptMarkUpToDate(showId: String, title: String) =
             AttemptMarkUpToDate(showId, title)
+
         fun setShowProgress(showId: String, seasonNumber: Int, episodeNumber: Int) =
             SetShowProgress(showId, seasonNumber, episodeNumber)
+
         fun markShowUpToDate(showId: String) = MarkShowUpToDate(showId)
         fun createToast(message: String) = CreateToast(message)
         fun load(showId: String) = Load(showId)

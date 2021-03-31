@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.progress.application
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 
 interface FetchShowSeasonAndEpisodeTotalsUseCaseContract {
     suspend operator fun invoke(showId: String): Resource<Map<Int, Int>>

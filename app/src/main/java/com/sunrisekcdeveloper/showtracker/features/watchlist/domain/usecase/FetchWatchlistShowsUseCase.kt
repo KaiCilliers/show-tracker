@@ -18,8 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoWatchlist
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
@@ -31,7 +30,7 @@ import kotlinx.coroutines.flow.flow
 
 @ExperimentalCoroutinesApi
 class FetchWatchlistShowsUseCase(
-    @RepoWatchlist private val repoWatchlist: RepositoryWatchlistContract
+    private val repoWatchlist: RepositoryWatchlistContract
 ) : FetchWatchlistShowsUseCaseContract {
     override suspend fun invoke(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
         return flow {

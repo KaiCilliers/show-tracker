@@ -36,7 +36,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
@@ -48,8 +48,6 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -57,15 +55,11 @@ import javax.inject.Inject
 class FragmentSearch : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-
     private val viewModel: ViewModelSearch by viewModels()
 
     private val adapterSearchResults = PagingAdapterSimplePosterMedium()
-
     lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
-
     lateinit var linearLayoutManager: LinearLayoutManager
-
     lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreateView(
@@ -94,7 +88,8 @@ class FragmentSearch : Fragment() {
     private fun isConnected() {
 
         try {
-            val cm = requireContext().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val cm =
+                requireContext().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
             val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
 

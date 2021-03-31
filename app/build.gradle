@@ -31,6 +31,7 @@ android {
 
         buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
         buildConfigField("String", "TMDB_POSTER_BASE_URL", apikeysProperties['TMDB_POSTER_BASE_URL'])
+        buildConfigField("String", "TMDB_BASE_URL", apikeysProperties['TMDB_BASE_URL'])
     }
     // Always show the result of every unit test when running via
     // command line, even if it passes.

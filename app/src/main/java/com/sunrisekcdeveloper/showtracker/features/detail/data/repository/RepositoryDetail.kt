@@ -18,15 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.room.withTransaction
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
@@ -40,53 +37,112 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class RepositoryDetail(
-    @SourceDetail private val remote: RemoteDataSourceDetailContract,
+    private val remote: RemoteDataSourceDetailContract,
     private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
 
-    // todo there needs some serious work to the business logic with the management of shows and movies
-    override suspend fun addShowToWatchlist(id: String) {
-        val exists = database.watchlistShowDao().watchlistShowExist(id)
+    override suspend fun addShow(id: String) {
+        val exists = database.watchlistShowDao().exist(id)
         if (exists) {
-            database.watchlistShowDao().markWatchlistShowAsNotDeleted(id)
+            val show = database.watchlistShowDao().withId(id)
+            database.withTransaction {
+                database.watchlistShowDao().update(
+                    show.copy(
+                        deleted = false,
+                        started = false,
+                        upToDate = false,
+                        lastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
         } else {
             database.watchlistShowDao().insert(EntityWatchlistShow.freshBareEntryFrom(id))
         }
     }
 
-    override suspend fun removeShowFromWatchlist(id: String) {
-        database.watchlistShowDao().removeShowFromWatchlist(id)
-    }
-
-    override suspend fun removeMovieFromWatchlist(id: String) {
-        database.watchlistMovieDao().removeMovieFromWatchlist(id)
-    }
-
-    override suspend fun updateWatchlistMovieAsWatched(id: String) {
-        // todo better implementation possible
-        insertWatchlistMovieIfNotExists(id)
-        database.watchlistMovieDao().setMovieAsWatched(id)
-    }
-
-    private suspend fun insertWatchlistMovieIfNotExists(id: String) {
-        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
-        if (!exists) {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
+    override suspend fun removeShow(id: String) {
+        val exists = database.watchlistShowDao().exist(id)
+        if (exists) {
+            val show = database.watchlistShowDao().withId(id)
+            database.withTransaction {
+                database.watchlistShowDao().update(
+                    show.copy(
+                        deleted = true,
+                        dateDeleted = System.currentTimeMillis(),
+                        lastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
         }
     }
 
-    override suspend fun updateWatchlistMovieAsNotWatched(id: String) {
-        database.watchlistMovieDao().setMovieAsNotWatched(id)
+    override suspend fun removeMovie(id: String) {
+        val exists = database.watchlistMovieDao().exist(id)
+        if (exists) {
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(
+                    movie.copy(
+                        deleted = true,
+                        dateDeleted = System.currentTimeMillis(),
+                        dateLastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
+        }
     }
 
-    override suspend fun addMovieToWatchlist(id: String) {
-        val exists = database.watchlistMovieDao().watchlistMovieExist(id)
+    override suspend fun watchMovie(id: String) {
+        val exists = database.watchlistMovieDao().exist(id)
         if (exists) {
-            database.watchlistMovieDao().markWatchlistMovieAsNotDeleted(id)
-            database.watchlistMovieDao().setMovieAsWatched(id)
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(
+                    movie.copy(
+                        deleted = false,
+                        watched = true,
+                        dateWatched = System.currentTimeMillis(),
+                        dateLastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
         } else {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.unWatchedfrom(id))
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.watchedFrom(id))
+        }
+    }
+
+    override suspend fun unwatchMovie(id: String) {
+        val exists = database.watchlistMovieDao().exist(id)
+        if (exists) {
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(
+                    movie.copy(
+                        watched = false,
+                        dateLastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
+        } else {
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.watchedFrom(id))
+        }
+    }
+
+    override suspend fun addMovie(id: String) {
+        val exists = database.watchlistMovieDao().exist(id)
+        if (exists) {
+            val movie = database.watchlistMovieDao().withId(id)
+            database.withTransaction {
+                database.watchlistMovieDao().update(
+                    movie.copy(
+                        deleted = false,
+                        dateLastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
+        } else {
+            database.watchlistMovieDao().insert(EntityWatchlistMovie.unwatchedFrom(id))
         }
     }
 
@@ -124,22 +180,22 @@ class RepositoryDetail(
     }
 
     override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
-        val deets = database.movieDao().distinctMovieDetailFlow(id)
-        val status = database.watchlistMovieDao().distinctWatchlistMovieFlow(id)
+        val detailsFlow = database.movieDao().distinctMovieFlow(id)
+        val statusFlow = database.watchlistMovieDao().distinctWatchlistMovieFlow(id)
 
-        return combine(deets, status) { d, s ->
+        return combine(detailsFlow, statusFlow) { details, status ->
             var watchlisted = false
             var watched = false
             var deleted = false
-            s?.let {
+            status?.let {
                 watchlisted = true
-                watched = s.watched
-                deleted = s.deleted
+                watched = status.watched
+                deleted = status.deleted
             }
-            return@combine if (d == null) {
+            return@combine if (details == null) {
                 Resource.Error(Exception("No movie with ID: $id exists in database"))
             } else {
-                Resource.Success(d.asUIModelMovieDetail(watchlisted, watched, deleted))
+                Resource.Success(details.asUIModelMovieDetail(watchlisted, watched, deleted))
             }
         }.onStart { emit(Resource.Loading) }
     }
@@ -177,10 +233,10 @@ class RepositoryDetail(
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
 
-        val detailsFlow = database.showDao().distinctShowDetailFlow(id)
+        val detailsFlow = database.showDao().distinctShowFlow(id)
         val statusFlow = database.watchlistShowDao().distinctWatchlistShowFlow(id)
 
-        return combine(detailsFlow, statusFlow) { showDetails, status ->
+        return combine(detailsFlow, statusFlow) { details, status ->
             var watchlisted = false
             var started = false
             var upToDate = false
@@ -193,11 +249,11 @@ class RepositoryDetail(
                 deleted = it.deleted
             }
 
-            return@combine if (showDetails == null) {
+            return@combine if (details == null) {
                 Resource.Error(Exception("No show with ID: $id exists in database"))
             } else {
                 Resource.Success(
-                    showDetails.asUIModelShowDetail(
+                    details.asUIModelShowDetail(
                         watchlisted,
                         started,
                         upToDate,
@@ -221,13 +277,13 @@ class RepositoryDetail(
                 return if (certification != "") {
                     certification
                 } else {
-                    "N/A"
+                    NONE_AVAILABLE
                 }
             } else {
-                "N/A"
+                NONE_AVAILABLE
             }
         } else {
-            "N/A"
+            NONE_AVAILABLE
         }
     }
 
@@ -241,69 +297,11 @@ class RepositoryDetail(
                 it.iso == "US"
             }?.certification ?: data[0].certification
         } else {
-            "N/A"
+            NONE_AVAILABLE
         }
     }
+
+    companion object {
+        const val NONE_AVAILABLE = "N/A"
+    }
 }
-
-// todo move these extension functions
-fun EntityShow.asUIModelShowDetail(
-    watchlisted: Boolean = false,
-    started: Boolean = false,
-    upToDate: Boolean = false,
-    deleted: Boolean
-) = UIModelShowDetail(
-    id = id,
-    name = title,
-    posterPath = posterPath,
-    overview = overview,
-    certification = certification,
-    firstAirDate = firstAirDate,
-    seasonsTotal = seasonTotal,
-    deleted = deleted,
-    watchlisted = watchlisted,
-    startedWatching = started,
-    upToDate = upToDate
-)
-
-fun ResponseShowDetail.asEntityShow() = EntityShow(
-    id = "$id",
-    title = name,
-    overview = overview,
-    certification = "N/A",
-    posterPath = posterPath ?: "",
-    backdropPath = backdropPath ?: "",
-    popularityValue = popularityValue,
-    firstAirDate = firstAirYear,
-    rating = rating,
-    episodeTotal = episodeCount,
-    seasonTotal = seasonCount,
-    lastUpdated = System.currentTimeMillis()
-)
-
-fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
-    id = "$id",
-    title = title,
-    overview = overview,
-    backdropPath = backdropPath ?: "",
-    posterPath = posterPath ?: "",
-    certification = "",
-    releaseDate = releaseDate,
-    runTime = "$runtime",
-    rating = rating,
-    popularityValue = popularityValue,
-)
-
-fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =
-    UIModelMovieDetail(
-        id = id,
-        title = title,
-        posterPath = posterPath,
-        overview = overview,
-        releaseYear = releaseDate,
-        certification = certification,
-        runtime = runTime,
-        deleted = deleted,
-        watchlisted = watchlisted,
-        watched = watched
-    )

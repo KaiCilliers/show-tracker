@@ -19,16 +19,18 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
 sealed class SetShowProgress {
-    data class Partial (
+    data class Partial(
         val showId: String,
         val seasonNumber: Int,
         val episodeNumber: Int
-    ): SetShowProgress()
-    data class UpToDate(val showId: String): SetShowProgress()
+    ) : SetShowProgress()
+
+    data class UpToDate(val showId: String) : SetShowProgress()
 
     companion object {
         fun partial(showId: String, seasonNumber: Int, episodeNumber: Int) =
             Partial(showId, seasonNumber, episodeNumber)
+
         fun upToDate(showId: String) = UpToDate(showId)
     }
 }

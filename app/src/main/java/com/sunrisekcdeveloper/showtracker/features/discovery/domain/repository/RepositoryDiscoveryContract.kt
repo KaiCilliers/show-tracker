@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository
 
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import kotlinx.coroutines.flow.Flow
 

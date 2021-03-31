@@ -31,7 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyMoviesBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
@@ -41,12 +41,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class FragmentDiscoveryMovies : Fragment() {
 
     private lateinit var binding: FragmentDiscoveryOnlyMoviesBinding
-
     private val viewModel: ViewModelDiscoveryMovies by viewModels()
 
     private val adapterPopularMovies = PagingAdapterSimplePoster()

@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMovieToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMovieFromWatchlistUseCaseContract
@@ -51,7 +51,7 @@ class ViewModelMovieDetail @ViewModelInject constructor(
     val state: LiveData<StateDetailMovie>
         get() = _state
 
-    private fun movieDetails(id: String) = viewModelScope.launch {
+    private fun fetchDetails(id: String) = viewModelScope.launch {
         fetchMovieDetailsUseCase(id).collect { resource ->
             when (resource) {
                 is Resource.Success -> {
@@ -70,7 +70,7 @@ class ViewModelMovieDetail @ViewModelInject constructor(
     fun submitAction(action: ActionDetailMovie) = viewModelScope.launch {
         when (action) {
             is ActionDetailMovie.Load -> {
-                movieDetails(action.movieId)
+                fetchDetails(action.movieId)
             }
             is ActionDetailMovie.Add -> {
                 addMovieToWatchlistUseCase(action.movieId)
@@ -89,7 +89,7 @@ class ViewModelMovieDetail @ViewModelInject constructor(
                 eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.SetUnwatched -> {
-               updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
                 eventChannel.send(EventDetailMovie.close())
             }
             ActionDetailMovie.Close -> {
@@ -99,10 +99,20 @@ class ViewModelMovieDetail @ViewModelInject constructor(
                 eventChannel.send(EventDetailMovie.ShowToast(action.msg))
             }
             is ActionDetailMovie.AttemptRemove -> {
-                eventChannel.send(EventDetailMovie.showConfirmationDialog(action.movieId, action.title))
+                eventChannel.send(
+                    EventDetailMovie.showConfirmationDialog(
+                        action.movieId,
+                        action.title
+                    )
+                )
             }
             is ActionDetailMovie.AttemptUnwatch -> {
-                eventChannel.send(EventDetailMovie.showConfirmationDialogUnwatch(action.movieId, action.title))
+                eventChannel.send(
+                    EventDetailMovie.showConfirmationDialogUnwatch(
+                        action.movieId,
+                        action.title
+                    )
+                )
             }
         }
     }

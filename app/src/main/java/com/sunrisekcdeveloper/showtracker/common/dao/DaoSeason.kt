@@ -25,44 +25,22 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.En
 
 @Dao
 interface DaoSeason : DaoBase<EntitySeason> {
-    /**
-     * Season
-     *
-     * Find and return season with matching show ID and season number
-     *
-     * @param showId : String
-     * @param season : Int
-     * @return
-     */
-    @Query("SELECT * FROM tbl_season WHERE season_show_id = :showId AND season_number = :season")
-    abstract suspend fun season(showId: String, season: Int): EntitySeason
 
-    /**
-     * Seasons of show
-     *
-     * Excludes special special episodes located in season 0 of a show
-     *
-     * @param showId : String
-     * @return List of EntitySeason
-     */
+    @Query("SELECT * FROM tbl_season WHERE season_show_id = :showId AND season_number = :season")
+    suspend fun withId(showId: String, season: Int): EntitySeason
+
     @Query(
         """
         SELECT * FROM tbl_season WHERE season_show_id = :showId
         AND season_number != 0 ORDER BY season_number
     """
     )
-    abstract suspend fun seasonsOfShow(showId: String): List<EntitySeason>
+    suspend fun allFromShow(showId: String): List<EntitySeason>
 
-    /**
-     * Last season of show
-     *
-     * @param showId : String
-     * @return EntitySeason
-     */
     @Query(
         """
         SELECT * FROM tbl_season WHERE season_show_id = :showId ORDER BY season_number DESC LIMIT 1
     """
     )
-    abstract suspend fun lastSeasonOfShow(showId: String): EntitySeason
+    suspend fun lastInShow(showId: String): EntitySeason
 }

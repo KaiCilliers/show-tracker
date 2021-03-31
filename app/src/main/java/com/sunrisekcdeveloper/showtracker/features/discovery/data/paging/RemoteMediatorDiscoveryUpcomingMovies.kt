@@ -23,14 +23,13 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.RemoteKeys
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import java.io.IOException
 import java.io.InvalidObjectException
 
 @ExperimentalPagingApi
@@ -79,9 +78,7 @@ class RemoteMediatorDiscoveryUpcomingMovies(
             }
         }
 
-        val response = remote.upcomingMovies(page)
-
-        return when (response) {
+        return when (val response = remote.upcomingMovies(page)) {
             is NetworkResult.Success -> {
 
                 val uiModels =

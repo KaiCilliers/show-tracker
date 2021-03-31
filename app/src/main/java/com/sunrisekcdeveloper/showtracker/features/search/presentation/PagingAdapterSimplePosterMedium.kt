@@ -24,23 +24,20 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemMediumPosterBinding
-import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium
-import timber.log.Timber
 
 class PagingAdapterSimplePosterMedium(
-    private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
+    private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePosterMedium>(
-    UIMODEL_DISCOVERY_COMPARATOR){
+    UIMODEL_DISCOVERY_COMPARATOR
+) {
 
     fun setPosterClickAction(clickListener: OnPosterClickListener) {
         onPosterClick = clickListener
@@ -53,12 +50,13 @@ class PagingAdapterSimplePosterMedium(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolderPagingSimplePosterMedium = ViewHolderPagingSimplePosterMedium.from(parent, onPosterClick)
+    ): ViewHolderPagingSimplePosterMedium =
+        ViewHolderPagingSimplePosterMedium.from(parent, onPosterClick)
 
     class ViewHolderPagingSimplePosterMedium(
         val binding: ItemMediumPosterBinding,
         val onClick: OnPosterClickListener
-        ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelDiscovery) {
             Glide.with(binding.root)
                 .load(EndpointPoster.Standard.urlWithResource(data.posterPath))
@@ -72,34 +70,41 @@ class PagingAdapterSimplePosterMedium(
                     data.id,
                     data.mediaTitle,
                     data.posterPath,
-                    data.mediaType)
+                    data.mediaType
+                )
             }
         }
+
         companion object {
-            fun from(parent: ViewGroup, onClick: OnPosterClickListener) : ViewHolderPagingSimplePosterMedium = ViewHolderPagingSimplePosterMedium(
+            fun from(
+                parent: ViewGroup,
+                onClick: OnPosterClickListener
+            ): ViewHolderPagingSimplePosterMedium = ViewHolderPagingSimplePosterMedium(
                 ItemMediumPosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 ), onClick
             )
         }
     }
-    companion object {
-        private val UIMODEL_DISCOVERY_COMPARATOR = object : DiffUtil.ItemCallback<UIModelDiscovery>() {
-            override fun areItemsTheSame(
-                oldItem: UIModelDiscovery,
-                newItem: UIModelDiscovery
-            ): Boolean = oldItem.id == newItem.id
 
-            override fun areContentsTheSame(
-                oldItem: UIModelDiscovery,
-                newItem: UIModelDiscovery
-            ): Boolean {
-                return (oldItem.id == newItem.id &&
-                        oldItem.mediaTitle == newItem.mediaTitle &&
-                        oldItem.mediaType == newItem.mediaType &&
-                        oldItem.posterPath == newItem.posterPath &&
-                        oldItem.listType == newItem.listType)
+    companion object {
+        private val UIMODEL_DISCOVERY_COMPARATOR =
+            object : DiffUtil.ItemCallback<UIModelDiscovery>() {
+                override fun areItemsTheSame(
+                    oldItem: UIModelDiscovery,
+                    newItem: UIModelDiscovery
+                ): Boolean = oldItem.id == newItem.id
+
+                override fun areContentsTheSame(
+                    oldItem: UIModelDiscovery,
+                    newItem: UIModelDiscovery
+                ): Boolean {
+                    return (oldItem.id == newItem.id &&
+                            oldItem.mediaTitle == newItem.mediaTitle &&
+                            oldItem.mediaType == newItem.mediaType &&
+                            oldItem.posterPath == newItem.posterPath &&
+                            oldItem.listType == newItem.listType)
+                }
             }
-        }
     }
 }

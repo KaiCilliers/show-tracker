@@ -19,29 +19,25 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import timber.log.Timber
 
 class AdapterWatchlistShow(
     var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
-    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _ , _, _-> }
+    var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _-> }
 ) : ListAdapter<UIModelWatchlistShow, AdapterWatchlistShow.ViewHolderWatchlistShow>(WATCHLIST_SHOW_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
         ViewHolderWatchlistShow.from(parent, onButtonClicked, onPosterClickListener)

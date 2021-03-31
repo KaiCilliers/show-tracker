@@ -16,19 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common.dao.combined
+package com.sunrisekcdeveloper.showtracker.common.util
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
-
-// todo extract
-data class WatchlistShowWithDetails(
-    @Embedded val status: EntityWatchlistShow,
-    @Relation(
-        parentColumn = "watch_show_id",
-        entityColumn = "show_id"
-    )
-    val details : EntityShow
-)
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Error(val exception: Exception) : NetworkResult<Nothing>()
+    companion object {
+        fun <T> success(data: T) = Success(data)
+        fun error(message: String) = Error(Exception(message))
+    }
+}

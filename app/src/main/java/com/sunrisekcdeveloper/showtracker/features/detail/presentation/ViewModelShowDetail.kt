@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
@@ -46,10 +46,26 @@ class ViewModelShowDetail @ViewModelInject constructor(
     val state: LiveData<StateDetailShow>
         get() = _state
 
+    private fun fetchDetails(id: String) = viewModelScope.launch {
+        fetchShowDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailShow.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailShow.Error(Exception(resource.exception))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailShow.Loading
+                }
+            }
+        }
+    }
+
     fun submitAction(action: ActionDetailShow) = viewModelScope.launch {
         when (action) {
             is ActionDetailShow.Load -> {
-                showDetails(action.showId)
+                fetchDetails(action.showId)
             }
             is ActionDetailShow.Add -> {
                 addShowToWatchlistUseCase(action.showId)
@@ -72,23 +88,12 @@ class ViewModelShowDetail @ViewModelInject constructor(
                 eventChannel.send(EventDetailShow.GoToShowInWatchlist(action.showId))
             }
             is ActionDetailShow.AttemptRemove -> {
-                eventChannel.send(EventDetailShow.showConfirmationDialog(action.showId, action.title))
-            }
-        }
-    }
-
-    private fun showDetails(id: String) = viewModelScope.launch {
-        fetchShowDetailsUseCase(id).collect { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    _state.value = StateDetailShow.Success(resource.data)
-                }
-                is Resource.Error -> {
-                    _state.value = StateDetailShow.Error(Exception(resource.exception))
-                }
-                Resource.Loading -> {
-                    _state.value = StateDetailShow.Loading
-                }
+                eventChannel.send(
+                    EventDetailShow.showConfirmationDialog(
+                        action.showId,
+                        action.title
+                    )
+                )
             }
         }
     }

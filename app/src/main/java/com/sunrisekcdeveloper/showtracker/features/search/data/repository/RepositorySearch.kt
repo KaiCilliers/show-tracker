@@ -21,15 +21,14 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
-import com.sunrisekcdeveloper.showtracker.di.ModuleNetwork.SourceSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.common.dao.combined.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.util.asUiModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
@@ -40,39 +39,20 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
 class RepositorySearch(
-    @SourceSearch private val remote: RemoteDataSourceSearchContract,
+    private val remote: RemoteDataSourceSearchContract,
     private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {
 
     override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
-        val movie = database.watchlistMovieDao().unwatchedMovies()
-        val shows = database.watchlistShowDao().unwatchedShows()
+        val movie = database.watchlistMovieDao().unwatched()
+        val shows = database.watchlistShowDao().unwatched()
 
-        Timber.e("movies: ${movie.map { it.details.title }}")
-        Timber.e("shows: ${shows.map { it.details.title }}")
-
-        val list = movie.map { it.asUiModelUnwatchedSearch() } + shows.map { it.asUiModelUnwatchedSearch() }
+        val list =
+            movie.map { it.asUiModelUnwatchedSearch() } + shows.map { it.asUiModelUnwatchedSearch() }
 
         return Resource.Success(list.sortedBy { it.title })
     }
-
-    // todo move these extension out
-    fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
-        id = status.id,
-        title = details.title,
-        posterPath = details.posterPath,
-        backdropPath = details.backdropPath,
-        mediaType = MediaType.Movie
-    )
-
-    fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
-        id = status.id,
-        title = details.title,
-        posterPath = details.posterPath,
-        backdropPath = details.backdropPath,
-        mediaType = MediaType.Show
-    )
 
     override fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>> {
         return Pager(
@@ -97,7 +77,7 @@ class RepositorySearch(
 
             when (movieResponse) {
                 is NetworkResult.Success -> {
-                    result.addAll(movieResponse.data.media.asUIModelSearch())
+                    result.addAll(movieResponse.data.media.map { it.asUIModelSearch() })
                 }
                 is NetworkResult.Error -> {
                     // todo dont swallow exceptions
@@ -106,7 +86,7 @@ class RepositorySearch(
             }
             when (showResponse) {
                 is NetworkResult.Success -> {
-                    result.addAll(showResponse.data.media.asUIModelSearchh())
+                    result.addAll(showResponse.data.media.map { it.asUIModelSearch() })
                 }
                 is NetworkResult.Error -> {
                     Timber.d("Error - show search call was not successful: ${showResponse.exception}")
@@ -114,53 +94,13 @@ class RepositorySearch(
             }
 
             // todo this can be done nicer
-            val filtered = result.filter { it.posterPath != "" }.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
+            val filtered = result.filter { it.posterPath != "" }
+                .filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
             val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
-                { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
+            { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
             )
-
-            Timber.d("Sorted: ${sorted.toList()}")
-
-            Timber.d("Results Media Type: ${sorted.map { 
-                when (it.mediaType) {
-                    MediaType.Movie -> "Movie"
-                    MediaType.Show -> "Show"
-                }
-            }}")
-            Timber.d("Results Rating: ${sorted.map {
-                "${it.rating}"
-            }}")
-            Timber.d("Results Popularity: ${sorted.map {
-                "${it.popularity}"
-            }}")
-            Timber.d("Results Vote Count: ${sorted.map {
-                "${it.ratingVotes}"
-            }}")
 
             Resource.Success(sorted)
         }
     }
 }
-
-// todo did not move to extensions file due to not having a solution
-//  to the function naming conflicts...
-fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
-    id = "$id",
-    title = title,
-    mediaType = MediaType.Movie,
-    posterPath = posterPath ?: "",
-    rating = rating,
-    popularity = popularity,
-    ratingVotes = voteCount
-)
-fun List<ResponseStandardMedia.ResponseMovie>.asUIModelSearch() = this.map { it.asUIModelSearch() }
-fun List<ResponseStandardMedia.ResponseShow>.asUIModelSearchh() = this.map { it.asUIModelSearch() }
-fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
-    id = "$id",
-    title = name,
-    mediaType = MediaType.Show,
-    posterPath = posterPath ?: "",
-    rating = rating,
-    popularity = popularity,
-    ratingVotes = voteCount
-)

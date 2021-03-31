@@ -18,12 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
@@ -45,7 +41,6 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -54,8 +49,6 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetMovieDetailBinding
     private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
     private val viewModel: ViewModelMovieDetail by viewModels()
-
-    private lateinit var tempButtonColor: Drawable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,8 +105,14 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Unwatch Movie?")
             .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
-            .setNegativeButton("Cancel") { _, _ ->}
-            .setPositiveButton("Unwatch") { _,_ -> viewModel.submitAction(ActionDetailMovie.setUnwatched(movieId)) }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .setPositiveButton("Unwatch") { _, _ ->
+                viewModel.submitAction(
+                    ActionDetailMovie.setUnwatched(
+                        movieId
+                    )
+                )
+            }
             .show()
     }
 
@@ -121,8 +120,14 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Remove Movie?")
             .setMessage("This will remove \"$title\" from your watchlist")
-            .setNegativeButton("Keep") { _, _ ->}
-            .setPositiveButton("Remove") { _,_ -> viewModel.submitAction(ActionDetailMovie.remove(movieId)) }
+            .setNegativeButton("Keep") { _, _ -> }
+            .setPositiveButton("Remove") { _, _ ->
+                viewModel.submitAction(
+                    ActionDetailMovie.remove(
+                        movieId
+                    )
+                )
+            }
             .show()
     }
 
@@ -157,7 +162,14 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         if (data.watchlisted && !data.deleted) {
             binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
             binding.btnDetailMovieAdd.text = getString(R.string.remove)
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.attemptRemove(data.id, data.title)) }
+            binding.btnDetailMovieAdd.click {
+                viewModel.submitAction(
+                    ActionDetailMovie.attemptRemove(
+                        data.id,
+                        data.title
+                    )
+                )
+            }
         } else {
 
             binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
@@ -169,16 +181,20 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         //  re-added
         if (data.watched && !data.deleted) {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
-                ActionDetailMovie.attemptUnwatch(data.id, data.title)
-            ) }
+            binding.btnDetailMovieWatchStatus.click {
+                viewModel.submitAction(
+                    ActionDetailMovie.attemptUnwatch(data.id, data.title)
+                )
+            }
         } else {
             binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
-            binding.btnDetailMovieWatchStatus.click { viewModel.submitAction(
-                ActionDetailMovie.setWatched(
-                    data.id
+            binding.btnDetailMovieWatchStatus.click {
+                viewModel.submitAction(
+                    ActionDetailMovie.setWatched(
+                        data.id
+                    )
                 )
-            ) }
+            }
         }
         binding.tvDetailMovieDescription.visible()
         binding.tvDetailMovieRuntime.visible()
@@ -189,12 +205,15 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         binding.btnDetailMovieAdd.enabled()
         binding.btnDetailMovieWatchStatus.enabled()
     }
+
     private fun stateLoading() {
         binding.layoutDetailMovieSkeleton.visible()
     }
+
     private fun stateError() {
         viewModel.submitAction(ActionDetailMovie.showToast("error"))
     }
+
     private fun cleanUI() {
         binding.layoutDetailMovieSkeleton.gone()
         binding.tvSeparatorOne.gone()

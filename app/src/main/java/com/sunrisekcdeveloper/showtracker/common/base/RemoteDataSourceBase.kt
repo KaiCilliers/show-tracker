@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.common.base
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response

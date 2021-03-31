@@ -31,7 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
@@ -41,13 +41,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class FragmentDiscoveryShows : Fragment() {
 
     private lateinit var binding: FragmentDiscoveryOnlyShowsBinding
-
-    @ExperimentalCoroutinesApi
     private val viewModel: ViewModelDiscoveryShows by viewModels()
 
     private val adapterPopularShows = PagingAdapterSimplePoster()

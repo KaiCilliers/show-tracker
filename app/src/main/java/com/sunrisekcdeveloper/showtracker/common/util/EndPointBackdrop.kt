@@ -16,23 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.statistics
+package com.sunrisekcdeveloper.showtracker.common.util
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentStatisticsBinding
+import com.sunrisekcdeveloper.showtracker.BuildConfig
 
-class FragmentStatistics : Fragment() {
-    private lateinit var binding: FragmentStatisticsBinding
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentStatisticsBinding.inflate(inflater)
-        return binding.root
+enum class EndPointBackdrop(private val endpoint: String) {
+    Small("/w300"),
+    Standard("/w780"),
+    Large("/w1280"),
+    Original("/original");
+
+    fun urlFromResource(backdropPath: String): String {
+        return BuildConfig.TMDB_POSTER_BASE_URL + endpoint + backdropPath
     }
 }

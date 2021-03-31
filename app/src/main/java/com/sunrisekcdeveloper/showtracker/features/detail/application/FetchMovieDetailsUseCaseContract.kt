@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.application
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import kotlinx.coroutines.flow.Flow
 

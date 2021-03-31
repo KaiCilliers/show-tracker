@@ -19,8 +19,6 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase
 
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.ModuleRepository.RepoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
@@ -29,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
 
 @ExperimentalCoroutinesApi
 class LoadTopRatedShowsUseCase(
-    @RepoDiscovery private val discoveryRepo: RepositoryDiscoveryContract
+    private val discoveryRepo: RepositoryDiscoveryContract
 ) : LoadTopRatedShowsUseCaseContract {
     override fun invoke(): Flow<PagingData<UIModelDiscovery>> = discoveryRepo.topRatedShowsStream()
 }

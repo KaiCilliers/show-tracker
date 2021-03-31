@@ -33,13 +33,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
 import com.sunrisekcdeveloper.showtracker.common.util.gone
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.common.util.visible
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
@@ -52,7 +51,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -60,19 +58,13 @@ import javax.inject.Inject
 class FragmentWatchlist : Fragment() {
 
     private lateinit var binding: FragmentWatchlistBinding
-
     private val viewModel: ViewModelWatchlist by viewModels()
-
-    @Inject
-    lateinit var watchlistMovieAdapter: AdapterWatchlistMovie
-
-    @Inject
-    lateinit var watchlistShowAdapter: AdapterWatchlistShow
-
     private val arguments: FragmentWatchlistArgs by navArgs()
 
-    private var scrolledOnce = false
+    private val watchlistMovieAdapter = AdapterWatchlistMovie()
+    private val watchlistShowAdapter = AdapterWatchlistShow()
 
+    private var scrolledOnce = false
     private var showSortCheckedItem = 0
     private var movieSortCheckedItem = 0
 
@@ -87,7 +79,6 @@ class FragmentWatchlist : Fragment() {
         "Started",
         "Not Started"
     )
-
     private val filterOptionMovie = arrayOf(
         "No Filters",
         "Watched",
@@ -206,7 +197,12 @@ class FragmentWatchlist : Fragment() {
                     )
                 }
                 is ShowAdapterAction.StartWatchingShow -> {
-                    viewModel.submitAction(ActionWatchlist.startWatchingShow(action.showId, action.title))
+                    viewModel.submitAction(
+                        ActionWatchlist.startWatchingShow(
+                            action.showId,
+                            action.title
+                        )
+                    )
                 }
             }
         }
@@ -389,8 +385,8 @@ class FragmentWatchlist : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Unwatch Movie?")
             .setMessage("This will set \"$title\" as an unwatched movie in your watchlist")
-            .setNegativeButton("Cancel") { _, _ ->}
-            .setPositiveButton("Unwatch") { _,_ ->
+            .setNegativeButton("Cancel") { _, _ -> }
+            .setPositiveButton("Unwatch") { _, _ ->
                 viewModel.submitAction(ActionWatchlist.markMovieAsUnwatched(movieId))
                 viewModel.submitAction(ActionWatchlist.showSnackbar("\"$title\" set as unwatched"))
             }

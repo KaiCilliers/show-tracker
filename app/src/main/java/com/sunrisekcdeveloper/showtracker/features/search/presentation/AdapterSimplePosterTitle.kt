@@ -23,22 +23,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.EndPointBackdrop
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.EndPointBackdrop
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 
 class AdapterSimplePosterTitle(
     private val glide: RequestManager,
-    private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ ->  }
+    private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : ListAdapter<UIModelUnwatchedSearch, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(
-    UNWATCHED_SEARCH_MODEL_COMPARATOR) {
+    UNWATCHED_SEARCH_MODEL_COMPARATOR
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
         ViewHolderSimplePosterTitle.from(parent, glide, onPosterClickListener)
 
@@ -54,7 +52,7 @@ class AdapterSimplePosterTitle(
         val binding: ItemSimplePosterAndTitleBinding,
         private val glide: RequestManager,
         private val onPosterClickListener: OnPosterClickListener
-        ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelUnwatchedSearch) {
             binding.root.click {
                 onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
@@ -68,6 +66,7 @@ class AdapterSimplePosterTitle(
                 .into(binding.imgvItemMediaPoster)
             binding.tvMediaTitle.text = data.title
         }
+
         companion object {
             fun from(
                 parent: ViewGroup,
@@ -80,6 +79,7 @@ class AdapterSimplePosterTitle(
             )
         }
     }
+
     companion object {
         private val UNWATCHED_SEARCH_MODEL_COMPARATOR =
             object : DiffUtil.ItemCallback<UIModelUnwatchedSearch>() {

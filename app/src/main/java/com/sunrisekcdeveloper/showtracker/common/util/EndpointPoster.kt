@@ -16,17 +16,25 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.common
+package com.sunrisekcdeveloper.showtracker.common.util
 
-import com.sunrisekcdeveloper.showtracker.BuildConfig
+// See more here https://www.journaldev.com/18688/kotlin-enum-class
+enum class EndpointPoster(private val endpoint: String) {
 
-enum class EndPointBackdrop(private val endpoint: String) {
-    Small("/w300"),
-    Standard("/w780"),
-    Large("/w1280"),
+    // values based on TMDB available poster sizes
+    Tiny("/w92"),
+    Small("/w154"),
+    Medium("/w185"),
+    Standard("/w342"),
+    Big("/w500"),
+    Large("/w780"),
     Original("/original");
 
-    fun urlFromResource(backdropPath: String): String {
-        return BuildConfig.TMDB_POSTER_BASE_URL + endpoint + backdropPath
+    fun urlWithResource(posterPath: String): String {
+        return baseUrl + endpoint + posterPath
+    }
+
+    private companion object {
+        private const val baseUrl = "https://image.tmdb.org/t/p"
     }
 }

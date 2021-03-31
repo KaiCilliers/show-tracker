@@ -29,7 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import dagger.hilt.android.AndroidEntryPoint

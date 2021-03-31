@@ -20,7 +20,9 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.updated.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.BuildConfig
+import com.sunrisekcdeveloper.showtracker.common.*
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetail
@@ -45,81 +47,18 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object ModuleNetwork {
 
-    @Singleton
-    @SourceProgress
-    @Provides
-    fun provideRemoteDataSourceProgress(
-        @ApiProgress api: ServiceProgressContract
-    ) : RemoteDataSourceProgressContract =
-        RemoteDataSourceProgress(api)
-
-    @Singleton
-    @ApiProgress
-    @Provides
-    fun  provideServiceProgress(retrofit: Retrofit): ServiceProgressContract {
-        return retrofit.create(ServiceProgress::class.java)
-    }
-
-    @Singleton
-    @SourceSearch
-    @Provides
-    fun provideRemoteDataSourceSearch(
-        @ApiSearch api: ServiceSearchContract
-    ) : RemoteDataSourceSearchContract {
-        return RemoteDataSourceSearch(api)
-    }
-
-    @Singleton
-    @ApiSearch
-    @Provides
-    fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
-        return retrofit.create(ServiceSearch::class.java)
-    }
-
-    @Singleton
-    @SourceDetail
-    @Provides
-    fun providesRemoteDataSourceDetail(
-        @ApiDetail api: ServiceDetailContract
-    ) : RemoteDataSourceDetailContract {
-        return RemoteDataSourceDetail(api)
-    }
-
-    @Singleton
-    @ApiDetail
-    @Provides
-    fun provideServiceDetail(retrofit: Retrofit): ServiceDetailContract {
-        return retrofit.create(ServiceDetail::class.java)
-    }
-
-    @Singleton
-    @SourceDiscovery
-    @Provides
-    fun provideRemoteDataSourceDiscovery(
-        @ApiDiscovery api: ServiceDiscoveryContract
-    ) : RemoteDataSourceDiscoveryContract {
-        return RemoteDataSourceDiscovery(api)
-    }
-
-    @Singleton
-    @ApiDiscovery
-    @Provides
-    fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
-        return retrofit.create(ServiceDiscovery::class.java)
-    }
-
+    // Retrofit
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(BuildConfig.TMDB_BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(
@@ -127,7 +66,6 @@ object ModuleNetwork {
             ))
             .build()
     }
-
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
@@ -136,35 +74,62 @@ object ModuleNetwork {
         })
         .build()
 
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SourceProgress
+    // Services
+    @Singleton
+    @ApiProgress
+    @Provides
+    fun  provideServiceProgress(retrofit: Retrofit): ServiceProgressContract {
+        return retrofit.create(ServiceProgress::class.java)
+    }
+    @Singleton
+    @ApiSearch
+    @Provides
+    fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
+        return retrofit.create(ServiceSearch::class.java)
+    }
+    @Singleton
+    @ApiDetail
+    @Provides
+    fun provideServiceDetail(retrofit: Retrofit): ServiceDetailContract {
+        return retrofit.create(ServiceDetail::class.java)
+    }
+    @Singleton
+    @ApiDiscovery
+    @Provides
+    fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
+        return retrofit.create(ServiceDiscovery::class.java)
+    }
 
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class ApiProgress
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SourceDetail
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class ApiDetail
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SourceDiscovery
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class ApiDiscovery
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class SourceSearch
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class ApiSearch
+    // Remote Data Sources
+    @Singleton
+    @SourceProgress
+    @Provides
+    fun provideRemoteDataSourceProgress(
+        @ApiProgress api: ServiceProgressContract
+    ) : RemoteDataSourceProgressContract =
+        RemoteDataSourceProgress(api)
+    @Singleton
+    @SourceSearch
+    @Provides
+    fun provideRemoteDataSourceSearch(
+        @ApiSearch api: ServiceSearchContract
+    ) : RemoteDataSourceSearchContract {
+        return RemoteDataSourceSearch(api)
+    }
+    @Singleton
+    @SourceDetail
+    @Provides
+    fun providesRemoteDataSourceDetail(
+        @ApiDetail api: ServiceDetailContract
+    ) : RemoteDataSourceDetailContract {
+        return RemoteDataSourceDetail(api)
+    }
+    @Singleton
+    @SourceDiscovery
+    @Provides
+    fun provideRemoteDataSourceDiscovery(
+        @ApiDiscovery api: ServiceDiscoveryContract
+    ) : RemoteDataSourceDiscoveryContract {
+        return RemoteDataSourceDiscovery(api)
+    }
 }

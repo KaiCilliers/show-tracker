@@ -82,10 +82,4 @@
     <style name="TextAppearance.ShowTracker.Overline" parent="TextAppearance.MaterialComponents.Overline">
         <item name="fontFamily">@font/ubuntu</item>
     </style>
-
-    <style name="TextAppearance.ShowTracker.BottomNavigation" parent="TextAppearance.ShowTracker.Caption">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.08</item>
-    </style>
-
 </resources>

@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow

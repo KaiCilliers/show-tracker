@@ -20,68 +20,21 @@ package com.sunrisekcdeveloper.showtracker.common.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import androidx.room.Transaction
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.WatchlistMovieDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 
+// todo all room functions need to either return nullable values (record might not be there)
+//  or return a List - thus an empty list is returned when no records are found
 @Dao
 abstract class DaoMovie : DaoBase<EntityMovie> {
 
-    // todo all room functions need to either return nullable values (record might not be there)
-    //  or return a List - thus an empty list is returned when no records are found
     @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
-    abstract suspend fun movie(id: String): EntityMovie?
+    abstract suspend fun withId(id: String): EntityMovie?
 
-    @Transaction
-    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
-    protected abstract fun privateWatchlistMoviesWithDetailsFlow(): Flow<List<WatchlistMovieDetails>>
-
-//    open fun distinctWatchlistMoviesDetailsFlow(sortBy: FilterMovies): Flow<List<WatchlistMovieDetails>> =
-//        privateWatchlistMoviesWithDetailsFlow().map { list ->
-//            when (sortBy) {
-//                FilterMovies.ByTitle -> {
-//                    list.sortedBy { it.details.title }
-//                }
-//                FilterMovies.ByRecentlyAdded -> {
-//                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
-//                        it.watchlist.dateAdded
-//                    }.thenBy {
-//                        it.details.title
-//                    })
-//                }
-//                FilterMovies.ByWatched -> {
-//                    list.sortedWith(compareByDescending<WatchlistMovieDetails> {
-//                        it.watchlist.watched
-//                    }.thenBy {
-//                        it.details.title
-//                    })
-//                }
-//            }
-//        }.distinctUntilChanged()
-
-    /**
-     * Movie detail
-     *
-     * Internal use only
-     *
-     * @param id : String
-     * @return Flow emitting EntityMovie
-     */
     @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
-    protected abstract fun movieDetail(id: String): Flow<EntityMovie?>
+    protected abstract fun movieFlow(id: String): Flow<EntityMovie?>
 
-    /**
-     * Distinct movie detail flow
-     *
-     * Return Flow to receive latest record that matches ID provided
-     *
-     * @param id : String
-     * @return Flow emitting distinct EntityMovie
-     */
-    open fun distinctMovieDetailFlow(id: String): Flow<EntityMovie?> = movieDetail(id).distinctUntilChanged()
+    open fun distinctMovieFlow(id: String): Flow<EntityMovie?> = movieFlow(id).distinctUntilChanged()
 }
