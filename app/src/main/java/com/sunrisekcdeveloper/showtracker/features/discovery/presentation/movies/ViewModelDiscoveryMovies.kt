@@ -25,14 +25,30 @@ import androidx.paging.cachedIn
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class ViewModelDiscoveryMovies @ViewModelInject constructor(
     loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
 ) : ViewModel() {
+
+    private val eventChannel = Channel<EventDiscovery>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    fun submitAction(action: ActionDiscovery) = viewModelScope.launch {
+        when (action) {
+            is ActionDiscovery.TapListHeading -> {
+                eventChannel.send(EventDiscovery.showFocusedContent(action.listType))
+            }
+        }
+    }
 
     val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()
         .cachedIn(viewModelScope)

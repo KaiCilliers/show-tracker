@@ -83,6 +83,9 @@
         <action
             android:id="@+id/navigate_from_discovery_movies_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
+        <action
+            android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_focused"
+            app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
     <fragment
         android:id="@+id/destination_discovery_shows_fragment"
@@ -100,6 +103,9 @@
         <action
             android:id="@+id/navigate_from_discovery_shows_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
+        <action
+            android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_focused"
+            app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_movie"

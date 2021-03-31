@@ -32,13 +32,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyMoviesBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -70,6 +77,17 @@ class FragmentDiscoveryMovies : Fragment() {
     }
 
     private fun setup() {
+
+        binding.tvHeadingPopularMovies.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.moviePopular()))
+        }
+        binding.tvHeadingTopRatedMovies.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieTopRated()))
+        }
+        binding.tvHeadingUpcomingMovies.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieUpcoming()))
+        }
+
         // Navigation - Toolbar Up button
         binding.toolbarDiscoveryMovies.setNavigationOnClickListener { findNavController().popBackStack() }
 
@@ -136,6 +154,38 @@ class FragmentDiscoveryMovies : Fragment() {
                 }
             }
         }
+        viewModel.eventsFlow.onEach { event ->
+            when (event) {
+                is EventDiscovery.ShowFocusedContent -> {
+                    navigateToFocusedContent(event.listType)
+                }
+            }
+        }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun navigateToFocusedContent(listType: ListType) {
+        findNavController().navigate(
+            when (listType) {
+                ListType.MoviePopular -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(1)
+                }
+                ListType.MovieTopRated -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(3)
+                }
+                ListType.MovieUpcoming -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(5)
+                }
+                ListType.ShowPopular -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(2)
+                }
+                ListType.ShowTopRated -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(4)
+                }
+                ListType.ShowAiringToday -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(6)
+                }
+            }
+        )
     }
 
     private fun setupBinding() {
