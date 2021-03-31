@@ -25,15 +25,32 @@ import androidx.paging.cachedIn
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadAiringTodayShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
+// todo discovery fragments share a single ViewModel?
 class ViewModelDiscoveryShows @ViewModelInject constructor(
     loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
     loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
     loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
 ) : ViewModel() {
+
+    private val eventChannel = Channel<EventDiscovery>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    fun submitAction(action: ActionDiscovery) = viewModelScope.launch {
+        when (action) {
+            is ActionDiscovery.TapListHeading -> {
+                eventChannel.send(EventDiscovery.showFocusedContent(action.listType))
+            }
+        }
+    }
 
     val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = loadPopularShowsUseCase()
         .cachedIn(viewModelScope)

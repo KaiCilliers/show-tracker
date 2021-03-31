@@ -35,10 +35,10 @@
             <!-- POPULAR MOVIES -->
 
             <TextView
-                android:id="@+id/tv_heading_popular"
+                android:id="@+id/tv_heading_popular_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/popular"
+                android:text="@string/heading_popular_movies"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 style="@style/Widget.ShowTracker.TextView.HeaderMediaList" />
@@ -46,7 +46,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_movies"
                 style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_movies"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <!-- POPULAR SHOWS -->
@@ -71,13 +71,13 @@
             <!-- TOP RATED MOVIES -->
 
             <TextView
-                android:id="@+id/tv_highest_rated_heading"
+                android:id="@+id/tv_heading_top_rated_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/top_rated"
+                android:text="@string/heading_top_rated_movies"
                 style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_popular_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
@@ -85,7 +85,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_movies"
                 style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
-                app:layout_constraintTop_toBottomOf="@id/tv_highest_rated_heading"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_movies"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <!-- TOP RATED SHOWS -->
@@ -111,13 +111,13 @@
             <!-- UPCOMING MOVIES -->
 
             <TextView
-                android:id="@+id/tv_heading_upcoming"
+                android:id="@+id/tv_heading_upcoming_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/upcoming"
+                android:text="@string/heading_upcoming_movies"
                 style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows"
                 app:layout_constraintStart_toStartOf="parent"/>
@@ -125,7 +125,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_upcoming_movies"
                 style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming_movies"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <!-- AIRING TODAY SHOWS -->

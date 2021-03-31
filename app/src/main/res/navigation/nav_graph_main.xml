@@ -44,6 +44,9 @@
         <action
             android:id="@+id/navigate_from_discovery_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
+        <action
+            android:id="@+id/navigate_from_discovery_to_bottom_sheet_focused"
+            app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
     <fragment
         android:id="@+id/destination_main_watchlist_fragment"
@@ -80,6 +83,9 @@
         <action
             android:id="@+id/navigate_from_discovery_movies_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
+        <action
+            android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_focused"
+            app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
     <fragment
         android:id="@+id/destination_discovery_shows_fragment"
@@ -97,6 +103,9 @@
         <action
             android:id="@+id/navigate_from_discovery_shows_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
+        <action
+            android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_focused"
+            app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_movie"
@@ -161,4 +170,19 @@
             android:name="showTitle"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/destination_bottom_sheet_focused"
+        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.FragmentBottomSheetFocused"
+        android:label="bottom_sheet_focused_discovery"
+        tools:layout="@layout/bottom_sheet_focused_discovery" >
+        <argument
+            android:name="listType"
+            app:argType="integer" />
+        <action
+            android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_show"
+            app:destination="@id/destination_bottom_sheet_detail_show" />
+        <action
+            android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_movie"
+            app:destination="@id/destination_bottom_sheet_detail_movie" />
+    </dialog>
 </navigation>

@@ -32,13 +32,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -117,9 +122,51 @@ class FragmentDiscoveryShows : Fragment() {
                 }
             }
         }
+        viewModel.eventsFlow.onEach { event ->
+            when (event) {
+                is EventDiscovery.ShowFocusedContent -> {
+                    navigateToFocusedContent(event.listType)
+                }
+            }
+        }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun navigateToFocusedContent(listType: ListType) {
+        findNavController().navigate(
+            when (listType) {
+                ListType.MoviePopular -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(1)
+                }
+                ListType.MovieTopRated -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(3)
+                }
+                ListType.MovieUpcoming -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(5)
+                }
+                ListType.ShowPopular -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(2)
+                }
+                ListType.ShowTopRated -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(4)
+                }
+                ListType.ShowAiringToday -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(6)
+                }
+            }
+        )
     }
 
     private fun setup() {
+        binding.tvHeadingPopularShows.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showPopular()))
+        }
+        binding.tvHeadingTopRatedShows.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showTopRated()))
+        }
+        binding.tvHeadingAiringTodayShows.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showAiringToday()))
+        }
+
         // Navigation - Toolbar Up button
         binding.toolbarDiscoveryShows.setNavigationOnClickListener {
             findNavController().popBackStack()

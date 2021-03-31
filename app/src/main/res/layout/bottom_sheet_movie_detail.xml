@@ -77,6 +77,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         android:textAppearance="?attr/textAppearanceHeadline5"
+        android:maxLines="3"
+        android:ellipsize="end"
         tools:text="Movie Title"
         app:layout_constraintStart_toEndOf="@+id/img_detail_movie_poster"
         app:layout_constraintEnd_toStartOf="@id/img_detail_movie_close"

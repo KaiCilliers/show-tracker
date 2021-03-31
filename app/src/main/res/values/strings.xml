@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">ShowTracker</string>
 
-    <string name="popular">Popular Movies</string>
+    <string name="heading_popular_movies">Popular Movies</string>
     <string name="most_popular_movies">Most popular movies</string>
-    <string name="top_rated">Top Rated Movies</string>
+    <string name="heading_top_rated_movies">Top Rated Movies</string>
     <string name="highest_rated_movies">Highest rated movies of all times</string>
-    <string name="upcoming">Upcoming Movies</string>
+    <string name="heading_upcoming_movies">Upcoming Movies</string>
     <string name="stay_updated">Stay updated with the latest movies</string>
 
     <!-- Concat -->
