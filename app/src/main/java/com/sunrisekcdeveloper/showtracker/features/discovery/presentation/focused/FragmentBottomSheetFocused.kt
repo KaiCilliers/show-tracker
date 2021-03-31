@@ -72,6 +72,9 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
         binding.tvHeading.click {
             viewModel.submitAction(ActionFocused.tapHeading())
         }
+        binding.imgFocusedClose.click {
+            viewModel.submitAction(ActionFocused.close())
+        }
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
