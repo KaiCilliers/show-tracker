@@ -69,7 +69,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
             when (mediaType) {
                 MediaType.Movie -> {
                     findNavController().navigate(
-                        FragmentBottomSheetFocusedDirections.actionDestinationBottomSheetFocusedToDestinationBottomSheetDetailMovie(
+                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailMovie(
                             movieId = mediaId,
                             movieTitle = mediaTitle,
                             posterPath = posterPath
@@ -78,7 +78,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
                 }
                 MediaType.Show -> {
                     findNavController().navigate(
-                        FragmentBottomSheetFocusedDirections.actionDestinationBottomSheetFocusedToDestinationBottomSheetDetailShow(
+                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailShow(
                             showId = mediaId,
                             showTitle = mediaTitle,
                             posterPath = posterPath

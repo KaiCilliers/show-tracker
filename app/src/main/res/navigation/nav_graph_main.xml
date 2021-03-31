@@ -173,10 +173,10 @@
             android:name="listType"
             app:argType="integer" />
         <action
-            android:id="@+id/action_destination_bottom_sheet_focused_to_destination_bottom_sheet_detail_show"
+            android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_show"
             app:destination="@id/destination_bottom_sheet_detail_show" />
         <action
-            android:id="@+id/action_destination_bottom_sheet_focused_to_destination_bottom_sheet_detail_movie"
+            android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
     </dialog>
 </navigation>
