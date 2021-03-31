@@ -42,9 +42,11 @@ class RepositoryDiscovery(
     @ExperimentalPagingApi
     override fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
         config = PagingConfig(
-            initialLoadSize = 40,
-            pageSize = 20, // todo my api does not use page size attribute (so 20 is just random number)
-            enablePlaceholders = false
+            initialLoadSize = 40, // todo i dont think this does anything
+            pageSize = 20, // todo my api does not use page size attribute (so 20 TMDB page size)
+            // placeholders prevent feature focused grid layout to restructure layout when new data is loaded
+            enablePlaceholders = true,
+            prefetchDistance = 60
         ),
         remoteMediator = RemoteMediatorDiscoveryPopularMovies(
             remote, database
@@ -59,7 +61,8 @@ class RepositoryDiscovery(
         config = PagingConfig(
             pageSize = 20,
             initialLoadSize = 40,
-            enablePlaceholders = false
+            enablePlaceholders = true,
+            prefetchDistance = 60
         ),
         remoteMediator = RemoteMediatorDiscoveryPopularShows(remote, database),
         pagingSourceFactory = {
@@ -72,7 +75,8 @@ class RepositoryDiscovery(
         config = PagingConfig(
             pageSize = 20,
             initialLoadSize = 40,
-            enablePlaceholders = false
+            enablePlaceholders = true,
+            prefetchDistance = 60
         ),
         remoteMediator = RemoteMediatorDiscoveryTopRatedMovies(remote, database),
         pagingSourceFactory = {
@@ -85,7 +89,8 @@ class RepositoryDiscovery(
         config = PagingConfig(
             pageSize = 20,
             initialLoadSize = 40,
-            enablePlaceholders = false
+            enablePlaceholders = true,
+            prefetchDistance = 60
         ),
         remoteMediator = RemoteMediatorDiscoveryTopRatedShows(remote, database),
         pagingSourceFactory = {
@@ -98,7 +103,8 @@ class RepositoryDiscovery(
         config = PagingConfig(
             pageSize = 20,
             initialLoadSize = 40,
-            enablePlaceholders = false
+            enablePlaceholders = true,
+            prefetchDistance = 60
         ),
         remoteMediator = RemoteMediatorDiscoveryUpcomingMovies(remote, database),
         pagingSourceFactory = {
@@ -111,7 +117,8 @@ class RepositoryDiscovery(
         config = PagingConfig(
             pageSize = 20,
             initialLoadSize = 40,
-            enablePlaceholders = false
+            enablePlaceholders = true,
+            prefetchDistance = 60
         ),
         remoteMediator = RemoteMediatorDiscoveryAiringShows(remote, database),
         pagingSourceFactory = {
