@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
+package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused
 
-sealed class EventDiscovery {
-    data class ShowFocusedContent(val listType: ListType) : EventDiscovery()
+sealed class ActionFocused {
+    object TapHeading : ActionFocused()
+    object Close : ActionFocused()
     companion object {
-        fun showFocusedContent(listType: ListType) = ShowFocusedContent(listType)
+        fun tapHeading() = TapHeading
+        fun close() = Close
     }
 }

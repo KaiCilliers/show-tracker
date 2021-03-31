@@ -27,6 +27,8 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.ActionFocused
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.EventFocused
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -43,6 +45,21 @@ class ViewModelDiscovery @ViewModelInject constructor(
 
     private val eventChannel = Channel<EventDiscovery>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
+
+    // todo focused needs its own ViewModel, while all discovery fragments need to share a ViewModel
+    private val eventChannelFocused = Channel<EventFocused>(Channel.BUFFERED)
+    val eventsFlowFocused = eventChannelFocused.receiveAsFlow()
+
+    fun submitAction(action: ActionFocused) = viewModelScope.launch {
+        when (action) {
+            ActionFocused.TapHeading -> {
+                eventChannelFocused.send(EventFocused.scrollToTop())
+            }
+            ActionFocused.Close -> {
+                eventChannelFocused.send(EventFocused.close())
+            }
+        }
+    }
 
     fun submitAction(action: ActionDiscovery) = viewModelScope.launch {
         when (action) {

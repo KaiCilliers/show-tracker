@@ -27,9 +27,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetFocusedDiscoveryBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.ViewModelDiscovery
@@ -37,6 +40,7 @@ import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAda
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -65,6 +69,10 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
     }
 
     private fun setup() {
+        binding.tvHeading.click {
+            viewModel.submitAction(ActionFocused.tapHeading())
+        }
+
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
@@ -97,42 +105,54 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
         job = viewLifecycleOwner.lifecycleScope.launch {
             when (arguments.listType) {
                 1 -> {
-                    binding.textView.text = getString(R.string.heading_popular_movies)
+                    binding.tvHeading.text = getString(R.string.heading_popular_movies)
                     viewModel.streamPopularMovies.collectLatest {
                         pagingAdapter.submitData(it)
                     }
                 }
                 2 -> {
-                    binding.textView.text = getString(R.string.heading_popular_shows)
+                    binding.tvHeading.text = getString(R.string.heading_popular_shows)
                     viewModel.streamPopularShows.collectLatest {
                         pagingAdapter.submitData(it)
                     }
                 }
                 3 -> {
                     viewModel.streamTopRatedMovies.collectLatest {
-                        binding.textView.text = getString(R.string.heading_top_rated_movies)
+                        binding.tvHeading.text = getString(R.string.heading_top_rated_movies)
                         pagingAdapter.submitData(it)
                     }
                 }
                 4 -> {
                     viewModel.streamTopRatedShows.collectLatest {
-                        binding.textView.text = getString(R.string.heading_top_rated_shows)
+                        binding.tvHeading.text = getString(R.string.heading_top_rated_shows)
                         pagingAdapter.submitData(it)
                     }
                 }
                 5 -> {
                     viewModel.streamUpcomingMovies.collectLatest {
-                        binding.textView.text = getString(R.string.heading_upcoming_movies)
+                        binding.tvHeading.text = getString(R.string.heading_upcoming_movies)
                         pagingAdapter.submitData(it)
                     }
                 }
                 6 -> {
                     viewModel.streamAiringTodayShows.collectLatest {
-                        binding.textView.text = getString(R.string.heading_airing_today_shows)
+                        binding.tvHeading.text = getString(R.string.heading_airing_today_shows)
                         pagingAdapter.submitData(it)
                     }
                 }
             }
         }
+        viewModel.eventsFlowFocused.onEach { event ->
+            when (event) {
+                EventFocused.Close -> {
+                    // todo this property needs to be set somewhere else
+                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
+                    dismiss()
+                }
+                EventFocused.ScrollToTop -> {
+                    binding.rcFocusedDiscovery.smoothScrollToPosition(0)
+                }
+            }
+        }.observeInLifecycle(viewLifecycleOwner)
     }
 }
