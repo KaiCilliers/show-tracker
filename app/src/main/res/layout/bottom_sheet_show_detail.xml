@@ -74,13 +74,16 @@
 
     <TextView
         android:id="@+id/tv_detail_show_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        tools:text="Show Title"
+        app:layout_constraintEnd_toStartOf="@+id/img_detail_show_close"
         app:layout_constraintStart_toEndOf="@+id/img_detail_show_poster"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Show Title" />
 
     <TextView
         android:id="@+id/tv_detail_show_description"
