@@ -99,8 +99,6 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
             }
         }
         pagingAdapter.setPosterClickAction(onClick)
-        binding.rcFocusedDiscovery.layoutManager =
-            GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
         binding.rcFocusedDiscovery.adapter = pagingAdapter
     }
 
