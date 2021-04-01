@@ -95,34 +95,26 @@ class RepositoryProgress(
 
     // todo refactor logic
     override suspend fun cacheEntireShow(showId: String) {
-        Timber.d("#### Caching with showID: $showId")
         withContext(dispatcher) {
             launch {
                 val response = remote.showWithSeasons(showId)
                 when (response) {
                     is NetworkResult.Success -> {
-                        Timber.d("#### Response Show success")
                         response.data.seasons.forEach {
-                            Timber.d("#### Season: ${it.name} with ${it.episodeCount} episodes")
                             val second = remote.seasonDetails(
                                 showId, it.number
                             )
 
-                            Timber.d("#### Saving season as entity: ${it.asEntitySeason(showId)}")
                             database.seasonDao().insert(it.asEntitySeason(showId))
 
                             when (second) {
                                 is NetworkResult.Success -> {
-                                    Timber.d("#### Response ${it.name} success")
                                     second.data.episodes.forEach { episode ->
-                                        Timber.d("#### Episode: ${episode.number} from Season: ${episode.seasonNumber}")
-                                        Timber.d("#### Episode saved as ${episode.asEntityEpisode(showId)}")
                                         database.episodeDao()
                                             .insert(episode.asEntityEpisode(showId))
                                     }
                                 }
                                 is NetworkResult.Error -> {
-                                    Timber.d("#### Response ${it.name} error")
                                     // todo dont swallow exceptions
                                     Timber.e("Error fetching season details with show_id: $showId and season number: ${it.number}. [${second.exception}]")
                                 }
@@ -130,7 +122,6 @@ class RepositoryProgress(
                         }
                     }
                     is NetworkResult.Error -> {
-                        Timber.d("#### Response Show error")
                         Timber.e("Error fetching details for show with ID: $showId. [${response.exception}]")
                     }
                 }
@@ -144,12 +135,9 @@ class RepositoryProgress(
         // todo handle if list is empty
         // todo handle check to ensure this is all the seasons
 
-        Timber.d("@@@@ before")
-
         return Resource.Success(
             seasons.map { season ->
                 val episodes = database.episodeDao().allInSeason(showId, season.number)
-                Timber.d("$$$$ episodes: ${episodes.size} and ${episodes.map { it.number }}")
                 season.number to episodes.map { it.number }
             }.toMap()
         )
