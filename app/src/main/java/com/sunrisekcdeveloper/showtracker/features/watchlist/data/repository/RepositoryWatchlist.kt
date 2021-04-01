@@ -158,9 +158,12 @@ class RepositoryWatchlist(
     }
 
     override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
-        return database.watchlistShowDao().distinctWithDetailsFlow(filterOption).map {
-            if (it.isNotEmpty()) {
-                Resource.Success(it.map { it.asUIModelWatchlistShow() })
+        return database.watchlistShowDao().distinctWithDetailsFlow(filterOption).map { list ->
+            if (list.isNotEmpty()) {
+                Resource.Success(list.map {
+                    val lastEpisodeInSeason = database.episodeDao().lastInSeason(it.details.id, it.status.currentSeasonNumber)
+                    it.asUIModelWatchlistShow(lastEpisodeInSeason.number)
+                })
             } else {
                 Resource.Error(Exception("There is no results in the database.watchlistDao()..."))
             }

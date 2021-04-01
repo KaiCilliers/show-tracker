@@ -31,6 +31,7 @@ class UpdateShowProgressUseCase(
     // todo this implementation and accompanying repository is bad
     //  requires refactoring and streamline design
     //  like really, this is just wrong
+    //  i mean you should be doing these database operations in transactions
     override suspend fun invoke(action: UpdateShowAction) {
         when (action) {
             is UpdateShowAction.IncrementEpisode -> {

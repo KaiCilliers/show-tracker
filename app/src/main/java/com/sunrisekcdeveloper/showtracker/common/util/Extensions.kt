@@ -237,7 +237,8 @@ fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch
     mediaType = MediaType.Show
 )
 
-fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
+// todo add lsat episode in season to EntityWatchlistSeason and/or EntitySeason
+fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) = UIModelWatchlistShow(
     id = details.id,
     title = details.title,
     posterPath = details.posterPath,
@@ -245,6 +246,7 @@ fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
     currentEpisodeName = status.currentEpisodeName,
     currentSeasonNumber = status.currentSeasonNumber,
     episodesInSeason = status.currentSeasonEpisodeTotal,
+    lastEpisodeInSeason = lastEpisodeInSeason,
     started = status.started,
     upToDate = status.upToDate,
     dateAdded = status.dateAdded
