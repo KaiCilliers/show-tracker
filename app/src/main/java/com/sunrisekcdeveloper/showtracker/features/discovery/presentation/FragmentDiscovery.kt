@@ -25,10 +25,13 @@ import android.view.ViewGroup
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
@@ -40,9 +43,12 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -76,6 +82,15 @@ class FragmentDiscovery : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionDiscovery.showSnackBar(it))
+                    }
+            }
+        }
         job = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.streamPopularMovies.collectLatest {
                 adapterPopularMovies.submitData(it)
@@ -116,148 +131,155 @@ class FragmentDiscovery : Fragment() {
                 is EventDiscovery.ShowFocusedContent -> {
                     navigateToFocusedContent(event.listType)
                 }
+                is EventDiscovery.ShowSnackBar -> {
+                    showSnackBar(event.message)
             }
-        }.observeInLifecycle(viewLifecycleOwner)
+        }
+    }.observeInLifecycle(viewLifecycleOwner)
+}
+
+private fun showSnackBar(message: String) {
+    Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+}
+
+private fun navigateToFocusedContent(listType: ListType) {
+    findNavController().navigate(
+        when (listType) {
+            ListType.MoviePopular -> {
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(1)
+            }
+            ListType.MovieTopRated -> {
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(3)
+            }
+            ListType.MovieUpcoming -> {
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(5)
+            }
+            ListType.ShowPopular -> {
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(2)
+            }
+            ListType.ShowTopRated -> {
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(4)
+            }
+            ListType.ShowAiringToday -> {
+                FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(6)
+            }
+        }
+    )
+}
+
+private fun setupBinding() {
+    val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
+        when (mediaType) {
+            MediaType.Movie -> {
+                findNavController().navigate(
+                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
+                        movieId = mediaId,
+                        movieTitle = mediaTitle,
+                        posterPath = posterPath
+                    )
+                )
+            }
+            MediaType.Show -> {
+                findNavController().navigate(
+                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
+                        mediaId,
+                        mediaTitle,
+                        posterPath
+                    )
+                )
+            }
+        }
     }
 
-    private fun navigateToFocusedContent(listType: ListType) {
-        findNavController().navigate(
-            when (listType) {
-                ListType.MoviePopular -> {
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(1)
-                }
-                ListType.MovieTopRated -> {
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(3)
-                }
-                ListType.MovieUpcoming -> {
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(5)
-                }
-                ListType.ShowPopular -> {
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(2)
-                }
-                ListType.ShowTopRated -> {
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(4)
-                }
-                ListType.ShowAiringToday -> {
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(6)
-                }
+    adapterPopularMovies.setPosterClickAction(onClick)
+    adapterPopularShows.setPosterClickAction(onClick)
+    adapterTopRatedMovies.setPosterClickAction(onClick)
+    adapterTopRatedShows.setPosterClickAction(onClick)
+    adapterUpcomingMovies.setPosterClickAction(onClick)
+    adapterAiringTodayShows.setPosterClickAction(onClick)
+
+    binding.rcPopularMovies.layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    binding.rcTopRatedMovies.layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    binding.rcUpcomingMovies.layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    binding.rcPopularShows.layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    binding.rcTopRatedShows.layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    binding.rcAiringTodayShows.layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+    binding.rcPopularMovies.adapter = adapterPopularMovies
+    binding.rcTopRatedMovies.adapter = adapterTopRatedMovies
+    binding.rcUpcomingMovies.adapter = adapterUpcomingMovies
+    binding.rcPopularShows.adapter = adapterPopularShows
+    binding.rcTopRatedShows.adapter = adapterTopRatedShows
+    binding.rcAiringTodayShows.adapter = adapterAiringTodayShows
+
+}
+
+private fun setup() {
+    binding.tvHeadingPopularMovies.click {
+        viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.moviePopular()))
+    }
+    binding.tvHeadingPopularShows.click {
+        viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showPopular()))
+    }
+    binding.tvHeadingTopRatedMovies.click {
+        viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieTopRated()))
+    }
+    binding.tvHeadingTopRatedShows.click {
+        viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showTopRated()))
+    }
+    binding.tvHeadingUpcomingMovies.click {
+        viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieUpcoming()))
+    }
+    binding.tvHeadingAiringTodayShows.click {
+        viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showAiringToday()))
+    }
+
+    // Navigation - Toolbar Search icon
+    binding.toolbarDiscovery.menu.forEach {
+        it.setOnMenuItemClickListener {
+            findNavController().navigate(
+                FragmentDiscoveryDirections.navigateFromDiscoveryToFragmentSearch()
+            )
+            true
+        }
+    }
+
+    // Navigation - Tabs
+    binding.tabsDiscovery.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            tab?.let {
+                navigateToSelectedTab(it.position)
             }
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+            tab?.let {
+                navigateToSelectedTab(it.position)
+            }
+        }
+    })
+}
+
+private fun navigateToSelectedTab(position: Int) {
+    // Movie Tab
+    if (position == 0) {
+        findNavController().navigate(
+            FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryMoviesFragment()
+        )
+        // TV Show Tab
+    } else if (position == 1) {
+        findNavController().navigate(
+            FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryShowsFragment()
         )
     }
-
-    private fun setupBinding() {
-        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            when (mediaType) {
-                MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
-                            movieId = mediaId,
-                            movieTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
-                }
-                MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
-                            mediaId,
-                            mediaTitle,
-                            posterPath
-                        )
-                    )
-                }
-            }
-        }
-
-        adapterPopularMovies.setPosterClickAction(onClick)
-        adapterPopularShows.setPosterClickAction(onClick)
-        adapterTopRatedMovies.setPosterClickAction(onClick)
-        adapterTopRatedShows.setPosterClickAction(onClick)
-        adapterUpcomingMovies.setPosterClickAction(onClick)
-        adapterAiringTodayShows.setPosterClickAction(onClick)
-
-        binding.rcPopularMovies.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rcTopRatedMovies.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rcUpcomingMovies.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rcPopularShows.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rcTopRatedShows.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rcAiringTodayShows.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        binding.rcPopularMovies.adapter = adapterPopularMovies
-        binding.rcTopRatedMovies.adapter = adapterTopRatedMovies
-        binding.rcUpcomingMovies.adapter = adapterUpcomingMovies
-        binding.rcPopularShows.adapter = adapterPopularShows
-        binding.rcTopRatedShows.adapter = adapterTopRatedShows
-        binding.rcAiringTodayShows.adapter = adapterAiringTodayShows
-
-    }
-
-    private fun setup() {
-        binding.tvHeadingPopularMovies.click {
-            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.moviePopular()))
-        }
-        binding.tvHeadingPopularShows.click {
-            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showPopular()))
-        }
-        binding.tvHeadingTopRatedMovies.click {
-            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieTopRated()))
-        }
-        binding.tvHeadingTopRatedShows.click {
-            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showTopRated()))
-        }
-        binding.tvHeadingUpcomingMovies.click {
-            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieUpcoming()))
-        }
-        binding.tvHeadingAiringTodayShows.click {
-            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showAiringToday()))
-        }
-
-        // Navigation - Toolbar Search icon
-        binding.toolbarDiscovery.menu.forEach {
-            it.setOnMenuItemClickListener {
-                findNavController().navigate(
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToFragmentSearch()
-                )
-                true
-            }
-        }
-
-        // Navigation - Tabs
-        binding.tabsDiscovery.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    navigateToSelectedTab(it.position)
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    navigateToSelectedTab(it.position)
-                }
-            }
-        })
-    }
-
-    private fun navigateToSelectedTab(position: Int) {
-        // Movie Tab
-        if (position == 0) {
-            findNavController().navigate(
-                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryMoviesFragment()
-            )
-            // TV Show Tab
-        } else if (position == 1) {
-            findNavController().navigate(
-                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryShowsFragment()
-            )
-        }
-    }
+}
 }

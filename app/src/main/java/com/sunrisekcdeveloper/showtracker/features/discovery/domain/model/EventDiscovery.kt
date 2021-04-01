@@ -20,7 +20,9 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
 sealed class EventDiscovery {
     data class ShowFocusedContent(val listType: ListType) : EventDiscovery()
+    data class ShowSnackBar(val message: String) : EventDiscovery()
     companion object {
+        fun showSnackBar(message: String) = ShowSnackBar(message)
         fun showFocusedContent(listType: ListType) = ShowFocusedContent(listType)
     }
 }

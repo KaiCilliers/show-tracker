@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -41,6 +42,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -97,6 +99,10 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                 is EventDetailMovie.ShowConfirmationDialogUnwatch -> {
                     showConfirmationDialogUnwatch(event.movieId, event.title)
                 }
+                is EventDetailMovie.SaveSnackbarMessage -> {
+                    findNavController().previousBackStackEntry?.savedStateHandle
+                        ?.set(KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message)
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
     }
@@ -109,7 +115,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
             .setPositiveButton("Unwatch") { _, _ ->
                 viewModel.submitAction(
                     ActionDetailMovie.setUnwatched(
-                        movieId
+                        movieId, title
                     )
                 )
             }
@@ -124,7 +130,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
             .setPositiveButton("Remove") { _, _ ->
                 viewModel.submitAction(
                     ActionDetailMovie.remove(
-                        movieId
+                        movieId, title
                     )
                 )
             }
@@ -173,8 +179,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         } else {
 
             binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
+            // todo you can add drawables to buttons
             binding.btnDetailMovieAdd.text = getString(R.string.add_button)
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id)) }
+            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id, data.title)) }
         }
 
         // todo some business logic regarding the watched status of movies "deleted" and then
@@ -191,7 +198,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
             binding.btnDetailMovieWatchStatus.click {
                 viewModel.submitAction(
                     ActionDetailMovie.setWatched(
-                        data.id
+                        data.id, data.title
                     )
                 )
             }
