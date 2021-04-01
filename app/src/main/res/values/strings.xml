@@ -11,6 +11,7 @@
     <!-- Concat -->
     <string name="season_plural_with_number">%1$s Seasons</string>
     <string name="season_single_with_number">%1$s Season</string>
+    <string name="runtime_with_value">%1$dh%02$dm</string>
 
     <!-- TESTING -->
     <string name="remove">Remove</string>
