@@ -24,6 +24,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -38,8 +41,12 @@ import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
@@ -47,6 +54,13 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetShowDetailBinding
     private val arguments: FragmentBottomSheetShowDetailArgs by navArgs()
     private val viewModel: ViewModelShowDetail by viewModels()
+
+    @Inject
+    lateinit var dataStore: DataStore<Preferences>
+
+    companion object {
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryPreviousSnackMessage.dataStoreStringKeyFormat()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,11 +113,15 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     dismissAllowingStateLoss()
                 }
                 is EventDetailShow.ShowToast -> {
-                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
                 is EventDetailShow.ShowConfirmationDialog -> {
                     showConfirmationDialog(event.showId, event.title)
+                }
+                is EventDetailShow.SaveSnackbarMessage -> {
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                        KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message
+                    )
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
@@ -117,7 +135,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
             .setPositiveButton("Remove") { _, _ ->
                 viewModel.submitAction(
                     ActionDetailShow.remove(
-                        showId
+                        showId, title
                     )
                 )
             }
@@ -189,7 +207,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     private fun stateNotOnWatchlist(data: UIModelShowDetail) {
         binding.btnDetailShowAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
         binding.btnDetailShowAdd.text = getString(R.string.show_add)
-        binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.add(data.id)) }
+        binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.add(data.id, data.name)) }
         stateNotStartedWatching(data)
     }
 
