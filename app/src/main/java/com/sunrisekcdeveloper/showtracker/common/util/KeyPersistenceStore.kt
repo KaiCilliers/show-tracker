@@ -25,7 +25,8 @@ enum class KeyPersistenceStore(private val keyStore: String) {
     DiscoveryPreviousSnackMessage("disc_key_previous_message"),
     DiscoveryMoviePreviousSnackMessage("disc_movie_key_previous_message"),
     DiscoveryShowPreviousSnackMessage("disc_show_key_previous_message"),
-    SearchPreviousSnackMessage("disc_show_key_previous_message");
+    SearchPreviousSnackMessage("search_key_previous_message"),
+    WatchlistPreviousSnackMessage("watchlist_key_previous_message");
     fun value() = keyStore
     fun dataStoreStringKeyFormat() = stringPreferencesKey(keyStore)
 }
