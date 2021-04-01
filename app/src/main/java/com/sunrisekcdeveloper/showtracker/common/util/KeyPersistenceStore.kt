@@ -18,8 +18,11 @@
 
 package com.sunrisekcdeveloper.showtracker.common.util
 
+import androidx.datastore.preferences.core.stringPreferencesKey
+
 enum class KeyPersistenceStore(private val keyStore: String) {
     DiscoverySnackBarKey("disc_key_snack"),
     DiscoveryPreviousSnackMessage("disc_key_previous_message");
     fun value() = keyStore
+    fun dataStoreStringKeyFormat() = stringPreferencesKey(keyStore)
 }
