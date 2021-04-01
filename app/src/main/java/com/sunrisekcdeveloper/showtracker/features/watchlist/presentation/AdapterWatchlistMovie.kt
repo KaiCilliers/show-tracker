@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -29,7 +30,6 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.fetchErrorColor
 import com.sunrisekcdeveloper.showtracker.common.util.fetchPrimaryColor
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
@@ -59,13 +59,13 @@ class AdapterWatchlistMovie(
             binding.tvWatchlistMovieTitle.text = item.title
             binding.tvWatchlistMovieOverview.text = item.overview
             if (item.watched) {
-                binding.btnWatchlistWatchedStatus.text = "Already Watched"
-                binding.btnWatchlistWatchedStatus.setBackgroundColor(fetchErrorColor(binding.root.context))
+                binding.btnWatchlistWatchedStatus.text = binding.root.context.getString(R.string.already_watched)
+                binding.btnWatchlistWatchedStatus.setBackgroundColor(Color.GRAY)
                 binding.btnWatchlistWatchedStatus.click {
                     onButtonClicked.onClick(item.id, item.title, MovieWatchedStatus.Watched)
                 }
             } else {
-                binding.btnWatchlistWatchedStatus.text = "Mark as Watched"
+                binding.btnWatchlistWatchedStatus.text = binding.root.context.getString(R.string.mark_as_watched)
                 binding.btnWatchlistWatchedStatus.setBackgroundColor(fetchPrimaryColor(binding.root.context))
                 binding.btnWatchlistWatchedStatus.click {
                     onButtonClicked.onClick(item.id, item.title, MovieWatchedStatus.NotWatched)

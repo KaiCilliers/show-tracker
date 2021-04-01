@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +41,6 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -187,7 +185,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         // todo some business logic regarding the watched status of movies "deleted" and then
         //  re-added
         if (data.watched && !data.deleted) {
-            binding.btnDetailMovieWatchStatus.text = getString(R.string.already_watched)
+            binding.btnDetailMovieWatchStatus.text = getString(R.string.watched)
             binding.btnDetailMovieWatchStatus.click {
                 viewModel.submitAction(
                     ActionDetailMovie.attemptUnwatch(data.id, data.title)
