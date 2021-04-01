@@ -29,6 +29,8 @@ interface DaoEpisode : DaoBase<EntityEpisode> {
     @Query("SELECT * FROM tbl_episode WHERE episode_show_id = :showId AND episode_season_number = :season AND episode_number = :episode")
     suspend fun withId(showId: String, season: Int, episode: Int): EntityEpisode
 
+    @Query("SELECT * FROM tbl_episode WHERE episode_show_id = :showId AND episode_season_number = :season")
+    suspend fun allInSeason(showId: String, season: Int): List<EntityEpisode>
 
     @Query(
         """

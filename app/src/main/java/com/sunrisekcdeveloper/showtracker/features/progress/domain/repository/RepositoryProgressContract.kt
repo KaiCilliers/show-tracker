@@ -22,7 +22,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 
 interface RepositoryProgressContract {
     suspend fun cacheEntireShow(showId: String)
-    suspend fun showSeasons(showId: String): Resource<Map<Int, Int>>
+    suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>>
     suspend fun setShowProgress(showId: String, season: Int, episode: Int)
     suspend fun setNewShowAsUpToDate(showId: String)
 }

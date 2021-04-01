@@ -36,7 +36,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
         EntityWatchlistBatch::class, UIModelDiscovery::class,
         RemoteKeys::class
     ],
-    version = 66,
+    version = 67,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)

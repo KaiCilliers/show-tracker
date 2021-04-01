@@ -49,7 +49,7 @@ class FragmentProgress : Fragment() {
     private val viewModel: ViewModelProgress by viewModels()
     private val arguments: FragmentProgressArgs by navArgs()
 
-    private var map: MutableMap<Int, Int> = mutableMapOf()
+    private var map: MutableMap<Int, List<Int>> = mutableMapOf()
 
     private lateinit var adapterSeason: ArrayAdapter<Int>
     private lateinit var adapterEpisode: ArrayAdapter<Int>
@@ -92,7 +92,7 @@ class FragmentProgress : Fragment() {
         binding.tvProgressSeason.gone()
     }
 
-    private fun stateSuccess(data: Map<Int, Int>) {
+    private fun stateSuccess(data: Map<Int, List<Int>>) {
         map = data.toMutableMap()
 
         adapterSeason.clear()
@@ -103,7 +103,8 @@ class FragmentProgress : Fragment() {
 
         adapterEpisode.clear()
         adapterEpisode.addAll(
-            *(1..map.getValue(1)).toList().toTypedArray()
+            map.getValue(1)
+//            *(1..map.getValue(1)).toList().toTypedArray()
         )
 
         binding.tvProgressSeason.visible()
@@ -223,7 +224,8 @@ class FragmentProgress : Fragment() {
                         Timber.e("Episodes for sesason ${position + 1}: ${map.getValue(position + 1)}")
                         adapterEpisode.clear()
                         adapterEpisode.addAll(
-                            *(1..map.getValue(position + 1)).toList().toTypedArray()
+                            map.getValue(position+1)
+//                            *(1..map.getValue(position + 1)).toList().toTypedArray()
                         )
                     }
                 }

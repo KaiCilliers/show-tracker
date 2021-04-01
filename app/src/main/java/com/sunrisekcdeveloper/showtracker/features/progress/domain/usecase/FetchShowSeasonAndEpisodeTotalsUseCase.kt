@@ -25,7 +25,7 @@ import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.Re
 class FetchShowSeasonAndEpisodeTotalsUseCase(
     private val repoProgress: RepositoryProgressContract
 ) : FetchShowSeasonAndEpisodeTotalsUseCaseContract {
-    override suspend fun invoke(showId: String): Resource<Map<Int, Int>> {
+    override suspend fun invoke(showId: String): Resource<Map<Int, List<Int>>> {
         repoProgress.cacheEntireShow(showId)
         return repoProgress.showSeasons(showId)
     }
