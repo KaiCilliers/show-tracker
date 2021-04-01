@@ -105,6 +105,7 @@ class FragmentDiscovery : Fragment() {
                     }
             }
         }
+        job?.cancel()
         job = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.streamPopularMovies.collectLatest {
                 adapterPopularMovies.submitData(it)

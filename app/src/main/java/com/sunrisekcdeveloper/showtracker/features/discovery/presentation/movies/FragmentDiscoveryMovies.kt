@@ -25,12 +25,18 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.forEach
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
@@ -39,14 +45,19 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.Action
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentDiscoveryMovies : Fragment() {
@@ -59,6 +70,13 @@ class FragmentDiscoveryMovies : Fragment() {
     private val adaptedUpcomingMovies = PagingAdapterSimplePoster()
 
     private var job: Job? = null
+
+    @Inject
+    lateinit var dataStore: DataStore<Preferences>
+
+    companion object {
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryMoviePreviousSnackMessage.dataStoreStringKeyFormat()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,6 +92,12 @@ class FragmentDiscoveryMovies : Fragment() {
         setup()
         setupBinding()
         observeViewModel()
+    }
+
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[PREVIOUS_SNACK_KEY] = message
+        }
     }
 
     private fun setup() {
@@ -137,6 +161,16 @@ class FragmentDiscoveryMovies : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionDiscovery.showSnackBar(it))
+                    }
+            }
+        }
+        job?.cancel()
         job = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.streamPopularMovies.collectLatest {
                 adapterPopularMovies.submitData(it)
@@ -159,8 +193,20 @@ class FragmentDiscoveryMovies : Fragment() {
                 is EventDiscovery.ShowFocusedContent -> {
                     navigateToFocusedContent(event.listType)
                 }
+                is EventDiscovery.ShowSnackBar -> {
+                    dataStore.data.take(1).collect {
+                        if (it[PREVIOUS_SNACK_KEY] != event.message) {
+                            showSnackBar(event.message)
+                            consumedSnackBarMessage(event.message)
+                        }
+                    }
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun navigateToFocusedContent(listType: ListType) {

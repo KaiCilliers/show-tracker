@@ -22,7 +22,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 
 enum class KeyPersistenceStore(private val keyStore: String) {
     DiscoverySnackBarKey("disc_key_snack"),
-    DiscoveryPreviousSnackMessage("disc_key_previous_message");
+    DiscoveryPreviousSnackMessage("disc_key_previous_message"),
+    DiscoveryMoviePreviousSnackMessage("disc_movie_key_previous_message"),
+    DiscoveryShowPreviousSnackMessage("disc_show_key_previous_message");
     fun value() = keyStore
     fun dataStoreStringKeyFormat() = stringPreferencesKey(keyStore)
 }
