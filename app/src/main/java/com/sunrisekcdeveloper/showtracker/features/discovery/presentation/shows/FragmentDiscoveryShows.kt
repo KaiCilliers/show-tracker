@@ -25,12 +25,18 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.forEach
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
@@ -39,12 +45,17 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.Action
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentDiscoveryShows : Fragment() {
@@ -57,6 +68,13 @@ class FragmentDiscoveryShows : Fragment() {
     private val adapterAiringShows = PagingAdapterSimplePoster()
 
     private var job: Job? = null
+
+    @Inject
+    lateinit var dataStore: DataStore<Preferences>
+
+    companion object {
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryShowPreviousSnackMessage.dataStoreStringKeyFormat()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +90,12 @@ class FragmentDiscoveryShows : Fragment() {
         setup()
         setupBinding()
         observeViewModel()
+    }
+
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[PREVIOUS_SNACK_KEY] = message
+        }
     }
 
     private fun setupBinding() {
@@ -104,6 +128,15 @@ class FragmentDiscoveryShows : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionDiscovery.showSnackBar(it))
+                    }
+            }
+        }
         job?.cancel()
         job = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.streamPopularShows.collectLatest {
@@ -127,8 +160,20 @@ class FragmentDiscoveryShows : Fragment() {
                 is EventDiscovery.ShowFocusedContent -> {
                     navigateToFocusedContent(event.listType)
                 }
+                is EventDiscovery.ShowSnackBar -> {
+                    dataStore.data.take(1).collect {
+                        if (it[PREVIOUS_SNACK_KEY] != event.message) {
+                            showSnackBar(event.message)
+                            consumedSnackBarMessage(event.message)
+                        }
+                    }
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun navigateToFocusedContent(listType: ListType) {

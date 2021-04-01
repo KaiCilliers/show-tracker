@@ -26,8 +26,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -35,19 +39,19 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
-import com.sunrisekcdeveloper.showtracker.common.util.gone
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.common.util.visible
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -61,6 +65,9 @@ class FragmentSearch : Fragment() {
     lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var gridLayoutManager: GridLayoutManager
+
+    @Inject
+    lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,6 +90,12 @@ class FragmentSearch : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(LAST_SEARCH_QUERY, binding.svSearch.query.trim().toString())
+    }
+
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[FragmentDiscoveryMovies.PREVIOUS_SNACK_KEY] = message
+        }
     }
 
     private fun isConnected() {
@@ -109,6 +122,15 @@ class FragmentSearch : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionSearch.showSnackBar(it))
+                    }
+            }
+        }
         viewModel.state.observe(viewLifecycleOwner) { state ->
             // todo this is bad, this causes UI flashing :(
             cleanUI()
@@ -129,6 +151,9 @@ class FragmentSearch : Fragment() {
                 }
                 is StateSearch.Error -> {
                     stateError()
+                }
+                StateSearch.EmptyWatchlist -> {
+                    stateEmptyWatchlist()
                 }
             }
         }
@@ -160,8 +185,18 @@ class FragmentSearch : Fragment() {
                 EventSearch.PopBackStack -> {
                     findNavController().popBackStack()
                 }
+                is EventSearch.ShowSnackBar -> {
+                    dataStore.data.take(1).collect {
+                        showSnackBar(event.message)
+                        consumedSnackBarMessage(event.message)
+                    }
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun stateError() {
@@ -225,12 +260,19 @@ class FragmentSearch : Fragment() {
 
     }
 
+    private fun stateEmptyWatchlist() {
+        binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
+        binding.tvHeaderWatchlistContent.visible()
+        binding.layoutEmpty.visible()
+    }
+
     private fun stateNoResults() {
         binding.tvHeaderNoResults.visible()
         binding.tvSubHeaderNoResults.visible()
     }
 
     private fun cleanUI() {
+        binding.layoutEmpty.gone()
         binding.imageView.gone()
         binding.recyclerviewSearch.gone()
         binding.tvHeaderNoResults.gone()
@@ -287,5 +329,6 @@ class FragmentSearch : Fragment() {
 
     companion object {
         private const val LAST_SEARCH_QUERY: String = "last_search_query"
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.SearchPreviousSnackMessage.dataStoreStringKeyFormat()
     }
 }

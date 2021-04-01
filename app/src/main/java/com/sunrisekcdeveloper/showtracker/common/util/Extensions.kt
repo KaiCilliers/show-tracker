@@ -120,7 +120,7 @@ fun EntityShow.asUIModelShowDetail(
     posterPath = posterPath,
     overview = overview,
     certification = certification,
-    firstAirDate = firstAirDate,
+    firstAirDate = firstAirDate.substring(0..3),
     seasonsTotal = seasonTotal,
     deleted = deleted,
     watchlisted = watchlisted,
@@ -162,7 +162,7 @@ fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, del
         title = title,
         posterPath = posterPath,
         overview = overview,
-        releaseYear = releaseDate,
+        releaseYear = releaseDate.substring(0..3),
         certification = certification,
         runtime = runTime,
         deleted = deleted,
@@ -237,7 +237,8 @@ fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch
     mediaType = MediaType.Show
 )
 
-fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
+// todo add lsat episode in season to EntityWatchlistSeason and/or EntitySeason
+fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) = UIModelWatchlistShow(
     id = details.id,
     title = details.title,
     posterPath = details.posterPath,
@@ -245,6 +246,7 @@ fun WatchlistShowWithDetails.asUIModelWatchlistShow() = UIModelWatchlistShow(
     currentEpisodeName = status.currentEpisodeName,
     currentSeasonNumber = status.currentSeasonNumber,
     episodesInSeason = status.currentSeasonEpisodeTotal,
+    lastEpisodeInSeason = lastEpisodeInSeason,
     started = status.started,
     upToDate = status.upToDate,
     dateAdded = status.dateAdded

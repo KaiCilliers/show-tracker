@@ -100,7 +100,6 @@ class RepositoryProgress(
                 val response = remote.showWithSeasons(showId)
                 when (response) {
                     is NetworkResult.Success -> {
-
                         response.data.seasons.forEach {
                             val second = remote.seasonDetails(
                                 showId, it.number
@@ -131,14 +130,15 @@ class RepositoryProgress(
     }
 
     @ExperimentalStdlibApi
-    override suspend fun showSeasons(showId: String): Resource<Map<Int, Int>> {
+    override suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>> {
         val seasons = database.seasonDao().allFromShow(showId)
         // todo handle if list is empty
         // todo handle check to ensure this is all the seasons
 
         return Resource.Success(
-            seasons.map {
-                it.number to it.episodeTotal
+            seasons.map { season ->
+                val episodes = database.episodeDao().allInSeason(showId, season.number)
+                season.number to episodes.map { it.number }
             }.toMap()
         )
     }

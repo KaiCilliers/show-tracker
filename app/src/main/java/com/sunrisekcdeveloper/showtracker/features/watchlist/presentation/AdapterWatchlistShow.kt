@@ -48,7 +48,9 @@ class AdapterWatchlistShow(
 
 
     fun positionOfItem(showId: String): Int {
+        Timber.d("I want the position of the show with ID: $showId")
         val data = currentList
+        Timber.d("data: ${data.map { "${it.id}: ${it.title}" }}")
         val item = data.find {
             it.id == showId
         }
@@ -101,8 +103,8 @@ class AdapterWatchlistShow(
             }
 
             binding.btnWatchlistShowMarkAsWatched.click {
-                Timber.e("current episode: ${item.currentEpisodeNumber} and total episodes in season ${item.currentSeasonNumber} is ${item.episodesInSeason}")
-                if (item.currentEpisodeNumber == item.episodesInSeason) {
+                Timber.e("current episode: ${item.currentEpisodeNumber} and last episode: ${item.lastEpisodeInSeason} (total episodes in season ${item.currentSeasonNumber} is ${item.episodesInSeason})")
+                if (item.currentEpisodeNumber == item.lastEpisodeInSeason) {
                     Timber.e("adapter - episode mark season...")
                     onButtonClicked.onClick(
                         ShowAdapterAction.MarkSeason(
@@ -135,6 +137,7 @@ class AdapterWatchlistShow(
             } else {
                 binding.tvWatchlistShowUpToDate.gone()
                 if (!item.started) {
+                    binding.tvWatchlistShowSeperator.gone()
                     binding.btnWatchlistShowStartWatching.visible()
                     binding.btnWatchlistShowCurrentEpisode.gone()
                     binding.btnWatchlistShowMarkAsWatched.gone()
@@ -149,12 +152,18 @@ class AdapterWatchlistShow(
                     binding.btnWatchlistShowMarkAsWatched.visible()
                     binding.tvWatchlistShowEpisodeName.visible()
 
+//                    item.
+//                        @643
+//                        @692
+//                            kort 3/50
+//                            645/692/50
+
                     // Progress indicator
                     val progress = binding.progressWatchlistShowSeasonProgress
                     progress.max = item.episodesInSeason
-                    progress.progress = item.currentEpisodeNumber
+                    progress.progress = item.episodesInSeason - (item.lastEpisodeInSeason - item.currentEpisodeNumber)
                     binding.tvWatchlistShowProgressCurrentEpisode.text = item.currentEpisodeNumber.toString()
-                    binding.tvWatchlistShowProgressMaxEpisodes.text = item.episodesInSeason.toString()
+                    binding.tvWatchlistShowProgressMaxEpisodes.text = item.lastEpisodeInSeason.toString()
 
                     binding.btnWatchlistShowCurrentEpisode.text =
                         "S${item.currentSeasonNumber}E${item.currentEpisodeNumber}"
@@ -210,6 +219,7 @@ data class UIModelWatchlistShow(
     val currentEpisodeNumber: Int,
     val currentSeasonNumber: Int,
     val episodesInSeason: Int,
+    val lastEpisodeInSeason: Int,
     val started: Boolean,
     val upToDate: Boolean,
     val dateAdded: Long

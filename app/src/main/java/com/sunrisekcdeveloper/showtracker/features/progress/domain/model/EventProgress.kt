@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
 sealed class EventProgress {
+    data class SaveSnackbarMessage(val message: String) : EventProgress()
     data class ShowConfirmationDialogSetProgress(
         val showId: String,
         val seasonNumber: Int,
@@ -35,6 +36,7 @@ sealed class EventProgress {
     data class ShowToast(val msg: String) : EventProgress()
 
     companion object {
+        fun saveSnackbarMessage(message: String) = SaveSnackbarMessage(message)
         fun showConfirmationDialogSetProgress(
             showId: String,
             seasonNumber: Int,

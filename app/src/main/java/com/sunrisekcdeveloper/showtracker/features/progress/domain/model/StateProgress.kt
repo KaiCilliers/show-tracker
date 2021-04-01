@@ -20,12 +20,12 @@ package com.sunrisekcdeveloper.showtracker.features.progress.domain.model
 
 sealed class StateProgress {
     object Loading : StateProgress()
-    data class Success(val values: Map<Int, Int>) : StateProgress()
+    data class Success(val values: Map<Int, List<Int>>) : StateProgress()
     data class Error(val error: Exception) : StateProgress()
 
     companion object {
         fun loading() = Loading
-        fun success(values: Map<Int, Int>) = Success(values)
+        fun success(values: Map<Int, List<Int>>) = Success(values)
         fun error(errorMessage: String) = Error(Exception(errorMessage))
     }
 }

@@ -18,14 +18,17 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 sealed class EventSearch {
     object PopBackStack : EventSearch()
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : EventSearch()
     data class ShowToast(val msg: String) : EventSearch()
+    data class ShowSnackBar(val message: String) : EventSearch()
 
     companion object {
+        fun showSnackBar(message: String) = ShowSnackBar(message)
         fun popBackStack() = PopBackStack
         fun loadMediaDetails(mediaId: String, title: String, posterPath: String, type: MediaType) =
             LoadMediaDetails(mediaId, title, posterPath, type)

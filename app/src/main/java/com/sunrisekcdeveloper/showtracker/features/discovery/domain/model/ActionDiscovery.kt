@@ -20,7 +20,9 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
 sealed class ActionDiscovery {
     data class TapListHeading(val listType: ListType) : ActionDiscovery()
+    data class ShowSnackBar(val message: String) : ActionDiscovery()
     companion object {
+        fun showSnackBar(message: String) = ShowSnackBar(message)
         fun tapListHeading(listType: ListType) = TapListHeading(listType)
     }
 }

@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateS
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class UpdateShowProgressUseCase(
@@ -29,6 +30,8 @@ class UpdateShowProgressUseCase(
 ) : UpdateShowProgressUseCaseContract {
     // todo this implementation and accompanying repository is bad
     //  requires refactoring and streamline design
+    //  like really, this is just wrong
+    //  i mean you should be doing these database operations in transactions
     override suspend fun invoke(action: UpdateShowAction) {
         when (action) {
             is UpdateShowAction.IncrementEpisode -> {
@@ -53,10 +56,15 @@ class UpdateShowProgressUseCase(
             }
             is UpdateShowAction.CompleteSeason -> {
                 val justShow = repo.currentShow(action.showId)
+                Timber.d("I got the show: ${justShow}")
                 val show = repo.currentWatchlistShow(action.showId)
+                Timber.d("Watchlist data: $show")
+
                 if (justShow.seasonTotal == show.currentSeasonNumber) {
                     setShowUpToDate(show.id)
                 } else {
+
+                    val firstEpisodeInSeason = repo.firstEpisodeFromSeason(show.id, show.currentSeasonNumber+1)
 
                     repo.markEpisodeAsWatched(
                         show.id,
@@ -81,7 +89,7 @@ class UpdateShowProgressUseCase(
                     repo.updateWatchlistShowEpisodeAndSeason(
                         show.id,
                         show.currentSeasonNumber + 1,
-                        1
+                        firstEpisodeInSeason.number
                     )
                 }
 

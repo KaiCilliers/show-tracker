@@ -9,7 +9,8 @@
     <string name="stay_updated">Stay updated with the latest movies</string>
 
     <!-- Concat -->
-    <string name="season_with_number">%1$s Seasons</string>
+    <string name="season_plural_with_number">%1$s Seasons</string>
+    <string name="season_single_with_number">%1$s Season</string>
 
     <!-- TESTING -->
     <string name="remove">Remove</string>
@@ -47,14 +48,18 @@
     <string name="show_update_progress">Update progress</string>
     <string name="show_remove">Remove</string>
     <string name="results">Results</string>
-    <string name="unwatched_shows_movies">Your Unwatched Movies and TV Shows</string>
-    <string name="already_watched">WATCHED</string>
+    <string name="unwatched_shows_movies">Your Unwatched Media</string>
+    <string name="watched">WATCHED</string>
+    <string name="already_watched">Already Watched</string>
     <string name="mark_watched">SET AS WATCHED</string>
     <string name="search_shows_by_title">Search TV shows by title</string>
     <string name="search_movie_by_title">Search movies by title</string>
     <string name="separator_left_to_right">/</string>
     <string name="search">Search</string>
     <string name="loading_show_information">Loading show information…</string>
+    <string name="mark_as_watched">Mark as Watched</string>
+    <string name="empty_list">EMPTY LIST</string>
+    <string name="empty_list_sub_heading">You can add movies and TV shows to your watchlist by visiting the Discovery or Search screen</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>

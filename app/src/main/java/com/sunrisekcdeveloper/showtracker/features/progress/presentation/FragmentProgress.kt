@@ -24,6 +24,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -38,6 +40,7 @@ import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.StatePr
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentProgress : Fragment() {
@@ -46,7 +49,7 @@ class FragmentProgress : Fragment() {
     private val viewModel: ViewModelProgress by viewModels()
     private val arguments: FragmentProgressArgs by navArgs()
 
-    private var map: MutableMap<Int, Int> = mutableMapOf()
+    private var map: MutableMap<Int, List<Int>> = mutableMapOf()
 
     private lateinit var adapterSeason: ArrayAdapter<Int>
     private lateinit var adapterEpisode: ArrayAdapter<Int>
@@ -89,7 +92,7 @@ class FragmentProgress : Fragment() {
         binding.tvProgressSeason.gone()
     }
 
-    private fun stateSuccess(data: Map<Int, Int>) {
+    private fun stateSuccess(data: Map<Int, List<Int>>) {
         map = data.toMutableMap()
 
         adapterSeason.clear()
@@ -100,7 +103,8 @@ class FragmentProgress : Fragment() {
 
         adapterEpisode.clear()
         adapterEpisode.addAll(
-            *(1..map.getValue(1)).toList().toTypedArray()
+            map.getValue(1)
+//            *(1..map.getValue(1)).toList().toTypedArray()
         )
 
         binding.tvProgressSeason.visible()
@@ -145,6 +149,11 @@ class FragmentProgress : Fragment() {
                 is EventProgress.ShowConfirmationDialogUpToDate -> {
                     showConfirmationDialogUpToDate(event.showId, event.title)
                 }
+                is EventProgress.SaveSnackbarMessage -> {
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                        KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message
+                    )
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
     }
@@ -164,7 +173,8 @@ class FragmentProgress : Fragment() {
                     ActionProgress.setShowProgress(
                         showId,
                         season,
-                        episode
+                        episode,
+                        title
                     )
                 )
             }
@@ -179,7 +189,8 @@ class FragmentProgress : Fragment() {
             .setPositiveButton("Confirm") { _, _ ->
                 viewModel.submitAction(
                     ActionProgress.markShowUpToDate(
-                        showId
+                        showId,
+                        title
                     )
                 )
             }
@@ -213,7 +224,8 @@ class FragmentProgress : Fragment() {
                         Timber.e("Episodes for sesason ${position + 1}: ${map.getValue(position + 1)}")
                         adapterEpisode.clear()
                         adapterEpisode.addAll(
-                            *(1..map.getValue(position + 1)).toList().toTypedArray()
+                            map.getValue(position+1)
+//                            *(1..map.getValue(position + 1)).toList().toTypedArray()
                         )
                     }
                 }

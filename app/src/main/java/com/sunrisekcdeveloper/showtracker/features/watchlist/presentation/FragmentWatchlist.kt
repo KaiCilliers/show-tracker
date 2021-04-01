@@ -23,8 +23,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -33,14 +37,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.getQueryTextChangedStateFlow
-import com.sunrisekcdeveloper.showtracker.common.util.gone
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.common.util.visible
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
@@ -51,6 +53,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -86,6 +89,13 @@ class FragmentWatchlist : Fragment() {
         "Added Today"
     )
 
+    @Inject
+    lateinit var dataStore: DataStore<Preferences>
+
+    companion object {
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.WatchlistPreviousSnackMessage.dataStoreStringKeyFormat()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -101,6 +111,16 @@ class FragmentWatchlist : Fragment() {
         setup()
         binding()
         observeViewModel()
+    }
+
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[PREVIOUS_SNACK_KEY] = message
+        }
+    }
+
+    private fun stateEmptyList() {
+        binding.layoutEmpty.visible()
     }
 
     private fun stateSuccess(
@@ -120,14 +140,29 @@ class FragmentWatchlist : Fragment() {
                             binding.svWatchlist.queryHint =
                                 getString(R.string.search_shows_by_title)
                             binding.svWatchlist.setQuery("", true)
-                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+                            if (allShows.isEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else {
+                                binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+                                // this is so hacky
+                                cleanUi()
+                                stateSuccess(allMovies, allShows)
+                            }
                         }
                         1 -> {
                             binding.svWatchlist.queryHint =
                                 getString(R.string.search_movie_by_title)
                             binding.svWatchlist.setQuery("", true)
-                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+                            if (allMovies.isEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else {
+                                binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+                                // hacky - bypasses route of Action >>> State / Event
+                                cleanUi()
+                                stateSuccess(allMovies, allShows)
+                            }
                         }
+                        else -> { viewModel.submitAction(ActionWatchlist.showEmptyState()) }
                     }
                 }
             }
@@ -141,7 +176,16 @@ class FragmentWatchlist : Fragment() {
 
         binding.imgvFilterWatchlist.visible()
         binding.recyclerviewWatchlist.visible()
-        arguments.showId?.let { if (!scrolledOnce) scrollToShow() }
+        if (arguments.showId != "none") {
+            if (!scrolledOnce) scrollToShow()
+        }
+        // initial empty list state (ugly yes :() or when removing last item from list
+        if(allShows.isEmpty() && binding.tabBarWatchlist.selectedTabPosition == 0) {
+            viewModel.submitAction(ActionWatchlist.showEmptyState())
+        }
+        if(allMovies.isEmpty() && binding.tabBarWatchlist.selectedTabPosition == 1) {
+            viewModel.submitAction(ActionWatchlist.showEmptyState())
+        }
     }
 
     private fun scrollToShow() = viewLifecycleOwner.lifecycleScope.launch {
@@ -165,6 +209,7 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun cleanUi() {
+        binding.layoutEmpty.gone()
         binding.layoutWatchlistSkeleton.gone()
         binding.imgvFilterWatchlist.gone()
         binding.recyclerviewWatchlist.gone()
@@ -328,6 +373,15 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionWatchlist.showSnackbar(it))
+                    }
+            }
+        }
         viewModel.state.observe(viewLifecycleOwner) { state ->
             cleanUi()
             when (state) {
@@ -339,6 +393,9 @@ class FragmentWatchlist : Fragment() {
                 }
                 is StateWatchlist.Error -> {
                     stateError()
+                }
+                StateWatchlist.EmptyList -> {
+                    stateEmptyList()
                 }
             }
         }
@@ -372,13 +429,22 @@ class FragmentWatchlist : Fragment() {
                     )
                 }
                 is EventWatchlist.ShowSnackbar -> {
-                    Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
+                    dataStore.data.take(1).collect {
+                        if (it[PREVIOUS_SNACK_KEY] != event.msg) {
+                            showSnackBar(event.msg)
+                            consumedSnackBarMessage(event.msg)
+                        }
+                    }
                 }
                 is EventWatchlist.ShowConfirmationDialog -> {
                     showConfirmationDialogUnwatch(event.movieId, event.title)
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showConfirmationDialogUnwatch(movieId: String, title: String) {

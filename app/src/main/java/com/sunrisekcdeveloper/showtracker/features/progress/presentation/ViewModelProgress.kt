@@ -79,10 +79,12 @@ class ViewModelProgress @ViewModelInject constructor(
                         action.episodeNumber
                     )
                 )
+                eventChannel.send(EventProgress.saveSnackbarMessage("Successfully started watching \"${action.title}!\""))
                 eventChannel.send(EventProgress.popBackStack())
             }
             is ActionProgress.MarkShowUpToDate -> {
                 setShowProgressUseCase(SetShowProgress.UpToDate(action.showId))
+                eventChannel.send(EventProgress.saveSnackbarMessage("You are up to date with \"${action.title}!\""))
                 eventChannel.send(EventProgress.popBackStack())
             }
             is ActionProgress.AttemptSetProgress -> {

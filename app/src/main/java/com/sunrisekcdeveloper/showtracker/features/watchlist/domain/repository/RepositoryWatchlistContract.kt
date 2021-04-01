@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
@@ -52,4 +53,6 @@ interface RepositoryWatchlistContract {
     suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int)
 
     suspend fun updateWatchlistShowAsUpToDate(showId: String)
+
+    suspend fun firstEpisodeFromSeason(showId: String, season: Int): EntityEpisode
 }

@@ -66,6 +66,9 @@ class ViewModelDiscovery @ViewModelInject constructor(
             is ActionDiscovery.TapListHeading -> {
                 eventChannel.send(EventDiscovery.showFocusedContent(action.listType))
             }
+            is ActionDiscovery.ShowSnackBar -> {
+                eventChannel.send(EventDiscovery.showSnackBar(action.message))
+            }
         }
     }
 
