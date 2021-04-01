@@ -22,6 +22,7 @@ import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
 sealed class StateSearch {
+    object EmptyWatchlist : StateSearch()
     data class EmptySearch(val data: List<UIModelUnwatchedSearch>) : StateSearch()
     object NoResultsFound : StateSearch()
     object Loading : StateSearch()
@@ -29,6 +30,7 @@ sealed class StateSearch {
     data class Error(val exception: Exception) : StateSearch()
 
     companion object {
+        fun emptyWatchlist() = EmptyWatchlist
         fun emptySearch(unWatchedList: List<UIModelUnwatchedSearch>) = EmptySearch(unWatchedList)
         fun noResultsFound() = NoResultsFound
         fun loading() = Loading

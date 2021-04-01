@@ -152,6 +152,9 @@ class FragmentSearch : Fragment() {
                 is StateSearch.Error -> {
                     stateError()
                 }
+                StateSearch.EmptyWatchlist -> {
+                    stateEmptyWatchlist()
+                }
             }
         }
         viewModel.eventsFlow.onEach { event ->
@@ -257,12 +260,19 @@ class FragmentSearch : Fragment() {
 
     }
 
+    private fun stateEmptyWatchlist() {
+        binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
+        binding.tvHeaderWatchlistContent.visible()
+        binding.layoutEmpty.visible()
+    }
+
     private fun stateNoResults() {
         binding.tvHeaderNoResults.visible()
         binding.tvSubHeaderNoResults.visible()
     }
 
     private fun cleanUI() {
+        binding.layoutEmpty.gone()
         binding.imageView.gone()
         binding.recyclerviewSearch.gone()
         binding.tvHeaderNoResults.gone()

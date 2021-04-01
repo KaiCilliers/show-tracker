@@ -47,7 +47,7 @@
     <string name="show_update_progress">Update progress</string>
     <string name="show_remove">Remove</string>
     <string name="results">Results</string>
-    <string name="unwatched_shows_movies">Your Unwatched Movies and TV Shows</string>
+    <string name="unwatched_shows_movies">Your Unwatched Media</string>
     <string name="watched">WATCHED</string>
     <string name="already_watched">Already Watched</string>
     <string name="mark_watched">SET AS WATCHED</string>

@@ -98,7 +98,11 @@ class ViewModelSearch @ViewModelInject constructor(
                     when (resource) {
                         is Resource.Success -> {
                             unwatchedMediaCache.addAll(resource.data)
-                            _state.value = StateSearch.EmptySearch(resource.data)
+                            if (unwatchedMediaCache.isEmpty()) {
+                                _state.value = StateSearch.emptyWatchlist()
+                            } else {
+                                _state.value = StateSearch.EmptySearch(resource.data)
+                            }
                         }
                         is Resource.Error -> {
                             eventChannel.send(EventSearch.ShowToast("could not load unwatched media content"))

@@ -54,6 +54,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <ImageView
+            android:id="@+id/img_empty_list"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_baseline_list_24"
+            app:layout_constraintBottom_toTopOf="@+id/empty_list_heading"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/empty_list_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_list"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadline4"
+            app:layout_constraintBottom_toTopOf="@+id/empty_list_sub_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_empty_list" />
+
+        <TextView
+            android:id="@+id/empty_list_sub_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_list_sub_heading"
+            android:textAlignment="center"
+            android:layout_marginBottom="100dp"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/empty_list_heading" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
@@ -86,6 +130,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:text="@string/heading_search_results"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
