@@ -119,6 +119,10 @@ class FragmentWatchlist : Fragment() {
         }
     }
 
+    private fun stateEmptyList() {
+        binding.layoutEmpty.visible()
+    }
+
     private fun stateSuccess(
         movies: List<UIModelWatchlisMovie>,
         shows: List<UIModelWatchlistShow>
@@ -136,14 +140,29 @@ class FragmentWatchlist : Fragment() {
                             binding.svWatchlist.queryHint =
                                 getString(R.string.search_shows_by_title)
                             binding.svWatchlist.setQuery("", true)
-                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+                            if (allShows.isEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else {
+                                binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+                                // this is so hacky
+                                cleanUi()
+                                stateSuccess(allMovies, allShows)
+                            }
                         }
                         1 -> {
                             binding.svWatchlist.queryHint =
                                 getString(R.string.search_movie_by_title)
                             binding.svWatchlist.setQuery("", true)
-                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+                            if (allMovies.isEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else {
+                                binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+                                // hacky - bypasses route of Action >>> State / Event
+                                cleanUi()
+                                stateSuccess(allMovies, allShows)
+                            }
                         }
+                        else -> { viewModel.submitAction(ActionWatchlist.showEmptyState()) }
                     }
                 }
             }
@@ -159,6 +178,13 @@ class FragmentWatchlist : Fragment() {
         binding.recyclerviewWatchlist.visible()
         if (arguments.showId != "none") {
             if (!scrolledOnce) scrollToShow()
+        }
+        // initial empty list state (ugly yes :() or when removing last item from list
+        if(allShows.isEmpty() && binding.tabBarWatchlist.selectedTabPosition == 0) {
+            viewModel.submitAction(ActionWatchlist.showEmptyState())
+        }
+        if(allMovies.isEmpty() && binding.tabBarWatchlist.selectedTabPosition == 1) {
+            viewModel.submitAction(ActionWatchlist.showEmptyState())
         }
     }
 
@@ -183,6 +209,7 @@ class FragmentWatchlist : Fragment() {
     }
 
     private fun cleanUi() {
+        binding.layoutEmpty.gone()
         binding.layoutWatchlistSkeleton.gone()
         binding.imgvFilterWatchlist.gone()
         binding.recyclerviewWatchlist.gone()
@@ -366,6 +393,9 @@ class FragmentWatchlist : Fragment() {
                 }
                 is StateWatchlist.Error -> {
                     stateError()
+                }
+                StateWatchlist.EmptyList -> {
+                    stateEmptyList()
                 }
             }
         }

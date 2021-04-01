@@ -126,6 +126,9 @@ class ViewModelWatchlist @ViewModelInject constructor(
                     )
                 )
             }
+            ActionWatchlist.ShowEmptyState -> {
+                _state.value = StateWatchlist.emptyList()
+            }
         }
     }
 
@@ -147,15 +150,16 @@ class ViewModelWatchlist @ViewModelInject constructor(
 
             // If both are success
             if (resourceMovie is Resource.Success && resourceShow is Resource.Success) {
-                return@combine StateWatchlist.Success(
-                    movies = resourceMovie.data.filter {
+                Timber.d("rabbithorse - both are a success: shows: ${resourceShow.data.size} and movies: ${resourceMovie.data.size}")
+                return@combine StateWatchlist.success(
+                    moviesList = resourceMovie.data.filter {
                         if (movieSearchQuery.isEmpty()) {
                             true
                         } else {
                             it.title.contains(movieSearchQuery, true)
                         }
                     },
-                    shows = resourceShow.data.filter {
+                    showsList = resourceShow.data.filter {
                         if (showSearchQuery.isEmpty()) {
                             true
                         } else {

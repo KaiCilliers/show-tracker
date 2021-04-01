@@ -57,6 +57,8 @@
     <string name="search">Search</string>
     <string name="loading_show_information">Loading show information…</string>
     <string name="mark_as_watched">Mark as Watched</string>
+    <string name="empty_list">EMPTY LIST</string>
+    <string name="empty_list_sub_heading">You can add movies and TV shows to your watchlist by visiting the Discovery or Search screen</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>
