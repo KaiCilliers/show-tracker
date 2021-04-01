@@ -111,6 +111,10 @@ class RepositoryWatchlist(
         )
     }
 
+    override suspend fun firstEpisodeFromSeason(showId: String, season: Int): EntityEpisode {
+        return database.episodeDao().firstInSeason(showId, season)
+    }
+
     override suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int) {
         val watchlistShow = database.watchlistShowDao().withId(showId)
         val episode = database.episodeDao().withId(showId, newSeason, newEpisode)

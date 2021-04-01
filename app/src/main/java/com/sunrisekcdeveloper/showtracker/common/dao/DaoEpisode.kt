@@ -26,6 +26,12 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.En
 @Dao
 interface DaoEpisode : DaoBase<EntityEpisode> {
 
+    @Query("""
+         SELECT * FROM tbl_episode WHERE episode_show_id = :showId
+            AND episode_season_number = :season ORDER BY episode_number ASC LIMIT 1 
+    """)
+    suspend fun firstInSeason(showId: String, season: Int): EntityEpisode
+
     @Query("SELECT * FROM tbl_episode WHERE episode_show_id = :showId AND episode_season_number = :season AND episode_number = :episode")
     suspend fun withId(showId: String, season: Int, episode: Int): EntityEpisode
 

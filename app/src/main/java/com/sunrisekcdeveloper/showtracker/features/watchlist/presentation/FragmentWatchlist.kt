@@ -157,7 +157,9 @@ class FragmentWatchlist : Fragment() {
 
         binding.imgvFilterWatchlist.visible()
         binding.recyclerviewWatchlist.visible()
-        arguments.showId?.let { if (!scrolledOnce) scrollToShow() }
+        if (arguments.showId != "none") {
+            if (!scrolledOnce) scrollToShow()
+        }
     }
 
     private fun scrollToShow() = viewLifecycleOwner.lifecycleScope.launch {

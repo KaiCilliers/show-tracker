@@ -48,7 +48,9 @@ class AdapterWatchlistShow(
 
 
     fun positionOfItem(showId: String): Int {
+        Timber.d("I want the position of the show with ID: $showId")
         val data = currentList
+        Timber.d("data: ${data.map { "${it.id}: ${it.title}" }}")
         val item = data.find {
             it.id == showId
         }
