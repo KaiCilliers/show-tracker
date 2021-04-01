@@ -35,10 +35,11 @@ sealed class ActionProgress {
     data class SetShowProgress(
         val showId: String,
         val seasonNumber: Int,
-        val episodeNumber: Int
+        val episodeNumber: Int,
+        val title: String
     ) : ActionProgress()
 
-    data class MarkShowUpToDate(val showId: String) : ActionProgress()
+    data class MarkShowUpToDate(val showId: String, val title: String) : ActionProgress()
     data class CreateToast(val msg: String) : ActionProgress()
     data class Load(val showId: String) : ActionProgress()
 
@@ -55,10 +56,10 @@ sealed class ActionProgress {
         fun attemptMarkUpToDate(showId: String, title: String) =
             AttemptMarkUpToDate(showId, title)
 
-        fun setShowProgress(showId: String, seasonNumber: Int, episodeNumber: Int) =
-            SetShowProgress(showId, seasonNumber, episodeNumber)
+        fun setShowProgress(showId: String, seasonNumber: Int, episodeNumber: Int, title: String) =
+            SetShowProgress(showId, seasonNumber, episodeNumber, title)
 
-        fun markShowUpToDate(showId: String) = MarkShowUpToDate(showId)
+        fun markShowUpToDate(showId: String, title: String) = MarkShowUpToDate(showId, title)
         fun createToast(message: String) = CreateToast(message)
         fun load(showId: String) = Load(showId)
     }

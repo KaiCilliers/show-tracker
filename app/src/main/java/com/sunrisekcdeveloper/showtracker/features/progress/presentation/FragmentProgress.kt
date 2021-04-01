@@ -24,6 +24,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -38,6 +40,7 @@ import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.StatePr
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentProgress : Fragment() {
@@ -145,6 +148,11 @@ class FragmentProgress : Fragment() {
                 is EventProgress.ShowConfirmationDialogUpToDate -> {
                     showConfirmationDialogUpToDate(event.showId, event.title)
                 }
+                is EventProgress.SaveSnackbarMessage -> {
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                        KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message
+                    )
+                }
             }
         }.observeInLifecycle(viewLifecycleOwner)
     }
@@ -164,7 +172,8 @@ class FragmentProgress : Fragment() {
                     ActionProgress.setShowProgress(
                         showId,
                         season,
-                        episode
+                        episode,
+                        title
                     )
                 )
             }
@@ -179,7 +188,8 @@ class FragmentProgress : Fragment() {
             .setPositiveButton("Confirm") { _, _ ->
                 viewModel.submitAction(
                     ActionProgress.markShowUpToDate(
-                        showId
+                        showId,
+                        title
                     )
                 )
             }
