@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 sealed class ActionSearch {
@@ -29,8 +30,10 @@ sealed class ActionSearch {
     data class LoadMediaDetails(val mediaId: String, val title: String, val posterPath: String, val type: MediaType) : ActionSearch()
     data class ShowToast(val msg: String) : ActionSearch()
     object LoadUnwatchedContent : ActionSearch()
+    data class ShowSnackBar(val message: String) : ActionSearch()
 
     companion object {
+        fun showSnackBar(message: String) = ShowSnackBar(message)
         fun deviceIsOnline() = DeviceIsOnline
         fun deviceIsOffline() = DeviceIsOffline
         fun backButtonPressed() = BackButtonPress

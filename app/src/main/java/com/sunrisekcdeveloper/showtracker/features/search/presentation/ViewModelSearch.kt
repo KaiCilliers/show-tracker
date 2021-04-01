@@ -117,6 +117,9 @@ class ViewModelSearch @ViewModelInject constructor(
             ActionSearch.DeviceIsOffline -> {
                 _stateNetwork.value = StateNetwork.Disconnected
             }
+            is ActionSearch.ShowSnackBar -> {
+                eventChannel.send(EventSearch.showSnackBar(action.message))
+            }
         }
     }
 
