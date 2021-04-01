@@ -18,10 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.common.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.TypedValue
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
@@ -51,6 +53,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*
+
+fun hideKeyboard(inputView: View, context: Context, rootView: View) {
+    val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(inputView.windowToken, 0)
+    rootView.requestFocus()
+}
 
 fun isDateSame(c1: Calendar, c2: Calendar): Boolean {
     return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) && c1.get(Calendar.MONTH) == c2.get(
