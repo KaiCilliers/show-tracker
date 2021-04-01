@@ -26,7 +26,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -35,17 +34,13 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -59,7 +54,8 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     lateinit var dataStore: DataStore<Preferences>
 
     companion object {
-        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryPreviousSnackMessage.dataStoreStringKeyFormat()
+        val PREVIOUS_SNACK_KEY =
+            KeyPersistenceStore.DiscoveryPreviousSnackMessage.dataStoreStringKeyFormat()
     }
 
     override fun onCreateView(
@@ -178,7 +174,11 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         binding.tvDetailShowFirstAirDate.text = data.firstAirDate
         binding.tvDetailShowCertification.text = data.certification
         binding.tvDetailShowSeasons.text = getString(
-            R.string.season_with_number, data.seasonsTotal.toString()
+            if (data.seasonsTotal > 1) {
+                R.string.season_plural_with_number
+            } else {
+                R.string.season_single_with_number
+            }, data.seasonsTotal.toString()
         )
 
         if (data.deleted || !data.watchlisted) {
@@ -207,7 +207,14 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     private fun stateNotOnWatchlist(data: UIModelShowDetail) {
         binding.btnDetailShowAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
         binding.btnDetailShowAdd.text = getString(R.string.show_add)
-        binding.btnDetailShowAdd.click { viewModel.submitAction(ActionDetailShow.add(data.id, data.name)) }
+        binding.btnDetailShowAdd.click {
+            viewModel.submitAction(
+                ActionDetailShow.add(
+                    data.id,
+                    data.name
+                )
+            )
+        }
         stateNotStartedWatching(data)
     }
 

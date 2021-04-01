@@ -9,7 +9,8 @@
     <string name="stay_updated">Stay updated with the latest movies</string>
 
     <!-- Concat -->
-    <string name="season_with_number">%1$s Seasons</string>
+    <string name="season_plural_with_number">%1$s Seasons</string>
+    <string name="season_single_with_number">%1$s Season</string>
 
     <!-- TESTING -->
     <string name="remove">Remove</string>
