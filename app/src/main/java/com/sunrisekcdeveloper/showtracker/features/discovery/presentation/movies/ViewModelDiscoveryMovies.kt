@@ -19,65 +19,44 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ViewModelDiscoveryMovies @ViewModelInject constructor(
-    private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
-    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
-    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
+    loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
+    loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
+    loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract
 ) : ViewModel() {
 
-    var popularMoviesPage = 0
-    var topRatedMoviesPage = 0
-    var upcomingMoviesPage = 0
+    private val eventChannel = Channel<EventDiscovery>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val _popularMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val popularMovies: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _popularMovies
-
-    private val _topRatedMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val topRatedMovies: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _topRatedMovies
-
-    private val _upcomingMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val upcomingMovies: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _upcomingMovies
-
-    init {
-        viewModelScope.launch {
-            launch { getPopularMovies() }
-            launch { getTopRatedMovies() }
-            launch { getUpcomingMovies() }
+    fun submitAction(action: ActionDiscovery) = viewModelScope.launch {
+        when (action) {
+            is ActionDiscovery.TapListHeading -> {
+                eventChannel.send(EventDiscovery.showFocusedContent(action.listType))
+            }
+            is ActionDiscovery.ShowSnackBar -> {
+                eventChannel.send(EventDiscovery.showSnackBar(action.message))
+            }
         }
     }
 
-    fun getPopularMovies() = viewModelScope.launch {
-        dispatch(_popularMovies) { loadPopularMoviesUseCase(++popularMoviesPage) }
-    }
-    fun getTopRatedMovies() = viewModelScope.launch {
-        dispatch(_topRatedMovies) { loadTopRatedMoviesUseCase(++topRatedMoviesPage) }
-    }
-    fun getUpcomingMovies() = viewModelScope.launch {
-        dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
-    }
-
-
-    private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<List<UIModelDiscovery>>>,
-        call: suspend () -> Resource<List<UIModelDiscovery>>
-    ) {
-        val data = withContext(Dispatchers.IO) { call() }
-        withContext(Dispatchers.Main) { mutableLiveData.value = data }
-    }
+    val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()
+        .cachedIn(viewModelScope)
+    val streamTopRatedMovies: Flow<PagingData<UIModelDiscovery>> = loadTopRatedMoviesUseCase()
+        .cachedIn(viewModelScope)
+    val streamUpcomingMovies: Flow<PagingData<UIModelDiscovery>> = loadUpcomingMoviesUseCase()
+        .cachedIn(viewModelScope)
 }

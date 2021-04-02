@@ -19,105 +19,69 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewActionsDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ViewStateDiscovery
-import kotlinx.coroutines.Dispatchers
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.ActionFocused
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.EventFocused
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ViewModelDiscovery @ViewModelInject constructor(
-    private val loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContractUpdated,
-    private val loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
-    private val loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
-    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
-    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
-    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
+    loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
+    loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
+    loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
+    loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
+    loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
+    loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
 ) : ViewModel() {
 
-    // todo implement paging 3
-    var popularMoviesPage = 0
-    var topRatedMoviesPage = 0
-    var upcomingMoviesPage = 0
-    var popularShowsPage = 0
-    var topRatedShowsPage = 0
-    var latestShowsPage = 0
+    private val eventChannel = Channel<EventDiscovery>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val _state = MutableLiveData<ViewStateDiscovery>().apply {
-        value = ViewStateDiscovery.Loading
-    }
-    val state: LiveData<ViewStateDiscovery> = _state
+    // todo focused needs its own ViewModel, while all discovery fragments need to share a ViewModel
+    private val eventChannelFocused = Channel<EventFocused>(Channel.BUFFERED)
+    val eventsFlowFocused = eventChannelFocused.receiveAsFlow()
 
-    private val _popularMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val popularMovies: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _popularMovies
-
-    private val _topRatedMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val topRatedMovies: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _topRatedMovies
-
-    private val _upcomingMovies = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val upcomingMovies: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _upcomingMovies
-
-    private val _popularShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val popularShows: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _popularShows
-
-    private val _topRatedShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val topRatedShows: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _topRatedShows
-
-    private val _airingTodayShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val airingTodayShows: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _airingTodayShows
-
-    fun performAction(action: ViewActionsDiscovery) = viewModelScope.launch {
+    fun submitAction(action: ActionFocused) = viewModelScope.launch {
         when (action) {
-            ViewActionsDiscovery.FetchMovieAndShowData -> {
-                viewModelScope.launch {
-                    launch { getPopularMovies() }
-                    launch { getTopRatedMovies() }
-                    launch { getUpcomingMovies() }
-                    launch { getPopularShows() }
-                    launch { getTopRatedShows() }
-                    launch { getAiringTodayShows() }
-                }
+            ActionFocused.TapHeading -> {
+                eventChannelFocused.send(EventFocused.scrollToTop())
+            }
+            ActionFocused.Close -> {
+                eventChannelFocused.send(EventFocused.close())
             }
         }
     }
 
-    fun getPopularMovies() = viewModelScope.launch {
-        dispatch(_popularMovies) { loadPopularMoviesUseCase(++popularMoviesPage) }
-    }
-    fun getTopRatedMovies() = viewModelScope.launch {
-        dispatch(_topRatedMovies) { loadTopRatedMoviesUseCase(++topRatedMoviesPage) }
-    }
-    fun getUpcomingMovies() = viewModelScope.launch {
-        dispatch(_upcomingMovies) { loadUpcomingMoviesUseCase(++upcomingMoviesPage) }
-    }
-
-    fun getPopularShows() = viewModelScope.launch {
-        dispatch(_popularShows) { loadPopularShowsUseCase(++popularShowsPage) }
-    }
-    fun getTopRatedShows() = viewModelScope.launch {
-        dispatch(_topRatedShows) { loadTopRatedShowsUseCase(++topRatedShowsPage) }
-    }
-    fun getAiringTodayShows() = viewModelScope.launch {
-        dispatch(_airingTodayShows) { loadAiringTodayShowsUseCase(++latestShowsPage) }
+    fun submitAction(action: ActionDiscovery) = viewModelScope.launch {
+        when (action) {
+            is ActionDiscovery.TapListHeading -> {
+                eventChannel.send(EventDiscovery.showFocusedContent(action.listType))
+            }
+            is ActionDiscovery.ShowSnackBar -> {
+                eventChannel.send(EventDiscovery.showSnackBar(action.message))
+            }
+        }
     }
 
-    private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<List<UIModelDiscovery>>>,
-        call: suspend () -> Resource<List<UIModelDiscovery>>
-    ) {
-        val data = withContext(Dispatchers.IO) { call() }
-        withContext(Dispatchers.Main) { mutableLiveData.value = data }
-    }
+    val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()
+        .cachedIn(viewModelScope)
+    val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = loadPopularShowsUseCase()
+        .cachedIn(viewModelScope)
+    val streamTopRatedMovies: Flow<PagingData<UIModelDiscovery>> = loadTopRatedMoviesUseCase()
+        .cachedIn(viewModelScope)
+    val streamTopRatedShows: Flow<PagingData<UIModelDiscovery>> = loadTopRatedShowsUseCase()
+        .cachedIn(viewModelScope)
+    val streamUpcomingMovies: Flow<PagingData<UIModelDiscovery>> = loadUpcomingMoviesUseCase()
+        .cachedIn(viewModelScope)
+    val streamAiringTodayShows: Flow<PagingData<UIModelDiscovery>> = loadAiringTodayShowsUseCase()
+        .cachedIn(viewModelScope)
 }

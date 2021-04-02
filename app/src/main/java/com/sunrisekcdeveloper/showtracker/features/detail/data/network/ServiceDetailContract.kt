@@ -26,24 +26,23 @@ import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseSho
 import retrofit2.Response
 
 interface ServiceDetailContract {
-    suspend fun movieDetail(
+    suspend fun movieDetails(
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<ResponseMovieDetail>
 
-    suspend fun movieCertification(
+    suspend fun movieCertifications(
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<EnvelopeMovieReleaseDates>
 
-    suspend fun showDetail(
+    suspend fun showDetails(
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<ResponseShowDetail>
 
-    suspend fun showCertification(
+    suspend fun showCertifications(
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<EnvelopeShowCertification>
-
 }

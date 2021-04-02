@@ -18,9 +18,21 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
+import androidx.room.Entity
 
+@Entity(
+    tableName = "tbl_paging_discovery",
+    primaryKeys = ["id", "listType"]
+)
 data class UIModelDiscovery(
     val id: String,
     val mediaType: MediaType,
+    val mediaTitle: String,
+    // Added list type to place all discovery lists in a
+    // single table and have multiple DAO functions which
+    // can use this field to determine what list the item
+    // belongs to. Marked as PK due to the possibility of
+    // the same media being present in multiple lists
+    val listType: ListType,
     val posterPath: String
 )

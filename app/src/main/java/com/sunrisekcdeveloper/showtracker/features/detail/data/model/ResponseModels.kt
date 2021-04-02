@@ -24,9 +24,13 @@ data class ResponseShowDetail(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String,
+    @SerializedName("backdrop_path") val backdropPath: String?,
+    @SerializedName("poster_path") val posterPath: String?,
+    @SerializedName("vote_average") val rating: Float,
     @SerializedName("first_air_date") val firstAirYear: String,
-    @SerializedName("number_of_seasons") val seasonTotal: Int
+    @SerializedName("number_of_episodes") val episodeCount: Int,
+    @SerializedName("number_of_seasons") val seasonCount: Int,
+    @SerializedName("popularity") val popularityValue: Float
 )
 
 data class EnvelopeShowCertification(
@@ -43,9 +47,12 @@ data class ResponseMovieDetail(
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,
     @SerializedName("overview") val overview: String,
+    @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("poster_path") val posterPath: String?,
     @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("runtime") val runtime: Int?
+    @SerializedName("runtime") val runtime: Int?,
+    @SerializedName("popularity") val popularityValue: Float,
+    @SerializedName("vote_average") val rating: Float,
 )
 
 data class EnvelopeMovieReleaseDates(
@@ -58,9 +65,18 @@ data class ResponseMovieReleaseDates(
     @SerializedName("release_dates") val releaseDates: List<ResponseCertificationAndReleaseDate>
 )
 
-// todo get the rating based on the type (it seems type 2)
 data class ResponseCertificationAndReleaseDate(
     @SerializedName("certification") val certification: String,
     @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("type") val releaseType: Int, // todo limited values - sealed class
+    @SerializedName("type") val releaseType: Int
 )
+
+// To be used with ResponseCertificationAndReleaseDate
+sealed class ReleaseDateType {
+    object Premiere : ReleaseDateType() // 1
+    object TheatricalLimited : ReleaseDateType() // 2
+    object Theatrical : ReleaseDateType() // 3
+    object Digital : ReleaseDateType() // 4
+    object Physical : ReleaseDateType() // 5
+    object TV : ReleaseDateType() // 6
+}

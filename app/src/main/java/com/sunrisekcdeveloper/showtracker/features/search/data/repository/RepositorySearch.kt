@@ -18,23 +18,52 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.SourceSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.showtracker.common.util.asUiModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
 class RepositorySearch(
-    @SourceSearch private val remote: RemoteDataSourceSearchContract,
+    private val remote: RemoteDataSourceSearchContract,
+    private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {
+
+    override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
+        val movie = database.watchlistMovieDao().unwatched()
+        val shows = database.watchlistShowDao().unwatched()
+
+        val list =
+            movie.map { it.asUiModelUnwatchedSearch() } + shows.map { it.asUiModelUnwatchedSearch() }
+
+        return Resource.Success(list.sortedBy { it.title })
+    }
+
+    override fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = 40,
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { PagingSourceSearch(remote, query) }
+        ).flow
+    }
 
     override suspend fun searchMediaByTitle(
         page: Int,
@@ -48,38 +77,30 @@ class RepositorySearch(
 
             when (movieResponse) {
                 is NetworkResult.Success -> {
-                    result.addAll(movieResponse.data.media.asUIModelSearch())
+                    result.addAll(movieResponse.data.media.map { it.asUIModelSearch() })
                 }
                 is NetworkResult.Error -> {
-                    Timber.d("Error - movie search call was not successful: ${movieResponse.message}")
+                    // todo dont swallow exceptions
+                    Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
                 }
             }
             when (showResponse) {
                 is NetworkResult.Success -> {
-                    result.addAll(showResponse.data.media.asUIModelSearchh())
+                    result.addAll(showResponse.data.media.map { it.asUIModelSearch() })
                 }
                 is NetworkResult.Error -> {
-                    Timber.d("Error - show search call was not successful: ${showResponse.message}")
+                    Timber.d("Error - show search call was not successful: ${showResponse.exception}")
                 }
             }
-            Resource.Success(result.toList())
+
+            // todo this can be done nicer
+            val filtered = result.filter { it.posterPath != "" }
+                .filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
+            val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
+            { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
+            )
+
+            Resource.Success(sorted)
         }
     }
 }
-
-// todo did not move to extensions file due to not having a solution
-//  to the function naming conflicts...
-fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
-    id = "$id",
-    title = title,
-    mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
-)
-fun List<ResponseStandardMedia.ResponseMovie>.asUIModelSearch() = this.map { it.asUIModelSearch() }
-fun List<ResponseStandardMedia.ResponseShow>.asUIModelSearchh() = this.map { it.asUIModelSearch() }
-fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
-    id = "$id",
-    title = name,
-    mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
-)

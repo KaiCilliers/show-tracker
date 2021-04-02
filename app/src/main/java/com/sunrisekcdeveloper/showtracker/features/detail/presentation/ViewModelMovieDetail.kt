@@ -18,27 +18,107 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMovieToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMovieFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ViewModelMovieDetail @ViewModelInject constructor(
-    private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract
+    private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
+    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCaseContract,
+    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
+    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCaseContract
 ) : ViewModel() {
-    private val _movieDetails = MutableLiveData<Resource<UIModelMovieDetail>>()
-    val movieDetails: LiveData<Resource<UIModelMovieDetail>>
-        get() = _movieDetails
 
-    fun movieDetails(id: String) = viewModelScope.launch {
-        fetchMovieDetailsUseCase(id).collect {
-            _movieDetails.value = it
+    private val eventChannel = Channel<EventDetailMovie>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    private val _state = MutableLiveData<StateDetailMovie>()
+    val state: LiveData<StateDetailMovie>
+        get() = _state
+
+    private fun fetchDetails(id: String) = viewModelScope.launch {
+        fetchMovieDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailMovie.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailMovie.Error(Exception(resource.exception))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailMovie.Loading
+                }
+            }
+        }
+    }
+
+    fun submitAction(action: ActionDetailMovie) = viewModelScope.launch {
+        when (action) {
+            is ActionDetailMovie.Load -> {
+                fetchDetails(action.movieId)
+            }
+            is ActionDetailMovie.Add -> {
+                addMovieToWatchlistUseCase(action.movieId)
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("Successfully added \"${action.title}\"!"))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.Remove -> {
+                removeMovieFromWatchlistUseCase(action.movieId)
+                // this is not ideal, but it works for now
+                // i want the dialog to dismiss when the user has selected an action
+                // a snackbar must then appear on the screen the user was previously describing
+                // the action the user just made
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("Removed \"${action.title}\""))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.SetWatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("\"${action.title}\" marked as watched!"))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.SetUnwatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("\"${action.title}\" marked as unwatched"))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            ActionDetailMovie.Close -> {
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.ShowToast -> {
+                eventChannel.send(EventDetailMovie.ShowToast(action.msg))
+            }
+            is ActionDetailMovie.AttemptRemove -> {
+                eventChannel.send(
+                    EventDetailMovie.showConfirmationDialog(
+                        action.movieId,
+                        action.title
+                    )
+                )
+            }
+            is ActionDetailMovie.AttemptUnwatch -> {
+                eventChannel.send(
+                    EventDetailMovie.showConfirmationDialogUnwatch(
+                        action.movieId,
+                        action.title
+                    )
+                )
+            }
         }
     }
 }
+

@@ -1,48 +1,22 @@
 <resources>
     <string name="app_name">ShowTracker</string>
-    <string name="menu_label_watchlist">Watchlist</string>
-    <string name="menu_label_discover">Discover</string>
-    <string name="menu_label_statistics">Statistics</string>
-    <string name="hint_search">Search Here</string>
 
-    <string name="popular">Popular Movies</string>
+    <string name="heading_popular_movies">Popular Movies</string>
     <string name="most_popular_movies">Most popular movies</string>
-    <string name="error_fetch_movies">Please check your internet connection</string>
-    <string name="top_rated">Top Rated Movies</string>
+    <string name="heading_top_rated_movies">Top Rated Movies</string>
     <string name="highest_rated_movies">Highest rated movies of all times</string>
-    <string name="upcoming">Upcoming Movies</string>
+    <string name="heading_upcoming_movies">Upcoming Movies</string>
     <string name="stay_updated">Stay updated with the latest movies</string>
 
-    <string name="chip_filter_movie">Movie</string>
-    <string name="chip_filter_shows">Shows</string>
-
     <!-- Concat -->
-    <string name="season_with_number">%1$s Seasons</string>
+    <string name="season_plural_with_number">%1$s Seasons</string>
+    <string name="season_single_with_number">%1$s Season</string>
+    <string name="runtime_with_value">%1$dh%02$dm</string>
 
     <!-- TESTING -->
-    <string name="input_text_value">Testing value</string>
-    <string name="movie_description_dummy">One advanced diverted domestic sex repeated bringing you old. Possible procured her trifling laughter thoughts property she met way. Companions shy had solicitude favourable own. Which could saw guest man now heard but. Lasted my coming uneasy marked so should. Gravity letters it amongst herself dearest an windows by. Wooded ladies she basket season age her uneasy saw. Discourse unwilling am no described dejection incommode no listening of. Before nature his parish boy. Folly words widow one downs few age every seven. If miss part by fact he park just shew. Discovered had get considered projection who favourable. Necessary up knowledge it tolerably. Unwilling departure education is be dashwoods or an. Use off agreeable law unwilling sir deficient curiosity instantly. Easy mind life fact with see has bore ten. Parish any chatty can elinor direct for former. Up as meant widow equal an share least.</string>
-    <string name="more_like_this_label">More like this</string>
-    <string name="series_label">TV Shows</string>
-    <string name="movies_label">Movies</string>
-    <string name="both_label">Both</string>
-    <string name="showtracker_label">ShowTracker</string>
-    <string name="recently_added_heading">Recently Added</string>
-    <string name="recently_added_sub_heading">Movies and Shows that you recently added to your watchlist</string>
-    <string name="recently_added">Recently Added</string>
     <string name="remove">Remove</string>
-    <string name="in_progress">In Progress</string>
-    <string name="completed">Completed</string>
-    <string name="anticipated">Anticipated</string>
-    <string name="none">None</string>
-    <string name="in_progress_sub_heading">Movies and Shows that you are in the progress of watching</string>
-    <string name="upcoming_sub_heading">Shows that are sceduled for release soon</string>
-    <string name="completed_sub_heading">Movies and Shows that you have already finished watching</string>
-    <string name="anticipated_sub_heading">Movies scheduled for release that you intend to watch</string>
-    <string name="title_activity_housing">MainActivity</string>
     <string name="watchlist_title_updated">Watchlist</string>
     <string name="discovery_title_updated">Discovery</string>
-    <string name="statistics_title_updated">Statistics</string>
     <string name="search_title">Search</string>
     <string name="movies_title">Movies</string>
     <string name="tv_shows_title">TV Shows</string>
@@ -50,10 +24,45 @@
     <string name="search_movie_show_hint">Search for a movie or a TV show</string>
     <string name="search_header_no_results">Oh no! We could not find what you were looking for.</string>
     <string name="search_sub_header_no_results">Try searching for a different movie or TV show</string>
-    <string name="search_header_watchlist">Your unwatched movies and TV shows</string>
     <string name="add_button">+ Add</string>
     <string name="movie_watched_text">I watched this</string>
     <string name="media_add">+ Add</string>
+    <string name="single_pipe">|</string>
+    <string name="heading_popular_shows">Popular Shows</string>
+    <string name="heading_top_rated_shows">Top Rated Shows</string>
+    <string name="heading_airing_today_shows">Airing Today</string>
+    <string name="sub_heading_popular_shows">Popular Shows</string>
+    <string name="sub_heading_top_rated_shows">Top Rated Shows</string>
+    <string name="sub_heading_airing_today_shows">Shows Airing Today </string>
+    <string name="heading_search_results">Results</string>
+    <string name="input_last_episode_watched">Please select the next episode you need to watch</string>
+    <string name="shorthand_season">S</string>
+    <string name="shorthand_episode">E</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_up_to_date">I\'m up to date</string>
+    <string name="action_set_watched">Set as watched</string>
+    <string name="action_start_watching">Start Watching Now</string>
+    <string name="info_up_to_date_show">Up to date!</string>
+    <string name="show_add">+ Add</string>
+    <string name="show_start_watching">Start Watching</string>
+    <string name="show_up_to_date">Up to date</string>
+    <string name="show_update_progress">Update progress</string>
+    <string name="show_remove">Remove</string>
+    <string name="results">Results</string>
+    <string name="unwatched_shows_movies">Your Unwatched Media</string>
+    <string name="watched">WATCHED</string>
+    <string name="already_watched">Already Watched</string>
+    <string name="mark_watched">SET AS WATCHED</string>
+    <string name="search_shows_by_title">Search TV shows by title</string>
+    <string name="search_movie_by_title">Search movies by title</string>
+    <string name="separator_left_to_right">/</string>
+    <string name="search">Search</string>
+    <string name="loading_show_information">Loading show information…</string>
+    <string name="mark_as_watched">Mark as Watched</string>
+    <string name="empty_list">EMPTY LIST</string>
+    <string name="empty_list_sub_heading">You can add movies and TV shows to your watchlist by visiting the Discovery or Search screen</string>
+    <string name="no_matches">NO MATCHES</string>
+    <string name="no_matches_sub_heading">Your filter and option and search query matches no media on your watchlist</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>

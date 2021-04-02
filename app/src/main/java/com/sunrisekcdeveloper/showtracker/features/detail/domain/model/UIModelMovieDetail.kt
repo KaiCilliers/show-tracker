@@ -27,5 +27,6 @@ data class UIModelMovieDetail(
     val certification: String,
     val runtime: String,
     val watchlisted: Boolean,
+    val deleted: Boolean,
     val watched: Boolean
 )

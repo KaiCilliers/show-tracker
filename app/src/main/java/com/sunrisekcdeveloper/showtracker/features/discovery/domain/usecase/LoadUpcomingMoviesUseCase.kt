@@ -18,15 +18,16 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContractUpdated
+import androidx.paging.PagingData
+import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 class LoadUpcomingMoviesUseCase(
-    @RepoDiscovery private val discoveryRepo: RepositoryDiscoveryContract
-) : LoadUpcomingMoviesUseCaseContractUpdated {
-    override suspend fun invoke(page: Int): Resource<List<UIModelDiscovery>> =
-        discoveryRepo.upcomingMovies(page)
+    private val discoveryRepo: RepositoryDiscoveryContract
+) : LoadUpcomingMoviesUseCaseContract {
+    override fun invoke(): Flow<PagingData<UIModelDiscovery>> = discoveryRepo.upcomingMoviesStream()
 }

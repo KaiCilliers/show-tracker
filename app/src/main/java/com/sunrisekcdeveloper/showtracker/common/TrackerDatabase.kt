@@ -19,40 +19,38 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
-import java.util.Date
+import com.sunrisekcdeveloper.showtracker.common.dao.*
+import com.sunrisekcdeveloper.showtracker.common.util.TrackerTypeConverters
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoRemoteKeys
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.*
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 
 @Database(
     entities = [
-        Placeholder::class
+        EntityMovie::class, EntityWatchlistMovie::class,
+        EntityShow::class, EntityWatchlistShow::class,
+        EntitySeason::class, EntityWatchlistSeason::class,
+        EntityEpisode::class, EntityWatchlistEpisode::class,
+        EntityWatchlistBatch::class, UIModelDiscovery::class,
+        RemoteKeys::class
     ],
-    version = 34,
+    version = 68,
     exportSchema = false
 )
 @TypeConverters(TrackerTypeConverters::class)
 abstract class TrackerDatabase : RoomDatabase() {
-}
 
-@Entity(tableName = "tbl_placeholder")
-data class Placeholder(@PrimaryKey val id: String)
-
-/**
- * Tracker type converters
- *
- * Two big issues
- *  Date class does not support timezones
- *  Persisted value is a simple Long which also can't store timezone info
- * https://medium.com/androiddevelopers/room-time-2b4cf9672b98
- *
- * @constructor Create empty Tracker type converters
- */
-class TrackerTypeConverters() {
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
-    }
+    abstract fun episodeDao(): DaoEpisode
+    abstract fun movieDao(): DaoMovie
+    abstract fun seasonDao(): DaoSeason
+    abstract fun showDao(): DaoShow
+    abstract fun watchlistEpisodeDao(): DaoWatchlistEpisode
+    abstract fun watchlistMovieDao(): DaoWatchlistMovie
+    abstract fun watchlistSeasonDao(): DaoWatchlistSeason
+    abstract fun watchlistShowDao(): DaoWatchlistShow
+    // todo refactor to have a dao for each table and not for each feature
+    abstract fun remoteKeysDiscovery(): DaoRemoteKeys
+    abstract fun discoveryDao(): DaoDiscovery
 }

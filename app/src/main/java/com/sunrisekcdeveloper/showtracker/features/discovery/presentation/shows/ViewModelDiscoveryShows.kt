@@ -19,64 +19,46 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadAiringTodayShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPopularShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
+// todo discovery fragments share a single ViewModel?
 class ViewModelDiscoveryShows @ViewModelInject constructor(
-    private val loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
-    private val loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
-    private val loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
+    loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
+    loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
+    loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
 ) : ViewModel() {
 
-    var popularShowsPage = 0
-    var topRatedShowsPage = 0
-    var latestShowsPage = 0
+    private val eventChannel = Channel<EventDiscovery>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val _popularShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val popularShows: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _popularShows
-
-    private val _topRatedShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val topRatedShows: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _topRatedShows
-
-    private val _airingTodayShows = MutableLiveData<Resource<List<UIModelDiscovery>>>()
-    val airingTodayShows: LiveData<Resource<List<UIModelDiscovery>>>
-        get() = _airingTodayShows
-
-    init {
-        viewModelScope.launch {
-            launch { getPopularShows() }
-            launch { getTopRatedShows() }
-            launch { getAiringTodayShows() }
+    fun submitAction(action: ActionDiscovery) = viewModelScope.launch {
+        when (action) {
+            is ActionDiscovery.TapListHeading -> {
+                eventChannel.send(EventDiscovery.showFocusedContent(action.listType))
+            }
+            is ActionDiscovery.ShowSnackBar -> {
+                eventChannel.send(EventDiscovery.showSnackBar(action.message))
+            }
         }
     }
 
-    fun getPopularShows() = viewModelScope.launch {
-        dispatch(_popularShows) { loadPopularShowsUseCase(++popularShowsPage) }
-    }
-    fun getTopRatedShows() = viewModelScope.launch {
-        dispatch(_topRatedShows) { loadTopRatedShowsUseCase(++topRatedShowsPage) }
-    }
-    fun getAiringTodayShows() = viewModelScope.launch {
-        dispatch(_airingTodayShows) { loadAiringTodayShowsUseCase(++latestShowsPage) }
-    }
-
-    private suspend fun dispatch(
-        mutableLiveData: MutableLiveData<Resource<List<UIModelDiscovery>>>,
-        call: suspend () -> Resource<List<UIModelDiscovery>>
-    ) {
-        val data = withContext(Dispatchers.IO) { call() }
-        withContext(Dispatchers.Main) { mutableLiveData.value = data }
-    }
+    val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = loadPopularShowsUseCase()
+        .cachedIn(viewModelScope)
+    val streamTopRatedShows: Flow<PagingData<UIModelDiscovery>> = loadTopRatedShowsUseCase()
+        .cachedIn(viewModelScope)
+    val streamAiringTodayShows: Flow<PagingData<UIModelDiscovery>> = loadAiringTodayShowsUseCase()
+        .cachedIn(viewModelScope)
 }

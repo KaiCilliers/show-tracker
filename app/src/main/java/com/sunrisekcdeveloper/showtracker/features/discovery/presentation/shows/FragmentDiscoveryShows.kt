@@ -25,22 +25,35 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.forEach
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
+import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,20 +61,20 @@ import javax.inject.Inject
 class FragmentDiscoveryShows : Fragment() {
 
     private lateinit var binding: FragmentDiscoveryOnlyShowsBinding
-
     private val viewModel: ViewModelDiscoveryShows by viewModels()
 
-    @Inject
-    lateinit var popularShowListAdapter: AdapterSimplePoster
-    private lateinit var popularShowLayoutManager: LinearLayoutManager
+    private val adapterPopularShows = PagingAdapterSimplePoster()
+    private val adapterTopRatedShows = PagingAdapterSimplePoster()
+    private val adapterAiringShows = PagingAdapterSimplePoster()
+
+    private var job: Job? = null
 
     @Inject
-    lateinit var topRatedShowsListAdapter: AdapterSimplePoster
-    private lateinit var topRatedShowLayoutManager: LinearLayoutManager
+    lateinit var dataStore: DataStore<Preferences>
 
-    @Inject
-    lateinit var airingTodayShowListAdapter: AdapterSimplePoster
-    private lateinit var airingTodayShowLayoutManager: LinearLayoutManager
+    companion object {
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryShowPreviousSnackMessage.dataStoreStringKeyFormat()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,107 +92,126 @@ class FragmentDiscoveryShows : Fragment() {
         observeViewModel()
     }
 
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[PREVIOUS_SNACK_KEY] = message
+        }
+    }
+
     private fun setupBinding() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             if (mediaType == MediaType.Show) {
                 findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(mediaId)
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(
+                        mediaId,
+                        mediaTitle,
+                        posterPath
+                    )
                 )
             }
         }
 
-        popularShowListAdapter.onPosterClickListener = onClick
-        topRatedShowsListAdapter.onPosterClickListener = onClick
-        airingTodayShowListAdapter.onPosterClickListener = onClick
+        adapterPopularShows.setPosterClickAction(onClick)
+        adapterTopRatedShows.setPosterClickAction(onClick)
+        adapterAiringShows.setPosterClickAction(onClick)
 
-        popularShowLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        topRatedShowLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        airingTodayShowLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+        binding.rcPopularShows.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rcTopRatedShows.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rcAiringTodayShows.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        binding.rcPopularShows.layoutManager = popularShowLayoutManager
-        binding.rcPopularShows.adapter = popularShowListAdapter
-
-        binding.rcTopRatedShows.layoutManager = topRatedShowLayoutManager
-        binding.rcTopRatedShows.adapter = topRatedShowsListAdapter
-
-        binding.rcAiringTodayShows.layoutManager = airingTodayShowLayoutManager
-        binding.rcAiringTodayShows.adapter = airingTodayShowListAdapter
-
-        attachOnScrollListener(
-            binding.rcPopularShows,
-            popularShowLayoutManager
-        ) { viewModel.getPopularShows() }
-        attachOnScrollListener(
-            binding.rcTopRatedShows,
-            topRatedShowLayoutManager
-        ) { viewModel.getTopRatedShows() }
-        attachOnScrollListener(
-            binding.rcAiringTodayShows,
-            airingTodayShowLayoutManager
-        ) { viewModel.getAiringTodayShows() }
+        binding.rcPopularShows.adapter = adapterPopularShows
+        binding.rcTopRatedShows.adapter = adapterTopRatedShows
+        binding.rcAiringTodayShows.adapter = adapterAiringShows
     }
 
     private fun observeViewModel() {
-        viewModel.popularShows.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionDiscovery.showSnackBar(it))
+                    }
+            }
+        }
+        job?.cancel()
+        job = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.streamPopularShows.collectLatest {
+                adapterPopularShows.submitData(it)
+            }
+        }.also {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.streamTopRatedShows.collectLatest {
+                    adapterTopRatedShows.submitData(it)
                 }
-                is Resource.Success -> {
-                    updateList(popularShowListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcPopularShows,
-                        popularShowLayoutManager
-                    ) { viewModel.getPopularShows() }
-                }
-                is Resource.Error -> {
+            }
+        }.also {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.streamAiringTodayShows.collectLatest {
+                    adapterAiringShows.submitData(it)
                 }
             }
         }
-        viewModel.topRatedShows.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
+        viewModel.eventsFlow.onEach { event ->
+            when (event) {
+                is EventDiscovery.ShowFocusedContent -> {
+                    navigateToFocusedContent(event.listType)
                 }
-                is Resource.Success -> {
-                    updateList(topRatedShowsListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcTopRatedShows,
-                        topRatedShowLayoutManager
-                    ) { viewModel.getTopRatedShows() }
-                }
-                is Resource.Error -> {
-                }
-            }
-        }
-        viewModel.airingTodayShows.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    updateList(airingTodayShowListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcAiringTodayShows,
-                        airingTodayShowLayoutManager
-                    ) { viewModel.getAiringTodayShows() }
-                }
-                is Resource.Error -> {
+                is EventDiscovery.ShowSnackBar -> {
+                    dataStore.data.take(1).collect {
+                        if (it[PREVIOUS_SNACK_KEY] != event.message) {
+                            showSnackBar(event.message)
+                            consumedSnackBarMessage(event.message)
+                        }
+                    }
                 }
             }
-        }
+        }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToFocusedContent(listType: ListType) {
+        findNavController().navigate(
+            when (listType) {
+                ListType.MoviePopular -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(1)
+                }
+                ListType.MovieTopRated -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(3)
+                }
+                ListType.MovieUpcoming -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(5)
+                }
+                ListType.ShowPopular -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(2)
+                }
+                ListType.ShowTopRated -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(4)
+                }
+                ListType.ShowAiringToday -> {
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(6)
+                }
+            }
+        )
     }
 
     private fun setup() {
+        binding.tvHeadingPopularShows.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showPopular()))
+        }
+        binding.tvHeadingTopRatedShows.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showTopRated()))
+        }
+        binding.tvHeadingAiringTodayShows.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showAiringToday()))
+        }
+
         // Navigation - Toolbar Up button
         binding.toolbarDiscoveryShows.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -189,7 +221,7 @@ class FragmentDiscoveryShows : Fragment() {
         binding.toolbarDiscoveryShows.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToNavGraphSearch()
+                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToFragmentSearch()
                 )
                 true
             }
@@ -206,9 +238,7 @@ class FragmentDiscoveryShows : Fragment() {
                 ) {
                     // Discovery Screen
                     if (id == 1L) {
-                        findNavController().navigate(
-                            FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToDiscoveryFragment()
-                        )
+                        findNavController().popBackStack()
                         // Discovery Movies Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
@@ -217,7 +247,7 @@ class FragmentDiscoveryShows : Fragment() {
                     }
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) { }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
     }
 
@@ -230,36 +260,5 @@ class FragmentDiscoveryShows : Fragment() {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerDiscoveryShows.adapter = it
         }
-    }
-
-    private fun updateList(
-        adapter: AdapterSimplePoster,
-        list: List<UIModelDiscovery>
-    ) {
-        adapter.updateList(list.asUIModelPosterList())
-    }
-
-    private fun attachOnScrollListener(
-        recyclerView: RecyclerView,
-        layoutManager: LinearLayoutManager,
-        fetchNextPage: suspend () -> Unit
-    ) {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // total number of movies inside adapter
-                val totalItems = layoutManager.itemCount
-                // current number of child views attached to the RecyclerView that are currently
-                // being recycled
-                val visibleItemCount = layoutManager.childCount
-                // position of the leftmost visible item in the list
-                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                    // This is to limit network calls
-                    recyclerView.removeOnScrollListener(this)
-                    MainScope().launch { fetchNextPage() }
-                }
-            }
-        })
     }
 }

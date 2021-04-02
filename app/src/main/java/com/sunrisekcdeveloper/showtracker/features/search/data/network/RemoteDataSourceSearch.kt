@@ -18,9 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.data.network
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.RemoteDataSourceBase
-import com.sunrisekcdeveloper.showtracker.di.NetworkModule.ApiSearch
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.base.RemoteDataSourceBase
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,14 +27,13 @@ import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 
 class RemoteDataSourceSearch(
-    @ApiSearch private val api: ServiceSearchContract,
+    private val api: ServiceSearchContract,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RemoteDataSourceSearchContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun moviesByTitle(
         query: String,
         page: Int
     ): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
-        Timber.e("inside datasource...")
         api.searchMoviesByTitle(query = query, page = page)
     }
 

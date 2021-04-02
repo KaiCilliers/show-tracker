@@ -18,8 +18,18 @@
 
 package com.sunrisekcdeveloper.showtracker.common.util
 
+import android.app.Activity
+import android.content.Context
+import android.content.res.TypedArray
+import android.util.TypedValue
 import android.view.View
-import android.widget.SearchView
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.LifecycleOwner
+import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
@@ -28,70 +38,256 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelPoster
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseEpisode
+import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeason
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.*
 
-// todo save call to db then get entity to convert to UI
-fun ResponseMovieDetail.asUIModelMovieDetail() = UIModelMovieDetail(
-    id = "$id",
-    title = title,
-    posterPath = posterPath ?: "",
-    overview = overview,
-    releaseYear = releaseDate,
-    certification = "N/A",
-    runtime = "$runtime",
-    watchlisted = false,
-    watched = false
-)
-fun ResponseShowDetail.asUIModelShowDetail() = UIModelShowDetail(
-    id = "$id",
-    name = name,
-    posterPath = posterPath,
-    overview = overview,
-    certification = "N/A",
-    firstAirDate = firstAirYear,
-    seasonsTotal = seasonTotal,
-    watchlisted = false,
-    startedWatching = false,
-    upToDate = false
-)
+fun hideKeyboard(inputView: View, context: Context, rootView: View) {
+    val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(inputView.windowToken, 0)
+    rootView.requestFocus()
+}
+
+fun isDateSame(c1: Calendar, c2: Calendar): Boolean {
+    return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) && c1.get(Calendar.MONTH) == c2.get(
+        Calendar.MONTH
+    ) && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH)
+}
+
+// hacky way of changing button colors depending on the action it represents
+fun fetchPrimaryColor(context: Context): Int {
+    val typedValue = TypedValue()
+    val a: TypedArray =
+        context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorPrimary))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
+}
+
+fun fetchErrorColor(context: Context): Int {
+    val typedValue = TypedValue()
+    val a: TypedArray =
+        context.obtainStyledAttributes(typedValue.data, intArrayOf(R.attr.colorError))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.enabled() {
+    this.isEnabled = true
+}
+
+fun View.disabled() {
+    this.isEnabled = false
+}
+
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
+    mediaTitle = title,
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    listType = listType
 )
+
 fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
+    mediaTitle = name,
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    listType = listType
 )
+
+fun EntityShow.asUIModelShowDetail(
+    watchlisted: Boolean = false,
+    started: Boolean = false,
+    upToDate: Boolean = false,
+    deleted: Boolean
+) = UIModelShowDetail(
+    id = id,
+    name = title,
+    posterPath = posterPath,
+    overview = overview,
+    certification = certification,
+    firstAirDate = firstAirDate.substring(0..3),
+    seasonsTotal = seasonTotal,
+    deleted = deleted,
+    watchlisted = watchlisted,
+    startedWatching = started,
+    upToDate = upToDate
+)
+
+fun ResponseShowDetail.asEntityShow() = EntityShow(
+    id = "$id",
+    title = name,
+    overview = overview,
+    certification = "N/A",
+    posterPath = posterPath ?: "",
+    backdropPath = backdropPath ?: "",
+    popularityValue = popularityValue,
+    firstAirDate = firstAirYear,
+    rating = rating,
+    episodeTotal = episodeCount,
+    seasonTotal = seasonCount,
+    lastUpdated = System.currentTimeMillis()
+)
+
+fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
+    id = "$id",
+    title = title,
+    overview = overview,
+    backdropPath = backdropPath ?: "",
+    posterPath = posterPath ?: "",
+    certification = "",
+    releaseDate = releaseDate,
+    runTime = "$runtime",
+    rating = rating,
+    popularityValue = popularityValue,
+)
+
+fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =
+    UIModelMovieDetail(
+        id = id,
+        title = title,
+        posterPath = posterPath,
+        overview = overview,
+        releaseYear = releaseDate.substring(0..3),
+        certification = certification,
+        runtime = runTime,
+        deleted = deleted,
+        watchlisted = watchlisted,
+        watched = watched
+    )
+
+fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(
+    showId = showId,
+    seasonNumber = seasonNumber,
+    number = number,
+    name = name,
+    overview = overview,
+    airDate = -1L, // todo date string to date Long
+    stillPath = stillPath ?: "",
+    lastUpdated = System.currentTimeMillis()
+)
+
+fun ResponseSeason.asEntitySeason(showId: String) = EntitySeason(
+    showId = showId,
+    id = id,
+    number = number,
+    name = name,
+    overview = overview,
+    posterPath = posterPath ?: "",
+    airDate = -1L, // todo conversion function to take string date and return Long version
+    episodeTotal = episodeCount,
+    lastUpdated = System.currentTimeMillis()
+)
+
 fun ResponseStandardMedia.ResponseMovie.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = title,
     mediaType = MediaType.Movie,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
+
 fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     id = "$id",
     title = name,
     mediaType = MediaType.Show,
-    posterPath = posterPath ?: ""
+    posterPath = posterPath ?: "",
+    rating = rating,
+    popularity = popularity,
+    ratingVotes = voteCount
 )
-fun UIModelDiscovery.asUIModelPoster() = UIModelPoster(
-    id = id,
-    posterPath = posterPath,
-    mediaType = mediaType
-)
-fun List<UIModelDiscovery>.asUIModelPosterList() = this.map { it.asUIModelPoster() }
-fun UIModelSearch.asUIModelPoster() = UIModelPoster(
-    id = id,
-    posterPath = posterPath,
-    mediaType = mediaType
-)
-fun List<UIModelSearch>.asUIModelPosterListt() = this.map { it.asUIModelPoster() }
 
+fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
+    id = id,
+    mediaTitle = title,
+    mediaType = mediaType,
+    listType = ListType.MoviePopular,
+    posterPath = posterPath
+)
+
+fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+    id = status.id,
+    title = details.title,
+    posterPath = details.posterPath,
+    backdropPath = details.backdropPath,
+    mediaType = MediaType.Movie
+)
+
+fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+    id = status.id,
+    title = details.title,
+    posterPath = details.posterPath,
+    backdropPath = details.backdropPath,
+    mediaType = MediaType.Show
+)
+
+// todo add lsat episode in season to EntityWatchlistSeason and/or EntitySeason
+fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) = UIModelWatchlistShow(
+    id = details.id,
+    title = details.title,
+    posterPath = details.posterPath,
+    currentEpisodeNumber = status.currentEpisodeNumber,
+    currentEpisodeName = status.currentEpisodeName,
+    currentSeasonNumber = status.currentSeasonNumber,
+    episodesInSeason = status.currentSeasonEpisodeTotal,
+    lastEpisodeInSeason = lastEpisodeInSeason,
+    started = status.started,
+    upToDate = status.upToDate,
+    dateAdded = status.dateAdded
+)
+
+fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
+    id = details.id,
+    title = details.title,
+    overview = details.overview,
+    posterPath = details.posterPath,
+    watched = status.watched,
+    dateAdded = status.dateAdded,
+    dateWatched = status.dateWatched,
+    lastUpdated = status.dateLastUpdated
+)
+
+fun TextView.setMaxLinesToEllipsize() {
+    val visibleLines = (measuredHeight - paddingTop - paddingBottom) / lineHeight
+    maxLines = visibleLines
+}
+
+
+// see more https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
+inline fun <reified T> Flow<T>.observeOnLifecycle(
+    lifecycleOwner: LifecycleOwner,
+    noinline collector: suspend (T) -> Unit
+) = FlowObserver(lifecycleOwner, this, collector)
+
+inline fun <reified T> Flow<T>.observeInLifecycle(
+    lifecycleOwner: LifecycleOwner
+) = FlowObserver(lifecycleOwner, this, {})
+
+@ExperimentalCoroutinesApi
 fun SearchView.getQueryTextChangedStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
 

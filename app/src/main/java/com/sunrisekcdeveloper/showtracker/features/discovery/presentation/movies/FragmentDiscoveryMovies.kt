@@ -25,22 +25,37 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.forEach
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterList
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterListt
+import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
+import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
+import com.sunrisekcdeveloper.showtracker.common.util.click
+import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyMoviesBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.AdapterSimplePoster
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
+import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,20 +63,20 @@ import javax.inject.Inject
 class FragmentDiscoveryMovies : Fragment() {
 
     private lateinit var binding: FragmentDiscoveryOnlyMoviesBinding
-
     private val viewModel: ViewModelDiscoveryMovies by viewModels()
 
-    @Inject
-    lateinit var popularMovieListAdapter: AdapterSimplePoster
-    private lateinit var popularMoviesLayoutManager: LinearLayoutManager
+    private val adapterPopularMovies = PagingAdapterSimplePoster()
+    private val adapterTopRatedMovies = PagingAdapterSimplePoster()
+    private val adaptedUpcomingMovies = PagingAdapterSimplePoster()
+
+    private var job: Job? = null
 
     @Inject
-    lateinit var topRatedMovieListAdapter: AdapterSimplePoster
-    private lateinit var topRatedMoviesLayoutManager: LinearLayoutManager
+    lateinit var dataStore: DataStore<Preferences>
 
-    @Inject
-    lateinit var upcomingMovieListAdapter: AdapterSimplePoster
-    private lateinit var upcomingMoviesLayoutManager: LinearLayoutManager
+    companion object {
+        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryMoviePreviousSnackMessage.dataStoreStringKeyFormat()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,7 +94,24 @@ class FragmentDiscoveryMovies : Fragment() {
         observeViewModel()
     }
 
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[PREVIOUS_SNACK_KEY] = message
+        }
+    }
+
     private fun setup() {
+
+        binding.tvHeadingPopularMovies.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.moviePopular()))
+        }
+        binding.tvHeadingTopRatedMovies.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieTopRated()))
+        }
+        binding.tvHeadingUpcomingMovies.click {
+            viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieUpcoming()))
+        }
+
         // Navigation - Toolbar Up button
         binding.toolbarDiscoveryMovies.setNavigationOnClickListener { findNavController().popBackStack() }
 
@@ -87,7 +119,7 @@ class FragmentDiscoveryMovies : Fragment() {
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
                 findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToNavGraphSearch()
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToFragmentSearch()
                 )
                 true
             }
@@ -104,9 +136,7 @@ class FragmentDiscoveryMovies : Fragment() {
                 ) {
                     // Discovery Screen
                     if (id == 1L) {
-                        findNavController().navigate(
-                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryFragment()
-                        )
+                        findNavController().popBackStack()
                         // TV Show Discovery Screen
                     } else if (id == 2L) {
                         findNavController().navigate(
@@ -115,7 +145,7 @@ class FragmentDiscoveryMovies : Fragment() {
                     }
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) { }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
     }
 
@@ -131,134 +161,103 @@ class FragmentDiscoveryMovies : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.popularMovies.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                    .collect {
+                        delay(300)
+                        viewModel.submitAction(ActionDiscovery.showSnackBar(it))
+                    }
+            }
+        }
+        job?.cancel()
+        job = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.streamPopularMovies.collectLatest {
+                adapterPopularMovies.submitData(it)
+            }
+        }.also {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.streamTopRatedMovies.collectLatest {
+                    adapterTopRatedMovies.submitData(it)
                 }
-                is Resource.Success -> {
-                    updateList(popularMovieListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcPopularMovies,
-                        popularMoviesLayoutManager
-                    ) { viewModel.getPopularMovies() }
-                }
-                is Resource.Error -> {
+            }
+        }.also {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.streamUpcomingMovies.collectLatest {
+                    adaptedUpcomingMovies.submitData(it)
                 }
             }
         }
-        viewModel.topRatedMovies.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
+        viewModel.eventsFlow.onEach { event ->
+            when (event) {
+                is EventDiscovery.ShowFocusedContent -> {
+                    navigateToFocusedContent(event.listType)
                 }
-                is Resource.Success -> {
-                    updateList(topRatedMovieListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcTopRatedMovies,
-                        topRatedMoviesLayoutManager
-                    ) { viewModel.getTopRatedMovies() }
-                }
-                is Resource.Error -> {
-                }
-            }
-        }
-        viewModel.upcomingMovies.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    updateList(upcomingMovieListAdapter, it.data)
-                    attachOnScrollListener(
-                        binding.rcUpcomingMovies,
-                        upcomingMoviesLayoutManager
-                    ) { viewModel.getUpcomingMovies() }
-                }
-                is Resource.Error -> {
+                is EventDiscovery.ShowSnackBar -> {
+                    dataStore.data.take(1).collect {
+                        if (it[PREVIOUS_SNACK_KEY] != event.message) {
+                            showSnackBar(event.message)
+                            consumedSnackBarMessage(event.message)
+                        }
+                    }
                 }
             }
-        }
+        }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToFocusedContent(listType: ListType) {
+        findNavController().navigate(
+            when (listType) {
+                ListType.MoviePopular -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(1)
+                }
+                ListType.MovieTopRated -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(3)
+                }
+                ListType.MovieUpcoming -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(5)
+                }
+                ListType.ShowPopular -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(2)
+                }
+                ListType.ShowTopRated -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(4)
+                }
+                ListType.ShowAiringToday -> {
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(6)
+                }
+            }
+        )
     }
 
     private fun setupBinding() {
-        val onClick = OnPosterClickListener { mediaId, mediaType ->
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             if (mediaType == MediaType.Movie) {
                 findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(mediaId)
+                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(
+                        mediaId, mediaTitle, posterPath
+                    )
                 )
             }
         }
 
-        popularMovieListAdapter.onPosterClickListener = onClick
-        topRatedMovieListAdapter.onPosterClickListener = onClick
-        upcomingMovieListAdapter.onPosterClickListener = onClick
+        adapterPopularMovies.setPosterClickAction(onClick)
+        adapterTopRatedMovies.setPosterClickAction(onClick)
+        adaptedUpcomingMovies.setPosterClickAction(onClick)
 
-        popularMoviesLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        topRatedMoviesLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        upcomingMoviesLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+        binding.rcPopularMovies.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rcTopRatedMovies.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rcUpcomingMovies.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        binding.rcPopularMovies.layoutManager = popularMoviesLayoutManager
-        binding.rcPopularMovies.adapter = popularMovieListAdapter
-
-        binding.rcTopRatedMovies.layoutManager = topRatedMoviesLayoutManager
-        binding.rcTopRatedMovies.adapter = topRatedMovieListAdapter
-
-        binding.rcUpcomingMovies.layoutManager = upcomingMoviesLayoutManager
-        binding.rcUpcomingMovies.adapter = upcomingMovieListAdapter
-
-        attachOnScrollListener(
-            binding.rcPopularMovies,
-            popularMoviesLayoutManager
-        ) { viewModel.getPopularMovies() }
-        attachOnScrollListener(
-            binding.rcTopRatedMovies,
-            topRatedMoviesLayoutManager
-        ) { viewModel.getTopRatedMovies() }
-        attachOnScrollListener(
-            binding.rcUpcomingMovies,
-            upcomingMoviesLayoutManager
-        ) { viewModel.getUpcomingMovies() }
+        binding.rcPopularMovies.adapter = adapterPopularMovies
+        binding.rcTopRatedMovies.adapter = adapterTopRatedMovies
+        binding.rcUpcomingMovies.adapter = adaptedUpcomingMovies
     }
-
-    private fun updateList(
-        adapter: AdapterSimplePoster,
-        list: List<UIModelDiscovery>
-    ) {
-        adapter.updateList(list.asUIModelPosterList())
-    }
-
-    private fun attachOnScrollListener(
-        recyclerView: RecyclerView,
-        layoutManager: LinearLayoutManager,
-        fetchNextPage: suspend () -> Unit
-    ) {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // total number of movies inside adapter
-                val totalItems = layoutManager.itemCount
-                // current number of child views attached to the RecyclerView that are currently
-                // being recycled
-                val visibleItemCount = layoutManager.childCount
-                // position of the leftmost visible item in the list
-                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-                // true if the user scrolls past halfway plus a buffered value of visibleItemCount
-                if (firstVisibleItem + visibleItemCount >= totalItems / 2) {
-                    // This is to limit network calls
-                    recyclerView.removeOnScrollListener(this)
-                    MainScope().launch { fetchNextPage() }
-                }
-            }
-        })
-    }
-
 }

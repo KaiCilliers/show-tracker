@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".updated.features.detail.presentation.FragmentBottomSheetShowDetail">
+    tools:context=".features.detail.presentation.FragmentBottomSheetShowDetail">
 
 
     <!-- TODO  give correct poster dimensions-->
@@ -31,9 +31,8 @@
         android:id="@+id/img_detail_show_poster"
         android:layout_width="135dp"
         android:layout_height="241dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/error_poster"
+        android:layout_margin="@dimen/margin_small"
+        tools:src="@drawable/error_poster"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_detail_show_add"/>
@@ -42,7 +41,10 @@
         android:id="@+id/btn_detail_show_add"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/media_add"
+        tools:text="@string/media_add"
+        android:textColor="@color/white"
+        android:enabled="false"
+        tools:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_detail_show_watch_status"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -52,28 +54,49 @@
         android:id="@+id/btn_detail_show_watch_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Start Watching"
+        android:textColor="@color/white"
+        tools:text="Start Watching"
+        android:enabled="false"
+        tools:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_detail_show_add" />
 
+    <LinearLayout
+        android:id="@+id/layout_detail_show_skeleton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_show_title"
+        app:layout_constraintStart_toEndOf="@id/img_detail_show_poster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/img_detail_show_poster">
+
+        <include layout="@layout/skeleton_detail"/>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_detail_show_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Show Title"
+        android:layout_margin="@dimen/margin_small"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        app:layout_constraintEnd_toStartOf="@+id/img_detail_show_close"
         app:layout_constraintStart_toEndOf="@+id/img_detail_show_poster"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Show Title" />
 
     <TextView
         android:id="@+id/tv_detail_show_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:padding="4dp"
-        android:text="Here is all the description you could need..."
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:ellipsize="end"
+        tools:text="Here is all the description you could need..."
         app:layout_constraintBottom_toTopOf="@+id/btn_detail_show_watch_status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_detail_show_poster"
@@ -83,9 +106,9 @@
         android:id="@+id/tv_detail_show_first_air_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="1998"
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceCaption"
+        tools:text="1998"
         app:layout_constraintStart_toEndOf="@+id/img_detail_show_poster"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_show_title"/>
 
@@ -93,8 +116,9 @@
         android:id="@+id/tv_detail_show_certification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="13+"
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceCaption"
+        tools:text="13+"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_show_first_air_date"
         app:layout_constraintStart_toEndOf="@+id/tv_show_separator_one"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_show_first_air_date" />
@@ -103,8 +127,9 @@
         android:id="@+id/tv_detail_show_seasons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="4 Seasons"
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceCaption"
+        tools:text="4 Seasons"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_show_first_air_date"
         app:layout_constraintStart_toEndOf="@+id/tv_show_separator_two"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_show_first_air_date" />
@@ -113,18 +138,24 @@
         android:id="@+id/tv_show_separator_one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="|"
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:text="@string/single_pipe"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_show_first_air_date"
         app:layout_constraintStart_toEndOf="@+id/tv_detail_show_first_air_date"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_show_first_air_date"/>
 
     <TextView
         android:id="@+id/tv_show_separator_two"
-        android:layout_width="3dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="8dp"
-        android:text="|"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:text="@string/single_pipe"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_show_first_air_date"
         app:layout_constraintStart_toEndOf="@+id/tv_detail_show_certification"
         app:layout_constraintTop_toTopOf="@+id/tv_detail_show_first_air_date" />
@@ -133,11 +164,10 @@
         android:id="@+id/img_detail_show_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        app:srcCompat="@drawable/ic_baseline_close_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

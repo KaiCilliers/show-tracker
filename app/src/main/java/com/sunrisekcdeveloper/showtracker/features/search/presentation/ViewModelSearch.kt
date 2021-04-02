@@ -23,42 +23,127 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.UIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.domain.ViewStateSearch
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class ViewModelSearch @ViewModelInject constructor(
-    private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract
+    private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract,
+    private val loadUnwatchedMediaUseCase: LoadUnwatchedMediaUseCaseContract
 ) : ViewModel() {
 
-    var mediaPage = 0
-    var lastQuery = ""
+    private val eventChannel = Channel<EventSearch>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val _results = MutableLiveData<Resource<List<UIModelSearch>>>()
-    val results: LiveData<Resource<List<UIModelSearch>>>
-        get() = _results
+    private val _state = MutableLiveData<StateSearch>()
+    val state: LiveData<StateSearch>
+        get() = _state
 
-    fun getSearchResults(query: String) = viewModelScope.launch {
-        Timber.e("inside viemodel get search results...")
-        // reset page
-        if (lastQuery != query) {
-            mediaPage = 0
-            lastQuery = query
+    private val _stateNetwork = MutableLiveData<StateNetwork>()
+    private val stateNetwork: LiveData<StateNetwork>
+        get() = _stateNetwork
+
+    private var currentQuery: String? = null
+    private var currentSearchResult: Flow<PagingData<UIModelDiscovery>>? = null
+
+    private val unwatchedMediaCache = mutableListOf<UIModelUnwatchedSearch>()
+
+    fun submitAction(action: ActionSearch) = viewModelScope.launch {
+        Timber.e("ACTION: $action")
+        when (action) {
+            is ActionSearch.ShowToast -> {
+                eventChannel.send(EventSearch.ShowToast(action.msg))
+            }
+            is ActionSearch.LoadMediaDetails -> {
+                eventChannel.send(
+                    EventSearch.LoadMediaDetails(
+                        action.mediaId,
+                        action.title,
+                        action.posterPath,
+                        action.type
+                    )
+                )
+            }
+            is ActionSearch.SearchForMedia -> {
+                if (stateNetwork.value == StateNetwork.Connected) {
+                    searchMedia(action.query).collectLatest { pagingData ->
+                        _state.value = StateSearch.Success(pagingData)
+                    }
+                } else {
+                    _state.value = StateSearch.Error(Exception("No internet access..."))
+                }
+            }
+            ActionSearch.BackButtonPress -> {
+                eventChannel.send(EventSearch.PopBackStack)
+            }
+            ActionSearch.NotifyNoSearchResults -> {
+                _state.value = StateSearch.NoResultsFound
+            }
+            ActionSearch.LoadUnwatchedContent -> {
+                Timber.e("is cache empty?: ${unwatchedMediaCache.isEmpty()}")
+                if (unwatchedMediaCache.isEmpty()) {
+                    val resource = loadUnwatchedMediaUseCase()
+                    when (resource) {
+                        is Resource.Success -> {
+                            unwatchedMediaCache.addAll(resource.data)
+                            if (unwatchedMediaCache.isEmpty()) {
+                                _state.value = StateSearch.emptyWatchlist()
+                            } else {
+                                _state.value = StateSearch.EmptySearch(resource.data)
+                            }
+                        }
+                        is Resource.Error -> {
+                            eventChannel.send(EventSearch.ShowToast("could not load unwatched media content"))
+                        }
+                        Resource.Loading -> {
+                            _state.value = StateSearch.Loading
+                        }
+                    }
+                } else {
+                    _state.value = StateSearch.EmptySearch(unwatchedMediaCache)
+                }
+            }
+            ActionSearch.DeviceIsOnline -> {
+                _stateNetwork.value = StateNetwork.Connected
+            }
+            ActionSearch.DeviceIsOffline -> {
+                _stateNetwork.value = StateNetwork.Disconnected
+            }
+            is ActionSearch.ShowSnackBar -> {
+                eventChannel.send(EventSearch.showSnackBar(action.message))
+            }
         }
-        getNextPage()
     }
 
-    fun getNextPage() = viewModelScope.launch {
-        Timber.e("inside viewmodel get next page...")
-        searchMediaByTitleUseCase(++mediaPage, lastQuery).collect {
-            _results.value = it
+    // todo returning different UIModel due to pagingadapter requirements
+    //  the adapter needs to have its own data type
+    private fun searchMedia(query: String): Flow<PagingData<UIModelDiscovery>> {
+        val lastResult = currentSearchResult
+        if (query == currentQuery && lastResult != null) {
+            return lastResult
         }
+        currentQuery = query
+        val newResult: Flow<PagingData<UIModelDiscovery>> = searchMediaByTitleUseCase(query)
+            .map {
+                it.map { model ->
+                    // todo this is temp fix (adapter needs its own data type)
+                    model.asUIModelDiscovery()
+                }
+            }
+            .cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        return newResult
     }
 }

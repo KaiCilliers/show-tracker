@@ -18,16 +18,20 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.common.Resource
-import com.sunrisekcdeveloper.showtracker.di.RepositoryModule.RepoDetail
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 class FetchShowDetailsUseCase(
-    @RepoDetail private val detailRepo: RepositoryDetailContract
+    private val detailRepo: RepositoryDetailContract
 ) : FetchShowDetailsUseCaseContract {
-    override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> =
-        detailRepo.showDetails(id)
+    override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> {
+        detailRepo.fetchAndSaveShowDetails(id)
+        return detailRepo.showDetails(id)
+    }
+
 }

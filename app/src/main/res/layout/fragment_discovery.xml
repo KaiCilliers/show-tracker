@@ -15,79 +15,39 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.discovery.presentation.FragmentDiscovery">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_discovery"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/menu_discovery_toolbar" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs_discovery"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_discovery"
-        app:tabIndicatorHeight="0dp"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="#929292">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/movies_title" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/tv_shows_title" />
-
-    </com.google.android.material.tabs.TabLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabs_discovery"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp">
 
             <!-- POPULAR MOVIES -->
 
             <TextView
-                android:id="@+id/tv_heading_popular"
+                android:id="@+id/tv_heading_popular_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/popular"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="@string/heading_popular_movies"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8"
-                android:padding="@dimen/padding_8" />
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_movies"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <!-- POPULAR SHOWS -->
 
@@ -98,41 +58,35 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="@string/heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintTop_toBottomOf="@id/rc_popular_movies"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <!-- TOP RATED MOVIES -->
 
             <TextView
-                android:id="@+id/tv_highest_rated_heading"
+                android:id="@+id/tv_heading_top_rated_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/top_rated"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="@string/heading_top_rated_movies"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintTop_toBottomOf="@id/rc_popular_shows"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_movies"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <!-- TOP RATED SHOWS -->
 
@@ -143,42 +97,36 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="@string/heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <!-- UPCOMING MOVIES -->
 
             <TextView
-                android:id="@+id/tv_heading_upcoming"
+                android:id="@+id/tv_heading_upcoming_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/upcoming"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="@string/heading_upcoming_movies"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_upcoming_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming_movies"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <!-- AIRING TODAY SHOWS -->
 
@@ -189,19 +137,55 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="@string/heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintTop_toBottomOf="@id/rc_upcoming_movies"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_airing_today_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
-        </LinearLayout>
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_discovery"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_discovery_toolbar"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs_discovery"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#929292">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/movies_title" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/tv_shows_title" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,6 +3,7 @@
     package="com.sunrisekcdeveloper.showtracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -12,8 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowTracker">
-        <activity android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.ActivitySearch"/>
-        <activity android:name=".common.MainActivity">
+        <activity android:name=".common.ActivityMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

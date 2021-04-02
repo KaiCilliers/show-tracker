@@ -25,4 +25,13 @@ sealed class ListType {
     object ShowPopular : ListType()
     object ShowTopRated : ListType()
     object ShowAiringToday : ListType()
+
+    companion object {
+        fun moviePopular() = MoviePopular
+        fun movieTopRated() = MovieTopRated
+        fun movieUpcoming() = MovieUpcoming
+        fun showPopular() = ShowPopular
+        fun showTopRated() = ShowTopRated
+        fun showAiringToday() = ShowAiringToday
+    }
 }

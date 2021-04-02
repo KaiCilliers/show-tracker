@@ -18,24 +18,121 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.data.repository
 
-import com.sunrisekcdeveloper.showtracker.common.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.Resource
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.paging.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
+import kotlinx.coroutines.flow.Flow
 
+// todo The base discovery lists need to look different each day (so why not rank them based on popularity? - just to give it a less static feel)
 class RepositoryDiscovery(
-    private val remote: RemoteDataSourceDiscoveryContract
+    private val remote: RemoteDataSourceDiscoveryContract,
+    private val database: TrackerDatabase
 ) : RepositoryDiscoveryContract {
+
+    @ExperimentalPagingApi
+    override fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+        config = PagingConfig(
+            initialLoadSize = 40, // todo i dont think this does anything
+            pageSize = 20, // todo my api does not use page size attribute (so 20 TMDB page size)
+            // placeholders prevent feature focused grid layout to restructure layout when new data is loaded
+            enablePlaceholders = true,
+            prefetchDistance = 60
+        ),
+        remoteMediator = RemoteMediatorDiscoveryPopularMovies(
+            remote, database
+        ),
+        pagingSourceFactory = {
+            database.discoveryDao().mediaList(ListType.MoviePopular)
+        }
+    ).flow
+
+    @ExperimentalPagingApi
+    override fun popularShowsStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 40,
+            enablePlaceholders = true,
+            prefetchDistance = 60
+        ),
+        remoteMediator = RemoteMediatorDiscoveryPopularShows(remote, database),
+        pagingSourceFactory = {
+            database.discoveryDao().mediaList(ListType.ShowPopular)
+        }
+    ).flow
+
+    @ExperimentalPagingApi
+    override fun topRatedMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 40,
+            enablePlaceholders = true,
+            prefetchDistance = 60
+        ),
+        remoteMediator = RemoteMediatorDiscoveryTopRatedMovies(remote, database),
+        pagingSourceFactory = {
+            database.discoveryDao().mediaList(ListType.MovieTopRated)
+        }
+    ).flow
+
+    @ExperimentalPagingApi
+    override fun topRatedShowsStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 40,
+            enablePlaceholders = true,
+            prefetchDistance = 60
+        ),
+        remoteMediator = RemoteMediatorDiscoveryTopRatedShows(remote, database),
+        pagingSourceFactory = {
+            database.discoveryDao().mediaList(ListType.ShowTopRated)
+        }
+    ).flow
+
+    @ExperimentalPagingApi
+    override fun upcomingMoviesStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 40,
+            enablePlaceholders = true,
+            prefetchDistance = 60
+        ),
+        remoteMediator = RemoteMediatorDiscoveryUpcomingMovies(remote, database),
+        pagingSourceFactory = {
+            database.discoveryDao().mediaList(ListType.MovieUpcoming)
+        }
+    ).flow
+
+    @ExperimentalPagingApi
+    override fun airingTodayShowsStream(): Flow<PagingData<UIModelDiscovery>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 40,
+            enablePlaceholders = true,
+            prefetchDistance = 60
+        ),
+        remoteMediator = RemoteMediatorDiscoveryAiringShows(remote, database),
+        pagingSourceFactory = {
+            database.discoveryDao().mediaList(ListType.ShowAiringToday)
+        }
+    ).flow
+
     override suspend fun popularMovies(page: Int): Resource<List<UIModelDiscovery>> {
         return when (val response = remote.popularMovies(page)) {
             is NetworkResult.Success -> {
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MoviePopular) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -46,7 +143,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MovieTopRated) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -57,7 +154,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.MovieUpcoming) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -68,7 +165,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowPopular) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -79,7 +176,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowTopRated) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }
@@ -90,7 +187,7 @@ class RepositoryDiscovery(
                 Resource.Success(response.data.media.map { it.asUIModelDiscovery(ListType.ShowAiringToday) })
             }
             is NetworkResult.Error -> {
-                Resource.Error(response.message)
+                Resource.Error(response.exception)
             }
         }
     }

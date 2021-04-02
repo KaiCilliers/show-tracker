@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright © 2021. The Android Open Source Project
   ~
   ~ @author Kai Cilliers
@@ -17,157 +16,138 @@
   ~ limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.discovery.presentation.shows.FragmentDiscoveryShows">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_discovery_shows"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:navigationIcon="?homeAsUpIndicator"
-        app:menu="@menu/menu_discovery_toolbar"
-        app:title="@string/tv_shows_title"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <Spinner
-        android:id="@+id/spinner_discovery_shows"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
-        android:spinnerMode="dialog"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_discovery_shows" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/spinner_discovery_shows"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp">
 
             <!-- POPULAR SHOWS -->
 
             <TextView
                 android:id="@+id/tv_heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_popular_movies"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:text="@string/heading_popular_shows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tv_sub_heading_popular_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Popular Shows"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:text="@string/sub_heading_popular_shows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_shows" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_popular_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular_shows" />
 
             <!-- TOP RATED SHOWS -->
 
             <TextView
                 android:id="@+id/tv_heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:text="@string/heading_top_rated_shows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rc_popular_shows" />
+
             <TextView
                 android:id="@+id/tv_sub_heading_top_rated_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Top Rated Shows"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:text="@string/sub_heading_top_rated_shows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_shows" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_top_rated_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_top_rated_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_top_rated_shows" />
 
             <!-- AIRING TODAY SHOWS -->
 
             <TextView
                 android:id="@+id/tv_heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/rc_upcoming_movies"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:text="@string/heading_airing_today_shows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_shows" />
+
             <TextView
                 android:id="@+id/tv_sub_heading_airing_today_shows"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Airing Today Shows"
-                app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:text="@string/sub_heading_airing_today_shows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_airing_today_shows" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_airing_today_shows"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_airing_today_shows"
-                app:layout_constraintStart_toStartOf="parent"/>
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_airing_today_shows" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_discovery_shows"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:menu="@menu/menu_discovery_toolbar"
+            app:navigationIcon="?homeAsUpIndicator"
+            app:title="@string/tv_shows_title" />
+
+        <Spinner
+            android:id="@+id/spinner_discovery_shows"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:spinnerMode="dialog" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
