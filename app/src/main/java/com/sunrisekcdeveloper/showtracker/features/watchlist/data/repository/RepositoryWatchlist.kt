@@ -156,8 +156,8 @@ class RepositoryWatchlist(
     override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
         return database.watchlistShowDao().distinctWithDetailsFlow(filterOption).map { list ->
             Resource.Success(list.map {
-                val lastEpisodeInSeason = database.episodeDao().lastInSeason(it.details.id, it.status.currentSeasonNumber)
-                it.asUIModelWatchlistShow(lastEpisodeInSeason.number)
+                val lastEpisodeInSeason : EntityEpisode? = database.episodeDao().lastInSeason(it.details.id, it.status.currentSeasonNumber)
+                it.asUIModelWatchlistShow(lastEpisodeInSeason?.number ?: -1)
             })
         }
     }
