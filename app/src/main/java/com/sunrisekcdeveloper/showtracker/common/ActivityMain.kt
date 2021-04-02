@@ -19,6 +19,8 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
@@ -32,6 +34,7 @@ import timber.log.Timber
 class ActivityMain : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var doubleBackToExitPressedLong = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,5 +47,15 @@ class ActivityMain : AppCompatActivity() {
         binding.botnavHousing.setupWithNavController(
             findNavController(R.id.nav_host_fragment_main)
         )
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedLong + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            return
+        } else {
+            Toast.makeText(baseContext, "Press back again to leave", Toast.LENGTH_SHORT).show()
+            doubleBackToExitPressedLong = System.currentTimeMillis()
+        }
     }
 }
