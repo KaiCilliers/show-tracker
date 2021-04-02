@@ -81,13 +81,6 @@ class FragmentSearch : Fragment() {
         return binding.root
     }
 
-//    override fun onResume() {
-//        Timber.d("resumesssssssssssssssssssssssssssssssssssssss")
-//        val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(binding.svSearch.windowToken, 0)
-//        super.onResume()
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
             binding.svSearch.setQuery(it, false)

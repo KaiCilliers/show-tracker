@@ -439,6 +439,7 @@ class FragmentWatchlist : Fragment() {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
                 is EventWatchlist.LoadMediaDetails -> {
+                    hideKeyboard(binding.svWatchlist, requireContext(), binding.root)
                     findNavController().navigate(
                         when (event.type) {
                             MediaType.Movie -> FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailMovie(
