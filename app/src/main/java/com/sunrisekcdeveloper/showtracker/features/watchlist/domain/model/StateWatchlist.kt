@@ -21,12 +21,14 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 
 sealed class StateWatchlist {
+    object NoFilterResults : StateWatchlist()
     object EmptyList : StateWatchlist()
     object Loading : StateWatchlist()
     data class Success(val movies: List<UIModelWatchlisMovie>, val shows: List<UIModelWatchlistShow>) : StateWatchlist()
     data class Error(val exception: Exception) : StateWatchlist()
 
     companion object {
+        fun noFilterResults() = NoFilterResults
         fun emptyList() = EmptyList
         fun loading() = Loading
         fun success(moviesList: List<UIModelWatchlisMovie>, showsList: List<UIModelWatchlistShow>) =

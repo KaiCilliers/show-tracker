@@ -61,6 +61,8 @@
     <string name="mark_as_watched">Mark as Watched</string>
     <string name="empty_list">EMPTY LIST</string>
     <string name="empty_list_sub_heading">You can add movies and TV shows to your watchlist by visiting the Discovery or Search screen</string>
+    <string name="no_matches">NO MATCHES</string>
+    <string name="no_matches_sub_heading">Your filter and option and search query matches no media on your watchlist</string>
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>

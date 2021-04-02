@@ -18,11 +18,13 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -40,9 +42,7 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.*
@@ -121,12 +121,18 @@ class FragmentWatchlist : Fragment() {
 
     private fun stateEmptyList() {
         binding.layoutEmpty.visible()
+        binding.imgEmptyList.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_list_24))
+        binding.emptyListHeading.text = getString(R.string.empty_list)
+        binding.emptyListSubHeading.text = getString(R.string.empty_list_sub_heading)
+        binding.imgvFilterWatchlist.gone()
     }
 
     private fun stateSuccess(
         movies: List<UIModelWatchlisMovie>,
         shows: List<UIModelWatchlistShow>
     ) {
+        Timber.d("999999999 success")
+
         allShows = shows
         allMovies = movies
         watchlistMovieAdapter.submitList(movies)
@@ -139,11 +145,13 @@ class FragmentWatchlist : Fragment() {
                         0 -> {
                             binding.svWatchlist.queryHint =
                                 getString(R.string.search_shows_by_title)
-                            binding.svWatchlist.setQuery("", true)
-                            if (allShows.isEmpty()) {
+                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+                            Timber.e("#### shows: ${allShows.size}, filterOption: ${viewModel.showFilterOption}, query: \"${binding.svWatchlist.query}\"")
+                            if (allShows.isEmpty() && viewModel.showFilterOption is FilterShows.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
                                 viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else if (allShows.isEmpty() && viewModel.showFilterOption !is FilterShows.NoFilters && binding.svWatchlist.query.isNotEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.noFilterResults())
                             } else {
-                                binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
                                 // this is so hacky
                                 cleanUi()
                                 stateSuccess(allMovies, allShows)
@@ -152,11 +160,12 @@ class FragmentWatchlist : Fragment() {
                         1 -> {
                             binding.svWatchlist.queryHint =
                                 getString(R.string.search_movie_by_title)
-                            binding.svWatchlist.setQuery("", true)
-                            if (allMovies.isEmpty()) {
+                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+                            if (allMovies.isEmpty() && (viewModel.movieFilterOption is FilterMovies.NoFilters || binding.svWatchlist.query.isNullOrEmpty())) {
                                 viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else if (allMovies.isEmpty() && (viewModel.movieFilterOption !is FilterMovies.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
+                                viewModel.submitAction(ActionWatchlist.noFilterResults())
                             } else {
-                                binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
                                 // hacky - bypasses route of Action >>> State / Event
                                 cleanUi()
                                 stateSuccess(allMovies, allShows)
@@ -179,12 +188,25 @@ class FragmentWatchlist : Fragment() {
         if (arguments.showId != "none") {
             if (!scrolledOnce) scrollToShow()
         }
+
+        Timber.d("999999999 shows: ${allShows.size}, movies: ${allMovies.size}, showFilter: ${viewModel.showFilterOption.javaClass.simpleName}, movieFilter: ${viewModel.movieFilterOption.javaClass.simpleName}, Query: \"${binding.svWatchlist.query}\"")
         // initial empty list state (ugly yes :() or when removing last item from list
-        if(allShows.isEmpty() && binding.tabBarWatchlist.selectedTabPosition == 0) {
-            viewModel.submitAction(ActionWatchlist.showEmptyState())
-        }
-        if(allMovies.isEmpty() && binding.tabBarWatchlist.selectedTabPosition == 1) {
-            viewModel.submitAction(ActionWatchlist.showEmptyState())
+        if (binding.tabBarWatchlist.selectedTabPosition == 0) {
+
+            if (allShows.isEmpty() && viewModel.showFilterOption is FilterShows.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
+                viewModel.submitAction(ActionWatchlist.showEmptyState())
+            } else if (allShows.isEmpty() && (viewModel.showFilterOption !is FilterShows.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
+                viewModel.submitAction(ActionWatchlist.noFilterResults())
+            }
+
+        } else {
+
+            if (allMovies.isEmpty() && viewModel.movieFilterOption is FilterMovies.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
+                viewModel.submitAction(ActionWatchlist.showEmptyState())
+            } else if (allMovies.isEmpty() && (viewModel.movieFilterOption !is FilterMovies.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
+                viewModel.submitAction(ActionWatchlist.noFilterResults())
+            }
+
         }
     }
 
@@ -206,6 +228,14 @@ class FragmentWatchlist : Fragment() {
 
     private fun stateError() {
         viewModel.submitAction(ActionWatchlist.showToast("state Error"))
+    }
+
+    private fun stateNoFilterResults() {
+        binding.layoutEmpty.visible()
+        binding.imgvFilterWatchlist.visible()
+        binding.imgEmptyList.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_outlet_24))
+        binding.emptyListHeading.text = getString(R.string.no_matches)
+        binding.emptyListSubHeading.text = getString(R.string.no_matches_sub_heading)
     }
 
     private fun cleanUi() {
@@ -273,11 +303,12 @@ class FragmentWatchlist : Fragment() {
                         when (binding.tabBarWatchlist.selectedTabPosition) {
                             0 -> {
                                 viewModel.updateShowSearchQuery(query)
-                                watchlistShowAdapter.submitList(allShows)
+                                // ugh, this is so not good
+                                viewModel._state.value = StateWatchlist.success(allMovies, allShows)
                             }
                             else -> {
                                 viewModel.updateMovieSearchQuery(query)
-                                watchlistMovieAdapter.submitList(allMovies)
+                                viewModel._state.value = StateWatchlist.success(allMovies, allShows)
                             }
                         }
                         false
@@ -293,14 +324,14 @@ class FragmentWatchlist : Fragment() {
                             val filtered = allShows.filter {
                                 it.title.contains(query, true)
                             }
-                            watchlistShowAdapter.submitList(filtered)
+                            viewModel._state.value = StateWatchlist.success(allMovies, filtered)
                         }
                         else -> {
                             viewModel.updateMovieSearchQuery(query)
                             val filtered = allMovies.filter {
                                 it.title.contains(query, true)
                             }
-                            watchlistMovieAdapter.submitList(filtered)
+                            viewModel._state.value = StateWatchlist.success(filtered, allShows)
                         }
                     }
                 }
@@ -397,6 +428,9 @@ class FragmentWatchlist : Fragment() {
                 StateWatchlist.EmptyList -> {
                     stateEmptyList()
                 }
+                StateWatchlist.NoFilterResults -> {
+                    stateNoFilterResults()
+                }
             }
         }
         viewModel.eventsFlow.onEach { event ->
@@ -405,6 +439,7 @@ class FragmentWatchlist : Fragment() {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
                 }
                 is EventWatchlist.LoadMediaDetails -> {
+                    hideKeyboard(binding.svWatchlist, requireContext(), binding.root)
                     findNavController().navigate(
                         when (event.type) {
                             MediaType.Movie -> FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailMovie(
