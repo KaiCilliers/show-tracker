@@ -19,11 +19,10 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import android.os.Bundle
-import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
+import androidx.navigation.get
 import androidx.navigation.ui.setupWithNavController
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
@@ -50,7 +49,10 @@ class ActivityMain : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (doubleBackToExitPressedLong + 2000 > System.currentTimeMillis()) {
+        Timber.e("${findNavController(R.id.nav_host_fragment_main).currentBackStackEntry?.destination}")
+        Timber.e("${findNavController(R.id.nav_host_fragment_main).currentDestination}")
+        if (findNavController(R.id.nav_host_fragment_main).currentDestination != findNavController(R.id.nav_host_fragment_main).graph[R.id.destination_main_discovery_fragment]
+            || doubleBackToExitPressedLong + 2000 > System.currentTimeMillis()) {
             super.onBackPressed()
             return
         } else {
