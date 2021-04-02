@@ -159,7 +159,11 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
             text = data.overview
             setMaxLinesToEllipsize()
         }
-        binding.tvDetailMovieRuntime.text = data.runtime
+
+        val hours = data.runtime.toInt() / 60
+        val minutes = data.runtime.toInt() % 60
+
+        binding.tvDetailMovieRuntime.text = getString(R.string.runtime_with_value, hours, minutes)
         binding.tvDetailMovieReleaseYear.text = data.releaseYear
         binding.tvDetailMovieCertification.text = data.certification
 

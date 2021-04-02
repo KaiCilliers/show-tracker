@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -25,6 +26,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -51,6 +53,7 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -77,6 +80,13 @@ class FragmentSearch : Fragment() {
         binding = FragmentSearchBinding.inflate(inflater)
         return binding.root
     }
+
+//    override fun onResume() {
+//        Timber.d("resumesssssssssssssssssssssssssssssssssssssss")
+//        val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(binding.svSearch.windowToken, 0)
+//        super.onResume()
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
@@ -160,6 +170,7 @@ class FragmentSearch : Fragment() {
         viewModel.eventsFlow.onEach { event ->
             when (event) {
                 is EventSearch.LoadMediaDetails -> {
+                    hideKeyboard(binding.svSearch, requireContext(), binding.root)
                     findNavController().navigate(
                         when (event.type) {
                             MediaType.Movie -> {
