@@ -46,14 +46,14 @@ class ViewModelWatchlist @ViewModelInject constructor(
     private val eventChannel = Channel<EventWatchlist>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val _state = MutableLiveData<StateWatchlist>()
+    val _state = MutableLiveData<StateWatchlist>()
     val state: LiveData<StateWatchlist>
         get() = _state
 
     private var showSearchQuery = ""
     private var movieSearchQuery = ""
-    private var movieFilterOption: FilterMovies = FilterMovies.NoFilters
-    private var showSortOrder: FilterShows = FilterShows.NoFilters
+    var movieFilterOption: FilterMovies = FilterMovies.NoFilters
+    var showFilterOption: FilterShows = FilterShows.NoFilters
 
     fun showSearchQuery() = showSearchQuery
     fun movieSearchQuery() = movieSearchQuery
@@ -75,7 +75,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
     }
 
     fun updateShowSortBy(sortBy: FilterShows) {
-        showSortOrder = sortBy
+        showFilterOption = sortBy
         submitAction(ActionWatchlist.LoadWatchlistData)
     }
 
@@ -129,12 +129,15 @@ class ViewModelWatchlist @ViewModelInject constructor(
             ActionWatchlist.ShowEmptyState -> {
                 _state.value = StateWatchlist.emptyList()
             }
+            ActionWatchlist.NoFilterResults -> {
+                _state.value = StateWatchlist.noFilterResults()
+            }
         }
     }
 
     private fun watchlistData() = viewModelScope.launch {
         val moviesFlow = fetchWatchlistMoviesUseCase(movieFilterOption)
-        val showsFlow = fetchWatchlistShowsUseCase(showSortOrder)
+        val showsFlow = fetchWatchlistShowsUseCase(showFilterOption)
 
         // todo consider replacing with zip for less emissions
         combine(moviesFlow, showsFlow) { resourceMovie, resourceShow ->
