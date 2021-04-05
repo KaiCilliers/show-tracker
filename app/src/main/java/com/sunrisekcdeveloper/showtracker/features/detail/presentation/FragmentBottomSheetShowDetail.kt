@@ -23,9 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
+import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -37,9 +35,9 @@ import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.util.ActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
@@ -47,9 +45,6 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetShowDetailBinding
     private val arguments: FragmentBottomSheetShowDetailArgs by navArgs()
     private val viewModel: ViewModelShowDetail by viewModels()
-
-    @Inject
-    lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,9 +57,21 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.submitAction(ActionDetailShow.load(arguments.showId))
+        init()
         setup()
         observe()
+    }
+
+    private fun init() {
+        viewModel.submitAction(ActionDetailShow.load(arguments.showId))
+    }
+
+    private fun setup() {
+        (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
+        binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.close()) }
+        binding.tvDetailShowTitle.text = arguments.showTitle
+        ImageLoadingStandardGlide(this)
+            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailShowPoster)
     }
 
     private fun observe() {
@@ -72,13 +79,13 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
             cleanUI()
             when (state) {
                 StateDetailShow.Loading -> {
-                    stateLoading()
+                    renderLoading()
                 }
                 is StateDetailShow.Success -> {
-                    stateSuccess(state.data)
+                    renderSuccess(state.data)
                 }
                 is StateDetailShow.Error -> {
-                    stateError()
+                    renderError()
                 }
             }
         }
@@ -97,9 +104,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     )
                 }
                 EventDetailShow.Close -> {
-                    // todo this property needs to be set somewhere else
-                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
-                    dismissAllowingStateLoss()
+                    dismiss()
                 }
                 is EventDetailShow.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()
@@ -114,6 +119,103 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun cleanUI() {
+        binding.layoutDetailShowSkeleton.gone()
+        binding.tvDetailShowDescription.gone()
+        binding.tvDetailShowFirstAirDate.gone()
+        binding.tvDetailShowCertification.gone()
+        binding.tvDetailShowSeasons.gone()
+        binding.tvShowSeparatorOne.gone()
+        binding.tvShowSeparatorTwo.gone()
+        binding.btnDetailShowAdd.disabled()
+        binding.btnDetailShowWatchStatus.disabled()
+    }
+
+    private fun renderSuccess(data: UIModelShowDetail) {
+        binding.tvDetailShowDescription.apply {
+            text = data.overview
+            setMaxLinesToEllipsize()
+        }
+        binding.tvDetailShowFirstAirDate.text = data.firstAirDate
+        binding.tvDetailShowCertification.text = data.certification
+        binding.tvDetailShowSeasons.text = getString(
+            if (data.seasonsTotal > 1) {
+                R.string.season_plural_with_number
+            } else {
+                R.string.season_single_with_number
+            }, data.seasonsTotal.toString()
+        )
+
+        when (data.watchlist) {
+            ShowWatchlistStatus.Watchlisted -> {
+                ActionButton(binding.btnDetailShowAdd).paint(
+                    fetchErrorColor(requireContext()),
+                    getString(R.string.show_remove)
+                ) {
+                    viewModel.submitAction(ActionDetailShow.attemptRemove(data.id, data.name))
+                }
+            }
+            ShowWatchlistStatus.NotWatchlisted -> {
+                ActionButton(binding.btnDetailShowAdd).paint(
+                    fetchPrimaryColor(requireContext()),
+                    getString(R.string.show_add)
+                ) {
+                    viewModel.submitAction(
+                        ActionDetailShow.add(
+                            data.id,
+                            data.name
+                        )
+                    )
+                }
+            }
+        }
+
+        when (data.status) {
+            ShowStatus.NotStarted -> {
+                ActionButton(binding.btnDetailShowWatchStatus).paint(
+                    text = getString(R.string.show_start_watching)
+                ) {
+                    viewModel.submitAction(ActionDetailShow.startWatching(data.id, data.name))
+                }
+            }
+            ShowStatus.Started -> {
+                if (!arguments.fromWatchlist) {
+                    ActionButton(binding.btnDetailShowWatchStatus).paint(
+                        text = getString(R.string.show_update_progress)
+                    ) {
+                        viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
+                    }
+                } else {
+                    binding.btnDetailShowWatchStatus.isGone = true
+                }
+            }
+            ShowStatus.UpToDate -> {
+                ActionButton(binding.btnDetailShowWatchStatus).paint(
+                    text = getString(R.string.show_up_to_date)
+                ) {
+                    viewModel.submitAction(ActionDetailShow.showToast("Show is up to date"))
+                }
+            }
+        }
+
+        binding.tvDetailShowDescription.visible()
+        binding.tvDetailShowFirstAirDate.visible()
+        binding.tvDetailShowCertification.visible()
+        binding.tvDetailShowSeasons.visible()
+        binding.tvShowSeparatorOne.visible()
+        binding.tvShowSeparatorTwo.visible()
+        binding.btnDetailShowAdd.enabled()
+        binding.btnDetailShowWatchStatus.enabled()
+    }
+
+    private fun renderLoading() {
+        binding.layoutDetailShowSkeleton.visible()
+    }
+
+    private fun renderError() {
+        viewModel.submitAction(ActionDetailShow.ShowToast("Show Detail Error"))
     }
 
     private fun showConfirmationDialog(showId: String, title: String) {
@@ -131,122 +233,4 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
             .show()
     }
 
-    private fun setup() {
-        binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.close()) }
-        bindPriorityData()
-    }
-
-    private fun bindPriorityData() {
-        ImageLoadingStandardGlide(this)
-            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailShowPoster)
-
-        binding.tvDetailShowTitle.text = arguments.showTitle
-    }
-
-    private fun cleanUI() {
-        binding.layoutDetailShowSkeleton.gone()
-        binding.tvDetailShowDescription.gone()
-        binding.tvDetailShowFirstAirDate.gone()
-        binding.tvDetailShowCertification.gone()
-        binding.tvDetailShowSeasons.gone()
-        binding.tvShowSeparatorOne.gone()
-        binding.tvShowSeparatorTwo.gone()
-        binding.btnDetailShowAdd.disabled()
-        binding.btnDetailShowWatchStatus.disabled()
-    }
-
-    private fun stateSuccess(data: UIModelShowDetail) {
-        binding.tvDetailShowDescription.apply {
-            text = data.overview
-            setMaxLinesToEllipsize()
-        }
-        binding.tvDetailShowFirstAirDate.text = data.firstAirDate
-        binding.tvDetailShowCertification.text = data.certification
-        binding.tvDetailShowSeasons.text = getString(
-            if (data.seasonsTotal > 1) {
-                R.string.season_plural_with_number
-            } else {
-                R.string.season_single_with_number
-            }, data.seasonsTotal.toString()
-        )
-
-        if (data.deleted || !data.watchlisted) {
-            stateNotOnWatchlist(data)
-        } else {
-            stateAddedToWatchlist(data)
-            if (!data.startedWatching) {
-                stateNotStartedWatching(data)
-            } else if (data.upToDate) {
-                stateUpToDate()
-            } else {
-                stateInProgress(data)
-            }
-        }
-
-        binding.tvDetailShowDescription.visible()
-        binding.tvDetailShowFirstAirDate.visible()
-        binding.tvDetailShowCertification.visible()
-        binding.tvDetailShowSeasons.visible()
-        binding.tvShowSeparatorOne.visible()
-        binding.tvShowSeparatorTwo.visible()
-        binding.btnDetailShowAdd.enabled()
-        binding.btnDetailShowWatchStatus.enabled()
-    }
-
-    private fun stateNotOnWatchlist(data: UIModelShowDetail) {
-        binding.btnDetailShowAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
-        binding.btnDetailShowAdd.text = getString(R.string.show_add)
-        binding.btnDetailShowAdd.click {
-            viewModel.submitAction(
-                ActionDetailShow.add(
-                    data.id,
-                    data.name
-                )
-            )
-        }
-        stateNotStartedWatching(data)
-    }
-
-    private fun stateNotStartedWatching(data: UIModelShowDetail) {
-        binding.btnDetailShowWatchStatus.text = getString(R.string.show_start_watching)
-        binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.startWatching(data.id, data.name))
-        }
-    }
-
-    private fun stateUpToDate() {
-        binding.btnDetailShowWatchStatus.text = getString(R.string.show_up_to_date)
-        binding.btnDetailShowWatchStatus.click {
-            viewModel.submitAction(ActionDetailShow.showToast("Show is up to date"))
-        }
-    }
-
-    private fun stateInProgress(data: UIModelShowDetail) {
-        // i dont want to show this button on the detail screen when user navigates from watchlist
-        // better implementation would be to just dismiss detail screen and flash/highlight the item
-        if (!arguments.fromWatchlist) {
-            binding.btnDetailShowWatchStatus.text = getString(R.string.show_update_progress)
-            binding.btnDetailShowWatchStatus.click {
-                viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
-            }
-        } else {
-            binding.btnDetailShowWatchStatus.isVisible = false
-        }
-    }
-
-    private fun stateAddedToWatchlist(data: UIModelShowDetail) {
-        binding.btnDetailShowAdd.setBackgroundColor(fetchErrorColor(requireContext()))
-        binding.btnDetailShowAdd.text = getString(R.string.show_remove)
-        binding.btnDetailShowAdd.click {
-            viewModel.submitAction(ActionDetailShow.attemptRemove(data.id, data.name))
-        }
-    }
-
-    private fun stateLoading() {
-        binding.layoutDetailShowSkeleton.visible()
-    }
-
-    private fun stateError() {
-        viewModel.submitAction(ActionDetailShow.ShowToast("Show Detail Error"))
-    }
 }

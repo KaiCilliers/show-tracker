@@ -16,26 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.util
 
-data class UIModelShowDetail(
-    val id: String,
-    val name: String,
-    val posterPath: String,
-    val overview: String,
-    val certification: String,
-    val firstAirDate: String,
-    val seasonsTotal: Int,
-    val watchlist: ShowWatchlistStatus,
-    val status: ShowStatus
-)
+import android.widget.Button
+import com.sunrisekcdeveloper.showtracker.common.util.click
 
-sealed class ShowWatchlistStatus {
-    object Watchlisted : ShowWatchlistStatus()
-    object NotWatchlisted : ShowWatchlistStatus()
-}
-sealed class ShowStatus {
-    object NotStarted : ShowStatus()
-    object Started : ShowStatus()
-    object UpToDate : ShowStatus()
+class ActionButton(private val button: Button) : ButtonDetail {
+    override fun paint(background: Int, text: String, onClick: () -> Unit) {
+        if (background != -1) button.setBackgroundColor(background)
+        button.text = text
+        button.click { onClick() }
+    }
 }

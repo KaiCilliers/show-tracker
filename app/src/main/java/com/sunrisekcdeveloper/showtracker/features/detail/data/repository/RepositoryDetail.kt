@@ -24,10 +24,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchlistStatus
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
@@ -190,11 +187,12 @@ class RepositoryDetail(
                 status?.let {
                     Resource.Success(
                         details.asUIModelMovieDetail(
-                            if (!status.deleted) {
+                            status = if (!status.deleted) {
                                 MovieWatchlistStatus.Watchlisted
                             } else {
                                 MovieWatchlistStatus.NotWatchlisted
-                            }, if (!status.deleted && status.watched) {
+                            },
+                            watched = if (!status.deleted && status.watched) {
                                 WatchedStatus.Watched
                             } else {
                                 WatchedStatus.NotWatched
@@ -238,35 +236,30 @@ class RepositoryDetail(
     }
 
     override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
-
         val detailsFlow = database.showDao().distinctShowFlow(id)
         val statusFlow = database.watchlistShowDao().distinctWatchlistShowFlow(id)
 
         return combine(detailsFlow, statusFlow) { details, status ->
-            var watchlisted = false
-            var started = false
-            var upToDate = false
-            var deleted = false
-
-            status?.let {
-                watchlisted = true
-                started = it.started
-                upToDate = it.upToDate
-                deleted = it.deleted
-            }
-
-            return@combine if (details == null) {
-                Resource.Error(Exception("No show with ID: $id exists in database"))
-            } else {
-                Resource.Success(
-                    details.asUIModelShowDetail(
-                        watchlisted,
-                        started,
-                        upToDate,
-                        deleted
+            details?.let {
+                status?.let {
+                    Resource.Success(
+                        details.asUIModelShowDetail(
+                            watchlist = if (!status.deleted) {
+                                ShowWatchlistStatus.Watchlisted
+                            } else {
+                                ShowWatchlistStatus.NotWatchlisted
+                            },
+                            status = if (!status.deleted && status.upToDate) {
+                                ShowStatus.UpToDate
+                            } else if (!status.deleted && status.started) {
+                                ShowStatus.Started
+                            } else {
+                                ShowStatus.NotStarted
+                            }
+                        )
                     )
-                )
-            }
+                }
+            } ?: Resource.Error(Exception("No show with ID: $id exists in database"))
         }.onStart { emit(Resource.Loading) }
     }
 

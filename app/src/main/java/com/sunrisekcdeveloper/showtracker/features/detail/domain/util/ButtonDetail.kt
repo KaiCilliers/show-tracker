@@ -16,26 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.util
 
-data class UIModelShowDetail(
-    val id: String,
-    val name: String,
-    val posterPath: String,
-    val overview: String,
-    val certification: String,
-    val firstAirDate: String,
-    val seasonsTotal: Int,
-    val watchlist: ShowWatchlistStatus,
-    val status: ShowStatus
-)
-
-sealed class ShowWatchlistStatus {
-    object Watchlisted : ShowWatchlistStatus()
-    object NotWatchlisted : ShowWatchlistStatus()
-}
-sealed class ShowStatus {
-    object NotStarted : ShowStatus()
-    object Started : ShowStatus()
-    object UpToDate : ShowStatus()
+interface ButtonDetail {
+    fun paint(background: Int = -1, text: String, onClick: () -> Unit)
 }

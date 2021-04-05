@@ -32,10 +32,7 @@ import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWit
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchlistStatus
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -120,10 +117,8 @@ fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = 
 )
 
 fun EntityShow.asUIModelShowDetail(
-    watchlisted: Boolean = false,
-    started: Boolean = false,
-    upToDate: Boolean = false,
-    deleted: Boolean
+    watchlist: ShowWatchlistStatus,
+    status: ShowStatus
 ) = UIModelShowDetail(
     id = id,
     name = title,
@@ -132,10 +127,8 @@ fun EntityShow.asUIModelShowDetail(
     certification = certification,
     firstAirDate = firstAirDate.substring(0..3),
     seasonsTotal = seasonTotal,
-    deleted = deleted,
-    watchlisted = watchlisted,
-    startedWatching = started,
-    upToDate = upToDate
+    watchlist = watchlist,
+    status = status
 )
 
 fun ResponseShowDetail.asEntityShow() = EntityShow(
