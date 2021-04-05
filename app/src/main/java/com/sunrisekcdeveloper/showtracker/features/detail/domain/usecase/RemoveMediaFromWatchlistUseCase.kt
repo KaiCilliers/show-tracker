@@ -18,19 +18,21 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMediaFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-// todo you can combine these usecases and have a simple when statement
-//  on a sealed class to determine if you are performing actions on a
-//  movie or show and then call the appropriate repo methods
 @ExperimentalCoroutinesApi
-class AddShowToWatchlistUseCase(
+class RemoveMediaFromWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
-) : AddShowToWatchlistUseCaseContract {
-    override suspend fun invoke(showId: String) {
-        detailRepo.submitShowAction(ActionRepositoryShow.Add(showId))
+) : RemoveMediaFromWatchlistUseCaseContract {
+    override suspend fun invoke(id: String, type: MediaType) {
+        when (type) {
+            MediaType.Movie -> { detailRepo.submitMovieAction(ActionRepositoryMovie.Remove(id)) }
+            MediaType.Show -> { detailRepo.submitShowAction(ActionRepositoryShow.Remove(id)) }
+        }
     }
 }

@@ -24,10 +24,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -35,8 +34,8 @@ import kotlinx.coroutines.launch
 
 class ViewModelShowDetail @ViewModelInject constructor(
     private val fetchShowDetailsUseCase: FetchShowDetailsUseCaseContract,
-    private val addShowToWatchlistUseCase: AddShowToWatchlistUseCaseContract,
-    private val removeShowFromWatchlistUseCase: RemoveShowFromWatchlistUseCaseContract
+    private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
+    private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract
 ) : ViewModel() {
 
     private val eventChannel = Channel<EventDetailShow>(Channel.BUFFERED)
@@ -52,12 +51,12 @@ class ViewModelShowDetail @ViewModelInject constructor(
                 fetchDetails(action.showId)
             }
             is ActionDetailShow.Add -> {
-                addShowToWatchlistUseCase(action.showId)
+                addMediaToWatchlistUseCase(action.showId, MediaType.show())
                 eventChannel.send(EventDetailShow.saveSnackbarMessage("Successfully added \"${action.title}\"!"))
                 eventChannel.send(EventDetailShow.Close)
             }
             is ActionDetailShow.Remove -> {
-                removeShowFromWatchlistUseCase(action.showId)
+                removeMediaFromWatchlistUseCase(action.showId, MediaType.show())
                 eventChannel.send(EventDetailShow.saveSnackbarMessage("Removed \"${action.title}\""))
                 eventChannel.send(EventDetailShow.Close)
             }

@@ -99,22 +99,10 @@ object ModuleUseCase {
 
     // Detail
     @Provides
-    fun provideAddShowToWatchlistUseCase(
+    fun provideRemoveMediaFromWatchlistUseCase(
         @RepoDetail detailRepo: RepositoryDetailContract
-    ) : AddShowToWatchlistUseCaseContract =
-        AddShowToWatchlistUseCase(detailRepo)
-
-    @Provides
-    fun provideRemoveShowFromWatchlistUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ) : RemoveShowFromWatchlistUseCaseContract =
-        RemoveShowFromWatchlistUseCase(detailRepo)
-
-    @Provides
-    fun provideRemoveMovieFromWatchlistUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ) : RemoveMovieFromWatchlistUseCaseContract =
-        RemoveMovieFromWatchlistUseCase(detailRepo)
+    ) : RemoveMediaFromWatchlistUseCaseContract =
+        RemoveMediaFromWatchlistUseCase(detailRepo)
 
     @Provides
     fun provideUpdateMovieWatchedStatusUseCase(
@@ -123,10 +111,10 @@ object ModuleUseCase {
         UpdateMovieWatchedStatusUseCase(detailRepo)
 
     @Provides
-    fun provideAddMovieToWatchlistUseCase(
+    fun provideAddMediaToWatchlistUseCase(
         @RepoDetail detailRepo: RepositoryDetailContract
-    ): AddMovieToWatchlistUseCaseContract =
-        AddMovieToWatchlistUseCase(detailRepo)
+    ): AddMediaToWatchlistUseCaseContract =
+        AddMediaToWatchlistUseCase(detailRepo)
 
     @Provides
     fun provideFetchMovieDetailsUseCase(

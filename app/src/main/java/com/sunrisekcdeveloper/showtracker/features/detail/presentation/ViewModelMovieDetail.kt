@@ -24,15 +24,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMovieToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMediaToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMovieFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMediaFromWatchlistUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
-import kotlinx.coroutines.Job
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -40,9 +40,9 @@ import kotlinx.coroutines.launch
 
 class ViewModelMovieDetail @ViewModelInject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
-    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCaseContract,
+    private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
-    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCaseContract
+    private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract
 ) : ViewModel() {
 
     private val eventChannel = Channel<EventDetailMovie>(Channel.BUFFERED)
@@ -58,12 +58,12 @@ class ViewModelMovieDetail @ViewModelInject constructor(
                 fetchDetails(action.movieId)
             }
             is ActionDetailMovie.Add -> {
-                addMovieToWatchlistUseCase(action.movieId)
+                addMediaToWatchlistUseCase(action.movieId, MediaType.movie())
                 eventChannel.send(EventDetailMovie.saveSnackbarMessage("Successfully added \"${action.title}\"!"))
                 eventChannel.send(EventDetailMovie.close())
             }
             is ActionDetailMovie.Remove -> {
-                removeMovieFromWatchlistUseCase(action.movieId)
+                removeMediaFromWatchlistUseCase(action.movieId, MediaType.movie())
                 eventChannel.send(EventDetailMovie.saveSnackbarMessage("Removed \"${action.title}\""))
                 eventChannel.send(EventDetailMovie.close())
             }

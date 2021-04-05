@@ -18,16 +18,21 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMediaToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class RemoveShowFromWatchlistUseCase(
+class AddMediaToWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
-) : RemoveShowFromWatchlistUseCaseContract {
-    override suspend fun invoke(showId: String) {
-        detailRepo.submitShowAction(ActionRepositoryShow.Remove(showId))
+) : AddMediaToWatchlistUseCaseContract {
+    override suspend fun invoke(id: String, type: MediaType) {
+        when (type) {
+            MediaType.Movie -> { detailRepo.submitMovieAction(ActionRepositoryMovie.Add(id)) }
+            MediaType.Show -> { detailRepo.submitShowAction(ActionRepositoryShow.Add(id)) }
+        }
     }
 }
