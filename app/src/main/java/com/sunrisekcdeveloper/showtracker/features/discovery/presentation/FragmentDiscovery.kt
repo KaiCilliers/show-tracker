@@ -34,6 +34,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -70,10 +71,6 @@ class FragmentDiscovery : Fragment() {
     @Inject
     lateinit var dataStore: DataStore<Preferences>
 
-    companion object {
-        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryPreviousSnackMessage.dataStoreStringKeyFormat()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,14 +88,14 @@ class FragmentDiscovery : Fragment() {
 
     private suspend fun consumedSnackBarMessage(message: String) {
         dataStore.edit { settings ->
-            settings[PREVIOUS_SNACK_KEY] = message
+            settings[KeyPersistenceStore(getString(R.string.key_disc_prev_message)).asDataStoreKey()] = message
         }
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
                     .collect {
                         delay(300)
                         viewModel.submitAction(ActionDiscovery.showSnackBar(it))
@@ -148,7 +145,7 @@ class FragmentDiscovery : Fragment() {
                 }
                 is EventDiscovery.ShowSnackBar -> {
                     dataStore.data.take(1).collect {
-                        if (it[PREVIOUS_SNACK_KEY] != event.message) {
+                        if (it[KeyPersistenceStore(getString(R.string.key_disc_prev_message)).asDataStoreKey()] != event.message) {
                             showSnackBar(event.message)
                             consumedSnackBarMessage(event.message)
                         }

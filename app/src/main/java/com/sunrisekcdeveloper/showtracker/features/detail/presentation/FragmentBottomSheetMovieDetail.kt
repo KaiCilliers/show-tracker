@@ -98,7 +98,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                 }
                 is EventDetailMovie.SaveSnackbarMessage -> {
                     findNavController().previousBackStackEntry?.savedStateHandle
-                        ?.set(KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message)
+                        ?.set(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value(), event.message)
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)

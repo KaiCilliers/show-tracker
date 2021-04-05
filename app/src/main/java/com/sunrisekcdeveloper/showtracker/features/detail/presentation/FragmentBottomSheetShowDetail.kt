@@ -52,11 +52,6 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     @Inject
     lateinit var dataStore: DataStore<Preferences>
 
-    companion object {
-        val PREVIOUS_SNACK_KEY =
-            KeyPersistenceStore.DiscoveryPreviousSnackMessage.dataStoreStringKeyFormat()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -115,7 +110,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                 }
                 is EventDetailShow.SaveSnackbarMessage -> {
                     findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                        KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message
+                        KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value(), event.message
                     )
                 }
             }

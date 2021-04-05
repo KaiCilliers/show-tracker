@@ -92,10 +92,6 @@ class FragmentWatchlist : Fragment() {
     @Inject
     lateinit var dataStore: DataStore<Preferences>
 
-    companion object {
-        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.WatchlistPreviousSnackMessage.dataStoreStringKeyFormat()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -115,7 +111,7 @@ class FragmentWatchlist : Fragment() {
 
     private suspend fun consumedSnackBarMessage(message: String) {
         dataStore.edit { settings ->
-            settings[PREVIOUS_SNACK_KEY] = message
+            settings[KeyPersistenceStore(getString(R.string.key_watchlist_previous_message)).asDataStoreKey()] = message
         }
     }
 
@@ -406,7 +402,7 @@ class FragmentWatchlist : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
                     .collect {
                         delay(300)
                         viewModel.submitAction(ActionWatchlist.showSnackbar(it))
@@ -465,7 +461,7 @@ class FragmentWatchlist : Fragment() {
                 }
                 is EventWatchlist.ShowSnackbar -> {
                     dataStore.data.take(1).collect {
-                        if (it[PREVIOUS_SNACK_KEY] != event.msg) {
+                        if (it[KeyPersistenceStore(getString(R.string.key_watchlist_previous_message)).asDataStoreKey()] != event.msg) {
                             showSnackBar(event.msg)
                             consumedSnackBarMessage(event.msg)
                         }
