@@ -25,12 +25,11 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMo
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import kotlinx.coroutines.flow.Flow
 
-// todo interface is too demanding with its amount of methods
 interface RepositoryDetailContract {
     suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>>
     suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>>
     suspend fun submitMovieAction(action: ActionRepositoryMovie)
     suspend fun submitShowAction(action: ActionRepositoryShow)
-    suspend fun fetchAndSaveMovieDetails(id: String)
-    suspend fun fetchAndSaveShowDetails(id: String)
+    suspend fun updateMovieDetails(id: String)
+    suspend fun updateShowDetails(id: String)
 }

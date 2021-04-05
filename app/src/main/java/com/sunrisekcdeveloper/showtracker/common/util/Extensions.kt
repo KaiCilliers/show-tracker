@@ -131,11 +131,11 @@ fun EntityShow.asUIModelShowDetail(
     status = status
 )
 
-fun ResponseShowDetail.asEntityShow() = EntityShow(
+fun ResponseShowDetail.asEntityShow(certification: String = "N/A") = EntityShow(
     id = "$id",
     title = name,
     overview = overview,
-    certification = "N/A",
+    certification = certification,
     posterPath = posterPath ?: "",
     backdropPath = backdropPath ?: "",
     popularityValue = popularityValue,
@@ -146,13 +146,13 @@ fun ResponseShowDetail.asEntityShow() = EntityShow(
     lastUpdated = System.currentTimeMillis()
 )
 
-fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
+fun ResponseMovieDetail.asEntityMovie(certification: String = "N/A") = EntityMovie(
     id = "$id",
     title = title,
     overview = overview,
     backdropPath = backdropPath ?: "",
     posterPath = posterPath ?: "",
-    certification = "",
+    certification = certification,
     releaseDate = releaseDate,
     runTime = "$runtime",
     rating = rating,

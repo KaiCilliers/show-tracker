@@ -21,24 +21,25 @@ package com.sunrisekcdeveloper.showtracker.features.detail.data.repository
 import androidx.room.withTransaction
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.util.*
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ReleaseDateType
+import com.sunrisekcdeveloper.showtracker.features.detail.data.util.CertificationsContract
+import com.sunrisekcdeveloper.showtracker.features.detail.data.util.CertificationsMovie
+import com.sunrisekcdeveloper.showtracker.features.detail.data.util.CertificationsShow
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class RepositoryDetail(
     private val remote: RemoteDataSourceDetailContract,
-    private val database: TrackerDatabase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val database: TrackerDatabase
 ) : RepositoryDetailContract {
 
     private val daoWatchlistShow = database.watchlistShowDao()
@@ -132,36 +133,23 @@ class RepositoryDetail(
         }
     }
 
-    override suspend fun fetchAndSaveMovieDetails(id: String) {
-        withContext(dispatcher) {
-            launch {
-                val responseMovie = remote.movieDetails(id)
-                val responseCertification = remote.movieReleaseDates(id)
+    override suspend fun updateMovieDetails(id: String) {
+        val responseMovie = remote.movieDetails(id)
+        val responseCertification = remote.movieReleaseDates(id)
 
-                when (responseMovie) {
-                    is NetworkResult.Success -> {
-                        var result = responseMovie.data.asEntityMovie()
-                        when (responseCertification) {
-                            is NetworkResult.Success -> {
-                                result = result.copy(
-                                    certification = movieCertificationUSIfPossible(
-                                        responseCertification.data.results
-                                    )
-                                )
-                            }
-                            is NetworkResult.Error -> {
-                                // todo log these somewhere
-                                //  dont swallow exception - bubble it up and handle it in UI to maybe retry
-                                Timber.e("Error fetching certification data for movie with ID: $id [${responseCertification.exception}]")
-                            }
-                        }
-                        saveMovieDetails(result)
-                    }
-                    is NetworkResult.Error -> {
-                        Timber.e("Error fetching movie details for movie with ID: $id [${responseMovie.exception}]")
-                    }
-                }
-            }
+        if (responseMovie is NetworkResult.Success && responseCertification is NetworkResult.Success) {
+            database.movieDao().insert(
+                responseMovie.data.asEntityMovie(
+                    CertificationsContract.Smart(
+                        CertificationsMovie(
+                            responseCertification.data.results,
+                            ReleaseDateType.Theatrical
+                        )
+                    ).fromUS()
+                )
+            )
+        } else {
+            Timber.e("Error with fetching movie details and certifications for movie with ID: $id [$responseMovie] [$responseCertification]")
         }
     }
 
@@ -191,34 +179,19 @@ class RepositoryDetail(
         }.onStart { emit(Resource.Loading) }
     }
 
-    override suspend fun fetchAndSaveShowDetails(id: String) {
-        withContext(dispatcher) {
-            launch {
-                val responseShow = remote.showDetail(id)
-                val responseCertification = remote.showCertification(id)
+    override suspend fun updateShowDetails(id: String) {
+        val responseShow = remote.showDetail(id)
+        val responseCertification = remote.showCertification(id)
 
-                when (responseShow) {
-                    is NetworkResult.Success -> {
-                        var result = responseShow.data.asEntityShow()
-                        when (responseCertification) {
-                            is NetworkResult.Success -> {
-                                result = result.copy(
-                                    certification = showCertificationUSIfPossible(
-                                        responseCertification.data.results
-                                    )
-                                )
-                            }
-                            is NetworkResult.Error -> {
-                                Timber.e("Error fetching show certification for show: $id")
-                            }
-                        }
-                        saveShowDetails(result)
-                    }
-                    is NetworkResult.Error -> {
-                        Timber.e("Error fetching show details for show with id: $id")
-                    }
-                }
-            }
+        if (responseShow is NetworkResult.Success && responseCertification is NetworkResult.Success) {
+            database.showDao().insert(
+                responseShow.data.asEntityShow(
+                    CertificationsContract.Smart(CertificationsShow(responseCertification.data.results))
+                        .fromUS()
+                )
+            )
+        } else {
+            Timber.e("Error with fetching show details and certifications for movie with ID: $id [$responseShow] [$responseCertification]")
         }
     }
 
@@ -248,46 +221,5 @@ class RepositoryDetail(
                 }
             } ?: Resource.Error(Exception("No show with ID: $id exists in database"))
         }.onStart { emit(Resource.Loading) }
-    }
-
-    private suspend fun saveMovieDetails(entity: EntityMovie) {
-        database.movieDao().insert(entity)
-    }
-
-    private fun movieCertificationUSIfPossible(data: List<ResponseMovieReleaseDates>): String {
-        return if (data.isNotEmpty()) {
-            val iso = data.find { it.iso == "US" } ?: data[0]
-            return if (iso.releaseDates.isNotEmpty()) {
-                val certification = iso.releaseDates.find { it.releaseType == 3 }?.certification
-                    ?: iso.releaseDates[0].certification
-                return if (certification != "") {
-                    certification
-                } else {
-                    NONE_AVAILABLE
-                }
-            } else {
-                NONE_AVAILABLE
-            }
-        } else {
-            NONE_AVAILABLE
-        }
-    }
-
-    private suspend fun saveShowDetails(entity: EntityShow) {
-        database.showDao().insert(entity)
-    }
-
-    private fun showCertificationUSIfPossible(data: List<ResponseShowCertification>): String {
-        return if (data.isNotEmpty()) {
-            data.find {
-                it.iso == "US"
-            }?.certification ?: data[0].certification
-        } else {
-            NONE_AVAILABLE
-        }
-    }
-
-    companion object {
-        const val NONE_AVAILABLE = "N/A"
     }
 }
