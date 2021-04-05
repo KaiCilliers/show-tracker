@@ -63,6 +63,15 @@
     <string name="empty_list_sub_heading">You can add movies and TV shows to your watchlist by visiting the Discovery or Search screen</string>
     <string name="no_matches">NO MATCHES</string>
     <string name="no_matches_sub_heading">Your filter and option and search query matches no media on your watchlist</string>
+
+    <!-- KeyStore -->
+    <string name="key_disc_snack_bar">key_disc_snack_bar</string>
+    <string name="key_disc_prev_message">key_disc_prev_message</string>
+    <string name="key_disc_movie_prev_message">key_disc_movie_prev_message</string>
+    <string name="key_disc_show_prev_message">key_disc_show_prev_message</string>
+    <string name="key_search_prev_message">key_search_prev_message</string>
+    <string name="key_watchlist_previous_message">key_watchlist_previous_message</string>
+
     <string-array name="movie_dropdown_array">
         <item>Movie</item>
         <item>All</item>

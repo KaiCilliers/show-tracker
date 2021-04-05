@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.sunrisekcdeveloper.showtracker.common.util.EndPointBackdrop
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointBackdropStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
@@ -60,7 +60,7 @@ class AdapterSimplePosterTitle(
             binding.cardPoster.click {
                 onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
             }
-            glide.load(EndPointBackdrop.Standard.urlFromResource(data.backdropPath))
+            glide.load(EndpointBackdropStandard(data.backdropPath).url())
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade(150))
                 .into(binding.imgvItemMediaPoster)

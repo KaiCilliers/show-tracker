@@ -97,7 +97,7 @@ class FragmentSearch : Fragment() {
 
     private suspend fun consumedSnackBarMessage(message: String) {
         dataStore.edit { settings ->
-            settings[FragmentDiscoveryMovies.PREVIOUS_SNACK_KEY] = message
+            settings[KeyPersistenceStore(getString(R.string.key_search_prev_message)).asDataStoreKey()] = message
         }
     }
 
@@ -127,7 +127,7 @@ class FragmentSearch : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
                     .collect {
                         delay(300)
                         viewModel.submitAction(ActionSearch.showSnackBar(it))
@@ -333,6 +333,5 @@ class FragmentSearch : Fragment() {
 
     companion object {
         private const val LAST_SEARCH_QUERY: String = "last_search_query"
-        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.SearchPreviousSnackMessage.dataStoreStringKeyFormat()
     }
 }

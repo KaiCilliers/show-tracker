@@ -32,6 +32,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSetProgressBinding
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionProgress
@@ -151,7 +152,7 @@ class FragmentProgress : Fragment() {
                 }
                 is EventProgress.SaveSnackbarMessage -> {
                     findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                        KeyPersistenceStore.DiscoverySnackBarKey.value(), event.message
+                        KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value(), event.message
                     )
                 }
             }

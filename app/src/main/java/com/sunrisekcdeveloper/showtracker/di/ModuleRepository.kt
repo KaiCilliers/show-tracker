@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.common.*
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract

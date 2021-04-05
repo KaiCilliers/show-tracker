@@ -26,11 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
-import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.gone
-import com.sunrisekcdeveloper.showtracker.common.util.visible
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import timber.log.Timber
@@ -70,7 +66,7 @@ class AdapterWatchlistShow(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlistShow) {
             Glide.with(binding.root)
-                .load(EndpointPoster.Standard.urlWithResource(item.posterPath))
+                .load(EndpointPosterStandard(item.posterPath).url())
                 .centerCrop()
                 .error(R.drawable.error_poster)
                 .transition(DrawableTransitionOptions.withCrossFade(100))

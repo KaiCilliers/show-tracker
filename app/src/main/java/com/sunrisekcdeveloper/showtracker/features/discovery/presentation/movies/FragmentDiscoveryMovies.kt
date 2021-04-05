@@ -74,10 +74,6 @@ class FragmentDiscoveryMovies : Fragment() {
     @Inject
     lateinit var dataStore: DataStore<Preferences>
 
-    companion object {
-        val PREVIOUS_SNACK_KEY = KeyPersistenceStore.DiscoveryMoviePreviousSnackMessage.dataStoreStringKeyFormat()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -96,7 +92,7 @@ class FragmentDiscoveryMovies : Fragment() {
 
     private suspend fun consumedSnackBarMessage(message: String) {
         dataStore.edit { settings ->
-            settings[PREVIOUS_SNACK_KEY] = message
+            settings[KeyPersistenceStore(getString(R.string.key_disc_movie_prev_message)).asDataStoreKey()] = message
         }
     }
 
@@ -163,7 +159,7 @@ class FragmentDiscoveryMovies : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-                getLiveData<String>(KeyPersistenceStore.DiscoverySnackBarKey.value()).asFlow()
+                getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
                     .collect {
                         delay(300)
                         viewModel.submitAction(ActionDiscovery.showSnackBar(it))
@@ -195,7 +191,7 @@ class FragmentDiscoveryMovies : Fragment() {
                 }
                 is EventDiscovery.ShowSnackBar -> {
                     dataStore.data.take(1).collect {
-                        if (it[PREVIOUS_SNACK_KEY] != event.message) {
+                        if (it[KeyPersistenceStore(getString(R.string.key_disc_movie_prev_message)).asDataStoreKey()] != event.message) {
                             showSnackBar(event.message)
                             consumedSnackBarMessage(event.message)
                         }

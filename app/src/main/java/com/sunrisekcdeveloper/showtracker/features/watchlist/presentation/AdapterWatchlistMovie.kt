@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPosterStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.fetchPrimaryColor
@@ -72,8 +72,7 @@ class AdapterWatchlistMovie(
                 }
             }
             Glide.with(binding.root)
-                    // todo update all Glide calls with this enum
-                .load(EndpointPoster.Standard.urlWithResource(item.posterPath))
+                .load(EndpointPosterStandard(item.posterPath).url())
                 .centerCrop()
                 .error(R.drawable.error_poster)
                 .transition(DrawableTransitionOptions.withCrossFade(100))

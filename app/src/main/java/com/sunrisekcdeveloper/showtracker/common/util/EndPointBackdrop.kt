@@ -20,13 +20,32 @@ package com.sunrisekcdeveloper.showtracker.common.util
 
 import com.sunrisekcdeveloper.showtracker.BuildConfig
 
-enum class EndPointBackdrop(private val endpoint: String) {
-    Small("/w300"),
-    Standard("/w780"),
-    Large("/w1280"),
-    Original("/original");
-
-    fun urlFromResource(backdropPath: String): String {
-        return BuildConfig.TMDB_POSTER_BASE_URL + endpoint + backdropPath
+class EndPointBackDropOriginal(private val backdropPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/original$backdropPath"
     }
+}
+
+class EndpointBackdropLarge(private val backdropPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w1280$backdropPath"
+    }
+}
+
+class EndpointBackdropStandard(private val backdropPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w780$backdropPath"
+    }
+}
+
+class EndpointBackdropSmall(private val backdropPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w300$backdropPath"
+    }
+}
+
+interface EndpointImageContract {
+    val baseUrl: String
+        get() = BuildConfig.TMDB_POSTER_BASE_URL
+    fun url(): String
 }
