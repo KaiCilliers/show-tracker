@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
+import com.sunrisekcdeveloper.showtracker.common.util.EndpointPosterStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterBinding
@@ -58,7 +58,7 @@ class PagingAdapterSimplePoster(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelDiscovery) {
             Glide.with(binding.root)
-                .load(EndpointPoster.Standard.urlWithResource(data.posterPath))
+                .load(EndpointPosterStandard(data.posterPath).url())
                 .centerCrop()
                 .error(R.drawable.error_poster)
                 .transition(DrawableTransitionOptions.withCrossFade(100))

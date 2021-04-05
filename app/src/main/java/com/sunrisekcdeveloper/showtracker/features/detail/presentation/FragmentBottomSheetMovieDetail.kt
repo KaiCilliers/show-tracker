@@ -32,7 +32,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.util.EndpointPoster
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
@@ -147,7 +146,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     private fun bindPriorityData() {
         binding.tvDetailMovieTitle.text = arguments.movieTitle
         Glide.with(this)
-            .load(EndpointPoster.Standard.urlWithResource(arguments.posterPath))
+            .load(EndpointPosterStandard(arguments.posterPath).url())
             .centerCrop()
             .error(R.drawable.error_poster)
             .transition(DrawableTransitionOptions.withCrossFade(100))

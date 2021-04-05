@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.common.*
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.ServiceDetailContract

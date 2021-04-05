@@ -18,23 +18,38 @@
 
 package com.sunrisekcdeveloper.showtracker.common.util
 
-// See more here https://www.journaldev.com/18688/kotlin-enum-class
-enum class EndpointPoster(private val endpoint: String) {
-
-    // values based on TMDB available poster sizes
-    Tiny("/w92"),
-    Small("/w154"),
-    Medium("/w185"),
-    Standard("/w342"),
-    Big("/w500"),
-    Large("/w780"),
-    Original("/original");
-
-    fun urlWithResource(posterPath: String): String {
-        return baseUrl + endpoint + posterPath
+class EndpointPosterTiny(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w92$posterPath"
     }
-
-    private companion object {
-        private const val baseUrl = "https://image.tmdb.org/t/p"
+}
+class EndpointPosterSmall(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w154$posterPath"
+    }
+}
+class EndpointPosterMedium(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w185$posterPath"
+    }
+}
+class EndpointPosterStandard(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w342$posterPath"
+    }
+}
+class EndpointPosterBig(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w500$posterPath"
+    }
+}
+class EndpointPosterLarge(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/w780$posterPath"
+    }
+}
+class EndpointPosterOriginal(private val posterPath: String) : EndpointImageContract {
+    override fun url(): String {
+        return "$baseUrl/original$posterPath"
     }
 }
