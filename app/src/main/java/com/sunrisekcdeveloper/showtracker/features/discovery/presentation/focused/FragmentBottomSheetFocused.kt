@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
@@ -50,7 +51,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
     private val viewModel: ViewModelDiscovery by viewModels()
     private val arguments: FragmentBottomSheetFocusedArgs by navArgs()
 
-    private val pagingAdapter = PagingAdapterSimplePosterMedium()
+    private lateinit var pagingAdapter : PagingAdapterSimplePosterMedium
     private var job: Job? = null
 
     override fun onCreateView(
@@ -64,6 +65,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pagingAdapter = PagingAdapterSimplePosterMedium(ImageLoadingStandardGlide(this))
         setup()
         observeViewModel()
     }

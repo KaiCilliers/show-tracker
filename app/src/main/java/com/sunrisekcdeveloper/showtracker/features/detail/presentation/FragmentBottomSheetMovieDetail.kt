@@ -26,12 +26,11 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
@@ -145,12 +144,8 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
     private fun bindPriorityData() {
         binding.tvDetailMovieTitle.text = arguments.movieTitle
-        Glide.with(this)
-            .load(EndpointPosterStandard(arguments.posterPath).url())
-            .centerCrop()
-            .error(R.drawable.error_poster)
-            .transition(DrawableTransitionOptions.withCrossFade(100))
-            .into(binding.imgDetailMoviePoster)
+        ImageLoadingStandardGlide(this)
+            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailMoviePoster)
     }
 
     private fun stateSuccess(data: UIModelMovieDetail) {

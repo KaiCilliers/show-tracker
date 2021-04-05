@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -59,12 +60,12 @@ class FragmentDiscovery : Fragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private val viewModel: ViewModelDiscovery by viewModels()
 
-    private val adapterPopularMovies = PagingAdapterSimplePoster()
-    private val adapterPopularShows = PagingAdapterSimplePoster()
-    private val adapterTopRatedMovies = PagingAdapterSimplePoster()
-    private val adapterTopRatedShows = PagingAdapterSimplePoster()
-    private val adapterUpcomingMovies = PagingAdapterSimplePoster()
-    private val adapterAiringTodayShows = PagingAdapterSimplePoster()
+    private lateinit var adapterPopularMovies : PagingAdapterSimplePoster
+    private lateinit var adapterPopularShows : PagingAdapterSimplePoster
+    private lateinit var adapterTopRatedMovies : PagingAdapterSimplePoster
+    private lateinit var adapterTopRatedShows : PagingAdapterSimplePoster
+    private lateinit var adapterUpcomingMovies : PagingAdapterSimplePoster
+    private lateinit var adapterAiringTodayShows : PagingAdapterSimplePoster
 
     private var job: Job? = null
 
@@ -76,6 +77,12 @@ class FragmentDiscovery : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        adapterPopularMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterPopularShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterTopRatedMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterTopRatedShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterUpcomingMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterAiringTodayShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         binding = FragmentDiscoveryBinding.inflate(inflater)
         return binding.root
     }

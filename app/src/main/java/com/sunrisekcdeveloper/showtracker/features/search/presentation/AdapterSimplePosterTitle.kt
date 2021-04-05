@@ -23,8 +23,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointBackdropStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -32,13 +31,13 @@ import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBi
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 
 class AdapterSimplePosterTitle(
-    private val glide: RequestManager,
+    private val image: ImageLoadingContract,
     private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : ListAdapter<UIModelUnwatchedSearch, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(
     UNWATCHED_SEARCH_MODEL_COMPARATOR
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
-        ViewHolderSimplePosterTitle.from(parent, glide, onPosterClickListener)
+        ViewHolderSimplePosterTitle.from(parent, image, onPosterClickListener)
 
     fun setPosterClickAction(clickListener: OnPosterClickListener) {
         onPosterClickListener = clickListener
@@ -50,7 +49,7 @@ class AdapterSimplePosterTitle(
 
     class ViewHolderSimplePosterTitle(
         val binding: ItemSimplePosterAndTitleBinding,
-        private val glide: RequestManager,
+        private val glide: ImageLoadingContract,
         private val onPosterClickListener: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelUnwatchedSearch) {
@@ -60,17 +59,14 @@ class AdapterSimplePosterTitle(
             binding.cardPoster.click {
                 onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
             }
-            glide.load(EndpointBackdropStandard(data.backdropPath).url())
-                .centerCrop()
-                .transition(DrawableTransitionOptions.withCrossFade(150))
-                .into(binding.imgvItemMediaPoster)
+            glide.load(EndpointBackdropStandard(data.backdropPath).url(), binding.imgvItemMediaPoster)
             binding.tvMediaTitle.text = data.title
         }
 
         companion object {
             fun from(
                 parent: ViewGroup,
-                glide: RequestManager,
+                glide: ImageLoadingContract,
                 posterClickListener: OnPosterClickListener
             ): ViewHolderSimplePosterTitle = ViewHolderSimplePosterTitle(
                 ItemSimplePosterAndTitleBinding.inflate(

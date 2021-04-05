@@ -23,9 +23,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointPosterStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -34,6 +33,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIMode
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 
 class PagingAdapterSimplePoster(
+    private val image: ImageLoadingContract,
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePoster>(
     UIMODEL_DISCOVERY_COMPARATOR
@@ -50,19 +50,15 @@ class PagingAdapterSimplePoster(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster.from(parent, onPosterClick)
+    ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster.from(parent, image, onPosterClick)
 
     class ViewHolderPagingSimplePoster(
-        val binding: ItemSimplePosterBinding,
-        val onClick: OnPosterClickListener
+        private val binding: ItemSimplePosterBinding,
+        private val image: ImageLoadingContract,
+        private val onClick: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelDiscovery) {
-            Glide.with(binding.root)
-                .load(EndpointPosterStandard(data.posterPath).url())
-                .centerCrop()
-                .error(R.drawable.error_poster)
-                .transition(DrawableTransitionOptions.withCrossFade(100))
-                .into(binding.imgvItemMoviePoster)
+            image.load(EndpointPosterStandard(data.posterPath).url(), binding.imgvItemMoviePoster)
 
             binding.root.click {
                 onClick.onClick(
@@ -77,11 +73,12 @@ class PagingAdapterSimplePoster(
         companion object {
             fun from(
                 parent: ViewGroup,
+                image: ImageLoadingContract,
                 onClick: OnPosterClickListener
             ): ViewHolderPagingSimplePoster = ViewHolderPagingSimplePoster(
                 ItemSimplePosterBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), onClick
+                ), image, onClick
             )
         }
     }

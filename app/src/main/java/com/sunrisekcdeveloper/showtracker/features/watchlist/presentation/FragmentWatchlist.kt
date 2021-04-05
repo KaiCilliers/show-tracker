@@ -39,6 +39,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
@@ -64,8 +65,8 @@ class FragmentWatchlist : Fragment() {
     private val viewModel: ViewModelWatchlist by viewModels()
     private val arguments: FragmentWatchlistArgs by navArgs()
 
-    private val watchlistMovieAdapter = AdapterWatchlistMovie()
-    private val watchlistShowAdapter = AdapterWatchlistShow()
+    private lateinit var watchlistMovieAdapter : AdapterWatchlistMovie
+    private lateinit var watchlistShowAdapter : AdapterWatchlistShow
 
     private var scrolledOnce = false
     private var showSortCheckedItem = 0
@@ -103,6 +104,8 @@ class FragmentWatchlist : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        watchlistMovieAdapter = AdapterWatchlistMovie(ImageLoadingStandardGlide(this))
+        watchlistShowAdapter = AdapterWatchlistShow(ImageLoadingStandardGlide(this))
         viewModel.submitAction(ActionWatchlist.loadWatchlistData())
         setup()
         binding()

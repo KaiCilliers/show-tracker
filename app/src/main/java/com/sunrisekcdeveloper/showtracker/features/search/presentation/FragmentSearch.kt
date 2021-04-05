@@ -43,6 +43,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
@@ -64,7 +65,7 @@ class FragmentSearch : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: ViewModelSearch by viewModels()
 
-    private val adapterSearchResults = PagingAdapterSimplePosterMedium()
+    private lateinit var adapterSearchResults : PagingAdapterSimplePosterMedium
     lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var gridLayoutManager: GridLayoutManager
@@ -77,6 +78,7 @@ class FragmentSearch : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        adapterSearchResults = PagingAdapterSimplePosterMedium(ImageLoadingStandardGlide(this))
         binding = FragmentSearchBinding.inflate(inflater)
         return binding.root
     }
@@ -288,7 +290,7 @@ class FragmentSearch : Fragment() {
     private fun setup() {
         isConnected()
         // todo consider injecting Glide to get the fragment context, thus glide attaching to its lifecycle
-        adapterUnwatchedContent = AdapterSimplePosterTitle(Glide.with(this)) { _, _, _, _ -> }
+        adapterUnwatchedContent = AdapterSimplePosterTitle(ImageLoadingStandardGlide(this)) { _, _, _, _ -> }
         linearLayoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )

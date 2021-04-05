@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointPosterStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -37,11 +38,12 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 
 class AdapterWatchlistMovie(
+    private val image: ImageLoadingContract,
     var onButtonClicked: OnMovieStatusClickListener = OnMovieStatusClickListener{_, _,_ -> },
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
 ) : ListAdapter<UIModelWatchlisMovie, AdapterWatchlistMovie.ViewHolderWatchlistMovie>(WATCHLIST_MOVIE_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistMovie =
-        ViewHolderWatchlistMovie.from(parent, onButtonClicked, onPosterClickListener)
+        ViewHolderWatchlistMovie.from(parent, image, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistMovie, position: Int) {
         holder.bind(getItem(position))
@@ -52,6 +54,7 @@ class AdapterWatchlistMovie(
     //  but then you can't have companion object for #from method
     class ViewHolderWatchlistMovie(
         val binding: ItemWatchlistMovieBinding,
+        private val image: ImageLoadingContract,
         private val onButtonClicked: OnMovieStatusClickListener,
         private val onPosterClickListener: OnPosterClickListener
         ) : RecyclerView.ViewHolder(binding.root) {
@@ -71,13 +74,7 @@ class AdapterWatchlistMovie(
                     onButtonClicked.onClick(item.id, item.title, MovieWatchedStatus.NotWatched)
                 }
             }
-            Glide.with(binding.root)
-                .load(EndpointPosterStandard(item.posterPath).url())
-                .centerCrop()
-                .error(R.drawable.error_poster)
-                .transition(DrawableTransitionOptions.withCrossFade(100))
-                .into(binding.imgvWatchlistMoviePoster)
-
+            image.load(EndpointPosterStandard(item.posterPath).url(), binding.imgvWatchlistMoviePoster)
             binding.imgvWatchlistMoviePoster.click {
                 onPosterClickListener.onClick(
                     item.id,
@@ -91,12 +88,13 @@ class AdapterWatchlistMovie(
         companion object {
             fun from(
                 parent: ViewGroup,
+                image: ImageLoadingContract,
                 clickAction: OnMovieStatusClickListener,
                 posterClick: OnPosterClickListener
             ) : ViewHolderWatchlistMovie = ViewHolderWatchlistMovie(
                 ItemWatchlistMovieBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), clickAction, posterClick
+                ), image, clickAction, posterClick
             )
         }
     }
