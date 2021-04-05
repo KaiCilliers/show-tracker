@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMovieToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -27,6 +28,6 @@ class AddMovieToWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : AddMovieToWatchlistUseCaseContract {
     override suspend fun invoke(movieId: String) {
-        detailRepo.addMovie(movieId)
+        detailRepo.submitMovieAction(ActionRepositoryMovie.Add(movieId))
     }
 }

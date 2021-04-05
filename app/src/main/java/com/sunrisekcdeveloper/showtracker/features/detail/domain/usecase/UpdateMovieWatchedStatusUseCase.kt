@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -28,13 +29,15 @@ class UpdateMovieWatchedStatusUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : UpdateMovieWatchedStatusUseCaseContract {
     override suspend fun invoke(movieId: String, watchedStatus: MovieWatchedStatus) {
-        when (watchedStatus) {
-            MovieWatchedStatus.Watched -> {
-                detailRepo.watchMovie(movieId)
+        detailRepo.submitMovieAction(
+            when (watchedStatus) {
+                MovieWatchedStatus.Watched -> {
+                    ActionRepositoryMovie.Watch(movieId)
+                }
+                MovieWatchedStatus.NotWatched -> {
+                    ActionRepositoryMovie.Unwatch(movieId)
+                }
             }
-            MovieWatchedStatus.NotWatched -> {
-                detailRepo.unwatchMovie(movieId)
-            }
-        }
+        )
     }
 }

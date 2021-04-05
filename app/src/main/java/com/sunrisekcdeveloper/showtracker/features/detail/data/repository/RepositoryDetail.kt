@@ -41,107 +41,94 @@ class RepositoryDetail(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositoryDetailContract {
 
-    override suspend fun addShow(id: String) {
-        val exists = database.watchlistShowDao().exist(id)
-        if (exists) {
-            val show = database.watchlistShowDao().withId(id)
-            database.withTransaction {
-                database.watchlistShowDao().update(
-                    show.copy(
-                        deleted = false,
-                        started = false,
-                        upToDate = false,
-                        lastUpdated = System.currentTimeMillis()
-                    )
-                )
+    private val daoWatchlistShow = database.watchlistShowDao()
+    private val daoWatchlistMovie = database.watchlistMovieDao()
+
+    override suspend fun submitMovieAction(action: ActionRepositoryMovie) {
+        database.withTransaction {
+            when (action) {
+                is ActionRepositoryMovie.Add -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                deleted = false,
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistMovie.insert(EntityWatchlistMovie.unwatchedFrom(action.id))
+                    }
+                }
+                is ActionRepositoryMovie.Remove -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                deleted = true,
+                                dateDeleted = System.currentTimeMillis(),
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                }
+                is ActionRepositoryMovie.Watch -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                deleted = false,
+                                watched = true,
+                                dateWatched = System.currentTimeMillis(),
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistMovie.insert(EntityWatchlistMovie.watchedFrom(action.id))
+                    }
+                }
+                is ActionRepositoryMovie.Unwatch -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                watched = false,
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistMovie.insert(EntityWatchlistMovie.unwatchedFrom(action.id))
+                    }
+                }
             }
-        } else {
-            database.watchlistShowDao().insert(EntityWatchlistShow.freshBareEntryFrom(id))
         }
     }
 
-    override suspend fun removeShow(id: String) {
-        val exists = database.watchlistShowDao().exist(id)
-        if (exists) {
-            val show = database.watchlistShowDao().withId(id)
-            database.withTransaction {
-                database.watchlistShowDao().update(
-                    show.copy(
-                        deleted = true,
-                        dateDeleted = System.currentTimeMillis(),
-                        lastUpdated = System.currentTimeMillis()
-                    )
-                )
+    override suspend fun submitShowAction(action: ActionRepositoryShow) {
+        database.withTransaction {
+            when (action) {
+                is ActionRepositoryShow.Add -> {
+                    if (daoWatchlistShow.exist(action.id)) {
+                        daoWatchlistShow.update(
+                            daoWatchlistShow.withId(action.id).copy(
+                                deleted = false,
+                                started = false,
+                                upToDate = false,
+                                lastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistShow.insert(EntityWatchlistShow.freshBareEntryFrom(action.id))
+                    }
+                }
+                is ActionRepositoryShow.Remove -> {
+                    if (daoWatchlistShow.exist(action.id)) {
+                        daoWatchlistShow.update(
+                            daoWatchlistShow.withId(action.id).copy(
+                                deleted = true,
+                                dateDeleted = System.currentTimeMillis(),
+                                lastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                }
             }
-        }
-    }
-
-    override suspend fun removeMovie(id: String) {
-        val exists = database.watchlistMovieDao().exist(id)
-        if (exists) {
-            val movie = database.watchlistMovieDao().withId(id)
-            database.withTransaction {
-                database.watchlistMovieDao().update(
-                    movie.copy(
-                        deleted = true,
-                        dateDeleted = System.currentTimeMillis(),
-                        dateLastUpdated = System.currentTimeMillis()
-                    )
-                )
-            }
-        }
-    }
-
-    override suspend fun watchMovie(id: String) {
-        val exists = database.watchlistMovieDao().exist(id)
-        if (exists) {
-            val movie = database.watchlistMovieDao().withId(id)
-            database.withTransaction {
-                database.watchlistMovieDao().update(
-                    movie.copy(
-                        deleted = false,
-                        watched = true,
-                        dateWatched = System.currentTimeMillis(),
-                        dateLastUpdated = System.currentTimeMillis()
-                    )
-                )
-            }
-        } else {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.watchedFrom(id))
-        }
-    }
-
-    override suspend fun unwatchMovie(id: String) {
-        val exists = database.watchlistMovieDao().exist(id)
-        if (exists) {
-            val movie = database.watchlistMovieDao().withId(id)
-            database.withTransaction {
-                database.watchlistMovieDao().update(
-                    movie.copy(
-                        watched = false,
-                        dateLastUpdated = System.currentTimeMillis()
-                    )
-                )
-            }
-        } else {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.watchedFrom(id))
-        }
-    }
-
-    override suspend fun addMovie(id: String) {
-        val exists = database.watchlistMovieDao().exist(id)
-        if (exists) {
-            val movie = database.watchlistMovieDao().withId(id)
-            database.withTransaction {
-                database.watchlistMovieDao().update(
-                    movie.copy(
-                        deleted = false,
-                        dateLastUpdated = System.currentTimeMillis()
-                    )
-                )
-            }
-        } else {
-            database.watchlistMovieDao().insert(EntityWatchlistMovie.unwatchedFrom(id))
         }
     }
 

@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -27,6 +28,6 @@ class RemoveShowFromWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : RemoveShowFromWatchlistUseCaseContract {
     override suspend fun invoke(showId: String) {
-        detailRepo.removeShow(showId)
+        detailRepo.submitShowAction(ActionRepositoryShow.Remove(showId))
     }
 }

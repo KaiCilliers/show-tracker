@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveMovieFromWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -27,6 +28,6 @@ class RemoveMovieFromWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : RemoveMovieFromWatchlistUseCaseContract {
     override suspend fun invoke(movieId: String) {
-        detailRepo.removeMovie(movieId)
+        detailRepo.submitMovieAction(ActionRepositoryMovie.Remove(movieId))
     }
 }

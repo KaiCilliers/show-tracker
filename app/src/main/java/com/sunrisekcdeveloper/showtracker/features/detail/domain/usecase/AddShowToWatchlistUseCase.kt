@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.features.detail.application.AddShowToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryShow
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -30,6 +31,6 @@ class AddShowToWatchlistUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : AddShowToWatchlistUseCaseContract {
     override suspend fun invoke(showId: String) {
-        detailRepo.addShow(showId)
+        detailRepo.submitShowAction(ActionRepositoryShow.Add(showId))
     }
 }
