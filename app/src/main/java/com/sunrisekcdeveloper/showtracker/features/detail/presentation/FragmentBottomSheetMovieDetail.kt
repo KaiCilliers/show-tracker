@@ -33,10 +33,7 @@ import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBinding
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDetailMovie
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
@@ -59,9 +56,28 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.submitAction(ActionDetailMovie.load(arguments.movieId))
+        init()
         setup()
         observe()
+    }
+
+    private fun init() {
+        viewModel.submitAction(ActionDetailMovie.load(arguments.movieId))
+    }
+
+    private fun setup() {
+        // Set properties
+        (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
+
+        // Navigation - Close fragment
+        binding.imgDetailMovieClose.click {
+            viewModel.submitAction(ActionDetailMovie.close())
+        }
+
+        // bind priority data
+        binding.tvDetailMovieTitle.text = arguments.movieTitle
+        ImageLoadingStandardGlide(this)
+            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailMoviePoster)
     }
 
     private fun observe() {
@@ -69,21 +85,19 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
             cleanUI()
             when (state) {
                 StateDetailMovie.Loading -> {
-                    stateLoading()
+                    renderLoading()
                 }
                 is StateDetailMovie.Success -> {
-                    stateSuccess(state.data)
+                    renderSuccess(state.data)
                 }
                 is StateDetailMovie.Error -> {
-                    stateError()
+                    renderError()
                 }
             }
         }
         viewModel.eventsFlow.onEach { event ->
             when (event) {
                 EventDetailMovie.Close -> {
-                    // todo this property needs to be set somewhere else
-                    (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
                     dismiss()
                 }
                 is EventDetailMovie.ShowToast -> {
@@ -101,6 +115,92 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                 }
             }
         }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    private fun renderSuccess(data: UIModelMovieDetail) {
+        binding.tvDetailMovieDescription.apply {
+            text = data.overview
+            setMaxLinesToEllipsize()
+        }
+
+        val hours = data.runtime.toInt() / 60
+        val minutes = data.runtime.toInt() % 60
+
+        binding.tvDetailMovieRuntime.text = getString(R.string.runtime_with_value, hours, minutes)
+        binding.tvDetailMovieReleaseYear.text = data.releaseYear
+        binding.tvDetailMovieCertification.text = data.certification
+
+        when (data.status) {
+            MovieWatchlistStatus.Watchlisted -> {
+                binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
+                binding.btnDetailMovieAdd.text = getString(R.string.remove)
+                binding.btnDetailMovieAdd.click {
+                    viewModel.submitAction(
+                        ActionDetailMovie.attemptRemove(
+                            data.id,
+                            data.title
+                        )
+                    )
+                }
+            }
+            MovieWatchlistStatus.NotWatchlisted -> {
+                binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
+                // todo you can add drawables to buttons
+                binding.btnDetailMovieAdd.text = getString(R.string.add_button)
+                binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id, data.title)) }
+            }
+        }
+
+        // todo some business logic regarding the watched status of movies "deleted" and then re-added
+        when (data.watched) {
+            WatchedStatus.Watched -> {
+                binding.btnDetailMovieWatchStatus.text = getString(R.string.watched)
+                binding.btnDetailMovieWatchStatus.click {
+                    viewModel.submitAction(
+                        ActionDetailMovie.attemptUnwatch(data.id, data.title)
+                    )
+                }
+            }
+            WatchedStatus.NotWatched -> {
+                binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
+                binding.btnDetailMovieWatchStatus.click {
+                    viewModel.submitAction(
+                        ActionDetailMovie.setWatched(
+                            data.id, data.title
+                        )
+                    )
+                }
+            }
+        }
+
+        binding.tvDetailMovieDescription.visible()
+        binding.tvDetailMovieRuntime.visible()
+        binding.tvDetailMovieReleaseYear.visible()
+        binding.tvSeparatorOne.visible()
+        binding.tvSeparatorTwo.visible()
+        binding.tvDetailMovieCertification.visible()
+        binding.btnDetailMovieAdd.enabled()
+        binding.btnDetailMovieWatchStatus.enabled()
+    }
+
+    private fun renderLoading() {
+        binding.layoutDetailMovieSkeleton.visible()
+    }
+
+    private fun renderError() {
+        viewModel.submitAction(ActionDetailMovie.showToast("error"))
+    }
+
+    private fun cleanUI() {
+        binding.layoutDetailMovieSkeleton.gone()
+        binding.tvSeparatorOne.gone()
+        binding.tvSeparatorTwo.gone()
+        binding.tvDetailMovieDescription.gone()
+        binding.tvDetailMovieRuntime.gone()
+        binding.tvDetailMovieReleaseYear.gone()
+        binding.tvDetailMovieCertification.gone()
+        binding.btnDetailMovieAdd.disabled()
+        binding.btnDetailMovieWatchStatus.disabled()
     }
 
     private fun showConfirmationDialogUnwatch(movieId: String, title: String) {
@@ -131,101 +231,5 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                 )
             }
             .show()
-    }
-
-    private fun setup() {
-        // Navigation - Close fragment
-        binding.imgDetailMovieClose.setOnClickListener {
-            viewModel.submitAction(ActionDetailMovie.close())
-        }
-        // bind poster and movie title
-        bindPriorityData()
-    }
-
-    private fun bindPriorityData() {
-        binding.tvDetailMovieTitle.text = arguments.movieTitle
-        ImageLoadingStandardGlide(this)
-            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailMoviePoster)
-    }
-
-    private fun stateSuccess(data: UIModelMovieDetail) {
-        binding.tvDetailMovieDescription.apply {
-            text = data.overview
-            setMaxLinesToEllipsize()
-        }
-
-        val hours = data.runtime.toInt() / 60
-        val minutes = data.runtime.toInt() % 60
-
-        binding.tvDetailMovieRuntime.text = getString(R.string.runtime_with_value, hours, minutes)
-        binding.tvDetailMovieReleaseYear.text = data.releaseYear
-        binding.tvDetailMovieCertification.text = data.certification
-
-        if (data.watchlisted && !data.deleted) {
-            binding.btnDetailMovieAdd.setBackgroundColor(fetchErrorColor(requireContext()))
-            binding.btnDetailMovieAdd.text = getString(R.string.remove)
-            binding.btnDetailMovieAdd.click {
-                viewModel.submitAction(
-                    ActionDetailMovie.attemptRemove(
-                        data.id,
-                        data.title
-                    )
-                )
-            }
-        } else {
-
-            binding.btnDetailMovieAdd.setBackgroundColor(fetchPrimaryColor(requireContext()))
-            // todo you can add drawables to buttons
-            binding.btnDetailMovieAdd.text = getString(R.string.add_button)
-            binding.btnDetailMovieAdd.click { viewModel.submitAction(ActionDetailMovie.add(data.id, data.title)) }
-        }
-
-        // todo some business logic regarding the watched status of movies "deleted" and then
-        //  re-added
-        if (data.watched && !data.deleted) {
-            binding.btnDetailMovieWatchStatus.text = getString(R.string.watched)
-            binding.btnDetailMovieWatchStatus.click {
-                viewModel.submitAction(
-                    ActionDetailMovie.attemptUnwatch(data.id, data.title)
-                )
-            }
-        } else {
-            binding.btnDetailMovieWatchStatus.text = getString(R.string.mark_watched)
-            binding.btnDetailMovieWatchStatus.click {
-                viewModel.submitAction(
-                    ActionDetailMovie.setWatched(
-                        data.id, data.title
-                    )
-                )
-            }
-        }
-        binding.tvDetailMovieDescription.visible()
-        binding.tvDetailMovieRuntime.visible()
-        binding.tvDetailMovieReleaseYear.visible()
-        binding.tvSeparatorOne.visible()
-        binding.tvSeparatorTwo.visible()
-        binding.tvDetailMovieCertification.visible()
-        binding.btnDetailMovieAdd.enabled()
-        binding.btnDetailMovieWatchStatus.enabled()
-    }
-
-    private fun stateLoading() {
-        binding.layoutDetailMovieSkeleton.visible()
-    }
-
-    private fun stateError() {
-        viewModel.submitAction(ActionDetailMovie.showToast("error"))
-    }
-
-    private fun cleanUI() {
-        binding.layoutDetailMovieSkeleton.gone()
-        binding.tvSeparatorOne.gone()
-        binding.tvSeparatorTwo.gone()
-        binding.tvDetailMovieDescription.gone()
-        binding.tvDetailMovieRuntime.gone()
-        binding.tvDetailMovieReleaseYear.gone()
-        binding.tvDetailMovieCertification.gone()
-        binding.btnDetailMovieAdd.disabled()
-        binding.btnDetailMovieWatchStatus.disabled()
     }
 }

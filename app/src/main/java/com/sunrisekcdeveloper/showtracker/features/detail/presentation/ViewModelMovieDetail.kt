@@ -32,6 +32,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionDet
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -51,22 +52,6 @@ class ViewModelMovieDetail @ViewModelInject constructor(
     val state: LiveData<StateDetailMovie>
         get() = _state
 
-    private fun fetchDetails(id: String) = viewModelScope.launch {
-        fetchMovieDetailsUseCase(id).collect { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    _state.value = StateDetailMovie.Success(resource.data)
-                }
-                is Resource.Error -> {
-                    _state.value = StateDetailMovie.Error(Exception(resource.exception))
-                }
-                Resource.Loading -> {
-                    _state.value = StateDetailMovie.Loading
-                }
-            }
-        }
-    }
-
     fun submitAction(action: ActionDetailMovie) = viewModelScope.launch {
         when (action) {
             is ActionDetailMovie.Load -> {
@@ -79,10 +64,6 @@ class ViewModelMovieDetail @ViewModelInject constructor(
             }
             is ActionDetailMovie.Remove -> {
                 removeMovieFromWatchlistUseCase(action.movieId)
-                // this is not ideal, but it works for now
-                // i want the dialog to dismiss when the user has selected an action
-                // a snackbar must then appear on the screen the user was previously describing
-                // the action the user just made
                 eventChannel.send(EventDetailMovie.saveSnackbarMessage("Removed \"${action.title}\""))
                 eventChannel.send(EventDetailMovie.close())
             }
@@ -120,5 +101,20 @@ class ViewModelMovieDetail @ViewModelInject constructor(
             }
         }
     }
-}
 
+    private fun fetchDetails(id: String) = viewModelScope.launch {
+        fetchMovieDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailMovie.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailMovie.Error(Exception(resource.exception))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailMovie.Loading
+                }
+            }
+        }
+    }
+}

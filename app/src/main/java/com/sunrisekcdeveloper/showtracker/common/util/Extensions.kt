@@ -32,8 +32,10 @@ import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWit
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchlistStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -164,7 +166,7 @@ fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
     popularityValue = popularityValue,
 )
 
-fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =
+fun EntityMovie.asUIModelMovieDetail(status: MovieWatchlistStatus, watched: WatchedStatus) =
     UIModelMovieDetail(
         id = id,
         title = title,
@@ -173,8 +175,7 @@ fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, del
         releaseYear = releaseDate.substring(0..3),
         certification = certification,
         runtime = runTime,
-        deleted = deleted,
-        watchlisted = watchlisted,
+        status = status,
         watched = watched
     )
 

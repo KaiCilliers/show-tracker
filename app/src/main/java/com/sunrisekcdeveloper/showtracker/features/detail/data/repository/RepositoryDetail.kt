@@ -24,8 +24,10 @@ import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieReleaseDates
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
 import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchlistStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.WatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
@@ -184,19 +186,23 @@ class RepositoryDetail(
         val statusFlow = database.watchlistMovieDao().distinctWatchlistMovieFlow(id)
 
         return combine(detailsFlow, statusFlow) { details, status ->
-            var watchlisted = false
-            var watched = false
-            var deleted = false
-            status?.let {
-                watchlisted = true
-                watched = status.watched
-                deleted = status.deleted
-            }
-            return@combine if (details == null) {
-                Resource.Error(Exception("No movie with ID: $id exists in database"))
-            } else {
-                Resource.Success(details.asUIModelMovieDetail(watchlisted, watched, deleted))
-            }
+            details?.let {
+                status?.let {
+                    Resource.Success(
+                        details.asUIModelMovieDetail(
+                            if (!status.deleted) {
+                                MovieWatchlistStatus.Watchlisted
+                            } else {
+                                MovieWatchlistStatus.NotWatchlisted
+                            }, if (!status.deleted && status.watched) {
+                                WatchedStatus.Watched
+                            } else {
+                                WatchedStatus.NotWatched
+                            }
+                        )
+                    )
+                }
+            } ?: Resource.Error(Exception("No movie with ID: $id exists in database"))
         }.onStart { emit(Resource.Loading) }
     }
 

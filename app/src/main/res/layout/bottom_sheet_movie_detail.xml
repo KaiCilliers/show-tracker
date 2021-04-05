@@ -54,7 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="@string/movie_watched_text"
+        android:text="@string/action_set_watched"
         android:enabled="false"
         tools:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"

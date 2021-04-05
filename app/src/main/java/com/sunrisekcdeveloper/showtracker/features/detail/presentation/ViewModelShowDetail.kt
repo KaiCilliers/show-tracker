@@ -46,22 +46,6 @@ class ViewModelShowDetail @ViewModelInject constructor(
     val state: LiveData<StateDetailShow>
         get() = _state
 
-    private fun fetchDetails(id: String) = viewModelScope.launch {
-        fetchShowDetailsUseCase(id).collect { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    _state.value = StateDetailShow.Success(resource.data)
-                }
-                is Resource.Error -> {
-                    _state.value = StateDetailShow.Error(Exception(resource.exception))
-                }
-                Resource.Loading -> {
-                    _state.value = StateDetailShow.Loading
-                }
-            }
-        }
-    }
-
     fun submitAction(action: ActionDetailShow) = viewModelScope.launch {
         when (action) {
             is ActionDetailShow.Load -> {
@@ -96,6 +80,22 @@ class ViewModelShowDetail @ViewModelInject constructor(
                         action.title
                     )
                 )
+            }
+        }
+    }
+
+    private fun fetchDetails(id: String) = viewModelScope.launch {
+        fetchShowDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailShow.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailShow.Error(Exception(resource.exception))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailShow.Loading
+                }
             }
         }
     }
