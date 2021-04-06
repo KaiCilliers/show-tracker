@@ -23,22 +23,19 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointPosterStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemMediumPosterBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium
 
 class PagingAdapterSimplePosterMedium(
     private val image: ImageLoadingContract,
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
-) : PagingDataAdapter<UIModelDiscovery, ViewHolderPagingSimplePosterMedium>(
-    UIMODEL_DISCOVERY_COMPARATOR
+) : PagingDataAdapter<UIModelPoster, ViewHolderPagingSimplePosterMedium>(
+    UIMODEL_POSTER_RESULT_COMPARATOR
 ) {
 
     fun setPosterClickAction(clickListener: OnPosterClickListener) {
@@ -60,14 +57,14 @@ class PagingAdapterSimplePosterMedium(
         private val image: ImageLoadingContract,
         private val onClick: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: UIModelDiscovery) {
+        fun bind(data: UIModelPoster) {
             image.load(EndpointPosterStandard(data.posterPath).url(), binding.imgvItemMoviePosterMedium)
             binding.root.click {
                 onClick.onClick(
                     data.id,
-                    data.mediaTitle,
+                    data.title,
                     data.posterPath,
-                    data.mediaType
+                    data.type
                 )
             }
         }
@@ -86,23 +83,21 @@ class PagingAdapterSimplePosterMedium(
     }
 
     companion object {
-        private val UIMODEL_DISCOVERY_COMPARATOR =
-            object : DiffUtil.ItemCallback<UIModelDiscovery>() {
-                override fun areItemsTheSame(
-                    oldItem: UIModelDiscovery,
-                    newItem: UIModelDiscovery
-                ): Boolean = oldItem.id == newItem.id
+        private val UIMODEL_POSTER_RESULT_COMPARATOR = object : DiffUtil.ItemCallback<UIModelPoster>() {
+            override fun areItemsTheSame(
+                oldItem: UIModelPoster,
+                newItem: UIModelPoster
+            ): Boolean = oldItem.id == newItem.id
 
-                override fun areContentsTheSame(
-                    oldItem: UIModelDiscovery,
-                    newItem: UIModelDiscovery
-                ): Boolean {
-                    return (oldItem.id == newItem.id &&
-                            oldItem.mediaTitle == newItem.mediaTitle &&
-                            oldItem.mediaType == newItem.mediaType &&
-                            oldItem.posterPath == newItem.posterPath &&
-                            oldItem.listType == newItem.listType)
-                }
-            }
+            override fun areContentsTheSame(
+                oldItem: UIModelPoster,
+                newItem: UIModelPoster
+            ): Boolean = oldItem.id == newItem.id &&
+                    oldItem.title == newItem.title &&
+                    oldItem.posterPath == newItem.posterPath &&
+                    oldItem.backdropPath == newItem.backdropPath &&
+                    oldItem.listType == newItem.listType &&
+                    oldItem.type == newItem.type
+        }
     }
 }

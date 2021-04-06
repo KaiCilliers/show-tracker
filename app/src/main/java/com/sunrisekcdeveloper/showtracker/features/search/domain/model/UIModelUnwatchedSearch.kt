@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
+@Deprecated("Replaced with UIModelPosterResult")
 data class UIModelUnwatchedSearch(
     val id: String,
     val title: String,

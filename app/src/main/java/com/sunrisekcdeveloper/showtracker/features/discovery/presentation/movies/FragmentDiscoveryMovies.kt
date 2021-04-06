@@ -230,6 +230,9 @@ class FragmentDiscoveryMovies : Fragment() {
                 ListType.ShowAiringToday -> {
                     FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(6)
                 }
+                ListType.NoList -> {
+                    throw Exception("No list type associated with group")
+                }
             }
         )
     }

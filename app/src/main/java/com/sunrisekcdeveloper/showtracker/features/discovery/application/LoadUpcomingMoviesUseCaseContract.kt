@@ -19,9 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.application
 
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.flow.Flow
 
 interface LoadUpcomingMoviesUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelDiscovery>>
+    operator fun invoke(): Flow<PagingData<UIModelPoster>>
 }

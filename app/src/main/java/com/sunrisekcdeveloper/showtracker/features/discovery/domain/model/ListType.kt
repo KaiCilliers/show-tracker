@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
 
 sealed class ListType {
+    object NoList : ListType()
     object MoviePopular : ListType()
     object MovieTopRated : ListType()
     object MovieUpcoming : ListType()
@@ -27,6 +28,7 @@ sealed class ListType {
     object ShowAiringToday : ListType()
 
     companion object {
+        fun noList() = NoList
         fun moviePopular() = MoviePopular
         fun movieTopRated() = MovieTopRated
         fun movieUpcoming() = MovieUpcoming

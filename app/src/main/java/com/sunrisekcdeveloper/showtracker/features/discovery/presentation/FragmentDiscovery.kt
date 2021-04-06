@@ -187,6 +187,9 @@ class FragmentDiscovery : Fragment() {
                 ListType.ShowAiringToday -> {
                     FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(6)
                 }
+                ListType.NoList -> {
+                    throw Exception("No list type associated with group")
+                }
             }
         )
     }

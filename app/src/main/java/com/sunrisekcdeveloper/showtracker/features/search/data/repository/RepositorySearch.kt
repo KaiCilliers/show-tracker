@@ -21,18 +21,12 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
-import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
-import com.sunrisekcdeveloper.showtracker.common.util.asUiModelUnwatchedSearch
+import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -44,12 +38,12 @@ class RepositorySearch(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RepositorySearchContract {
 
-    override suspend fun loadUnwatchedMedia(): Resource<List<UIModelUnwatchedSearch>> {
+    override suspend fun loadUnwatchedMedia(): Resource<List<UIModelPoster>> {
         val movie = database.watchlistMovieDao().unwatched()
         val shows = database.watchlistShowDao().unwatched()
 
         val list =
-            movie.map { it.asUiModelUnwatchedSearch() } + shows.map { it.asUiModelUnwatchedSearch() }
+            movie.map { it.asUiModelPosterResult() } + shows.map { it.asUiModelPosterResult() }
 
         return Resource.Success(list.sortedBy { it.title })
     }

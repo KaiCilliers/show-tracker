@@ -16,10 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
+
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
 data class UIModelPoster(
     val id: String,
+    val title: String,
     val posterPath: String,
-    val mediaType: MediaType
+    val backdropPath: String,
+    val type: MediaType,
+    val listType: ListType
 )

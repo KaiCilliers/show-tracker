@@ -25,10 +25,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.common.util.asUIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
@@ -56,12 +53,11 @@ class ViewModelSearch @ViewModelInject constructor(
         get() = _stateNetwork
 
     private var currentQuery: String? = null
-    private var currentSearchResult: Flow<PagingData<UIModelDiscovery>>? = null
+    private var currentSearchResult: Flow<PagingData<UIModelPoster>>? = null
 
-    private val unwatchedMediaCache = mutableListOf<UIModelUnwatchedSearch>()
+    private val unwatchedMediaCache = mutableListOf<UIModelPoster>()
 
     fun submitAction(action: ActionSearch) = viewModelScope.launch {
-        Timber.e("ACTION: $action")
         when (action) {
             is ActionSearch.ShowToast -> {
                 eventChannel.send(EventSearch.ShowToast(action.msg))
@@ -92,10 +88,8 @@ class ViewModelSearch @ViewModelInject constructor(
                 _state.value = StateSearch.NoResultsFound
             }
             ActionSearch.LoadUnwatchedContent -> {
-                Timber.e("is cache empty?: ${unwatchedMediaCache.isEmpty()}")
                 if (unwatchedMediaCache.isEmpty()) {
-                    val resource = loadUnwatchedMediaUseCase()
-                    when (resource) {
+                    when (val resource = loadUnwatchedMediaUseCase()) {
                         is Resource.Success -> {
                             unwatchedMediaCache.addAll(resource.data)
                             if (unwatchedMediaCache.isEmpty()) {
@@ -127,21 +121,13 @@ class ViewModelSearch @ViewModelInject constructor(
         }
     }
 
-    // todo returning different UIModel due to pagingadapter requirements
-    //  the adapter needs to have its own data type
-    private fun searchMedia(query: String): Flow<PagingData<UIModelDiscovery>> {
+    private fun searchMedia(query: String): Flow<PagingData<UIModelPoster>> {
         val lastResult = currentSearchResult
         if (query == currentQuery && lastResult != null) {
             return lastResult
         }
         currentQuery = query
-        val newResult: Flow<PagingData<UIModelDiscovery>> = searchMediaByTitleUseCase(query)
-            .map {
-                it.map { model ->
-                    // todo this is temp fix (adapter needs its own data type)
-                    model.asUIModelDiscovery()
-                }
-            }
+        val newResult: Flow<PagingData<UIModelPoster>> = searchMediaByTitleUseCase(query)
             .cachedIn(viewModelScope)
         currentSearchResult = newResult
         return newResult

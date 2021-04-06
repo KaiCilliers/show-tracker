@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
-import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -26,7 +25,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -40,16 +38,12 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -213,7 +207,7 @@ class FragmentSearch : Fragment() {
 
     }
 
-    private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
+    private suspend fun stateSuccess(page: PagingData<UIModelPoster>) {
         binding.tvHeaderWatchlistContent.text = getString(R.string.results)
         binding.recyclerviewSearch.layoutManager = gridLayoutManager
         binding.recyclerviewSearch.adapter = adapterSearchResults
@@ -245,7 +239,7 @@ class FragmentSearch : Fragment() {
 
     // todo handle case where unwatched movies and shows are empty
     //  perhaps show some image that says user should add stuff to their watchlist (along with same header as below)
-    private fun stateEmpty(list: List<UIModelUnwatchedSearch>) {
+    private fun stateEmpty(list: List<UIModelPoster>) {
         binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
         binding.tvHeaderWatchlistContent.visible()
 

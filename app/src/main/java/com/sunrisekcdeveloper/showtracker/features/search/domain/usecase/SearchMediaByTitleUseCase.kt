@@ -19,13 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
 import androidx.paging.PagingData
+import androidx.paging.map
+import com.sunrisekcdeveloper.showtracker.common.util.asUiModelPosterResult
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @ExperimentalCoroutinesApi
 class SearchMediaByTitleUseCase(
@@ -33,7 +36,8 @@ class SearchMediaByTitleUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SearchMediaByTitleUseCaseContract {
 
-    override fun invoke(query: String): Flow<PagingData<UIModelSearch>> {
+    override fun invoke(query: String): Flow<PagingData<UIModelPoster>> {
         return searchRepo.searchMediaByTitlePage(query)
+            .map { pagingData -> pagingData.map { it.asUiModelPosterResult() } }
     }
 }

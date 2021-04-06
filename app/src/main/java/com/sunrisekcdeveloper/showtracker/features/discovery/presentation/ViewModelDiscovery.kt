@@ -22,13 +22,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.ActionFocused
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.EventFocused
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -72,16 +71,16 @@ class ViewModelDiscovery @ViewModelInject constructor(
         }
     }
 
-    val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()
+    val streamPopularMovies: Flow<PagingData<UIModelPoster>> = loadPopularMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = loadPopularShowsUseCase()
+    val streamPopularShows: Flow<PagingData<UIModelPoster>> = loadPopularShowsUseCase()
         .cachedIn(viewModelScope)
-    val streamTopRatedMovies: Flow<PagingData<UIModelDiscovery>> = loadTopRatedMoviesUseCase()
+    val streamTopRatedMovies: Flow<PagingData<UIModelPoster>> = loadTopRatedMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamTopRatedShows: Flow<PagingData<UIModelDiscovery>> = loadTopRatedShowsUseCase()
+    val streamTopRatedShows: Flow<PagingData<UIModelPoster>> = loadTopRatedShowsUseCase()
         .cachedIn(viewModelScope)
-    val streamUpcomingMovies: Flow<PagingData<UIModelDiscovery>> = loadUpcomingMoviesUseCase()
+    val streamUpcomingMovies: Flow<PagingData<UIModelPoster>> = loadUpcomingMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamAiringTodayShows: Flow<PagingData<UIModelDiscovery>> = loadAiringTodayShowsUseCase()
+    val streamAiringTodayShows: Flow<PagingData<UIModelPoster>> = loadAiringTodayShowsUseCase()
         .cachedIn(viewModelScope)
 }

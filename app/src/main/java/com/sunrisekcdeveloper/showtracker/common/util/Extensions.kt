@@ -39,6 +39,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeason
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
@@ -99,6 +100,16 @@ fun View.enabled() {
 fun View.disabled() {
     this.isEnabled = false
 }
+
+fun UIModelDiscovery.asUIModelPosterResult() = UIModelPoster(
+    id = id,
+    title = mediaTitle,
+    posterPath = posterPath,
+    // TODO: 06-04-2021 include backdrop path to UIModelDiscovery
+    backdropPath = "",
+    type = mediaType,
+    listType = listType
+)
 
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
@@ -215,44 +226,49 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     ratingVotes = voteCount
 )
 
-fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
+fun UIModelSearch.asUiModelPosterResult() = UIModelPoster(
     id = id,
-    mediaTitle = title,
-    mediaType = mediaType,
+    title = title,
+    type = mediaType,
     listType = ListType.MoviePopular,
-    posterPath = posterPath
+    posterPath = posterPath,
+    // TODO: 06-04-2021 include backdropPath in model
+    backdropPath = ""
 )
 
-fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+fun WatchlistMovieWithDetails.asUiModelPosterResult() = UIModelPoster(
     id = status.id,
     title = details.title,
     posterPath = details.posterPath,
     backdropPath = details.backdropPath,
-    mediaType = MediaType.Movie
+    type = MediaType.Movie,
+    listType = ListType.noList()
 )
 
-fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+fun WatchlistShowWithDetails.asUiModelPosterResult() = UIModelPoster(
     id = status.id,
     title = details.title,
     posterPath = details.posterPath,
     backdropPath = details.backdropPath,
-    mediaType = MediaType.Show
+    type = MediaType.Show,
+    listType = ListType.noList()
 )
 
 // todo add lsat episode in season to EntityWatchlistSeason and/or EntitySeason
-fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) = UIModelWatchlistShow(
-    id = details.id,
-    title = details.title,
-    posterPath = details.posterPath,
-    currentEpisodeNumber = status.currentEpisodeNumber,
-    currentEpisodeName = status.currentEpisodeName,
-    currentSeasonNumber = status.currentSeasonNumber,
-    episodesInSeason = status.currentSeasonEpisodeTotal,
-    lastEpisodeInSeason = lastEpisodeInSeason,
-    started = status.started,
-    upToDate = status.upToDate,
-    dateAdded = status.dateAdded
-)
+fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) =
+    UIModelWatchlistShow(
+        id = details.id,
+        title = details.title,
+        posterPath = details.posterPath,
+        currentEpisodeNumber = status.currentEpisodeNumber,
+        currentEpisodeName = status.currentEpisodeName,
+        currentSeasonNumber = status.currentSeasonNumber,
+        episodesInSeason = status.currentSeasonEpisodeTotal,
+        lastEpisodeInSeason = lastEpisodeInSeason,
+        started = status.started,
+        upToDate = status.upToDate,
+        dateAdded = status.dateAdded
+    )
 
 fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
     id = details.id,
