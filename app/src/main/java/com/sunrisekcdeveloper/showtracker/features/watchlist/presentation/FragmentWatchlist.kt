@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -75,21 +74,6 @@ class FragmentWatchlist : Fragment() {
     private var allMovies: List<UIModelWatchlisMovie> = listOf()
     private var allShows: List<UIModelWatchlistShow> = listOf()
 
-    // todo extract array
-    private val sortOptionsShow = arrayOf(
-        "No Filters",
-        "Added Today",
-        "Watched Today",
-        "Started",
-        "Not Started"
-    )
-    private val filterOptionMovie = arrayOf(
-        "No Filters",
-        "Watched",
-        "Not Watched",
-        "Added Today"
-    )
-
     @Inject
     lateinit var dataStore: DataStore<Preferences>
 
@@ -104,144 +88,17 @@ class FragmentWatchlist : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        watchlistMovieAdapter = AdapterWatchlistMovie(ImageLoadingStandardGlide(this))
-        watchlistShowAdapter = AdapterWatchlistShow(ImageLoadingStandardGlide(this))
-        viewModel.submitAction(ActionWatchlist.loadWatchlistData())
+        init()
         setup()
-        binding()
+        observeInput()
+        observeSnackBarEvent()
         observeViewModel()
     }
 
-    private suspend fun consumedSnackBarMessage(message: String) {
-        dataStore.edit { settings ->
-            settings[KeyPersistenceStore(getString(R.string.key_watchlist_previous_message)).asDataStoreKey()] = message
-        }
-    }
-
-    private fun stateEmptyList() {
-        binding.layoutEmpty.visible()
-        binding.imgEmptyList.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_list_24))
-        binding.emptyListHeading.text = getString(R.string.empty_list)
-        binding.emptyListSubHeading.text = getString(R.string.empty_list_sub_heading)
-        binding.imgvFilterWatchlist.gone()
-    }
-
-    private fun stateSuccess(
-        movies: List<UIModelWatchlisMovie>,
-        shows: List<UIModelWatchlistShow>
-    ) {
-        Timber.d("999999999 success")
-
-        allShows = shows
-        allMovies = movies
-        watchlistMovieAdapter.submitList(movies)
-        watchlistShowAdapter.submitList(shows)
-
-        binding.tabBarWatchlist.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    when (it.position) {
-                        0 -> {
-                            binding.svWatchlist.queryHint =
-                                getString(R.string.search_shows_by_title)
-                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
-                            Timber.e("#### shows: ${allShows.size}, filterOption: ${viewModel.showFilterOption}, query: \"${binding.svWatchlist.query}\"")
-                            if (allShows.isEmpty() && viewModel.showFilterOption is FilterShows.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
-                                viewModel.submitAction(ActionWatchlist.showEmptyState())
-                            } else if (allShows.isEmpty() && viewModel.showFilterOption !is FilterShows.NoFilters && binding.svWatchlist.query.isNotEmpty()) {
-                                viewModel.submitAction(ActionWatchlist.noFilterResults())
-                            } else {
-                                // this is so hacky
-                                cleanUi()
-                                stateSuccess(allMovies, allShows)
-                            }
-                        }
-                        1 -> {
-                            binding.svWatchlist.queryHint =
-                                getString(R.string.search_movie_by_title)
-                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
-                            if (allMovies.isEmpty() && (viewModel.movieFilterOption is FilterMovies.NoFilters || binding.svWatchlist.query.isNullOrEmpty())) {
-                                viewModel.submitAction(ActionWatchlist.showEmptyState())
-                            } else if (allMovies.isEmpty() && (viewModel.movieFilterOption !is FilterMovies.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
-                                viewModel.submitAction(ActionWatchlist.noFilterResults())
-                            } else {
-                                // hacky - bypasses route of Action >>> State / Event
-                                cleanUi()
-                                stateSuccess(allMovies, allShows)
-                            }
-                        }
-                        else -> { viewModel.submitAction(ActionWatchlist.showEmptyState()) }
-                    }
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-        })
-
-        binding.imgvFilterWatchlist.visible()
-        binding.recyclerviewWatchlist.visible()
-        if (arguments.showId != "none") {
-            if (!scrolledOnce) scrollToShow()
-        }
-
-        Timber.d("999999999 shows: ${allShows.size}, movies: ${allMovies.size}, showFilter: ${viewModel.showFilterOption.javaClass.simpleName}, movieFilter: ${viewModel.movieFilterOption.javaClass.simpleName}, Query: \"${binding.svWatchlist.query}\"")
-        // initial empty list state (ugly yes :() or when removing last item from list
-        if (binding.tabBarWatchlist.selectedTabPosition == 0) {
-
-            if (allShows.isEmpty() && viewModel.showFilterOption is FilterShows.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
-                viewModel.submitAction(ActionWatchlist.showEmptyState())
-            } else if (allShows.isEmpty() && (viewModel.showFilterOption !is FilterShows.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
-                viewModel.submitAction(ActionWatchlist.noFilterResults())
-            }
-
-        } else {
-
-            if (allMovies.isEmpty() && viewModel.movieFilterOption is FilterMovies.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
-                viewModel.submitAction(ActionWatchlist.showEmptyState())
-            } else if (allMovies.isEmpty() && (viewModel.movieFilterOption !is FilterMovies.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
-                viewModel.submitAction(ActionWatchlist.noFilterResults())
-            }
-
-        }
-    }
-
-    private fun scrollToShow() = viewLifecycleOwner.lifecycleScope.launch {
-        delay(1000)
-        scrolledOnce = true
-        val position = watchlistShowAdapter.positionOfItem(arguments.showId)
-        binding.recyclerviewWatchlist.getChildAt(position)?.let {
-            val y = binding.recyclerviewWatchlist.y + binding.recyclerviewWatchlist.getChildAt(
-                position
-            ).y
-            binding.scrollWatchlist.smoothScrollTo(0, y.toInt())
-        }
-    }
-
-    private fun stateLoading() {
-        binding.layoutWatchlistSkeleton.visible()
-    }
-
-    private fun stateError() {
-        viewModel.submitAction(ActionWatchlist.showToast("state Error"))
-    }
-
-    private fun stateNoFilterResults() {
-        binding.layoutEmpty.visible()
-        binding.imgvFilterWatchlist.visible()
-        binding.imgEmptyList.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_outlet_24))
-        binding.emptyListHeading.text = getString(R.string.no_matches)
-        binding.emptyListSubHeading.text = getString(R.string.no_matches_sub_heading)
-    }
-
-    private fun cleanUi() {
-        binding.layoutEmpty.gone()
-        binding.layoutWatchlistSkeleton.gone()
-        binding.imgvFilterWatchlist.gone()
-        binding.recyclerviewWatchlist.gone()
+    private fun init() {
+        watchlistMovieAdapter = AdapterWatchlistMovie(ImageLoadingStandardGlide(this))
+        watchlistShowAdapter = AdapterWatchlistShow(ImageLoadingStandardGlide(this))
+        viewModel.submitAction(ActionWatchlist.loadWatchlistData())
     }
 
     private fun setup() {
@@ -294,7 +151,87 @@ class FragmentWatchlist : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+        binding.imgvFilterWatchlist.setOnClickListener {
+            when (binding.tabBarWatchlist.selectedTabPosition) {
+                0 -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.filter_show_by))
+                        .setSingleChoiceItems(
+                            R.array.items_show_sort,
+                            showSortCheckedItem
+                        ) { dialog, which ->
+                            showSortCheckedItem = which
+                            viewModel.updateShowSortBy(
+                                when (showSortCheckedItem) {
+                                    1 -> {
+                                        FilterShows.AddedToday
+                                    }
+                                    2 -> {
+                                        FilterShows.WatchedToday
+                                    }
+                                    3 -> {
+                                        FilterShows.Started
+                                    }
+                                    4 -> {
+                                        FilterShows.NotStarted
+                                    }
+                                    else -> {
+                                        FilterShows.NoFilters
+                                    }
+                                }
+                            )
+                            dialog.dismiss()
+                        }.show()
+                }
+                else -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        // todo extract string
+                        .setTitle(getString(R.string.filter_movie_by))
+                        .setSingleChoiceItems(
+                            R.array.items_movie_sort,
+                            movieSortCheckedItem
+                        ) { dialog, which ->
+                            movieSortCheckedItem = which
+                            viewModel.updateMovieSortBy(
+                                when (movieSortCheckedItem) {
+                                    1 -> {
+                                        FilterMovies.Watched
+                                    }
+                                    2 -> {
+                                        FilterMovies.Unwatched
+                                    }
+                                    3 -> {
+                                        FilterMovies.AddedToday
+                                    }
+                                    else -> {
+                                        FilterMovies.NoFilters
+                                    }
+                                }
+                            )
+                            dialog.dismiss()
+                        }.show()
+                }
+            }
+        }
+        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
+            viewModel.submitAction(
+                ActionWatchlist.LoadMediaDetails(
+                    mediaId, mediaTitle, posterPath, mediaType
+                )
+            )
+        }
+
+        watchlistShowAdapter.onPosterClickListener = onClick
+        watchlistMovieAdapter.onPosterClickListener = onClick
+
+        binding.recyclerviewWatchlist.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+    }
+
+    private fun observeInput() = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             binding.svWatchlist.getQueryTextChangedStateFlow()
                 .debounce(400)
                 .filter { query ->
@@ -336,99 +273,34 @@ class FragmentWatchlist : Fragment() {
                 }
         }
 
-        binding.imgvFilterWatchlist.setOnClickListener {
-            when (binding.tabBarWatchlist.selectedTabPosition) {
-                0 -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Filter TV Shows by:")
-                        .setSingleChoiceItems(
-                            sortOptionsShow,
-                            showSortCheckedItem
-                        ) { dialog, which ->
-                            Timber.e("Sort chosen: ${sortOptionsShow[which]}")
-                            showSortCheckedItem = which
-                            viewModel.updateShowSortBy(
-                                when (showSortCheckedItem) {
-                                    1 -> {
-                                        FilterShows.AddedToday
-                                    }
-                                    2 -> {
-                                        FilterShows.WatchedToday
-                                    }
-                                    3 -> {
-                                        FilterShows.Started
-                                    }
-                                    4 -> {
-                                        FilterShows.NotStarted
-                                    }
-                                    else -> {
-                                        FilterShows.NoFilters
-                                    }
-                                }
-                            )
-                            dialog.dismiss()
-                        }.show()
+    private fun observeSnackBarEvent() = viewLifecycleOwner.lifecycleScope.launch {
+        findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+            getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
+                .collect {
+                    delay(300)
+                    viewModel.submitAction(ActionWatchlist.showSnackbar(it))
                 }
-                else -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        // todo extract string
-                        .setTitle("Filter Movies by:")
-                        .setSingleChoiceItems(
-                            filterOptionMovie,
-                            movieSortCheckedItem
-                        ) { dialog, which ->
-                            Timber.e("Sort chosen: ${filterOptionMovie[which]}")
-                            movieSortCheckedItem = which
-                            viewModel.updateMovieSortBy(
-                                when (movieSortCheckedItem) {
-                                    1 -> {
-                                        FilterMovies.Watched
-                                    }
-                                    2 -> {
-                                        FilterMovies.Unwatched
-                                    }
-                                    3 -> {
-                                        FilterMovies.AddedToday
-                                    }
-                                    else -> {
-                                        FilterMovies.NoFilters
-                                    }
-                                }
-                            )
-                            dialog.dismiss()
-                        }.show()
-                }
-            }
         }
     }
 
     private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-                getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
-                    .collect {
-                        delay(300)
-                        viewModel.submitAction(ActionWatchlist.showSnackbar(it))
-                    }
-            }
-        }
         viewModel.state.observe(viewLifecycleOwner) { state ->
             cleanUi()
             when (state) {
                 StateWatchlist.Loading -> {
-                    stateLoading()
+                    renderLoading()
                 }
                 is StateWatchlist.Success -> {
-                    stateSuccess(state.movies, state.shows)
+                    renderSuccess(state.movies, state.shows)
                 }
                 is StateWatchlist.Error -> {
-                    stateError()
+                    renderError()
                 }
                 StateWatchlist.EmptyList -> {
-                    stateEmptyList()
+                    renderEmptyList()
                 }
                 StateWatchlist.NoFilterResults -> {
-                    stateNoFilterResults()
+                    renderNoFilterResults()
                 }
             }
         }
@@ -465,7 +337,7 @@ class FragmentWatchlist : Fragment() {
                 is EventWatchlist.ShowSnackbar -> {
                     dataStore.data.take(1).collect {
                         if (it[KeyPersistenceStore(getString(R.string.key_watchlist_previous_message)).asDataStoreKey()] != event.msg) {
-                            showSnackBar(event.msg)
+                            Snackbar.make(binding.root, event.msg, Snackbar.LENGTH_SHORT).show()
                             consumedSnackBarMessage(event.msg)
                         }
                     }
@@ -477,8 +349,113 @@ class FragmentWatchlist : Fragment() {
         }.observeInLifecycle(viewLifecycleOwner)
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    private fun renderSuccess(
+        movies: List<UIModelWatchlisMovie>,
+        shows: List<UIModelWatchlistShow>
+    ) {
+        allShows = shows
+        allMovies = movies
+        watchlistMovieAdapter.submitList(movies)
+        watchlistShowAdapter.submitList(shows)
+
+        binding.tabBarWatchlist.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    when (it.position) {
+                        0 -> {
+                            binding.svWatchlist.queryHint = getString(R.string.search_shows_by_title)
+                            binding.recyclerviewWatchlist.adapter = watchlistShowAdapter
+
+                            if (allShows.isEmpty() && viewModel.showFilterOption is FilterShows.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else if (allShows.isEmpty() && viewModel.showFilterOption !is FilterShows.NoFilters && binding.svWatchlist.query.isNotEmpty()) {
+                                viewModel.submitAction(ActionWatchlist.noFilterResults())
+                            } else {
+                                // this is so hacky
+                                cleanUi()
+                                renderSuccess(allMovies, allShows)
+                            }
+                        }
+                        1 -> {
+                            binding.svWatchlist.queryHint = getString(R.string.search_movie_by_title)
+                            binding.recyclerviewWatchlist.adapter = watchlistMovieAdapter
+
+                            if (allMovies.isEmpty() && (viewModel.movieFilterOption is FilterMovies.NoFilters || binding.svWatchlist.query.isNullOrEmpty())) {
+                                viewModel.submitAction(ActionWatchlist.showEmptyState())
+                            } else if (allMovies.isEmpty() && (viewModel.movieFilterOption !is FilterMovies.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
+                                viewModel.submitAction(ActionWatchlist.noFilterResults())
+                            } else {
+                                // hacky - bypasses route of Action >>> State / Event
+                                cleanUi()
+                                renderSuccess(allMovies, allShows)
+                            }
+                        }
+                        else -> { viewModel.submitAction(ActionWatchlist.showEmptyState()) }
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+
+        binding.imgvFilterWatchlist.visible()
+        binding.recyclerviewWatchlist.visible()
+        if (arguments.showId != "none") {
+            if (!scrolledOnce) scrollToShow()
+        }
+        // initial empty list state (ugly yes :() or when removing last item from list
+        if (binding.tabBarWatchlist.selectedTabPosition == 0) {
+
+            if (allShows.isEmpty() && viewModel.showFilterOption is FilterShows.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
+                viewModel.submitAction(ActionWatchlist.showEmptyState())
+            } else if (allShows.isEmpty() && (viewModel.showFilterOption !is FilterShows.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
+                viewModel.submitAction(ActionWatchlist.noFilterResults())
+            }
+
+        } else {
+
+            if (allMovies.isEmpty() && viewModel.movieFilterOption is FilterMovies.NoFilters && binding.svWatchlist.query.isNullOrEmpty()) {
+                viewModel.submitAction(ActionWatchlist.showEmptyState())
+            } else if (allMovies.isEmpty() && (viewModel.movieFilterOption !is FilterMovies.NoFilters || binding.svWatchlist.query.isNotEmpty())) {
+                viewModel.submitAction(ActionWatchlist.noFilterResults())
+            }
+
+        }
+    }
+
+    private fun renderLoading() {
+        binding.layoutWatchlistSkeleton.visible()
+    }
+
+    private fun renderError() {
+        viewModel.submitAction(ActionWatchlist.showToast("state Error"))
+    }
+
+    private fun renderEmptyList() {
+        binding.layoutEmpty.visible()
+        binding.imgEmptyList.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_list_24))
+        binding.emptyListHeading.text = getString(R.string.empty_list)
+        binding.emptyListSubHeading.text = getString(R.string.empty_list_sub_heading)
+        binding.imgvFilterWatchlist.gone()
+    }
+
+    private fun renderNoFilterResults() {
+        binding.layoutEmpty.visible()
+        binding.imgvFilterWatchlist.visible()
+        binding.imgEmptyList.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_outlet_24))
+        binding.emptyListHeading.text = getString(R.string.no_matches)
+        binding.emptyListSubHeading.text = getString(R.string.no_matches_sub_heading)
+    }
+
+    private fun cleanUi() {
+        binding.layoutEmpty.gone()
+        binding.layoutWatchlistSkeleton.gone()
+        binding.imgvFilterWatchlist.gone()
+        binding.recyclerviewWatchlist.gone()
     }
 
     private fun showConfirmationDialogUnwatch(movieId: String, title: String) {
@@ -493,22 +470,21 @@ class FragmentWatchlist : Fragment() {
             .show()
     }
 
-    private fun binding() {
-        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            viewModel.submitAction(
-                ActionWatchlist.LoadMediaDetails(
-                    mediaId, mediaTitle, posterPath, mediaType
-                )
-            )
+    private fun scrollToShow() = viewLifecycleOwner.lifecycleScope.launch {
+        delay(1000)
+        scrolledOnce = true
+        val position = watchlistShowAdapter.positionOfItem(arguments.showId)
+        binding.recyclerviewWatchlist.getChildAt(position)?.let {
+            val y = binding.recyclerviewWatchlist.y + binding.recyclerviewWatchlist.getChildAt(
+                position
+            ).y
+            binding.scrollWatchlist.smoothScrollTo(0, y.toInt())
         }
+    }
 
-        watchlistShowAdapter.onPosterClickListener = onClick
-        watchlistMovieAdapter.onPosterClickListener = onClick
-
-        binding.recyclerviewWatchlist.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[KeyPersistenceStore(getString(R.string.key_watchlist_previous_message)).asDataStoreKey()] = message
+        }
     }
 }

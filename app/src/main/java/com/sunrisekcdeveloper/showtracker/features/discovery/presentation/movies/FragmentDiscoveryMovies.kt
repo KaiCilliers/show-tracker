@@ -46,11 +46,8 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.Action
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -152,7 +149,7 @@ class FragmentDiscoveryMovies : Fragment() {
     private fun renderSpinner() {
         ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.movie_dropdown_array,
+            R.array.items_movie_filter,
             android.R.layout.simple_spinner_item
         ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

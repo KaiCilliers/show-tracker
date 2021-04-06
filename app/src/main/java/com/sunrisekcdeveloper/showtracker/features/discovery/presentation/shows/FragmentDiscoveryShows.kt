@@ -46,7 +46,6 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.Action
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -257,7 +256,7 @@ class FragmentDiscoveryShows : Fragment() {
     private fun renderSpinner() {
         ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.show_dropdown_array,
+            R.array.items_show_filter,
             android.R.layout.simple_spinner_item
         ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
