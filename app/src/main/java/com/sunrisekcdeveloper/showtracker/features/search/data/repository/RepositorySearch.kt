@@ -22,14 +22,24 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.common.util.*
+import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
+import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
+import com.sunrisekcdeveloper.showtracker.common.util.asUiModelPosterResult
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.paging.PagingSourceSearch
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList.DefaultList
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList.FilteredList
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList.SortedList
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 
 class RepositorySearch(
@@ -57,44 +67,5 @@ class RepositorySearch(
             ),
             pagingSourceFactory = { PagingSourceSearch(remote, query) }
         ).flow
-    }
-
-    override suspend fun searchMediaByTitle(
-        page: Int,
-        query: String
-    ): Flow<Resource<List<UIModelSearch>>> {
-        val movieFlow = flow { emit(remote.moviesByTitle(query, page)) }.flowOn(dispatcher)
-        val showFlow = flow { emit(remote.showsByTitle(query, page)) }.flowOn(dispatcher)
-
-        return combine(movieFlow, showFlow) { movieResponse, showResponse ->
-            val result = mutableListOf<UIModelSearch>()
-
-            when (movieResponse) {
-                is NetworkResult.Success -> {
-                    result.addAll(movieResponse.data.media.map { it.asUIModelSearch() })
-                }
-                is NetworkResult.Error -> {
-                    // todo dont swallow exceptions
-                    Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
-                }
-            }
-            when (showResponse) {
-                is NetworkResult.Success -> {
-                    result.addAll(showResponse.data.media.map { it.asUIModelSearch() })
-                }
-                is NetworkResult.Error -> {
-                    Timber.d("Error - show search call was not successful: ${showResponse.exception}")
-                }
-            }
-
-            // todo this can be done nicer
-            val filtered = result.filter { it.posterPath != "" }
-                .filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriate items
-            val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
-            { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
-            )
-
-            Resource.Success(sorted)
-        }
     }
 }

@@ -21,6 +21,8 @@ package com.sunrisekcdeveloper.showtracker.common.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -39,6 +41,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaT
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeason
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.ActionSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
@@ -54,9 +57,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*
 
-fun hideKeyboard(inputView: View, context: Context, rootView: View) {
+fun Context.hasConnection(): Boolean {
+    val cm = this.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var connected = false
+    cm.getNetworkCapabilities(cm.activeNetwork)?.let {
+        connected = it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+    }
+    return connected
+}
+
+fun View.hideKeyboard(context: Context, rootView: View) {
     val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(inputView.windowToken, 0)
+    imm.hideSoftInputFromWindow(this.windowToken, 0)
     rootView.requestFocus()
 }
 

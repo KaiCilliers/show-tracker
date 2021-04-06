@@ -16,15 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.search.domain.repository
+package com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.OrganisedList
 
-interface RepositorySearchContract {
-    suspend fun loadUnwatchedMedia() : Resource<List<UIModelPoster>>
-    fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>>
+class SortedList<T>(private val origin: OrganisedList<T>, private val comparator: Comparator<T>) :
+    OrganisedList<T> {
+    override fun list() = origin.list().sortedWith(comparator)
 }
