@@ -159,22 +159,20 @@ class RepositoryDetail(
 
         return combine(detailsFlow, statusFlow) { details, status ->
             details?.let {
-                status?.let {
                     Resource.Success(
                         details.asUIModelMovieDetail(
-                            status = if (!status.deleted) {
+                            status = if (status?.deleted == false) {
                                 MovieWatchlistStatus.Watchlisted
                             } else {
                                 MovieWatchlistStatus.NotWatchlisted
                             },
-                            watched = if (!status.deleted && status.watched) {
+                            watched = if (status?.deleted == false && status.watched) {
                                 WatchedStatus.Watched
                             } else {
                                 WatchedStatus.NotWatched
                             }
                         )
                     )
-                }
             } ?: Resource.Error(Exception("No movie with ID: $id exists in database"))
         }.onStart { emit(Resource.Loading) }
     }
@@ -201,24 +199,22 @@ class RepositoryDetail(
 
         return combine(detailsFlow, statusFlow) { details, status ->
             details?.let {
-                status?.let {
-                    Resource.Success(
-                        details.asUIModelShowDetail(
-                            watchlist = if (!status.deleted) {
-                                ShowWatchlistStatus.Watchlisted
-                            } else {
-                                ShowWatchlistStatus.NotWatchlisted
-                            },
-                            status = if (!status.deleted && status.upToDate) {
-                                ShowStatus.UpToDate
-                            } else if (!status.deleted && status.started) {
-                                ShowStatus.Started
-                            } else {
-                                ShowStatus.NotStarted
-                            }
-                        )
+                Resource.Success(
+                    details.asUIModelShowDetail(
+                        watchlist = if (status?.deleted == false) {
+                            ShowWatchlistStatus.Watchlisted
+                        } else {
+                            ShowWatchlistStatus.NotWatchlisted
+                        },
+                        status = if (status?.deleted == false && status.upToDate) {
+                            ShowStatus.UpToDate
+                        } else if (status?.deleted == false && status.started) {
+                            ShowStatus.Started
+                        } else {
+                            ShowStatus.NotStarted
+                        }
                     )
-                }
+                )
             } ?: Resource.Error(Exception("No show with ID: $id exists in database"))
         }.onStart { emit(Resource.Loading) }
     }

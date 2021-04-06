@@ -38,6 +38,7 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.util.ActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
@@ -85,6 +86,7 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
                     renderSuccess(state.data)
                 }
                 is StateDetailShow.Error -> {
+                    Timber.e(state.exception)
                     renderError()
                 }
             }

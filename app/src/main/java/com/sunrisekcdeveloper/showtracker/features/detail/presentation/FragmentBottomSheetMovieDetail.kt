@@ -36,6 +36,7 @@ import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetMovieDetailBind
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -91,6 +92,7 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
                     renderSuccess(state.data)
                 }
                 is StateDetailMovie.Error -> {
+                    Timber.e(state.exception)
                     renderError()
                 }
             }
