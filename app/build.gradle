@@ -27,7 +27,7 @@ android {
 //                                      "$projectDir/schemas".toString()]
 //            }
 //        }
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.sunrisekcdeveloper.showtracker.util.CustomTestRunner"
 
         buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
         buildConfigField("String", "TMDB_POSTER_BASE_URL", apikeysProperties['TMDB_POSTER_BASE_URL'])
