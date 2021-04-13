@@ -16,12 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.util
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import kotlinx.coroutines.flow.Flow
+import android.widget.Button
+import com.sunrisekcdeveloper.showtracker.common.util.click
 
-interface LoadPopularShowsUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelPoster>>
+class ActionButton(private val button: Button) : ButtonDetail {
+    override fun paint(background: Int, text: String, onClick: () -> Unit) {
+        if (background != -1) button.setBackgroundColor(background)
+        button.text = text
+        button.click { onClick() }
+    }
 }

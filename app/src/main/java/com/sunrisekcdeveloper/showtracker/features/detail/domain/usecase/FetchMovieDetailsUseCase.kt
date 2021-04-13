@@ -30,7 +30,7 @@ class FetchMovieDetailsUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : FetchMovieDetailsUseCaseContract {
     override suspend fun invoke(id: String): Flow<Resource<UIModelMovieDetail>> {
-        detailRepo.fetchAndSaveMovieDetails(id)
+        detailRepo.updateMovieDetails(id)
         return detailRepo.movieDetails(id)
     }
 }

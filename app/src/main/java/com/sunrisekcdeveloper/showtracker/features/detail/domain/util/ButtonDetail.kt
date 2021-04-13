@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.application
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.util
 
-interface AddMovieToWatchlistUseCaseContract {
-    suspend operator fun invoke(movieId: String)
+interface ButtonDetail {
+    fun paint(background: Int = -1, text: String, onClick: () -> Unit)
 }

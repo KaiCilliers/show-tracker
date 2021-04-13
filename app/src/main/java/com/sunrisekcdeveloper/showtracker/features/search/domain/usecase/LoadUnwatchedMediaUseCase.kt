@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.showtracker.features.search.domain.usecase
 
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -28,7 +28,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class LoadUnwatchedMediaUseCase(
     private val repo: RepositorySearchContract
 ) : LoadUnwatchedMediaUseCaseContract {
-    override suspend fun invoke(): Resource<List<UIModelUnwatchedSearch>> {
+    override suspend fun invoke(): Resource<List<UIModelPoster>> {
         return repo.loadUnwatchedMedia()
     }
 }

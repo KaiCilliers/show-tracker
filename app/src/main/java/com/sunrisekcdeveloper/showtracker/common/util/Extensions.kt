@@ -21,6 +21,8 @@ package com.sunrisekcdeveloper.showtracker.common.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -32,14 +34,15 @@ import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWit
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseEpisode
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeason
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.ActionSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
@@ -54,9 +57,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*
 
-fun hideKeyboard(inputView: View, context: Context, rootView: View) {
+fun Context.hasConnection(): Boolean {
+    val cm = this.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var connected = false
+    cm.getNetworkCapabilities(cm.activeNetwork)?.let {
+        connected = it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+    }
+    return connected
+}
+
+fun View.hideKeyboard(context: Context, rootView: View) {
     val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(inputView.windowToken, 0)
+    imm.hideSoftInputFromWindow(this.windowToken, 0)
     rootView.requestFocus()
 }
 
@@ -101,6 +115,16 @@ fun View.disabled() {
     this.isEnabled = false
 }
 
+fun UIModelDiscovery.asUIModelPosterResult() = UIModelPoster(
+    id = id,
+    title = mediaTitle,
+    posterPath = posterPath,
+    // TODO: 06-04-2021 include backdrop path to UIModelDiscovery
+    backdropPath = "",
+    type = mediaType,
+    listType = listType
+)
+
 fun ResponseStandardMedia.ResponseMovie.asUIModelDiscovery(listType: ListType) = UIModelDiscovery(
     id = "$id",
     mediaTitle = title,
@@ -118,10 +142,8 @@ fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = 
 )
 
 fun EntityShow.asUIModelShowDetail(
-    watchlisted: Boolean = false,
-    started: Boolean = false,
-    upToDate: Boolean = false,
-    deleted: Boolean
+    watchlist: ShowWatchlistStatus,
+    status: ShowStatus
 ) = UIModelShowDetail(
     id = id,
     name = title,
@@ -130,17 +152,15 @@ fun EntityShow.asUIModelShowDetail(
     certification = certification,
     firstAirDate = firstAirDate.substring(0..3),
     seasonsTotal = seasonTotal,
-    deleted = deleted,
-    watchlisted = watchlisted,
-    startedWatching = started,
-    upToDate = upToDate
+    watchlist = watchlist,
+    status = status
 )
 
-fun ResponseShowDetail.asEntityShow() = EntityShow(
+fun ResponseShowDetail.asEntityShow(certification: String = "N/A") = EntityShow(
     id = "$id",
     title = name,
     overview = overview,
-    certification = "N/A",
+    certification = certification,
     posterPath = posterPath ?: "",
     backdropPath = backdropPath ?: "",
     popularityValue = popularityValue,
@@ -151,20 +171,20 @@ fun ResponseShowDetail.asEntityShow() = EntityShow(
     lastUpdated = System.currentTimeMillis()
 )
 
-fun ResponseMovieDetail.asEntityMovie() = EntityMovie(
+fun ResponseMovieDetail.asEntityMovie(certification: String = "N/A") = EntityMovie(
     id = "$id",
     title = title,
     overview = overview,
     backdropPath = backdropPath ?: "",
     posterPath = posterPath ?: "",
-    certification = "",
+    certification = certification,
     releaseDate = releaseDate,
     runTime = "$runtime",
     rating = rating,
     popularityValue = popularityValue,
 )
 
-fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, deleted: Boolean) =
+fun EntityMovie.asUIModelMovieDetail(status: MovieWatchlistStatus, watched: WatchedStatus) =
     UIModelMovieDetail(
         id = id,
         title = title,
@@ -173,8 +193,7 @@ fun EntityMovie.asUIModelMovieDetail(watchlisted: Boolean, watched: Boolean, del
         releaseYear = releaseDate.substring(0..3),
         certification = certification,
         runtime = runTime,
-        deleted = deleted,
-        watchlisted = watchlisted,
+        status = status,
         watched = watched
     )
 
@@ -221,44 +240,49 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     ratingVotes = voteCount
 )
 
-fun UIModelSearch.asUIModelDiscovery() = UIModelDiscovery(
+fun UIModelSearch.asUiModelPosterResult() = UIModelPoster(
     id = id,
-    mediaTitle = title,
-    mediaType = mediaType,
+    title = title,
+    type = mediaType,
     listType = ListType.MoviePopular,
-    posterPath = posterPath
+    posterPath = posterPath,
+    // TODO: 06-04-2021 include backdropPath in model
+    backdropPath = ""
 )
 
-fun WatchlistMovieWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+fun WatchlistMovieWithDetails.asUiModelPosterResult() = UIModelPoster(
     id = status.id,
     title = details.title,
     posterPath = details.posterPath,
     backdropPath = details.backdropPath,
-    mediaType = MediaType.Movie
+    type = MediaType.Movie,
+    listType = ListType.noList()
 )
 
-fun WatchlistShowWithDetails.asUiModelUnwatchedSearch() = UIModelUnwatchedSearch(
+fun WatchlistShowWithDetails.asUiModelPosterResult() = UIModelPoster(
     id = status.id,
     title = details.title,
     posterPath = details.posterPath,
     backdropPath = details.backdropPath,
-    mediaType = MediaType.Show
+    type = MediaType.Show,
+    listType = ListType.noList()
 )
 
 // todo add lsat episode in season to EntityWatchlistSeason and/or EntitySeason
-fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) = UIModelWatchlistShow(
-    id = details.id,
-    title = details.title,
-    posterPath = details.posterPath,
-    currentEpisodeNumber = status.currentEpisodeNumber,
-    currentEpisodeName = status.currentEpisodeName,
-    currentSeasonNumber = status.currentSeasonNumber,
-    episodesInSeason = status.currentSeasonEpisodeTotal,
-    lastEpisodeInSeason = lastEpisodeInSeason,
-    started = status.started,
-    upToDate = status.upToDate,
-    dateAdded = status.dateAdded
-)
+fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) =
+    UIModelWatchlistShow(
+        id = details.id,
+        title = details.title,
+        posterPath = details.posterPath,
+        currentEpisodeNumber = status.currentEpisodeNumber,
+        currentEpisodeName = status.currentEpisodeName,
+        currentSeasonNumber = status.currentSeasonNumber,
+        episodesInSeason = status.currentSeasonEpisodeTotal,
+        lastEpisodeInSeason = lastEpisodeInSeason,
+        started = status.started,
+        upToDate = status.upToDate,
+        dateAdded = status.dateAdded
+    )
 
 fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
     id = details.id,

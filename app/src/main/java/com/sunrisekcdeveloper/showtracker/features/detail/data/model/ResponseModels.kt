@@ -70,13 +70,3 @@ data class ResponseCertificationAndReleaseDate(
     @SerializedName("release_date") val releaseDate: String,
     @SerializedName("type") val releaseType: Int
 )
-
-// To be used with ResponseCertificationAndReleaseDate
-sealed class ReleaseDateType {
-    object Premiere : ReleaseDateType() // 1
-    object TheatricalLimited : ReleaseDateType() // 2
-    object Theatrical : ReleaseDateType() // 3
-    object Digital : ReleaseDateType() // 4
-    object Physical : ReleaseDateType() // 5
-    object TV : ReleaseDateType() // 6
-}

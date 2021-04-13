@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.application
 
-interface RemoveMovieFromWatchlistUseCaseContract {
-    suspend operator fun invoke(movieId: String)
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+
+interface AddMediaToWatchlistUseCaseContract {
+    suspend operator fun invoke(id: String, type: MediaType)
 }

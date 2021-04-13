@@ -36,6 +36,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -45,11 +46,8 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.Action
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscoveryDirections
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -65,9 +63,9 @@ class FragmentDiscoveryMovies : Fragment() {
     private lateinit var binding: FragmentDiscoveryOnlyMoviesBinding
     private val viewModel: ViewModelDiscoveryMovies by viewModels()
 
-    private val adapterPopularMovies = PagingAdapterSimplePoster()
-    private val adapterTopRatedMovies = PagingAdapterSimplePoster()
-    private val adaptedUpcomingMovies = PagingAdapterSimplePoster()
+    private lateinit var adapterPopularMovies : PagingAdapterSimplePoster
+    private lateinit var adapterTopRatedMovies : PagingAdapterSimplePoster
+    private lateinit var adaptedUpcomingMovies : PagingAdapterSimplePoster
 
     private var job: Job? = null
 
@@ -79,6 +77,9 @@ class FragmentDiscoveryMovies : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        adapterPopularMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterTopRatedMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adaptedUpcomingMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         binding = FragmentDiscoveryOnlyMoviesBinding.inflate(inflater)
         renderSpinner()
         return binding.root
@@ -148,7 +149,7 @@ class FragmentDiscoveryMovies : Fragment() {
     private fun renderSpinner() {
         ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.movie_dropdown_array,
+            R.array.items_movie_filter,
             android.R.layout.simple_spinner_item
         ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -225,6 +226,9 @@ class FragmentDiscoveryMovies : Fragment() {
                 }
                 ListType.ShowAiringToday -> {
                     FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(6)
+                }
+                ListType.NoList -> {
+                    throw Exception("No list type associated with group")
                 }
             }
         )

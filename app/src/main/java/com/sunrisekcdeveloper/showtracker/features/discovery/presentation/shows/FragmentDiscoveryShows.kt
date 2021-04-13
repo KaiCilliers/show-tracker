@@ -36,6 +36,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
@@ -45,7 +46,6 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.Action
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.FragmentDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -63,9 +63,9 @@ class FragmentDiscoveryShows : Fragment() {
     private lateinit var binding: FragmentDiscoveryOnlyShowsBinding
     private val viewModel: ViewModelDiscoveryShows by viewModels()
 
-    private val adapterPopularShows = PagingAdapterSimplePoster()
-    private val adapterTopRatedShows = PagingAdapterSimplePoster()
-    private val adapterAiringShows = PagingAdapterSimplePoster()
+    private lateinit var adapterPopularShows : PagingAdapterSimplePoster
+    private lateinit var adapterTopRatedShows : PagingAdapterSimplePoster
+    private lateinit var adapterAiringShows : PagingAdapterSimplePoster
 
     private var job: Job? = null
 
@@ -77,6 +77,9 @@ class FragmentDiscoveryShows : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        adapterPopularShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterTopRatedShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
+        adapterAiringShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         binding = FragmentDiscoveryOnlyShowsBinding.inflate(inflater)
         renderSpinner()
         return binding.root
@@ -193,6 +196,9 @@ class FragmentDiscoveryShows : Fragment() {
                 ListType.ShowAiringToday -> {
                     FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(6)
                 }
+                ListType.NoList -> {
+                    throw Exception("No list type associated with group")
+                }
             }
         )
     }
@@ -250,7 +256,7 @@ class FragmentDiscoveryShows : Fragment() {
     private fun renderSpinner() {
         ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.show_dropdown_array,
+            R.array.items_show_filter,
             android.R.layout.simple_spinner_item
         ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

@@ -16,8 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.application
+package com.sunrisekcdeveloper.showtracker.features.detail.data.model
 
-interface RemoveShowFromWatchlistUseCaseContract {
-    suspend operator fun invoke(showId: String)
+// To be used with ResponseCertificationAndReleaseDate
+sealed class ReleaseDateType {
+    object Premiere : ReleaseDateType() // 1
+    object TheatricalLimited : ReleaseDateType() // 2
+    object Theatrical : ReleaseDateType() // 3
+    object Digital : ReleaseDateType() // 4
+    object Physical : ReleaseDateType() // 5
+    object TV : ReleaseDateType() // 6
 }

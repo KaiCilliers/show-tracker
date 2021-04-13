@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import kotlinx.coroutines.flow.Flow
-
-interface LoadPopularShowsUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelPoster>>
+sealed class ActionRepositoryMovie {
+    data class Add(val id: String) : ActionRepositoryMovie()
+    data class Remove(val id: String) : ActionRepositoryMovie()
+    data class Watch(val id: String) : ActionRepositoryMovie()
+    data class Unwatch(val id: String) : ActionRepositoryMovie()
 }

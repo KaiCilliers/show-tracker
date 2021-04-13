@@ -71,15 +71,30 @@
     <string name="key_disc_show_prev_message">key_disc_show_prev_message</string>
     <string name="key_search_prev_message">key_search_prev_message</string>
     <string name="key_watchlist_previous_message">key_watchlist_previous_message</string>
+    <string name="filter_show_by">Filter TV Shows by:</string>
+    <string name="filter_movie_by">Filter Movies by:</string>
 
-    <string-array name="movie_dropdown_array">
+    <string-array name="items_movie_filter">
         <item>Movie</item>
         <item>All</item>
         <item>TV Shows</item>
     </string-array>
-    <string-array name="show_dropdown_array">
+    <string-array name="items_show_filter">
         <item>TV Show</item>
         <item>All</item>
         <item>Movies</item>
+    </string-array>
+    <string-array name="items_show_sort">
+        <item>No Filters</item>
+        <item>Added Today</item>
+        <item>Watched Today</item>
+        <item>Started</item>
+        <item>Not Started</item>
+    </string-array>
+    <string-array name="items_movie_sort">
+        <item>No Filters</item>
+        <item>Watched</item>
+        <item>Not Watched</item>
+        <item>Added Today</item>
     </string-array>
 </resources>

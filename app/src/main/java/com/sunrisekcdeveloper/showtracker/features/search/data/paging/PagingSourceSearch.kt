@@ -24,6 +24,9 @@ import androidx.paging.PagingState
 import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList.DefaultList
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList.FilteredList
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList.SortedList
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import timber.log.Timber
 
@@ -75,16 +78,19 @@ class PagingSourceSearch(
             }
         }
 
-        // todo this can be done nicer
-        val filtered =
-            result.filter { it.popularity > 10 } // attempt to filer out the bulk of unappropriated items
-        val sorted = filtered.sortedWith(compareByDescending<UIModelSearch>
-        { it.ratingVotes }.thenByDescending { it.rating }.thenByDescending { it.popularity }
-        )
+        val organisedList = SortedList(
+            FilteredList(
+                DefaultList(
+                    result
+                ),
+                predicate = { it.popularity > 10 }),
+            comparator = compareByDescending<UIModelSearch> { it.ratingVotes }.thenByDescending { it.rating }
+                .thenByDescending { it.popularity }
+        ).list()
 
         nextKey = when {
             // some business logic to improve search experience
-            sorted.isEmpty() || (sorted.size < 5 && position > 20) -> {
+            organisedList.isEmpty() || (organisedList.size < 5 && position > 20) -> {
                 null
             }
             else -> {
@@ -98,7 +104,7 @@ class PagingSourceSearch(
         }
 
         return LoadResult.Page(
-            data = sorted,
+            data = organisedList,
             prevKey = prevKey,
             nextKey = nextKey
         )

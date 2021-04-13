@@ -26,7 +26,15 @@ data class UIModelMovieDetail(
     val releaseYear: String,
     val certification: String,
     val runtime: String,
-    val watchlisted: Boolean,
-    val deleted: Boolean,
-    val watched: Boolean
+    val status: MovieWatchlistStatus,
+    val watched: WatchedStatus
 )
+
+sealed class MovieWatchlistStatus {
+    object Watchlisted : MovieWatchlistStatus()
+    object NotWatchlisted : MovieWatchlistStatus()
+}
+sealed class WatchedStatus {
+    object Watched : WatchedStatus()
+    object NotWatched : WatchedStatus()
+}

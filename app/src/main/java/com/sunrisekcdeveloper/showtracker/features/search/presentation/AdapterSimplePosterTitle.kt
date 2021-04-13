@@ -23,22 +23,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
 import com.sunrisekcdeveloper.showtracker.common.util.EndpointBackdropStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.databinding.ItemSimplePosterAndTitleBinding
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 
 class AdapterSimplePosterTitle(
-    private val glide: RequestManager,
+    private val image: ImageLoadingContract,
     private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
-) : ListAdapter<UIModelUnwatchedSearch, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(
-    UNWATCHED_SEARCH_MODEL_COMPARATOR
+) : ListAdapter<UIModelPoster, AdapterSimplePosterTitle.ViewHolderSimplePosterTitle>(
+    UIMODEL_POSTER_RESULT_COMPARATOR
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSimplePosterTitle =
-        ViewHolderSimplePosterTitle.from(parent, glide, onPosterClickListener)
+        ViewHolderSimplePosterTitle.from(parent, image, onPosterClickListener)
 
     fun setPosterClickAction(clickListener: OnPosterClickListener) {
         onPosterClickListener = clickListener
@@ -50,27 +49,24 @@ class AdapterSimplePosterTitle(
 
     class ViewHolderSimplePosterTitle(
         val binding: ItemSimplePosterAndTitleBinding,
-        private val glide: RequestManager,
+        private val glide: ImageLoadingContract,
         private val onPosterClickListener: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: UIModelUnwatchedSearch) {
+        fun bind(data: UIModelPoster) {
             binding.root.click {
-                onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
+                onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.type)
             }
             binding.cardPoster.click {
-                onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.mediaType)
+                onPosterClickListener.onClick(data.id, data.title, data.posterPath, data.type)
             }
-            glide.load(EndpointBackdropStandard(data.backdropPath).url())
-                .centerCrop()
-                .transition(DrawableTransitionOptions.withCrossFade(150))
-                .into(binding.imgvItemMediaPoster)
+            glide.load(EndpointBackdropStandard(data.backdropPath).url(), binding.imgvItemMediaPoster)
             binding.tvMediaTitle.text = data.title
         }
 
         companion object {
             fun from(
                 parent: ViewGroup,
-                glide: RequestManager,
+                glide: ImageLoadingContract,
                 posterClickListener: OnPosterClickListener
             ): ViewHolderSimplePosterTitle = ViewHolderSimplePosterTitle(
                 ItemSimplePosterAndTitleBinding.inflate(
@@ -81,22 +77,21 @@ class AdapterSimplePosterTitle(
     }
 
     companion object {
-        private val UNWATCHED_SEARCH_MODEL_COMPARATOR =
-            object : DiffUtil.ItemCallback<UIModelUnwatchedSearch>() {
-                override fun areItemsTheSame(
-                    oldItem: UIModelUnwatchedSearch,
-                    newItem: UIModelUnwatchedSearch
-                ): Boolean = oldItem.id == newItem.id
+        private val UIMODEL_POSTER_RESULT_COMPARATOR = object : DiffUtil.ItemCallback<UIModelPoster>() {
+            override fun areItemsTheSame(
+                oldItem: UIModelPoster,
+                newItem: UIModelPoster
+            ): Boolean = oldItem.id == newItem.id
 
-                override fun areContentsTheSame(
-                    oldItem: UIModelUnwatchedSearch,
-                    newItem: UIModelUnwatchedSearch
-                ): Boolean {
-                    // todo don't include comparing MediaType objects, i am not sure about the behaviour of comparing Objects
-                    return (oldItem.id == newItem.id &&
-                            oldItem.title == newItem.title &&
-                            oldItem.backdropPath == newItem.backdropPath)
-                }
-            }
+            override fun areContentsTheSame(
+                oldItem: UIModelPoster,
+                newItem: UIModelPoster
+            ): Boolean = oldItem.id == newItem.id &&
+                    oldItem.title == newItem.title &&
+                    oldItem.posterPath == newItem.posterPath &&
+                    oldItem.backdropPath == newItem.backdropPath &&
+                    oldItem.listType == newItem.listType &&
+                    oldItem.type == newItem.type
+        }
     }
 }

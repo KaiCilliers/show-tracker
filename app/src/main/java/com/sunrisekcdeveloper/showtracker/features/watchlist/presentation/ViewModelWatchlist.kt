@@ -55,9 +55,6 @@ class ViewModelWatchlist @ViewModelInject constructor(
     var movieFilterOption: FilterMovies = FilterMovies.NoFilters
     var showFilterOption: FilterShows = FilterShows.NoFilters
 
-    fun showSearchQuery() = showSearchQuery
-    fun movieSearchQuery() = movieSearchQuery
-
     fun updateShowSearchQuery(query: String) {
         showSearchQuery = query
         // todo not pretty but it works
@@ -153,7 +150,6 @@ class ViewModelWatchlist @ViewModelInject constructor(
 
             // If both are success
             if (resourceMovie is Resource.Success && resourceShow is Resource.Success) {
-                Timber.d("rabbithorse - both are a success: shows: ${resourceShow.data.size} and movies: ${resourceMovie.data.size}")
                 return@combine StateWatchlist.success(
                     moviesList = resourceMovie.data.filter {
                         if (movieSearchQuery.isEmpty()) {
@@ -171,7 +167,7 @@ class ViewModelWatchlist @ViewModelInject constructor(
                     }
                 )
             } else {
-                return@combine StateWatchlist.Error(Exception("Fetching watchlist data unkown state..."))
+                return@combine StateWatchlist.Error(Exception("Fetching watchlist data unknown state..."))
             }
             // todo consider adding conflate() to flow
         }.collect {

@@ -16,12 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.detail.data.util
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import kotlinx.coroutines.flow.Flow
-
-interface LoadPopularShowsUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelPoster>>
+interface CertificationsContract {
+    val noneAvailable: String
+        get() = "N/A"
+    fun from(iso: String): String
+    class Smart(private val origin: CertificationsContract) {
+        fun fromUS() = origin.from("US")
+    }
 }

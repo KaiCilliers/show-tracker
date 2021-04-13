@@ -19,22 +19,21 @@
 package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 
 sealed class StateSearch {
     object EmptyWatchlist : StateSearch()
-    data class EmptySearch(val data: List<UIModelUnwatchedSearch>) : StateSearch()
+    data class EmptySearch(val data: List<UIModelPoster>) : StateSearch()
     object NoResultsFound : StateSearch()
     object Loading : StateSearch()
-    data class Success(val data: PagingData<UIModelDiscovery>) : StateSearch()
+    data class Success(val data: PagingData<UIModelPoster>) : StateSearch()
     data class Error(val exception: Exception) : StateSearch()
 
     companion object {
         fun emptyWatchlist() = EmptyWatchlist
-        fun emptySearch(unWatchedList: List<UIModelUnwatchedSearch>) = EmptySearch(unWatchedList)
+        fun emptySearch(unWatchedList: List<UIModelPoster>) = EmptySearch(unWatchedList)
         fun noResultsFound() = NoResultsFound
         fun loading() = Loading
-        fun success(pagingData: PagingData<UIModelDiscovery>) = Success(pagingData)
+        fun success(pagingData: PagingData<UIModelPoster>) = Success(pagingData)
         fun error(errorMessage: String) = Error(Exception(errorMessage))
     }
 }

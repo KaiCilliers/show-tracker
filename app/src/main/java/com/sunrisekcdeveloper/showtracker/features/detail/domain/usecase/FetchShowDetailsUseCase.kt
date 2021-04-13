@@ -30,7 +30,7 @@ class FetchShowDetailsUseCase(
     private val detailRepo: RepositoryDetailContract
 ) : FetchShowDetailsUseCaseContract {
     override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> {
-        detailRepo.fetchAndSaveShowDetails(id)
+        detailRepo.updateShowDetails(id)
         return detailRepo.showDetails(id)
     }
 

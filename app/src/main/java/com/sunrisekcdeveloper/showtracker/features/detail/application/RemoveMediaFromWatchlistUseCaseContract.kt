@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.detail.application
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 
-interface LoadPopularShowsUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelPoster>>
+interface RemoveMediaFromWatchlistUseCaseContract {
+    suspend operator fun invoke(id: String, type: MediaType)
 }

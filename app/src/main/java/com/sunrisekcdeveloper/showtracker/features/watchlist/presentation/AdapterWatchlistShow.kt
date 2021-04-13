@@ -26,17 +26,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
 import timber.log.Timber
 
 class AdapterWatchlistShow(
+    private val image: ImageLoadingContract,
     var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _-> }
 ) : ListAdapter<UIModelWatchlistShow, AdapterWatchlistShow.ViewHolderWatchlistShow>(WATCHLIST_SHOW_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
-        ViewHolderWatchlistShow.from(parent, onButtonClicked, onPosterClickListener)
+        ViewHolderWatchlistShow.from(parent, image, onButtonClicked, onPosterClickListener)
 
     override fun onBindViewHolder(holder: ViewHolderWatchlistShow, position: Int) {
         holder.bind(getItem(position))
@@ -61,17 +63,12 @@ class AdapterWatchlistShow(
 
     class ViewHolderWatchlistShow(
         val binding: ItemWatchlistShowBinding,
+        private val image: ImageLoadingContract,
         private val onButtonClicked: OnShowStatusClickListener,
         private val onPosterClickListener: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UIModelWatchlistShow) {
-            Glide.with(binding.root)
-                .load(EndpointPosterStandard(item.posterPath).url())
-                .centerCrop()
-                .error(R.drawable.error_poster)
-                .transition(DrawableTransitionOptions.withCrossFade(100))
-                .into(binding.imgvWatchlistShowPoster)
-
+            image.load(EndpointPosterStandard(item.posterPath).url(), binding.imgvWatchlistShowPoster)
             binding.imgvWatchlistShowPoster.click {
                 onPosterClickListener.onClick(
                     item.id,
@@ -148,13 +145,6 @@ class AdapterWatchlistShow(
                     binding.btnWatchlistShowMarkAsWatched.visible()
                     binding.tvWatchlistShowEpisodeName.visible()
 
-//                    item.
-//                        @643
-//                        @692
-//                            kort 3/50
-//                            645/692/50
-
-                    // Progress indicator
                     val progress = binding.progressWatchlistShowSeasonProgress
                     progress.max = item.episodesInSeason
                     progress.progress = item.episodesInSeason - (item.lastEpisodeInSeason - item.currentEpisodeNumber)
@@ -171,12 +161,13 @@ class AdapterWatchlistShow(
         companion object {
             fun from(
                 parent: ViewGroup,
+                image: ImageLoadingContract,
                 onButtonClicked: OnShowStatusClickListener,
                 posterClickListener: OnPosterClickListener
             ) = ViewHolderWatchlistShow(
                 ItemWatchlistShowBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), onButtonClicked, posterClickListener
+                ), image, onButtonClicked, posterClickListener
             )
         }
     }

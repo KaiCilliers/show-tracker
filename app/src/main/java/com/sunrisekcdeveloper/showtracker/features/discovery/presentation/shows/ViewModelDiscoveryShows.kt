@@ -27,8 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadPop
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedShowsUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -55,10 +54,10 @@ class ViewModelDiscoveryShows @ViewModelInject constructor(
         }
     }
 
-    val streamPopularShows: Flow<PagingData<UIModelDiscovery>> = loadPopularShowsUseCase()
+    val streamPopularShows: Flow<PagingData<UIModelPoster>> = loadPopularShowsUseCase()
         .cachedIn(viewModelScope)
-    val streamTopRatedShows: Flow<PagingData<UIModelDiscovery>> = loadTopRatedShowsUseCase()
+    val streamTopRatedShows: Flow<PagingData<UIModelPoster>> = loadTopRatedShowsUseCase()
         .cachedIn(viewModelScope)
-    val streamAiringTodayShows: Flow<PagingData<UIModelDiscovery>> = loadAiringTodayShowsUseCase()
+    val streamAiringTodayShows: Flow<PagingData<UIModelPoster>> = loadAiringTodayShowsUseCase()
         .cachedIn(viewModelScope)
 }

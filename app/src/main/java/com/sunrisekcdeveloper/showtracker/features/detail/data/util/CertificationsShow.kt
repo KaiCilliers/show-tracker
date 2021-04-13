@@ -16,12 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.detail.data.util
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowCertification
 
-interface LoadPopularShowsUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelPoster>>
+class CertificationsShow(private val data: List<ResponseShowCertification>) : CertificationsContract {
+    override fun from(iso: String): String {
+        if (data.isEmpty()) return noneAvailable
+        return data.find { it.iso == iso }?.certification ?: data[0].certification
+    }
 }

@@ -26,8 +26,16 @@ data class UIModelShowDetail(
     val certification: String,
     val firstAirDate: String,
     val seasonsTotal: Int,
-    val watchlisted: Boolean,
-    val startedWatching: Boolean,
-    val deleted: Boolean,
-    val upToDate: Boolean
+    val watchlist: ShowWatchlistStatus,
+    val status: ShowStatus
 )
+
+sealed class ShowWatchlistStatus {
+    object Watchlisted : ShowWatchlistStatus()
+    object NotWatchlisted : ShowWatchlistStatus()
+}
+sealed class ShowStatus {
+    object NotStarted : ShowStatus()
+    object Started : ShowStatus()
+    object UpToDate : ShowStatus()
+}

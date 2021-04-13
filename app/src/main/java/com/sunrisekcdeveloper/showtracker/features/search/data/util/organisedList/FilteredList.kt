@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.application
+package com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList
 
-import androidx.paging.PagingData
-import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import kotlinx.coroutines.flow.Flow
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.OrganisedList
 
-interface LoadPopularShowsUseCaseContract {
-    operator fun invoke(): Flow<PagingData<UIModelPoster>>
+class FilteredList<T>(private val origin: OrganisedList<T>, private val predicate: (T) -> Boolean) :
+    OrganisedList<T> {
+    override fun list() = origin.list().filter { predicate(it) }
 }

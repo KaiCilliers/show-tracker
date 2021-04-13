@@ -16,8 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.application
+package com.sunrisekcdeveloper.showtracker.features.search.domain.model
 
-interface AddShowToWatchlistUseCaseContract {
-    suspend operator fun invoke(showId: String)
-}
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
+import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+
+data class UIModelPoster(
+    val id: String,
+    val title: String,
+    val posterPath: String,
+    val backdropPath: String,
+    val type: MediaType,
+    val listType: ListType
+)

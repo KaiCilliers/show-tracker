@@ -16,17 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
+package com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList
 
-import com.sunrisekcdeveloper.showtracker.features.detail.application.RemoveShowFromWatchlistUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.OrganisedList
 
-@ExperimentalCoroutinesApi
-class RemoveShowFromWatchlistUseCase(
-    private val detailRepo: RepositoryDetailContract
-) : RemoveShowFromWatchlistUseCaseContract {
-    override suspend fun invoke(showId: String) {
-        detailRepo.removeShow(showId)
-    }
+class SortedList<T>(private val origin: OrganisedList<T>, private val comparator: Comparator<T>) :
+    OrganisedList<T> {
+    override fun list() = origin.list().sortedWith(comparator)
 }

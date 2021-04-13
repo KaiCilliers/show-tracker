@@ -27,7 +27,7 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTop
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -53,10 +53,10 @@ class ViewModelDiscoveryMovies @ViewModelInject constructor(
         }
     }
 
-    val streamPopularMovies: Flow<PagingData<UIModelDiscovery>> = loadPopularMoviesUseCase()
+    val streamPopularMovies: Flow<PagingData<UIModelPoster>> = loadPopularMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamTopRatedMovies: Flow<PagingData<UIModelDiscovery>> = loadTopRatedMoviesUseCase()
+    val streamTopRatedMovies: Flow<PagingData<UIModelPoster>> = loadTopRatedMoviesUseCase()
         .cachedIn(viewModelScope)
-    val streamUpcomingMovies: Flow<PagingData<UIModelDiscovery>> = loadUpcomingMoviesUseCase()
+    val streamUpcomingMovies: Flow<PagingData<UIModelPoster>> = loadUpcomingMoviesUseCase()
         .cachedIn(viewModelScope)
 }

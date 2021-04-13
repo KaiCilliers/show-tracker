@@ -16,17 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
+package com.sunrisekcdeveloper.showtracker.features.search.data.util
 
-import com.sunrisekcdeveloper.showtracker.features.detail.application.AddMovieToWatchlistUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-
-@ExperimentalCoroutinesApi
-class AddMovieToWatchlistUseCase(
-    private val detailRepo: RepositoryDetailContract
-) : AddMovieToWatchlistUseCaseContract {
-    override suspend fun invoke(movieId: String) {
-        detailRepo.addMovie(movieId)
-    }
+interface OrganisedList<T> {
+    fun list(): List<T>
 }

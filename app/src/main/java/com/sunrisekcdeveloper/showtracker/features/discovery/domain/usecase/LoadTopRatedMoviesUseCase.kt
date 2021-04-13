@@ -19,15 +19,20 @@
 package com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase
 
 import androidx.paging.PagingData
+import androidx.paging.map
+import com.sunrisekcdeveloper.showtracker.common.util.asUIModelPosterResult
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTopRatedMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
+import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @ExperimentalCoroutinesApi
 class LoadTopRatedMoviesUseCase(
     private val discoveryRepo: RepositoryDiscoveryContract
 ) : LoadTopRatedMoviesUseCaseContract {
-    override fun invoke(): Flow<PagingData<UIModelDiscovery>> = discoveryRepo.topRatedMoviesStream()
+    override fun invoke(): Flow<PagingData<UIModelPoster>> =
+        discoveryRepo.topRatedMoviesStream()
+            .map { pagingData -> pagingData.map { it.asUIModelPosterResult() } }
 }

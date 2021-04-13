@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.domain.model
+package com.sunrisekcdeveloper.showtracker.features.search.data.util.organisedList
 
-data class UIModelPoster(
-    val id: String,
-    val posterPath: String,
-    val mediaType: MediaType
-)
+import com.sunrisekcdeveloper.showtracker.features.search.data.util.OrganisedList
+
+class DefaultList<T>(private val list: List<T>) : OrganisedList<T> {
+    override fun list(): List<T> = list
+}

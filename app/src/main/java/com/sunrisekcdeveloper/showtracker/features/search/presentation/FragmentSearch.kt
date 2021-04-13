@@ -18,15 +18,10 @@
 
 package com.sunrisekcdeveloper.showtracker.features.search.presentation
 
-import android.app.Activity
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -40,20 +35,16 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentSearchBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -64,7 +55,7 @@ class FragmentSearch : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: ViewModelSearch by viewModels()
 
-    private val adapterSearchResults = PagingAdapterSimplePosterMedium()
+    private lateinit var adapterSearchResults: PagingAdapterSimplePosterMedium
     lateinit var adapterUnwatchedContent: AdapterSimplePosterTitle
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var gridLayoutManager: GridLayoutManager
@@ -82,88 +73,118 @@ class FragmentSearch : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        savedInstanceState?.getString(LAST_SEARCH_QUERY)?.let {
-            binding.svSearch.setQuery(it, false)
-            viewModel.submitAction(ActionSearch.searchForMedia(it))
-        }
+        init()
         setup()
+        observeSearchInput()
+        observeSnackBarEvents()
+        observeResultsState()
         observeViewModel()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(LAST_SEARCH_QUERY, binding.svSearch.query.trim().toString())
+    private fun init() {
+        viewModel.submitAction(
+            if (requireContext().hasConnection()) ActionSearch.deviceIsOnline()
+            else ActionSearch.deviceIsOffline()
+        )
     }
 
-    private suspend fun consumedSnackBarMessage(message: String) {
-        dataStore.edit { settings ->
-            settings[KeyPersistenceStore(getString(R.string.key_search_prev_message)).asDataStoreKey()] = message
+    private fun setup() {
+        adapterSearchResults = PagingAdapterSimplePosterMedium(ImageLoadingStandardGlide(this))
+        adapterUnwatchedContent =
+            AdapterSimplePosterTitle(ImageLoadingStandardGlide(this)) { _, _, _, _ -> }
+
+        adapterSearchResults.setPosterClickAction { mediaId, mediaTitle, posterPath, mediaType ->
+            viewModel.submitAction(
+                ActionSearch.loadMediaDetails(
+                    mediaId, mediaTitle, posterPath, mediaType
+                )
+            )
+        }
+
+        linearLayoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.VERTICAL, false
+        )
+        gridLayoutManager = GridLayoutManager(
+            requireContext(),
+            3,
+            GridLayoutManager.VERTICAL,
+            false
+        )
+
+        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.backButtonPressed()) }
+
+        // programmatically setting SearchView attributes due to it not working in layout for some reason
+        binding.svSearch.setIconifiedByDefault(false)
+        binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
+    }
+
+    private fun observeSearchInput() = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+        binding.svSearch.getQueryTextChangedStateFlow()
+            .debounce(300)
+            .filter { query ->
+                if (query.isEmpty()) {
+                    adapterSearchResults.submitData(PagingData.empty())
+                    viewModel.submitAction(ActionSearch.loadUnwatchedContent())
+                    return@filter false
+                }
+                return@filter true
+            }
+            .distinctUntilChanged()
+            .collect { query ->
+                viewModel.submitAction(ActionSearch.searchForMedia(query))
+            }
+    }
+
+    private fun observeSnackBarEvents() = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+        findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+            getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
+                .collect {
+                    delay(300)
+                    viewModel.submitAction(ActionSearch.showSnackBar(it))
+                }
         }
     }
 
-    private fun isConnected() {
-
-        try {
-            val cm =
-                requireContext().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-            val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
-
-            capabilities?.let {
-                if (
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-                ) {
-                    viewModel.submitAction(ActionSearch.deviceIsOnline())
-                } else {
-                    viewModel.submitAction(ActionSearch.deviceIsOffline())
+    private fun observeResultsState() = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+        adapterSearchResults.loadStateFlow
+            .distinctUntilChangedBy { it.refresh }
+            .filter { it.refresh is LoadState.NotLoading }
+            .collect {
+                binding.recyclerviewSearch.scrollToPosition(0)
+                if (adapterSearchResults.itemCount == 0) {
+                    viewModel.submitAction(ActionSearch.notifyNoSearchResults())
                 }
             }
-        } catch (exception: Exception) {
-        }
     }
 
     private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-                getLiveData<String>(KeyPersistenceStore(getString(R.string.key_disc_snack_bar)).value()).asFlow()
-                    .collect {
-                        delay(300)
-                        viewModel.submitAction(ActionSearch.showSnackBar(it))
-                    }
-            }
-        }
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            // todo this is bad, this causes UI flashing :(
             cleanUI()
             when (state) {
                 is StateSearch.EmptySearch -> {
-                    stateEmpty(state.data)
+                    renderEmpty(state.data)
                 }
                 StateSearch.NoResultsFound -> {
-                    stateNoResults()
+                    renderNoResults()
                 }
                 StateSearch.Loading -> {
-                    stateLoading()
+                    renderLoading()
                 }
                 is StateSearch.Success -> {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        stateSuccess(state.data)
-                    }
+                    renderSuccess(state.data)
                 }
                 is StateSearch.Error -> {
-                    stateError()
+                    renderError()
                 }
                 StateSearch.EmptyWatchlist -> {
-                    stateEmptyWatchlist()
+                    renderEmptyWatchlist()
                 }
             }
         }
         viewModel.eventsFlow.onEach { event ->
             when (event) {
                 is EventSearch.LoadMediaDetails -> {
-                    hideKeyboard(binding.svSearch, requireContext(), binding.root)
+                    binding.svSearch.hideKeyboard(requireContext(), binding.root)
                     findNavController().navigate(
                         when (event.type) {
                             MediaType.Movie -> {
@@ -191,7 +212,7 @@ class FragmentSearch : Fragment() {
                 }
                 is EventSearch.ShowSnackBar -> {
                     dataStore.data.take(1).collect {
-                        showSnackBar(event.message)
+                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
                         consumedSnackBarMessage(event.message)
                     }
                 }
@@ -199,51 +220,29 @@ class FragmentSearch : Fragment() {
         }.observeInLifecycle(viewLifecycleOwner)
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun stateError() {
+    private fun renderError() {
         binding.imageView.visible()
     }
 
-    private fun stateLoading() {
+    // TODO: 06-04-2021 loading state search
+    private fun renderLoading() {
 
     }
 
-    private suspend fun stateSuccess(page: PagingData<UIModelDiscovery>) {
-        binding.tvHeaderWatchlistContent.text = getString(R.string.results)
-        binding.recyclerviewSearch.layoutManager = gridLayoutManager
-        binding.recyclerviewSearch.adapter = adapterSearchResults
-        binding.recyclerviewSearch.visible()
-        binding.tvHeaderWatchlistContent.visible()
-
-        adapterSearchResults.submitData(page)
-
-        // Here we launch a coroutine which is responsible for scrolling the list to the top
-        // when the list is refreshed from the network
+    private fun renderSuccess(page: PagingData<UIModelPoster>) =
         viewLifecycleOwner.lifecycleScope.launch {
+            binding.tvHeaderWatchlistContent.text = getString(R.string.results)
+            binding.recyclerviewSearch.layoutManager = gridLayoutManager
+            binding.recyclerviewSearch.adapter = adapterSearchResults
+            binding.recyclerviewSearch.visible()
+            binding.tvHeaderWatchlistContent.visible()
 
-            // PagingAdapter exposes a Flow`which emits changes in the adapter's loads state
-            // via a CombinedLoadState object
-            adapterSearchResults.loadStateFlow
-                // Only emit when the REFRESH LoadState changes
-                .distinctUntilChangedBy { it.refresh }
-                // Only emit when REFRESH completes i.e., NotLoading
-                .filter { it.refresh is LoadState.NotLoading }
-                // Scroll to the top of the list
-                .collect {
-                    binding.recyclerviewSearch.scrollToPosition(0)
-                    if (adapterSearchResults.itemCount == 0) {
-                        viewModel.submitAction(ActionSearch.notifyNoSearchResults())
-                    }
-                }
+            adapterSearchResults.submitData(page)
         }
-    }
 
     // todo handle case where unwatched movies and shows are empty
     //  perhaps show some image that says user should add stuff to their watchlist (along with same header as below)
-    private fun stateEmpty(list: List<UIModelUnwatchedSearch>) {
+    private fun renderEmpty(list: List<UIModelPoster>) {
         binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
         binding.tvHeaderWatchlistContent.visible()
 
@@ -264,13 +263,13 @@ class FragmentSearch : Fragment() {
 
     }
 
-    private fun stateEmptyWatchlist() {
+    private fun renderEmptyWatchlist() {
         binding.tvHeaderWatchlistContent.text = getString(R.string.unwatched_shows_movies)
         binding.tvHeaderWatchlistContent.visible()
         binding.layoutEmpty.visible()
     }
 
-    private fun stateNoResults() {
+    private fun renderNoResults() {
         binding.tvHeaderNoResults.visible()
         binding.tvSubHeaderNoResults.visible()
     }
@@ -284,54 +283,10 @@ class FragmentSearch : Fragment() {
         binding.tvHeaderWatchlistContent.gone()
     }
 
-
-    private fun setup() {
-        isConnected()
-        // todo consider injecting Glide to get the fragment context, thus glide attaching to its lifecycle
-        adapterUnwatchedContent = AdapterSimplePosterTitle(Glide.with(this)) { _, _, _, _ -> }
-        linearLayoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.VERTICAL, false
-        )
-        gridLayoutManager = GridLayoutManager(
-            requireContext(),
-            3,
-            GridLayoutManager.VERTICAL,
-            false
-        )
-        // todo programatically set searchview attributes due to it not working in layout for some reason
-        binding.svSearch.setIconifiedByDefault(false)
-        binding.svSearch.queryHint = getString(R.string.search_movie_show_hint)
-
-        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            viewModel.submitAction(
-                ActionSearch.loadMediaDetails(
-                    mediaId, mediaTitle, posterPath, mediaType
-                )
-            )
+    private suspend fun consumedSnackBarMessage(message: String) {
+        dataStore.edit { settings ->
+            settings[KeyPersistenceStore(getString(R.string.key_search_prev_message)).asDataStoreKey()] =
+                message
         }
-
-        adapterSearchResults.setPosterClickAction(onClick)
-
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            binding.svSearch.getQueryTextChangedStateFlow()
-                .debounce(300)
-                .filter { query ->
-                    if (query.isEmpty()) {
-                        adapterSearchResults.submitData(PagingData.empty())
-                        viewModel.submitAction(ActionSearch.loadUnwatchedContent())
-                        return@filter false
-                    }
-                    return@filter true
-                }
-                .distinctUntilChanged()
-                .collect { query ->
-                    viewModel.submitAction(ActionSearch.searchForMedia(query))
-                }
-        }
-        binding.toolbarSearch.setNavigationOnClickListener { viewModel.submitAction(ActionSearch.backButtonPressed()) }
-    }
-
-    companion object {
-        private const val LAST_SEARCH_QUERY: String = "last_search_query"
     }
 }
