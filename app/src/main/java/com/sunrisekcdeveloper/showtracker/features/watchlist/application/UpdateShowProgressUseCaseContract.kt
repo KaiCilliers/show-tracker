@@ -22,4 +22,9 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.Update
 
 interface UpdateShowProgressUseCaseContract {
     suspend operator fun invoke(action: UpdateShowAction)
+    class Fake() : UpdateShowProgressUseCaseContract {
+        override suspend fun invoke(action: UpdateShowAction) {
+            TODO("Not yet implemented")
+        }
+    }
 }

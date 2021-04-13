@@ -22,7 +22,16 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 interface FetchWatchlistShowsUseCaseContract {
     suspend operator fun invoke(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>>
+    class Fake() : FetchWatchlistShowsUseCaseContract {
+        override suspend fun invoke(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
+            return flow {
+                emit(Resource.loading())
+                emit(Resource.success(UIModelWatchlistShow.create(45)))
+            }
+        }
+    }
 }

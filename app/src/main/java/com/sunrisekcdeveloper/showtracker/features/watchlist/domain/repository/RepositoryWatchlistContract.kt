@@ -55,4 +55,62 @@ interface RepositoryWatchlistContract {
     suspend fun updateWatchlistShowAsUpToDate(showId: String)
 
     suspend fun firstEpisodeFromSeason(showId: String, season: Int): EntityEpisode
+
+    class Fake() : RepositoryWatchlistContract {
+        override fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
+            TODO("Not yet implemented")
+        }
+
+        override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun currentShow(showId: String): EntityShow {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun currentWatchlistShow(showId: String): EntityWatchlistShow {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun insertNewWatchlistEpisode(showId: String, season: Int, episode: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun incrementSeasonCurrentEpisode(showId: String, currentSeason: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun incrementWatchlistShowCurrentEpisode(showId: String) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun updateSeasonAsWatched(showId: String, season: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun insertNewWatchlistSeason(showId: String, season: Int, episode: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun updateWatchlistShowEpisodeAndSeason(
+            showId: String,
+            newSeason: Int,
+            newEpisode: Int
+        ) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun updateWatchlistShowAsUpToDate(showId: String) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun firstEpisodeFromSeason(showId: String, season: Int): EntityEpisode {
+            TODO("Not yet implemented")
+        }
+    }
 }
