@@ -29,6 +29,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterSh
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -37,6 +38,40 @@ import timber.log.Timber
 class RepositoryWatchlist(
     private val database: TrackerDatabase
 ) : RepositoryWatchlistContract {
+
+    override suspend fun updateShowProgress(action: UpdateShowAction) {
+        when (action) {
+            is UpdateShowAction.IncrementEpisode -> {
+                currentWatchlistShow(action.showId).apply {
+                    markEpisodeAsWatched(id, currentSeasonNumber, currentEpisodeNumber)
+                    insertNewWatchlistEpisode(id, currentSeasonNumber, currentEpisodeNumber + 1)
+                    incrementSeasonCurrentEpisode(id, currentSeasonNumber)
+                    incrementWatchlistShowCurrentEpisode(id)
+                }
+            }
+            is UpdateShowAction.CompleteSeason -> {
+                val show = currentShow(action.showId)
+                val watchlistShow = currentWatchlistShow(action.showId)
+
+                if (show.seasonTotal == watchlistShow.currentSeasonNumber) {
+                    setShowUpToDate(watchlistShow.id)
+                } else {
+                    watchlistShow.apply {
+                        val firstEpisodeInSeason = firstEpisodeFromSeason(id, currentSeasonNumber + 1)
+                        markEpisodeAsWatched(id, currentSeasonNumber, currentEpisodeNumber)
+                        updateSeasonAsWatched(id, currentSeasonNumber)
+                        insertNewWatchlistEpisode(id, currentSeasonNumber + 1, 1)
+                        insertNewWatchlistSeason(id, currentSeasonNumber + 1, 1)
+                        updateWatchlistShowEpisodeAndSeason(id, currentSeasonNumber + 1, firstEpisodeInSeason.number)
+                    }
+                }
+
+            }
+            is UpdateShowAction.UpToDateWithShow -> {
+                setShowUpToDate(action.showId)
+            }
+        }
+    }
 
     override suspend fun currentShow(showId: String): EntityShow {
         return database.showDao().withId(showId)
@@ -160,5 +195,19 @@ class RepositoryWatchlist(
                 it.asUIModelWatchlistShow(lastEpisodeInSeason?.number ?: -1)
             })
         }
+    }
+
+    private suspend fun setShowUpToDate(showId: String) {
+        val show = currentWatchlistShow(showId)
+        markEpisodeAsWatched(
+            show.id,
+            show.currentSeasonNumber,
+            show.currentEpisodeNumber
+        )
+        updateSeasonAsWatched(
+            show.id,
+            show.currentSeasonNumber
+        )
+        updateWatchlistShowAsUpToDate(showId)
     }
 }
