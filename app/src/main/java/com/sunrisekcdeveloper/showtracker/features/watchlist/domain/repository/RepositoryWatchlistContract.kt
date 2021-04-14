@@ -31,32 +31,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface RepositoryWatchlistContract {
 
-    suspend fun updateShowProgress(action: UpdateShowAction)
-
     fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>>
+
     fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>>
 
-    // todo this is not ideal to return value like this
-    suspend fun currentShow(showId: String): EntityShow
-
-    // todo this is not ideal to return value like this
-    suspend fun currentWatchlistShow(showId: String): EntityWatchlistShow
-
-    suspend fun markEpisodeAsWatched(showId: String, season: Int, episode: Int)
-
-    suspend fun insertNewWatchlistEpisode(showId: String, season: Int, episode: Int)
-
-    suspend fun incrementSeasonCurrentEpisode(showId: String, currentSeason: Int)
-
-    suspend fun incrementWatchlistShowCurrentEpisode(showId: String)
-
-    suspend fun updateSeasonAsWatched(showId: String, season: Int)
-
-    suspend fun insertNewWatchlistSeason(showId: String, season: Int, episode: Int)
-
-    suspend fun updateWatchlistShowEpisodeAndSeason(showId: String, newSeason: Int, newEpisode: Int)
+    suspend fun updateShowProgress(action: UpdateShowAction)
 
     suspend fun updateWatchlistShowAsUpToDate(showId: String)
-
-    suspend fun firstEpisodeFromSeason(showId: String, season: Int): EntityEpisode
 }
