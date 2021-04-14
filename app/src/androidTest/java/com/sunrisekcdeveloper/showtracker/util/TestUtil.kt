@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.util
 
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import kotlin.random.Random
 
 object TestUtil {
@@ -38,6 +39,26 @@ object TestUtil {
             releaseDate = "",
             runTime = "",
             dateLastUpdated = System.currentTimeMillis()
+        )
+    }
+
+    fun createEntityShow(
+        id: Int = Random(Int.MAX_VALUE).nextInt(),
+        title: String = "${Random(Int.MAX_VALUE).nextInt()}"
+    ): EntityShow {
+        return EntityShow(
+            id = "$id",
+            title = title,
+            overview = "",
+            certification = "",
+            posterPath = "",
+            backdropPath = "",
+            popularityValue = 1f,
+            firstAirDate = "",
+            rating = 1f,
+            episodeTotal = 1,
+            seasonTotal = 1,
+            lastUpdated = System.currentTimeMillis()
         )
     }
 }
