@@ -28,6 +28,7 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIMode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
 import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 interface RepositoryWatchlistContract {
 
@@ -38,4 +39,22 @@ interface RepositoryWatchlistContract {
     suspend fun updateShowProgress(action: UpdateShowAction)
 
     suspend fun updateWatchlistShowAsUpToDate(showId: String)
+
+    class Fake() : RepositoryWatchlistContract {
+        override fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
+            return flow {
+                Resource.success(UIModelWatchlisMovie.create(60))
+            }
+        }
+
+        override fun watchlistShows(filterOption: FilterShows): Flow<Resource<List<UIModelWatchlistShow>>> {
+            return flow {
+                Resource.success(UIModelWatchlistShow.create(60))
+            }
+        }
+
+        override suspend fun updateShowProgress(action: UpdateShowAction) {  }
+
+        override suspend fun updateWatchlistShowAsUpToDate(showId: String) {  }
+    }
 }
