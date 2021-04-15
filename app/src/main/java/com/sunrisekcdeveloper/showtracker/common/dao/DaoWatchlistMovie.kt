@@ -68,16 +68,16 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
             }
         }.map { list -> list.sortedBy { it.details.title } }.distinctUntilChanged()
 
+    @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id)")
+    abstract suspend fun exist(id: String): Boolean
+
+    open fun distinctWatchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?> = watchlistMovieFlow(id).distinctUntilChanged()
+
+    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
+    protected abstract fun watchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?>
 
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWithDetailsFlow(): Flow<List<WatchlistMovieWithDetails>>
 
-    @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id)")
-    abstract suspend fun exist(id: String): Boolean
-
-    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
-    protected abstract fun watchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?>
-
-    open fun distinctWatchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?> = watchlistMovieFlow(id).distinctUntilChanged()
 }

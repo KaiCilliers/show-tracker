@@ -98,17 +98,22 @@ object TestUtil {
         )
     }
 
-    fun createEntityWatchlistEpisode(): EntityWatchlistEpisode {
+    fun createEntityWatchlistEpisode(
+        showId: Int = Random(Int.MAX_VALUE).nextInt(),
+        seasonNumber: Int = Random(Int.MAX_VALUE).nextInt(),
+        number: Int = Random(Int.MAX_VALUE).nextInt(),
+        lastUpdated: Long = Random(Long.MAX_VALUE).nextLong()
+    ): EntityWatchlistEpisode {
         return EntityWatchlistEpisode(
-            showId = "",
-            episodeNumber = 0,
-            seasonNumber = 0,
+            showId = "$showId",
+            episodeNumber = number,
+            seasonNumber = seasonNumber,
             watched = false,
             initialSetProgressBatch = false,
             viaUpToDateAction = false,
             dateWatched = 0L,
             onEpisodeSinceDate = 0L,
-            lastUpdated = 0L
+            lastUpdated = lastUpdated
         )
     }
 
