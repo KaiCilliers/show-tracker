@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.util
 
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
@@ -79,6 +80,24 @@ object TestUtil {
             airDate = 0L,
             episodeTotal = 0,
             lastUpdated = -1L
+        )
+    }
+
+    fun createEntityEpisode(
+        showId: Int = Random(Int.MAX_VALUE).nextInt(),
+        seasonNumber: Int = Random(Int.MAX_VALUE).nextInt(),
+        number: Int = Random(Int.MAX_VALUE).nextInt(),
+        name: String = ""
+    ): EntityEpisode {
+        return EntityEpisode(
+            showId = "$showId",
+            seasonNumber = seasonNumber,
+            number = number,
+            name = name,
+            airDate = 0L,
+            overview = "",
+            stillPath = "",
+            lastUpdated = 0L
         )
     }
 }
