@@ -57,11 +57,11 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
                     val now = Calendar.getInstance()
                     now.timeInMillis = System.currentTimeMillis()
                     list.filter {
-                        val lastUpdatedDate = Calendar.getInstance()
-                        lastUpdatedDate.timeInMillis = it.status.dateLastUpdated
+                        val dateAdded = Calendar.getInstance()
+                        dateAdded.timeInMillis = it.status.dateAdded
                         isDateSame(
                             now,
-                            lastUpdatedDate
+                            dateAdded
                         )
                     }
                 }
