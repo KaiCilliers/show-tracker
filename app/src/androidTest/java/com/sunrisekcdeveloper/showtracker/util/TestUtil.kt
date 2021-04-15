@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.util
 
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import kotlin.random.Random
 
@@ -136,19 +137,26 @@ object TestUtil {
         )
     }
 
-    fun createEntityWatchlistShow(): EntityWatchlistShow {
+    fun createEntityWatchlistShow(
+        id: Int = Random(Int.MAX_VALUE).nextInt(),
+        started: Boolean = false,
+        deleted: Boolean = false,
+        upToDate: Boolean = false,
+        dateAdded: Long = 0L,
+        lastUpdated: Long = 0L
+    ): EntityWatchlistShow {
         return EntityWatchlistShow(
-            id = "",
+            id = "$id",
             currentEpisodeNumber = 0,
             currentEpisodeName = "",
             currentSeasonNumber = 0,
             currentSeasonEpisodeTotal = 0,
-            started = false,
-            upToDate = false,
-            deleted = false,
+            started = started,
+            upToDate = upToDate,
+            deleted = deleted,
             dateDeleted = 0L,
-            dateAdded = 0L,
-            lastUpdated = 0L
+            dateAdded = dateAdded,
+            lastUpdated = lastUpdated
         )
     }
 
@@ -179,6 +187,20 @@ object TestUtil {
         return WatchlistMovieWithDetails(
             details = createEntityMovie(id = id, title = title),
             status = createEntityWatchlistMovie(id = id, watched = watched, dateAdded = dateAdded)
+        )
+    }
+
+    fun createWatchlistShowWithDetails(
+        id: Int = Random(Int.MAX_VALUE).nextInt(),
+        title: String = "",
+        started: Boolean = false,
+        lastUpdated: Long = 0L,
+        upToDate: Boolean = false,
+        dateAdded: Long = 0L
+    ): WatchlistShowWithDetails {
+        return WatchlistShowWithDetails(
+            details = createEntityShow(id = id, title = title),
+            status = createEntityWatchlistShow(id = id, started = started, upToDate = upToDate, dateAdded = dateAdded, lastUpdated = lastUpdated)
         )
     }
 }
