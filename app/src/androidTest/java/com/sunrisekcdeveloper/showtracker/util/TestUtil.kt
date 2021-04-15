@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.util
 
+import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import kotlin.random.Random
 
@@ -147,15 +148,33 @@ object TestUtil {
         )
     }
 
-    fun createEntityWatchlistMovie(): EntityWatchlistMovie {
+    fun createEntityWatchlistMovie(
+        id: Int = Random(Int.MAX_VALUE).nextInt(),
+        lastUpdated: Long = 0L,
+        watched: Boolean = false,
+        deleted: Boolean = false,
+        dateAdded: Long = 0L
+    ): EntityWatchlistMovie {
         return EntityWatchlistMovie(
-            id = "",
-            watched = true,
-            dateAdded = 0L,
+            id = "$id",
+            watched = watched,
+            dateAdded = dateAdded,
             dateWatched = 0L,
-            deleted = false,
+            deleted = deleted,
             dateDeleted = 0L,
-            dateLastUpdated = 0L
+            dateLastUpdated = lastUpdated
+        )
+    }
+
+    fun createWatchlistMovieWithDetails(
+        id: Int = Random(Int.MAX_VALUE).nextInt(),
+        title: String = "",
+        watched: Boolean = false,
+        dateAdded: Long = 0L
+    ): WatchlistMovieWithDetails {
+        return WatchlistMovieWithDetails(
+            details = createEntityMovie(id = id, title = title),
+            status = createEntityWatchlistMovie(id = id, watched = watched, dateAdded = dateAdded)
         )
     }
 }
