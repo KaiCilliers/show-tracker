@@ -16,13 +16,15 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.watchlist.application
+package com.sunrisekcdeveloper.showtracker.util
 
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
+import android.app.Application
+import android.content.Context
+import androidx.test.runner.AndroidJUnitRunner
+import dagger.hilt.android.testing.HiltTestApplication
 
-interface UpdateShowProgressUseCaseContract {
-    suspend operator fun invoke(action: UpdateShowAction)
-    class Fake() : UpdateShowProgressUseCaseContract {
-        override suspend fun invoke(action: UpdateShowAction) {  }
+class CustomTestRunner : AndroidJUnitRunner() {
+    override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
+        return super.newApplication(cl, HiltTestApplication::class.java.name, context)
     }
 }

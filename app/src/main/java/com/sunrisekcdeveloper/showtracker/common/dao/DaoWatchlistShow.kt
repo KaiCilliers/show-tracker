@@ -37,16 +37,13 @@ abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
     @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_show WHERE watch_show_id = :id)")
     abstract suspend fun exist(id: String): Boolean
 
+    // todo rename to notStarted
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0 AND watch_show_started = 0")
     abstract suspend fun unwatched(): List<WatchlistShowWithDetails>
 
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_id = :showId")
     abstract suspend fun withId(showId: String): EntityWatchlistShow
-
-    @Transaction
-    @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0")
-    protected abstract fun privateWithDetailsFlow(): Flow<List<WatchlistShowWithDetails>>
 
     // TODO placing this filter logic in DAO is questionable
     open fun distinctWithDetailsFlow(sortShows: FilterShows): Flow<List<WatchlistShowWithDetails>> =
@@ -78,8 +75,12 @@ abstract class DaoWatchlistShow : DaoBase<EntityWatchlistShow> {
             }
         }.map { it.sortedBy { it.details.title } }.distinctUntilChanged()
 
+    open fun distinctWatchlistShowFlow(id: String): Flow<EntityWatchlistShow?> = watchlistShowFlow(id).distinctUntilChanged()
+
     @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_id = :id")
     protected abstract fun watchlistShowFlow(id: String): Flow<EntityWatchlistShow?>
 
-    open fun distinctWatchlistShowFlow(id: String): Flow<EntityWatchlistShow?> = watchlistShowFlow(id).distinctUntilChanged()
+    @Transaction
+    @Query("SELECT * FROM tbl_watchlist_show WHERE watch_show_deleted = 0")
+    protected abstract fun privateWithDetailsFlow(): Flow<List<WatchlistShowWithDetails>>
 }

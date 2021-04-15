@@ -57,27 +57,27 @@ abstract class DaoWatchlistMovie : DaoBase<EntityWatchlistMovie> {
                     val now = Calendar.getInstance()
                     now.timeInMillis = System.currentTimeMillis()
                     list.filter {
-                        val lastUpdatedDate = Calendar.getInstance()
-                        lastUpdatedDate.timeInMillis = it.status.dateLastUpdated
+                        val dateAdded = Calendar.getInstance()
+                        dateAdded.timeInMillis = it.status.dateAdded
                         isDateSame(
                             now,
-                            lastUpdatedDate
+                            dateAdded
                         )
                     }
                 }
             }
         }.map { list -> list.sortedBy { it.details.title } }.distinctUntilChanged()
 
+    @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id)")
+    abstract suspend fun exist(id: String): Boolean
+
+    open fun distinctWatchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?> = watchlistMovieFlow(id).distinctUntilChanged()
+
+    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
+    protected abstract fun watchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?>
 
     @Transaction
     @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_deleted = 0")
     protected abstract fun privateWithDetailsFlow(): Flow<List<WatchlistMovieWithDetails>>
 
-    @Query("SELECT EXISTS(SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id)")
-    abstract suspend fun exist(id: String): Boolean
-
-    @Query("SELECT * FROM tbl_watchlist_movie WHERE watch_movie_id = :id")
-    protected abstract fun watchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?>
-
-    open fun distinctWatchlistMovieFlow(id: String): Flow<EntityWatchlistMovie?> = watchlistMovieFlow(id).distinctUntilChanged()
 }

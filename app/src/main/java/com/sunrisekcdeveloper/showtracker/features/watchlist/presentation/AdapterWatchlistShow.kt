@@ -30,6 +30,7 @@ import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.databinding.ItemWatchlistShowBinding
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import timber.log.Timber
 
 class AdapterWatchlistShow(
@@ -210,7 +211,31 @@ data class UIModelWatchlistShow(
     val started: Boolean,
     val upToDate: Boolean,
     val dateAdded: Long
-)
+) {
+    companion object {
+        fun create(amount: Int): List<UIModelWatchlistShow> {
+            val models = mutableListOf<UIModelWatchlistShow>()
+            repeat(amount) {
+                models.add(
+                    UIModelWatchlistShow(
+                        id = "id$it",
+                        title = "title$it",
+                        posterPath = "posterPath$it",
+                        currentEpisodeName = "currentEpisodeName$it",
+                        currentEpisodeNumber = -1,
+                        currentSeasonNumber = -1,
+                        episodesInSeason = -1,
+                        lastEpisodeInSeason = -1,
+                        started = false,
+                        upToDate = false,
+                        dateAdded = it.toLong()
+                    )
+                )
+            }
+            return models.toList()
+        }
+    }
+}
 
 // todo better name
 fun interface OnShowStatusClickListener {
