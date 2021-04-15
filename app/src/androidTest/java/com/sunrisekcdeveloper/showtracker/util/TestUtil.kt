@@ -118,14 +118,18 @@ object TestUtil {
         )
     }
 
-    fun createEntityWatchlistSeason(): EntityWatchlistSeason {
+    fun createEntityWatchlistSeason(
+        showId: Int = Random(Int.MAX_VALUE).nextInt(),
+        number: Int = Random(Int.MAX_VALUE).nextInt(),
+        currentEpisode: Int = 0
+    ): EntityWatchlistSeason {
         return EntityWatchlistSeason(
-            showId = "",
-            number = 0,
+            showId = "$showId",
+            number = number,
             dateStarted = 0L,
             dateCompleted = 0L,
             completed = false,
-            currentEpisode = 0,
+            currentEpisode = currentEpisode,
             startedTrackingSeason = false,
             finishedBeforeTracking = false,
             lastUpdated = 0L
