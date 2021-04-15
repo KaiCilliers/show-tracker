@@ -18,10 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.util
 
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import kotlin.random.Random
 
 object TestUtil {
@@ -98,6 +95,62 @@ object TestUtil {
             overview = "",
             stillPath = "",
             lastUpdated = 0L
+        )
+    }
+
+    fun createEntityWatchlistEpisode(): EntityWatchlistEpisode {
+        return EntityWatchlistEpisode(
+            showId = "",
+            episodeNumber = 0,
+            seasonNumber = 0,
+            watched = false,
+            initialSetProgressBatch = false,
+            viaUpToDateAction = false,
+            dateWatched = 0L,
+            onEpisodeSinceDate = 0L,
+            lastUpdated = 0L
+        )
+    }
+
+    fun createEntityWatchlistSeason(): EntityWatchlistSeason {
+        return EntityWatchlistSeason(
+            showId = "",
+            number = 0,
+            dateStarted = 0L,
+            dateCompleted = 0L,
+            completed = false,
+            currentEpisode = 0,
+            startedTrackingSeason = false,
+            finishedBeforeTracking = false,
+            lastUpdated = 0L
+        )
+    }
+
+    fun createEntityWatchlistShow(): EntityWatchlistShow {
+        return EntityWatchlistShow(
+            id = "",
+            currentEpisodeNumber = 0,
+            currentEpisodeName = "",
+            currentSeasonNumber = 0,
+            currentSeasonEpisodeTotal = 0,
+            started = false,
+            upToDate = false,
+            deleted = false,
+            dateDeleted = 0L,
+            dateAdded = 0L,
+            lastUpdated = 0L
+        )
+    }
+
+    fun createEntityWatchlistMovie(): EntityWatchlistMovie {
+        return EntityWatchlistMovie(
+            id = "",
+            watched = true,
+            dateAdded = 0L,
+            dateWatched = 0L,
+            deleted = false,
+            dateDeleted = 0L,
+            dateLastUpdated = 0L
         )
     }
 }
