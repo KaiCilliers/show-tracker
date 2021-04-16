@@ -76,9 +76,13 @@ class FeatureWatchlistMovieTest{
     }
 
     @Test
+    // todo use fake data for tests
     fun mark_movie_as_watched() {
         // Launch application
         ActivityScenario.launch(ActivityMain::class.java)
+
+        // Wait for network response
+        Thread.sleep(500)
 
         // Click a movie on start destination
         onView(withId(R.id.rc_popular_movies)).perform(
