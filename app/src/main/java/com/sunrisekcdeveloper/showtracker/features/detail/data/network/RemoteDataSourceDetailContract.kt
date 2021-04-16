@@ -19,14 +19,100 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
 import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.*
+import retrofit2.Response
 
 interface RemoteDataSourceDetailContract {
     suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail>
-    suspend fun movieReleaseDates(id: String) : NetworkResult<EnvelopeMovieReleaseDates>
+    suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates>
     suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail>
     suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification>
+
+    class Fake() : RemoteDataSourceDetailContract {
+        override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> {
+            return NetworkResult.success(
+                ResponseMovieDetail(
+                    id = id.toInt(),
+                    title = "a",
+                    overview = "a",
+                    backdropPath = "a",
+                    posterPath = "a",
+                    releaseDate = "a",
+                    runtime = 1,
+                    popularityValue = 1F,
+                    rating = 1F
+                )
+            )
+        }
+
+        override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> {
+            return NetworkResult.success(
+                EnvelopeMovieReleaseDates(
+                    id = id.toInt(),
+                    results = listOf(
+                        ResponseMovieReleaseDates(
+                            iso = "a",
+                            releaseDates = listOf(
+                                ResponseCertificationAndReleaseDate(
+                                    certification = "a",
+                                    releaseDate = "a",
+                                    releaseType = 1
+                                ),
+                                ResponseCertificationAndReleaseDate(
+                                    certification = "b",
+                                    releaseDate = "b",
+                                    releaseType = 2
+                                )
+                            )
+                        ),
+                        ResponseMovieReleaseDates(
+                            iso = "b",
+                            releaseDates = listOf(
+                                ResponseCertificationAndReleaseDate(
+                                    certification = "c",
+                                    releaseDate = "c",
+                                    releaseType = 1
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        }
+
+        override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> {
+            return NetworkResult.success(
+                ResponseShowDetail(
+                    id = id.toInt(),
+                    name = "a",
+                    overview = "a",
+                    backdropPath = "a",
+                    posterPath = "a",
+                    rating = 1f,
+                    firstAirYear = "a",
+                    episodeCount = 1,
+                    seasonCount = 1,
+                    popularityValue = 1f
+                )
+            )
+        }
+
+        override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> {
+            return NetworkResult.success(
+                EnvelopeShowCertification(
+                    id = id.toInt(),
+                    results = listOf(
+                        ResponseShowCertification(
+                            iso = "a",
+                            certification = "a"
+                        ),
+                        ResponseShowCertification(
+                            iso = "b",
+                            certification = "b"
+                        )
+                    )
+                )
+            )
+        }
+    }
 }

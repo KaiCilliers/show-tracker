@@ -18,11 +18,9 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.data.network
 
+import com.google.gson.annotations.SerializedName
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeMovieReleaseDates
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.EnvelopeShowCertification
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.model.*
 import retrofit2.Response
 
 interface ServiceDetailContract {
@@ -45,4 +43,101 @@ interface ServiceDetailContract {
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<EnvelopeShowCertification>
+
+    class Fake() : ServiceDetailContract {
+        override suspend fun movieDetails(
+            id: String,
+            apiKey: String
+        ): Response<ResponseMovieDetail> {
+            return Response.success(
+                ResponseMovieDetail(
+                    id = id.toInt(),
+                    title = "a",
+                    overview = "a",
+                    backdropPath = "a",
+                    posterPath = "a",
+                    releaseDate = "a",
+                    runtime = 1,
+                    popularityValue = 1F,
+                    rating = 1F
+                )
+            )
+        }
+
+        override suspend fun movieCertifications(
+            id: String,
+            apiKey: String
+        ): Response<EnvelopeMovieReleaseDates> {
+            return Response.success(
+                EnvelopeMovieReleaseDates(
+                    id = id.toInt(),
+                    results = listOf(
+                        ResponseMovieReleaseDates(
+                            iso = "a",
+                            releaseDates = listOf(
+                                ResponseCertificationAndReleaseDate(
+                                    certification = "a",
+                                    releaseDate = "a",
+                                    releaseType = 1
+                                ),
+                                ResponseCertificationAndReleaseDate(
+                                    certification = "b",
+                                    releaseDate = "b",
+                                    releaseType = 2
+                                )
+                            )
+                        ),
+                        ResponseMovieReleaseDates(
+                            iso = "b",
+                            releaseDates = listOf(
+                                ResponseCertificationAndReleaseDate(
+                                    certification = "c",
+                                    releaseDate = "c",
+                                    releaseType = 1
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        }
+
+        override suspend fun showDetails(id: String, apiKey: String): Response<ResponseShowDetail> {
+            return Response.success(
+                ResponseShowDetail(
+                    id = id.toInt(),
+                    name = "a",
+                    overview = "a",
+                    backdropPath = "a",
+                    posterPath = "a",
+                    rating = 1f,
+                    firstAirYear = "a",
+                    episodeCount = 1,
+                    seasonCount = 1,
+                    popularityValue = 1f
+                )
+            )
+        }
+
+        override suspend fun showCertifications(
+            id: String,
+            apiKey: String
+        ): Response<EnvelopeShowCertification> {
+            return Response.success(
+                EnvelopeShowCertification(
+                    id = id.toInt(),
+                    results = listOf(
+                        ResponseShowCertification(
+                            iso = "a",
+                            certification = "a"
+                        ),
+                        ResponseShowCertification(
+                            iso = "b",
+                            certification = "b"
+                        )
+                    )
+                )
+            )
+        }
+    }
 }
