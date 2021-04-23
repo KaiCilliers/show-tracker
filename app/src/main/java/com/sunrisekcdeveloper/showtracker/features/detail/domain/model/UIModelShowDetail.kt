@@ -28,7 +28,29 @@ data class UIModelShowDetail(
     val seasonsTotal: Int,
     val watchlist: ShowWatchlistStatus,
     val status: ShowStatus
-)
+) {
+    companion object {
+        fun create(amount: Int): List<UIModelShowDetail> {
+            val models = mutableListOf<UIModelShowDetail>()
+            repeat(amount) {
+                models.add(
+                    UIModelShowDetail(
+                    id = "id$it",
+                    name = "name$it",
+                    posterPath = "posterPath$it",
+                    overview = "overview$it",
+                    firstAirDate = "firstAirDate$it",
+                    certification = "certification$it",
+                    seasonsTotal = 1,
+                        watchlist = ShowWatchlistStatus.NotWatchlisted,
+                    status = ShowStatus.NotStarted
+                ))
+            }
+            return models.toList()
+        }
+        fun single() = create(1)[0]
+    }
+}
 
 sealed class ShowWatchlistStatus {
     object Watchlisted : ShowWatchlistStatus()

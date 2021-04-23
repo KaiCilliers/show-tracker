@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
 
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
+
 data class UIModelMovieDetail(
     val id: String,
     val title: String,
@@ -28,7 +30,28 @@ data class UIModelMovieDetail(
     val runtime: String,
     val status: MovieWatchlistStatus,
     val watched: WatchedStatus
-)
+) {
+    companion object {
+        fun create(amount: Int): List<UIModelMovieDetail> {
+            val models = mutableListOf<UIModelMovieDetail>()
+            repeat(amount) {
+                models.add(UIModelMovieDetail(
+                 id = "id$it",
+                 title = "title$it",
+                 posterPath = "posterPath$it",
+                 overview = "overview$it",
+                    releaseYear = "releaseYear$it",
+                    certification = "certification$it",
+                    runtime = "runtime$it",
+                    status = MovieWatchlistStatus.NotWatchlisted,
+                    watched = WatchedStatus.NotWatched
+                ))
+            }
+            return models.toList()
+        }
+        fun single() = create(1)[0]
+    }
+}
 
 sealed class MovieWatchlistStatus {
     object Watchlisted : MovieWatchlistStatus()

@@ -19,7 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.application
 
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import timber.log.Timber
 
 interface RemoveMediaFromWatchlistUseCaseContract {
     suspend operator fun invoke(id: String, type: MediaType)
+    class Fake() : RemoveMediaFromWatchlistUseCaseContract {
+        override suspend fun invoke(id: String, type: MediaType) {
+            when (type) {
+                MediaType.Movie -> { Timber.d("Fake - Removed Movie (id=$id) from Watchlist") }
+                MediaType.Show -> { Timber.d("Fake - Removed Show (id=$id) from Watchlist") }
+            }
+        }
+    }
 }

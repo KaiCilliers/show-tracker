@@ -21,7 +21,18 @@ package com.sunrisekcdeveloper.showtracker.features.detail.application
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 
 interface FetchShowDetailsUseCaseContract {
     suspend operator fun invoke(id: String): Flow<Resource<UIModelShowDetail>>
+    class Fake() : FetchShowDetailsUseCaseContract {
+        var expectException = false
+        override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> {
+            return flow {
+                if (expectException) emit(Resource.error(Exception("Fake - Error fetching Show (id=$id) details")))
+                else emit(Resource.success(UIModelShowDetail.single()))
+            }
+        }
+    }
 }

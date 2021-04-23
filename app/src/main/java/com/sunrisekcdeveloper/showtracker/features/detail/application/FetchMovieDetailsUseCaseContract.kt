@@ -21,7 +21,18 @@ package com.sunrisekcdeveloper.showtracker.features.detail.application
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 
 interface FetchMovieDetailsUseCaseContract {
     suspend operator fun invoke(id: String): Flow<Resource<UIModelMovieDetail>>
+    class Fake() : FetchMovieDetailsUseCaseContract {
+        var expectException = false
+        override suspend fun invoke(id: String): Flow<Resource<UIModelMovieDetail>> {
+            return flow {
+                if (expectException) emit(Resource.error(Exception("Fake - Error fetching Movie (id=$id) details")))
+                else emit(Resource.success(UIModelMovieDetail.single()))
+            }
+        }
+    }
 }

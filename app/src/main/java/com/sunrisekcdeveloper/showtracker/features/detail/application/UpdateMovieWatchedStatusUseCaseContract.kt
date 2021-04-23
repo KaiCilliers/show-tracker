@@ -19,7 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.application
 
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import timber.log.Timber
 
 interface UpdateMovieWatchedStatusUseCaseContract {
     suspend operator fun invoke(movieId: String, watchedStatus: MovieWatchedStatus)
+    class Fake() : UpdateMovieWatchedStatusUseCaseContract {
+        override suspend fun invoke(movieId: String, watchedStatus: MovieWatchedStatus) {
+            when (watchedStatus) {
+                MovieWatchedStatus.Watched -> { Timber.d("Fake - Updated Movie )id=$movieId) status to Watched") }
+                MovieWatchedStatus.NotWatched -> { Timber.d("Fake - Updated Movie )id=$movieId) status to Unwatched") }
+            }
+        }
+    }
 }

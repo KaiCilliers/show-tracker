@@ -19,11 +19,12 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryShow
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.UIModelShowDetail
+import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
+import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
+import timber.log.Timber
 
 interface RepositoryDetailContract {
     suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>>
@@ -32,4 +33,75 @@ interface RepositoryDetailContract {
     suspend fun submitShowAction(action: ActionRepositoryShow)
     suspend fun updateMovieDetails(id: String)
     suspend fun updateShowDetails(id: String)
+
+    class Fake() : RepositoryDetailContract {
+
+        var expectException = false
+
+        override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
+            return flow {
+                if (expectException) emit(Resource.error(Exception("Fake - No movie with ID: $id exists in database")))
+                emit(
+                    Resource.success(
+                        UIModelMovieDetail(
+                            id = id,
+                            title = "a",
+                            posterPath = "a",
+                            overview = "a",
+                            releaseYear = "a",
+                            certification = "a",
+                            runtime = "a",
+                            status = MovieWatchlistStatus.NotWatchlisted,
+                            watched = WatchedStatus.NotWatched
+                        )
+                    )
+                )
+            }.onStart { emit(Resource.loading()) }
+        }
+
+        override suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>> {
+            return flow {
+                if (expectException) emit(Resource.error(Exception("Fake - No show with ID: $id exists in database")))
+                emit(
+                    Resource.success(
+                        UIModelShowDetail(
+                            id = id,
+                            name = "a",
+                            posterPath = "a",
+                            overview = "a",
+                            certification = "a",
+                            firstAirDate = "a",
+                            seasonsTotal = 1,
+                            watchlist = ShowWatchlistStatus.NotWatchlisted,
+                            status = ShowStatus.NotStarted
+                        )
+                    )
+                )
+            }.onStart { emit(Resource.loading()) }
+        }
+
+        override suspend fun submitMovieAction(action: ActionRepositoryMovie) {
+            when (action) {
+                is ActionRepositoryMovie.Add -> { Timber.d("Fake - Add Movie") }
+                is ActionRepositoryMovie.Remove -> { Timber.d("Fake - Remove Movie") }
+                is ActionRepositoryMovie.Watch -> { Timber.d("Fake - Watch Movie") }
+                is ActionRepositoryMovie.Unwatch -> { Timber.d("Fake - Unwatch Movie") }
+            }
+        }
+
+        override suspend fun submitShowAction(action: ActionRepositoryShow) {
+            when (action) {
+                is ActionRepositoryShow.Add -> { Timber.d("Fake - Add Show") }
+                is ActionRepositoryShow.Remove -> { Timber.d("Fake - Remove Show") }
+            }
+        }
+
+        override suspend fun updateMovieDetails(id: String) {
+            Timber.d("Fake - Update Movie details with id: $id")
+        }
+
+        override suspend fun updateShowDetails(id: String) {
+            Timber.d("Fake - Update Show details with id: $id")
+        }
+    }
 }
