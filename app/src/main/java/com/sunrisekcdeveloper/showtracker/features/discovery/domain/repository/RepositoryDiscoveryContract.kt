@@ -22,19 +22,39 @@ import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 interface RepositoryDiscoveryContract {
-    suspend fun popularMovies(page: Int): Resource<List<UIModelDiscovery>>
-    suspend fun topRatedMovies(page: Int): Resource<List<UIModelDiscovery>>
-    suspend fun upcomingMovies(page: Int): Resource<List<UIModelDiscovery>>
-    suspend fun popularShows(page: Int): Resource<List<UIModelDiscovery>>
-    suspend fun topRatedShows(page: Int): Resource<List<UIModelDiscovery>>
-    suspend fun airingTodayShows(page: Int): Resource<List<UIModelDiscovery>>
-
     fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>>
     fun popularShowsStream(): Flow<PagingData<UIModelDiscovery>>
     fun topRatedMoviesStream(): Flow<PagingData<UIModelDiscovery>>
     fun topRatedShowsStream(): Flow<PagingData<UIModelDiscovery>>
     fun upcomingMoviesStream(): Flow<PagingData<UIModelDiscovery>>
     fun airingTodayShowsStream(): Flow<PagingData<UIModelDiscovery>>
+
+    class Fake() : RepositoryDiscoveryContract {
+        override fun popularMoviesStream(): Flow<PagingData<UIModelDiscovery>> {
+            return flowOf(PagingData.from(UIModelDiscovery.create(20)))
+        }
+
+        override fun popularShowsStream(): Flow<PagingData<UIModelDiscovery>> {
+            return flowOf(PagingData.from(UIModelDiscovery.create(20)))
+        }
+
+        override fun topRatedMoviesStream(): Flow<PagingData<UIModelDiscovery>> {
+            return flowOf(PagingData.from(UIModelDiscovery.create(20)))
+        }
+
+        override fun topRatedShowsStream(): Flow<PagingData<UIModelDiscovery>> {
+            return flowOf(PagingData.from(UIModelDiscovery.create(20)))
+        }
+
+        override fun upcomingMoviesStream(): Flow<PagingData<UIModelDiscovery>> {
+            return flowOf(PagingData.from(UIModelDiscovery.create(20)))
+        }
+
+        override fun airingTodayShowsStream(): Flow<PagingData<UIModelDiscovery>> {
+            return flowOf(PagingData.from(UIModelDiscovery.create(20)))
+        }
+    }
 }

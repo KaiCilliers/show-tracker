@@ -21,7 +21,13 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.application
 import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 interface LoadPopularShowsUseCaseContract {
     operator fun invoke(): Flow<PagingData<UIModelPoster>>
+    class Fake() : LoadPopularShowsUseCaseContract {
+        override fun invoke(): Flow<PagingData<UIModelPoster>> {
+            return flowOf(PagingData.from(UIModelPoster.create(20)))
+        }
+    }
 }

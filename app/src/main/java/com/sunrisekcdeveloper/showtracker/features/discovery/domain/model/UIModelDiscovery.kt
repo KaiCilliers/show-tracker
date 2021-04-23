@@ -35,4 +35,22 @@ data class UIModelDiscovery(
     // the same media being present in multiple lists
     val listType: ListType,
     val posterPath: String
-)
+) {
+    companion object {
+        fun create(amount: Int): List<UIModelDiscovery> {
+            val list = mutableListOf<UIModelDiscovery>()
+            repeat(amount) {
+                list.add(
+                    UIModelDiscovery(
+                        id = "id$it",
+                        mediaType = MediaType.movie(),
+                        mediaTitle = "title$it",
+                        listType = ListType.noList(),
+                        posterPath = "posterPath$it"
+                    )
+                )
+            }
+            return list.toList()
+        }
+    }
+}
