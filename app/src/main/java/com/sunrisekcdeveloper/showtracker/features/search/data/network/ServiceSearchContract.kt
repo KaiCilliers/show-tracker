@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.search.data.network
 import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 
 interface ServiceSearchContract {
@@ -35,4 +36,25 @@ interface ServiceSearchContract {
         page: Int,
         query: String
     ) : Response<EnvelopePaginatedShows>
+
+    class Fake() : ServiceSearchContract {
+        var expectException = false
+        override suspend fun searchMoviesByTitle(
+            apiKey: String,
+            page: Int,
+            query: String
+        ): Response<EnvelopePaginatedMovies> {
+            return if (expectException) Response.error(404, "Fake - Error fetching Movies".toResponseBody())
+            else Response.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun searchShowByTitle(
+            apiKey: String,
+            page: Int,
+            query: String
+        ): Response<EnvelopePaginatedShows> {
+            return if (expectException) Response.error(404, "Fake - Error fetching Shows".toResponseBody())
+            else Response.success(EnvelopePaginatedShows.single())
+        }
+    }
 }

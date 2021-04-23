@@ -23,4 +23,11 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPo
 
 interface LoadUnwatchedMediaUseCaseContract {
     suspend operator fun invoke() : Resource<List<UIModelPoster>>
+    class Fake() : LoadUnwatchedMediaUseCaseContract {
+        var expectException = false
+        override suspend fun invoke(): Resource<List<UIModelPoster>> {
+            return if (expectException) Resource.error("Fake - Error retrieving unwatched media")
+            else Resource.success(UIModelPoster.create(100))
+        }
+    }
 }

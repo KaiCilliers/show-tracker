@@ -28,5 +28,25 @@ data class UIModelSearch(
     val rating: Float,
     val popularity: Float,
     val ratingVotes: Int
-)
+) {
+    companion object {
+        fun create(amount: Int): List<UIModelSearch> {
+            val list = mutableListOf<UIModelSearch>()
+            repeat(amount) {
+                list.add(
+                    UIModelSearch(
+                        id = "id$it",
+                        title = "title$it",
+                        posterPath = "posterPath$it",
+                        mediaType = MediaType.movie(),
+                        rating = 1f,
+                        popularity = 1f,
+                        ratingVotes = 1
+                    )
+                )
+            }
+            return list.toList()
+        }
+    }
+}
 
