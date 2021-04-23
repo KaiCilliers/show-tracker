@@ -22,4 +22,16 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 
 interface FetchShowSeasonAndEpisodeTotalsUseCaseContract {
     suspend operator fun invoke(showId: String): Resource<Map<Int, List<Int>>>
+    class Fake() : FetchShowSeasonAndEpisodeTotalsUseCaseContract {
+        var expectException = false
+        override suspend fun invoke(showId: String): Resource<Map<Int, List<Int>>> {
+            return if (expectException) Resource.error("Fake - Could not fetch Show (id=$showId) information")
+            else Resource.success(
+                mapOf(
+                    1 to listOf(1,2,3,4,5,6),
+                    2 to listOf(1,2,3,4,5,6,7)
+                )
+            )
+        }
+    }
 }
