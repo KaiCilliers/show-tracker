@@ -19,10 +19,35 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.domain.repository
 
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import timber.log.Timber
 
 interface RepositoryProgressContract {
     suspend fun cacheEntireShow(showId: String)
     suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>>
     suspend fun setShowProgress(showId: String, season: Int, episode: Int)
     suspend fun setNewShowAsUpToDate(showId: String)
+    class Fake() : RepositoryProgressContract {
+        var expectException = false
+        override suspend fun cacheEntireShow(showId: String) {
+            Timber.d("Fake - cached Show (id=$showId)")
+        }
+
+        override suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>> {
+            return if (expectException) Resource.error("Fake - Error fetching Show (id=$showId) seasons")
+            else Resource.success(
+                mapOf(
+                    1 to listOf(1,2,3,4,5,6),
+                    2 to listOf(1,2,3,4,5,6,7)
+                )
+            )
+        }
+
+        override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
+            Timber.d("Fake - Set Show (id=$showId) season (number=$season) episode (number=$episode) progress")
+        }
+
+        override suspend fun setNewShowAsUpToDate(showId: String) {
+            Timber.d("Fake - Set Show (id=$showId) as up to date")
+        }
+    }
 }

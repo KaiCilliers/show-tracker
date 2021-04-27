@@ -19,7 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.application
 
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
+import timber.log.Timber
 
 interface SetShowProgressUseCaseContract {
     suspend operator fun invoke(progress: SetShowProgress)
+    class Fake() : SetShowProgressUseCaseContract {
+        override suspend fun invoke(progress: SetShowProgress) {
+            when (progress) {
+                is SetShowProgress.Partial -> { Timber.d("Fake - Setting Show (id=${progress.showId} Partial") }
+                is SetShowProgress.UpToDate -> { Timber.d("Fake - Setting Show (id=${progress.showId} Up to date") }
+            }
+        }
+    }
 }

@@ -23,8 +23,21 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 interface RepositorySearchContract {
     suspend fun loadUnwatchedMedia() : Resource<List<UIModelPoster>>
     fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>>
+    class Fake() : RepositorySearchContract {
+        var expectException = false
+        override suspend fun loadUnwatchedMedia(): Resource<List<UIModelPoster>> {
+            return if (expectException) Resource.error("Fake - Error fetching unwatched media")
+            else Resource.success(UIModelPoster.create(100))
+        }
+
+        override fun searchMediaByTitlePage(query: String): Flow<PagingData<UIModelSearch>> {
+            return flowOf(PagingData.from(UIModelSearch.create(20)))
+        }
+    }
 }

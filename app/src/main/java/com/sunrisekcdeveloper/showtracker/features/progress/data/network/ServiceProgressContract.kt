@@ -21,6 +21,8 @@ package com.sunrisekcdeveloper.showtracker.features.progress.data.network
 import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseSeasonDetailWithEpisodes
 import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseShowDetailWithSeasons
+import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 
 interface ServiceProgressContract {
@@ -34,4 +36,24 @@ interface ServiceProgressContract {
         seasonNumber: Int,
         apiKey: String = BuildConfig.TMDB_API_KEY
     ) : Response<ResponseSeasonDetailWithEpisodes>
+
+    class Fake() : ServiceProgressContract {
+        var expectException = false
+        override suspend fun showWithSeasons(
+            id: String,
+            apiKey: String
+        ): Response<ResponseShowDetailWithSeasons> {
+            return if (expectException) Response.error(0, "Fake - Could not fetch Show (id=$id)".toResponseBody())
+            else Response.success(ResponseShowDetailWithSeasons.single())
+        }
+
+        override suspend fun seasonsWithEpisodes(
+            showId: String,
+            seasonNumber: Int,
+            apiKey: String
+        ): Response<ResponseSeasonDetailWithEpisodes> {
+            return if (expectException) Response.error(0, "Fake - Could not fetch season (number=$seasonNumber) from Show (id=$showId)".toResponseBody())
+            else Response.success(ResponseSeasonDetailWithEpisodes.single())
+        }
+    }
 }

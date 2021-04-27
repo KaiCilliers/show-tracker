@@ -28,4 +28,23 @@ data class UIModelPoster(
     val backdropPath: String,
     val type: MediaType,
     val listType: ListType
-)
+) {
+    companion object {
+        fun create(amount: Int): List<UIModelPoster> {
+            val list = mutableListOf<UIModelPoster>()
+            repeat(amount) {
+                list.add(
+                    UIModelPoster(
+                        id = "id$it",
+                        title = "title$it",
+                        posterPath = "posterPath$it",
+                        backdropPath = "backdropPath$it",
+                        type = MediaType.movie(),
+                        listType = ListType.noList()
+                    )
+                )
+            }
+            return list.toList()
+        }
+    }
+}

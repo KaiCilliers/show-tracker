@@ -19,7 +19,16 @@
 package com.sunrisekcdeveloper.showtracker.features.detail.application
 
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import timber.log.Timber
 
 interface AddMediaToWatchlistUseCaseContract {
     suspend operator fun invoke(id: String, type: MediaType)
+    class Fake() : AddMediaToWatchlistUseCaseContract {
+        override suspend fun invoke(id: String, type: MediaType) {
+            when (type) {
+                MediaType.Movie -> { Timber.d("Fake - Add Movie (id=$id) to Watchlist") }
+                MediaType.Show -> { Timber.d("Fake - Add Show (id=$id) to Watchlist") }
+            }
+        }
+    }
 }

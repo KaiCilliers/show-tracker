@@ -25,6 +25,7 @@ sealed class Resource<out T> {
     companion object {
         fun <T>success(data: T) = Success(data)
         fun error(exception: Exception) = Error(exception)
+        fun error(message: String) = error(kotlin.Exception(message))
         fun loading() = Loading
     }
 }

@@ -25,4 +25,19 @@ import com.sunrisekcdeveloper.showtracker.features.progress.data.model.ResponseS
 interface RemoteDataSourceProgressContract {
     suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons>
     suspend fun seasonDetails(showId: String, season: Int): NetworkResult<ResponseSeasonDetailWithEpisodes>
+    class Fake() : RemoteDataSourceProgressContract {
+        var expectException = false
+        override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> {
+            return if (expectException) NetworkResult.error("Fake - Could not fetch Show (id=$showId)")
+            else NetworkResult.success(ResponseShowDetailWithSeasons.single())
+        }
+
+        override suspend fun seasonDetails(
+            showId: String,
+            season: Int
+        ): NetworkResult<ResponseSeasonDetailWithEpisodes> {
+            return if (expectException) NetworkResult.error("Fake - Could not fetch season (number=$season) from Show (id=$showId)")
+            else NetworkResult.success(ResponseSeasonDetailWithEpisodes.single())
+        }
+    }
 }

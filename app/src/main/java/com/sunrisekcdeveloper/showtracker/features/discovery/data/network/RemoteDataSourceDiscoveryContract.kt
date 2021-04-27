@@ -29,4 +29,37 @@ interface RemoteDataSourceDiscoveryContract {
     suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShows>
     suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShows>
     suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShows>
+
+    class Fake() : RemoteDataSourceDiscoveryContract {
+        var expectException = false
+        override suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Popular Movies (page=$page)")
+            else NetworkResult.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun topRatedMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Top Rated Movies (page=$page)")
+            else NetworkResult.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun upcomingMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Upcoming Movies (page=$page)")
+            else NetworkResult.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShows> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Popular Shows (page=$page)")
+            else NetworkResult.success(EnvelopePaginatedShows.single())
+        }
+
+        override suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShows> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Top Rated Shows (page=$page)")
+            else NetworkResult.success(EnvelopePaginatedShows.single())
+        }
+
+        override suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShows> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Airing Today Shows (page=$page)")
+            else NetworkResult.success(EnvelopePaginatedShows.single())
+        }
+    }
 }

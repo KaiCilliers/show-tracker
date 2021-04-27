@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.data.model
 
 import com.google.gson.annotations.SerializedName
+import com.sunrisekcdeveloper.showtracker.common.util.RepoSearch
 
 data class ResponseSeasonDetailWithEpisodes(
     @SerializedName("id") val id: Int,
@@ -28,7 +29,28 @@ data class ResponseSeasonDetailWithEpisodes(
     @SerializedName("season_number") val number: Int,
     @SerializedName("air_date") val dateAired: String?,
     @SerializedName("episodes") val episodes: List<ResponseEpisode>
-)
+) {
+    companion object {
+        fun create(amount: Int): List<ResponseSeasonDetailWithEpisodes> {
+            val list = mutableListOf<ResponseSeasonDetailWithEpisodes>()
+            repeat(amount) {
+                list.add(
+                    ResponseSeasonDetailWithEpisodes(
+                        id = it,
+                        name = "name$it",
+                        overview = "overview$it",
+                        posterPath = "posterPath$it",
+                        number = 1,
+                        dateAired = "dateAired$it",
+                        episodes = ResponseEpisode.create(20)
+                    )
+                )
+            }
+            return list.toList()
+        }
+        fun single() = create(1)[0]
+    }
+}
 
 // todo roughly made
 data class ResponseEpisode(
@@ -41,7 +63,29 @@ data class ResponseEpisode(
     @SerializedName("still_path") val stillPath: String?,
     @SerializedName("vote_average") val rating: Float,
     @SerializedName("vote_count") val voteCount: Int
-)
+) {
+    companion object {
+        fun create(amount: Int): List<ResponseEpisode> {
+            val list = mutableListOf<ResponseEpisode>()
+            repeat(amount) {
+                list.add(
+                    ResponseEpisode(
+                        id = it,
+                        name = "name$it",
+                        overview = "overview$it",
+                        number = it,
+                        dateAired = "dateAired$it",
+                        seasonNumber = 1,
+                        stillPath = "stillPath$it",
+                        rating = 1f,
+                        voteCount = 1
+                    )
+                )
+            }
+            return list.toList()
+        }
+    }
+}
 
 // todo this should not be a separate class
 data class ResponseShowDetailWithSeasons(
@@ -56,7 +100,33 @@ data class ResponseShowDetailWithSeasons(
     @SerializedName("number_of_seasons") val seasonCount: Int,
     @SerializedName("popularity") val popularityValue: Float,
     @SerializedName("seasons") val seasons: List<ResponseSeason>
-)
+) {
+    companion object {
+        fun create(amount: Int): List<ResponseShowDetailWithSeasons> {
+            val list = mutableListOf<ResponseShowDetailWithSeasons>()
+            repeat(amount) {
+                list.add(
+                    ResponseShowDetailWithSeasons(
+                        id = it,
+                        name = "name$it",
+                        overview = "overview$it",
+                        backdropPath = "backdropPath$it",
+                        posterPath = "posterPath$it",
+                        rating = 1f,
+                        firstAirYear = "firstAirYear$it",
+                        episodeCount = 1,
+                        seasonCount = 1,
+                        popularityValue = 1f,
+                        seasons = ResponseSeason.create(20)
+                    )
+                )
+            }
+            return list.toList()
+        }
+
+        fun single() = create(1)[0]
+    }
+}
 
 data class ResponseSeason(
     @SerializedName("id") val id: Int,
@@ -66,4 +136,24 @@ data class ResponseSeason(
     @SerializedName("poster_path") val posterPath: String?,
     @SerializedName("episode_count") val episodeCount: Int,
     @SerializedName("air_date") val dateAired: String
-)
+) {
+    companion object {
+        fun create(amount: Int): List<ResponseSeason> {
+            val list = mutableListOf<ResponseSeason>()
+            repeat(amount) {
+                list.add(
+                    ResponseSeason(
+                        id = it,
+                        number = it,
+                        name = "name$it",
+                        overview = "overview$it",
+                        posterPath = "posterPath$it",
+                        episodeCount = 1,
+                        dateAired = "dateAired$it"
+                    )
+                )
+            }
+            return list.toList()
+        }
+    }
+}

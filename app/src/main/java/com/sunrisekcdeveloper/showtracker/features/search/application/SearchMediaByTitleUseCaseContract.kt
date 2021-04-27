@@ -21,7 +21,14 @@ package com.sunrisekcdeveloper.showtracker.features.search.application
 import androidx.paging.PagingData
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 interface SearchMediaByTitleUseCaseContract {
     operator fun invoke(query: String) : Flow<PagingData<UIModelPoster>>
+    class Fake() : SearchMediaByTitleUseCaseContract {
+        override fun invoke(query: String): Flow<PagingData<UIModelPoster>> {
+            return flowOf(PagingData.from(UIModelPoster.create(20)))
+        }
+    }
 }

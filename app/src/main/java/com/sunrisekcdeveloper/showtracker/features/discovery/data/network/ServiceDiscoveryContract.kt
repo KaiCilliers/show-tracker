@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.showtracker.features.discovery.data.network
 import com.sunrisekcdeveloper.showtracker.BuildConfig
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.EnvelopePaginatedShows
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 
 interface ServiceDiscoveryContract {
@@ -53,4 +54,55 @@ interface ServiceDiscoveryContract {
         apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedShows>
+
+    class Fake() : ServiceDiscoveryContract {
+        var expectException = false
+        override suspend fun popularMovies(
+            apiKey: String,
+            page: Int
+        ): Response<EnvelopePaginatedMovies> {
+            return if (expectException) Response.error(404, "Fake - Error fetching popular movies".toResponseBody())
+            else Response.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun topRatedMovies(
+            apiKey: String,
+            page: Int
+        ): Response<EnvelopePaginatedMovies> {
+            return if (expectException) Response.error(404, "Fake - Error fetching top rated movies".toResponseBody())
+            else Response.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun upcomingMovies(
+            apiKey: String,
+            page: Int
+        ): Response<EnvelopePaginatedMovies> {
+            return if (expectException) Response.error(404, "Fake - Error fetching upcoming movies".toResponseBody())
+            else Response.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun popularShows(
+            apiKey: String,
+            page: Int
+        ): Response<EnvelopePaginatedShows> {
+            return if (expectException) Response.error(404, "Fake - Error fetching popular shows".toResponseBody())
+            else Response.success(EnvelopePaginatedShows.single())
+        }
+
+        override suspend fun topRatedShows(
+            apiKey: String,
+            page: Int
+        ): Response<EnvelopePaginatedShows> {
+            return if (expectException) Response.error(404, "Fake - Error fetching top rated shows".toResponseBody())
+            else Response.success(EnvelopePaginatedShows.single())
+        }
+
+        override suspend fun airingTodayShows(
+            apiKey: String,
+            page: Int
+        ): Response<EnvelopePaginatedShows> {
+            return if (expectException) Response.error(404, "Fake - Error fetching airing today shows".toResponseBody())
+            else Response.success(EnvelopePaginatedShows.single())
+        }
+    }
 }

@@ -25,4 +25,22 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.
 interface RemoteDataSourceSearchContract {
     suspend fun moviesByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedMovies>
     suspend fun showsByTitle(query: String, page: Int) : NetworkResult<EnvelopePaginatedShows>
+    class Fake() : RemoteDataSourceSearchContract {
+        var expectException = false
+        override suspend fun moviesByTitle(
+            query: String,
+            page: Int
+        ): NetworkResult<EnvelopePaginatedMovies> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Movies with query: \"$query\"")
+            else NetworkResult.success(EnvelopePaginatedMovies.single())
+        }
+
+        override suspend fun showsByTitle(
+            query: String,
+            page: Int
+        ): NetworkResult<EnvelopePaginatedShows> {
+            return if (expectException) NetworkResult.error("Fake - Error fetching Shows with query: \"$query\"")
+            else NetworkResult.success(EnvelopePaginatedShows.single())
+        }
+    }
 }
