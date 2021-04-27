@@ -73,6 +73,10 @@
     <string name="key_watchlist_previous_message">key_watchlist_previous_message</string>
     <string name="filter_show_by">Filter TV Shows by:</string>
     <string name="filter_movie_by">Filter Movies by:</string>
+    <string name="runtime">Runtime</string>
+    <string name="year">Year</string>
+    <string name="language">Language</string>
+    <string name="age_rating">Age Rating</string>
 
     <string-array name="items_movie_filter">
         <item>Movie</item>
