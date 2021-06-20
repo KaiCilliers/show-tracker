@@ -1,0 +1,33 @@
+apply from: "$rootDir/common-android-library.gradle"
+
+android {
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation project(Core.network)
+    implementation project(Core.cache)
+    implementation project(Core.views)
+
+    implementation Libs.hilt
+    implementation Libs.hiltLifecycleViewModel
+
+    // todo BottomSheetDialogFragment needed a class from this dep
+    implementation "androidx.activity:activity-ktx:1.2.1"
+
+    implementation Libs.androidxCoreKtx
+    implementation Libs.androidxAppCompat
+    implementation Libs.navigationFragmentKtx
+
+    implementation Libs.glide
+    implementation Libs.dataStorePref
+
+    implementation Libs.googleMaterial
+    implementation Libs.timber
+    implementation Libs.gson
+    implementation Libs.retrofit
+    implementation Libs.coroutinesCore
+    implementation Libs.roomKtx
+}

@@ -30,6 +30,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetShowDetailArgs
+import com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetShowDetailDirections
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*

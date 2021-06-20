@@ -1,0 +1,100 @@
+<resources>
+    <string name="app_name">ShowTracker</string>
+
+    <string name="heading_popular_movies">Popular Movies</string>
+    <string name="most_popular_movies">Most popular movies</string>
+    <string name="heading_top_rated_movies">Top Rated Movies</string>
+    <string name="highest_rated_movies">Highest rated movies of all times</string>
+    <string name="heading_upcoming_movies">Upcoming Movies</string>
+    <string name="stay_updated">Stay updated with the latest movies</string>
+
+    <!-- Concat -->
+    <string name="season_plural_with_number">%1$s Seasons</string>
+    <string name="season_single_with_number">%1$s Season</string>
+    <string name="runtime_with_value">%1$dh%02$dm</string>
+
+    <!-- TESTING -->
+    <string name="remove">Remove</string>
+    <string name="watchlist_title_updated">Watchlist</string>
+    <string name="discovery_title_updated">Discovery</string>
+    <string name="search_title">Search</string>
+    <string name="movies_title">Movies</string>
+    <string name="tv_shows_title">TV Shows</string>
+    <string name="search_by_show_hint">Search TV Show by title</string>
+    <string name="search_movie_show_hint">Search for a movie or a TV show</string>
+    <string name="search_header_no_results">Oh no! We could not find what you were looking for.</string>
+    <string name="search_sub_header_no_results">Try searching for a different movie or TV show</string>
+    <string name="add_button">+ Add</string>
+    <string name="movie_watched_text">I watched this</string>
+    <string name="media_add">+ Add</string>
+    <string name="single_pipe">|</string>
+    <string name="heading_popular_shows">Popular Shows</string>
+    <string name="heading_top_rated_shows">Top Rated Shows</string>
+    <string name="heading_airing_today_shows">Airing Today</string>
+    <string name="sub_heading_popular_shows">Popular Shows</string>
+    <string name="sub_heading_top_rated_shows">Top Rated Shows</string>
+    <string name="sub_heading_airing_today_shows">Shows Airing Today </string>
+    <string name="heading_search_results">Results</string>
+    <string name="input_last_episode_watched">Please select the next episode you need to watch</string>
+    <string name="shorthand_season">S</string>
+    <string name="shorthand_episode">E</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_up_to_date">I\'m up to date</string>
+    <string name="action_set_watched">Set as watched</string>
+    <string name="action_start_watching">Start Watching Now</string>
+    <string name="info_up_to_date_show">Up to date!</string>
+    <string name="show_add">+ Add</string>
+    <string name="show_start_watching">Start Watching</string>
+    <string name="show_up_to_date">Up to date</string>
+    <string name="show_update_progress">Update progress</string>
+    <string name="show_remove">Remove</string>
+    <string name="results">Results</string>
+    <string name="unwatched_shows_movies">Your Unwatched Media</string>
+    <string name="watched">WATCHED</string>
+    <string name="already_watched">Already Watched</string>
+    <string name="mark_watched">SET AS WATCHED</string>
+    <string name="search_shows_by_title">Search TV shows by title</string>
+    <string name="search_movie_by_title">Search movies by title</string>
+    <string name="separator_left_to_right">/</string>
+    <string name="search">Search</string>
+    <string name="loading_show_information">Loading show information…</string>
+    <string name="mark_as_watched">Mark as Watched</string>
+    <string name="empty_list">EMPTY LIST</string>
+    <string name="empty_list_sub_heading">You can add movies and TV shows to your watchlist by visiting the Discovery or Search screen</string>
+    <string name="no_matches">NO MATCHES</string>
+    <string name="no_matches_sub_heading">Your filter and option and search query matches no media on your watchlist</string>
+
+    <!-- KeyStore -->
+    <string name="key_disc_snack_bar">key_disc_snack_bar</string>
+    <string name="key_disc_prev_message">key_disc_prev_message</string>
+    <string name="key_disc_movie_prev_message">key_disc_movie_prev_message</string>
+    <string name="key_disc_show_prev_message">key_disc_show_prev_message</string>
+    <string name="key_search_prev_message">key_search_prev_message</string>
+    <string name="key_watchlist_previous_message">key_watchlist_previous_message</string>
+    <string name="filter_show_by">Filter TV Shows by:</string>
+    <string name="filter_movie_by">Filter Movies by:</string>
+
+    <string-array name="items_movie_filter">
+        <item>Movie</item>
+        <item>All</item>
+        <item>TV Shows</item>
+    </string-array>
+    <string-array name="items_show_filter">
+        <item>TV Show</item>
+        <item>All</item>
+        <item>Movies</item>
+    </string-array>
+    <string-array name="items_show_sort">
+        <item>No Filters</item>
+        <item>Added Today</item>
+        <item>Watched Today</item>
+        <item>Started</item>
+        <item>Not Started</item>
+    </string-array>
+    <string-array name="items_movie_sort">
+        <item>No Filters</item>
+        <item>Watched</item>
+        <item>Not Watched</item>
+        <item>Added Today</item>
+    </string-array>
+</resources>

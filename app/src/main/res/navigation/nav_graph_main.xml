@@ -109,7 +109,7 @@
     </fragment>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_movie"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetMovieDetail"
+        android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetMovieDetail"
         android:label="bottom_sheet_detail_movie"
         tools:layout="@layout/bottom_sheet_movie_detail" >
         <argument
@@ -124,7 +124,7 @@
     </dialog>
     <dialog
         android:id="@+id/destination_bottom_sheet_detail_show"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetShowDetail"
+        android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetShowDetail"
         android:label="bottom_sheet_detail_show"
         tools:layout="@layout/bottom_sheet_show_detail" >
         <argument

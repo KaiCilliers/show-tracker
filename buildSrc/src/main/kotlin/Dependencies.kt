@@ -13,7 +13,13 @@ object DefaultConfig {
 }
 
 object Modules {
+    const val detail = ":features:detail"
+}
 
+object Core {
+    const val network = ":core:network"
+    const val cache = ":core:cache"
+    const val views = ":core:views"
 }
 
 object Versions {
@@ -137,8 +143,8 @@ object Libs {
     val fragmentTest = "androidx.fragment:fragment-testing:${Versions.FRAGMENT}"
 
     // Navigation
-    val navigationUiKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
-    val navigationFragmentKtx = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
+    val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
+    val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     val navigationTest = "androidx.navigation:navigation-testing:${Versions.NAVIGATION}"
 
     // ========

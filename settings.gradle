@@ -1,2 +1,6 @@
-include ':app'
 rootProject.name = "ShowTracker"
+include ':app'
+include ':core:network'
+include ':features:detail'
+include ':core:cache'
+include ':core:views'
