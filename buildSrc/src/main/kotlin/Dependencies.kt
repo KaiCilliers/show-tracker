@@ -14,6 +14,7 @@ object DefaultConfig {
 
 object Modules {
     const val detail = ":features:detail"
+    const val discovery = ":features:discovery"
 }
 
 object Core {
@@ -106,7 +107,7 @@ object Libs {
 
     // Retrofit
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
-    val okHttpLogInterceptor = "com.squareup.okhttp3:logging-interceptor:$${Versions.OK_HTTP}"
+    val okHttpLogInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.OK_HTTP}"
     val moshi = "com.squareup.moshi:moshi-kotlin:${Versions.MOSHI}"
     val retrofitMoshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.RETROFIT}"
     val retrofitScalarsConverter = "com.squareup.retrofit2:converter-scalars:${Versions.RETROFIT}"

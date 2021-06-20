@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies
+package com.sunrisekcdeveloper.discovery.presentation.movies
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,19 +35,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.sunrisekcdeveloper.discovery.presentation.movies.FragmentDiscoveryMoviesDirections
-import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
-import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
-import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyMoviesBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
+import com.sunrisekcdeveloper.cache.ListType
+import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.discovery.*
+import com.sunrisekcdeveloper.discovery.databinding.FragmentDiscoveryOnlyMoviesBinding
+import com.sunrisekcdeveloper.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -97,16 +91,15 @@ class FragmentDiscoveryMovies : Fragment() {
             settings[KeyPersistenceStore(getString(R.string.key_disc_movie_prev_message)).asDataStoreKey()] = message
         }
     }
-
     private fun setup() {
 
-        binding.tvHeadingPopularMovies.click {
+        binding.tvHeadingPopularMovies.setOnClickListener {
             viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.moviePopular()))
         }
-        binding.tvHeadingTopRatedMovies.click {
+        binding.tvHeadingTopRatedMovies.setOnClickListener {
             viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieTopRated()))
         }
-        binding.tvHeadingUpcomingMovies.click {
+        binding.tvHeadingUpcomingMovies.setOnClickListener {
             viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.movieUpcoming()))
         }
 
@@ -116,9 +109,9 @@ class FragmentDiscoveryMovies : Fragment() {
         // Navigation - Toolbar Search
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
-                findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToFragmentSearch()
-                )
+//                findNavController().navigate(
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToFragmentSearch()
+//                )
                 true
             }
         }
@@ -137,9 +130,9 @@ class FragmentDiscoveryMovies : Fragment() {
                         findNavController().popBackStack()
                         // TV Show Discovery Screen
                     } else if (id == 2L) {
-                        findNavController().navigate(
-                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryShowsFragment()
-                        )
+//                        findNavController().navigate(
+//                            FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToDiscoveryShowsFragment()
+//                        )
                     }
                 }
 
@@ -208,41 +201,41 @@ class FragmentDiscoveryMovies : Fragment() {
     }
 
     private fun navigateToFocusedContent(listType: ListType) {
-        findNavController().navigate(
-            when (listType) {
-                ListType.MoviePopular -> {
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(1)
-                }
-                ListType.MovieTopRated -> {
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(3)
-                }
-                ListType.MovieUpcoming -> {
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(5)
-                }
-                ListType.ShowPopular -> {
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(2)
-                }
-                ListType.ShowTopRated -> {
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(4)
-                }
-                ListType.ShowAiringToday -> {
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(6)
-                }
-                ListType.NoList -> {
-                    throw Exception("No list type associated with group")
-                }
-            }
-        )
+//        findNavController().navigate(
+//            when (listType) {
+//                ListType.MoviePopular -> {
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(1)
+//                }
+//                ListType.MovieTopRated -> {
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(3)
+//                }
+//                ListType.MovieUpcoming -> {
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(5)
+//                }
+//                ListType.ShowPopular -> {
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(2)
+//                }
+//                ListType.ShowTopRated -> {
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(4)
+//                }
+//                ListType.ShowAiringToday -> {
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetFocused(6)
+//                }
+//                ListType.NoList -> {
+//                    throw Exception("No list type associated with group")
+//                }
+//            }
+//        )
     }
 
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            if (mediaType == MediaType.Movie) {
-                findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(
-                        mediaId, mediaTitle, posterPath
-                    )
-                )
+            if (mediaType == MediaType.movie()) {
+//                findNavController().navigate(
+//                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToBottomSheetDetailMovie(
+//                        mediaId, mediaTitle, posterPath
+//                    )
+//                )
             }
         }
 

@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/destination_main_discovery_movies_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies"
+        android:name="com.sunrisekcdeveloper.discovery.presentation.movies.FragmentDiscoveryMovies"
         android:label="fragment_discovery_movies"
         tools:layout="@layout/fragment_discovery_only_movies" >
         <action
@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/destination_discovery_shows_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows.FragmentDiscoveryShows"
+        android:name="com.sunrisekcdeveloper.discovery.presentation.shows.FragmentDiscoveryShows"
         android:label="fragment_discovery_shows"
         tools:layout="@layout/fragment_discovery_only_shows" >
         <action
@@ -172,7 +172,7 @@
     </fragment>
     <dialog
         android:id="@+id/destination_bottom_sheet_focused"
-        android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.FragmentBottomSheetFocused"
+        android:name="com.sunrisekcdeveloper.discovery.presentation.focused.FragmentBottomSheetFocused"
         android:label="bottom_sheet_focused_discovery"
         tools:layout="@layout/bottom_sheet_focused_discovery" >
         <argument

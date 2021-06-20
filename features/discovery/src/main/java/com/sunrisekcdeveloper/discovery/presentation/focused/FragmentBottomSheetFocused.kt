@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused
+package com.sunrisekcdeveloper.discovery.presentation.focused
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,22 +24,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.sunrisekcdeveloper.discovery.presentation.focused.FragmentBottomSheetFocusedArgs
-import com.sunrisekcdeveloper.discovery.presentation.focused.FragmentBottomSheetFocusedDirections
-import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
-import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.databinding.BottomSheetFocusedDiscoveryBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.ViewModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAdapterSimplePosterMedium
+import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.discovery.*
+import com.sunrisekcdeveloper.discovery.databinding.BottomSheetFocusedDiscoveryBinding
+import com.sunrisekcdeveloper.discovery.presentation.ViewModelDiscovery
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -51,7 +41,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetFocusedDiscoveryBinding
     private val viewModel: ViewModelDiscovery by viewModels()
-    private val arguments: FragmentBottomSheetFocusedArgs by navArgs()
+//    private val arguments: FragmentBottomSheetFocusedArgs by navArgs()
 
     private lateinit var pagingAdapter : PagingAdapterSimplePosterMedium
     private var job: Job? = null
@@ -73,32 +63,32 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
     }
 
     private fun setup() {
-        binding.tvHeading.click {
+        binding.tvHeading.setOnClickListener {
             viewModel.submitAction(ActionFocused.tapHeading())
         }
-        binding.imgFocusedClose.click {
+        binding.imgFocusedClose.setOnClickListener {
             viewModel.submitAction(ActionFocused.close())
         }
 
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
-                MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailMovie(
-                            movieId = mediaId,
-                            movieTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
+                MediaType.movie() -> {
+//                    findNavController().navigate(
+//                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailMovie(
+//                            movieId = mediaId,
+//                            movieTitle = mediaTitle,
+//                            posterPath = posterPath
+//                        )
+//                    )
                 }
                 MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailShow(
-                            showId = mediaId,
-                            showTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
+//                    findNavController().navigate(
+//                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailShow(
+//                            showId = mediaId,
+//                            showTitle = mediaTitle,
+//                            posterPath = posterPath
+//                        )
+//                    )
                 }
             }
         }
@@ -108,7 +98,9 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
 
     private fun observeViewModel() {
         job = viewLifecycleOwner.lifecycleScope.launch {
-            when (arguments.listType) {
+//            when (arguments.listType) {
+            val one = 1
+            when(one) {
                 1 -> {
                     binding.tvHeading.text = getString(R.string.heading_popular_movies)
                     viewModel.streamPopularMovies.collectLatest {

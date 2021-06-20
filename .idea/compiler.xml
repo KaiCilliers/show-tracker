@@ -8,6 +8,7 @@
       <module name="ShowTracker.core.views" target="11" />
       <module name="ShowTracker.detail" target="11" />
       <module name="ShowTracker.features.detail" target="11" />
+      <module name="ShowTracker.features.discovery" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -16,9 +16,8 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.data.common
+package com.sunrisekcdeveloper.network
 
-import com.sunrisekcdeveloper.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response

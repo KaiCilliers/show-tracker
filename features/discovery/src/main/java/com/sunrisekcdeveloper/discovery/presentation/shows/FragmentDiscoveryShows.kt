@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.discovery.presentation.shows
+package com.sunrisekcdeveloper.discovery.presentation.shows
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,19 +35,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.sunrisekcdeveloper.discovery.presentation.shows.FragmentDiscoveryShowsDirections
-import com.sunrisekcdeveloper.showtracker.R
-import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
-import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
-import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
-import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryOnlyShowsBinding
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
-import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
-import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.PagingAdapterSimplePoster
+import com.sunrisekcdeveloper.cache.ListType
+import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.discovery.*
+import com.sunrisekcdeveloper.discovery.databinding.FragmentDiscoveryOnlyShowsBinding
+import com.sunrisekcdeveloper.discovery.domain.model.ActionDiscovery
+import com.sunrisekcdeveloper.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.discovery.presentation.PagingAdapterSimplePoster
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -100,14 +94,14 @@ class FragmentDiscoveryShows : Fragment() {
 
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
-            if (mediaType == MediaType.Show) {
-                findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(
-                        mediaId,
-                        mediaTitle,
-                        posterPath
-                    )
-                )
+            if (mediaType == MediaType.show()) {
+//                findNavController().navigate(
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(
+//                        mediaId,
+//                        mediaTitle,
+//                        posterPath
+//                    )
+//                )
             }
         }
 
@@ -177,41 +171,41 @@ class FragmentDiscoveryShows : Fragment() {
     }
 
     private fun navigateToFocusedContent(listType: ListType) {
-        findNavController().navigate(
-            when (listType) {
-                ListType.MoviePopular -> {
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(1)
-                }
-                ListType.MovieTopRated -> {
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(3)
-                }
-                ListType.MovieUpcoming -> {
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(5)
-                }
-                ListType.ShowPopular -> {
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(2)
-                }
-                ListType.ShowTopRated -> {
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(4)
-                }
-                ListType.ShowAiringToday -> {
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(6)
-                }
-                ListType.NoList -> {
-                    throw Exception("No list type associated with group")
-                }
-            }
-        )
+//        findNavController().navigate(
+//            when (listType) {
+//                ListType.MoviePopular -> {
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(1)
+//                }
+//                ListType.MovieTopRated -> {
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(3)
+//                }
+//                ListType.MovieUpcoming -> {
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(5)
+//                }
+//                ListType.ShowPopular -> {
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(2)
+//                }
+//                ListType.ShowTopRated -> {
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(4)
+//                }
+//                ListType.ShowAiringToday -> {
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetFocused(6)
+//                }
+//                ListType.NoList -> {
+//                    throw Exception("No list type associated with group")
+//                }
+//            }
+//        )
     }
 
     private fun setup() {
-        binding.tvHeadingPopularShows.click {
+        binding.tvHeadingPopularShows.setOnClickListener {
             viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showPopular()))
         }
-        binding.tvHeadingTopRatedShows.click {
+        binding.tvHeadingTopRatedShows.setOnClickListener {
             viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showTopRated()))
         }
-        binding.tvHeadingAiringTodayShows.click {
+        binding.tvHeadingAiringTodayShows.setOnClickListener {
             viewModel.submitAction(ActionDiscovery.tapListHeading(ListType.showAiringToday()))
         }
 
@@ -223,9 +217,9 @@ class FragmentDiscoveryShows : Fragment() {
         // Navigation - Toolbar Search
         binding.toolbarDiscoveryShows.menu.forEach {
             it.setOnMenuItemClickListener {
-                findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToFragmentSearch()
-                )
+//                findNavController().navigate(
+//                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToFragmentSearch()
+//                )
                 true
             }
         }
@@ -244,9 +238,9 @@ class FragmentDiscoveryShows : Fragment() {
                         findNavController().popBackStack()
                         // Discovery Movies Screen
                     } else if (id == 2L) {
-                        findNavController().navigate(
-                            FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToDiscoveryMoviesFragment()
-                        )
+//                        findNavController().navigate(
+//                            FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToDiscoveryMoviesFragment()
+//                        )
                     }
                 }
 

@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/core/views" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/detail" />
+            <option value="$PROJECT_DIR$/features/discovery" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

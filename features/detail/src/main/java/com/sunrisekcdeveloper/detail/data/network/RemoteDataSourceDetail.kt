@@ -18,12 +18,12 @@
 
 package com.sunrisekcdeveloper.detail.data.network
 
-import com.sunrisekcdeveloper.detail.data.common.RemoteDataSourceBase
 import com.sunrisekcdeveloper.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.detail.data.model.ResponseShowDetail
 import com.sunrisekcdeveloper.network.NetworkResult
+import com.sunrisekcdeveloper.network.RemoteDataSourceBase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
