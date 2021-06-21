@@ -23,6 +23,11 @@ object Core {
     const val views = ":core:views"
 }
 
+object Common {
+    const val models = ":common:models"
+    const val uiComponents = ":common:ui-components"
+}
+
 object Versions {
     const val GRADLE_TOOLS = "4.1.2" // todo update version
 

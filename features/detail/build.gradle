@@ -10,6 +10,8 @@ dependencies {
     implementation project(Core.network)
     implementation project(Core.cache)
     implementation project(Core.views)
+    implementation project(Common.models)
+    implementation project(Common.uiComponents)
 
     implementation Libs.hilt
     implementation Libs.hiltLifecycleViewModel
@@ -26,8 +28,8 @@ dependencies {
 
     implementation Libs.googleMaterial
     implementation Libs.timber
-    implementation Libs.gson
-    implementation Libs.retrofit
+//    implementation Libs.gson
+//    implementation Libs.retrofit
     implementation Libs.coroutinesCore
-    implementation Libs.roomKtx
+//    implementation Libs.roomKtx
 }
