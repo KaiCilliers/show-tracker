@@ -26,7 +26,7 @@ object Core {
 object Versions {
     const val GRADLE_TOOLS = "4.1.2" // todo update version
 
-    const val KOTLIN = "1.4.20" // todo update version
+    const val KOTLIN = "1.5.0" // todo update version
     const val COROUTINE = "1.2.1"
     const val COROUTINE_TEST = "1.3.0" // todo update version
 
@@ -62,7 +62,7 @@ object Versions {
 
     const val SAVED_STATE = "2.3.0"
 
-    const val ROOM = "2.3.0-alpha03" // todo update version
+    const val ROOM = "2.3.0" // todo update version
     const val ROOM_TESTING = "1.1.1"
 
     const val TIMBER = "4.7.1"
@@ -117,7 +117,6 @@ object Libs {
     // Room
     val roomKtx = "androidx.room:room-ktx:${Versions.ROOM}"
     val roomCompiler = "androidx.room:room-compiler:${Versions.ROOM}"
-    val roomPersistenceCompiler = "android.arch.persistence.room:compiler:${Versions.ROOM}"
     val roomTesting = "android.arch.persistence.room:testing:${Versions.ROOM_TESTING}"
 
     // DataStore
