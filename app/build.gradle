@@ -106,8 +106,6 @@ dependencies {
     implementation project(Common.models)
     implementation project(Common.uiComponents)
 
-    implementation project(":test")
-
     // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
