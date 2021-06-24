@@ -27,7 +27,16 @@
         android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetMovieDetail"
         android:label="bottom_sheet_movie_detail"
         tools:layout="@layout/bottom_sheet_movie_detail">
-        <deepLink app:uri="showtracker://detail/movie_detail"/>
+        <deepLink app:uri="showtracker://detail/movie_detail?id={movieId}?movieTitle={movieTitle}?posterPath={posterPath}"/>
+        <argument
+            android:name="movieId"
+            app:argType="string" />
+        <argument
+            android:name="movieTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/fragmentBottomSheetShowDetail"

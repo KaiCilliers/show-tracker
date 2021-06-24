@@ -31,7 +31,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.sunrisekcdeveloper.showtracker.common.ActivityMain
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.di.ModuleLocal
+import com.sunrisekcdeveloper.detail.di.ModuleLocal
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

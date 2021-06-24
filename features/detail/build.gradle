@@ -1,4 +1,7 @@
 apply from: "$rootDir/common-android-library.gradle"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     buildFeatures {
@@ -25,6 +28,10 @@ dependencies {
 
     implementation Libs.glide
     implementation Libs.dataStorePref
+
+    kapt Libs.hiltAndroidCompiler
+    implementation Libs.hilt
+    implementation Libs.hiltLifecycleViewModel
 
     implementation Libs.googleMaterial
     implementation Libs.timber

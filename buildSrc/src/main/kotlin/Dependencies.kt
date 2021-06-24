@@ -63,6 +63,7 @@ object Versions {
 
     const val HILT = "2.28-alpha"
     const val HILT_COMPILER = "1.0.0-alpha02"
+    const val HILT_ANDROID_COMPILER = "2.37"
     const val HILT_LIFECYCLE_VIEWMODEL = "1.0.0-alpha02" // todo update version
 
     const val SAVED_STATE = "2.3.0"
@@ -138,8 +139,8 @@ object Libs {
     val pagingRuntimeKtx = "androidx.paging:paging-runtime-ktx:${Versions.PAGING_RUNTIME}"
 
     // DI Hilt
-    val hilt = "com.google.dagger:hilt-android:${Versions.HILT}"
-    val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
+    val hilt = "com.google.dagger:hilt-android:${Versions.HILT_ANDROID_COMPILER}"
+    val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.HILT_ANDROID_COMPILER}"
     val hiltTesting = "com.google.dagger:hilt-android-testing:${Versions.HILT}"
     val hiltLifecycleViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.HILT_LIFECYCLE_VIEWMODEL}"
     val hiltCompiler = "androidx.hilt:hilt-compiler:${Versions.HILT_COMPILER}"

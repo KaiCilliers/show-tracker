@@ -185,4 +185,5 @@
             android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_movie"
             app:destination="@id/destination_bottom_sheet_detail_movie" />
     </dialog>
+    <include app:graph="@navigation/detail_module_nav_graph" />
 </navigation>

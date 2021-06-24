@@ -18,10 +18,12 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.forEach
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -30,11 +32,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
@@ -198,13 +203,24 @@ class FragmentDiscovery : Fragment() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
-                            movieId = mediaId,
-                            movieTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
+//                    <deepLink app:uri="showtracker://detail/movie_detail?id={id}&amp;movieTitle={movieTitle}&amp;posterPath={posterPath}"/>
+//                    val intent = Uri.parse(
+//                        "showtracker://detail/movie_detail?id=$mediaId&movieTitle=$mediaTitle&posterPath=$posterPath"
+//                    )
+//                    findNavController().navigate(intent)
+                    val intent = InternalDeepLink.moduleDetailMovie(
+                        id = mediaId,
+                        movieTittle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
+//                    findNavController().navigate(
+//                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
+//                            movieId = mediaId,
+//                            movieTitle = mediaTitle,
+//                            posterPath = posterPath
+//                        )
+//                    )
                 }
                 MediaType.Show -> {
                     findNavController().navigate(

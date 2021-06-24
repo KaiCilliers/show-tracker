@@ -80,6 +80,18 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/gradle/incremental.annotation.processors'
+        exclude("META-INF/*.kotlin_module")
+    }
 }
 // Additionally configure kapt to correct error types by setting correctErrorTypes to true.
 kapt {
@@ -87,9 +99,12 @@ kapt {
 }
 dependencies {
 
-    // todo add to buildSrc
-//    implementation project(":features:detail")
-//    implementation project(":core:network")
+    implementation project(":features:detail")
+    implementation project(Core.network)
+    implementation project(Core.cache)
+    implementation project(Core.views)
+    implementation project(Common.models)
+    implementation project(Common.uiComponents)
 
     // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

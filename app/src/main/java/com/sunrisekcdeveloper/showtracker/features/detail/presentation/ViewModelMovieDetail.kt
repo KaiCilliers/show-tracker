@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.detail.presentation
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,12 +32,15 @@ import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.EventDeta
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.StateDetailMovie
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelMovieDetail @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelMovieDetail @Inject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
     private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
