@@ -31,12 +31,15 @@ import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterSh
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.StateWatchlist
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class ViewModelWatchlist @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelWatchlist @Inject constructor(
     private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
     private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract,
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,

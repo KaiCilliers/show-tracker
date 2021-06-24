@@ -30,11 +30,14 @@ import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.ActionP
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.EventProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.SetShowProgress
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.model.StateProgress
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelProgress @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelProgress @Inject constructor(
     private val fetchShowSeasonAndEpisodeTotalsUseCase: FetchShowSeasonAndEpisodeTotalsUseCaseContract,
     private val setShowProgressUseCase: SetShowProgressUseCaseContract
 ) : ViewModel() {

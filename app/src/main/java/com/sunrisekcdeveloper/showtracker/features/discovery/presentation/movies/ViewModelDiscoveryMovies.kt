@@ -28,12 +28,15 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadUpc
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelDiscoveryMovies @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelDiscoveryMovies @Inject constructor(
     loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract

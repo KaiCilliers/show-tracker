@@ -27,12 +27,15 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.detail.application.*
 import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelShowDetail @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelShowDetail @Inject constructor(
     private val fetchShowDetailsUseCase: FetchShowDetailsUseCaseContract,
     private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
     private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract

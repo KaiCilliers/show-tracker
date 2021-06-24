@@ -29,14 +29,17 @@ import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class ViewModelSearch @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelSearch @Inject constructor(
     private val searchMediaByTitleUseCase: SearchMediaByTitleUseCaseContract,
     private val loadUnwatchedMediaUseCase: LoadUnwatchedMediaUseCaseContract
 ) : ViewModel() {
