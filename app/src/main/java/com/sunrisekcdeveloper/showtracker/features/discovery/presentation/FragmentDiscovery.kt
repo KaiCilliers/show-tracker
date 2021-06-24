@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+//import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
@@ -46,6 +47,7 @@ import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
 import com.sunrisekcdeveloper.showtracker.common.util.click
 import com.sunrisekcdeveloper.showtracker.common.util.observeInLifecycle
 import com.sunrisekcdeveloper.showtracker.databinding.FragmentDiscoveryBinding
+import com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetMovieDetail
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
@@ -56,6 +58,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -208,12 +211,12 @@ class FragmentDiscovery : Fragment() {
 //                        "showtracker://detail/movie_detail?id=$mediaId&movieTitle=$mediaTitle&posterPath=$posterPath"
 //                    )
 //                    findNavController().navigate(intent)
-                    val intent = InternalDeepLink.moduleDetailMovie(
-                        id = mediaId,
-                        movieTittle = mediaTitle,
-                        posterPath = posterPath
-                    ).toUri()
-                    findNavController().navigate(intent)
+//                    val intent = InternalDeepLink.moduleDetailMovie(
+//                        id = mediaId,
+//                        movieTittle = mediaTitle,
+//                        posterPath = posterPath
+//                    ).toUri()
+//                    findNavController().navigate(intent)
 //                    findNavController().navigate(
 //                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
 //                            movieId = mediaId,
@@ -221,6 +224,19 @@ class FragmentDiscovery : Fragment() {
 //                            posterPath = posterPath
 //                        )
 //                    )
+
+//                    Timber.d("args: ${arguments.movieId} and ${arguments.movieTitle} and ${arguments.posterPath} and $arguments")
+                    // todo fak man, this damn bottomsheets
+                    FragmentBottomSheetMovieDetail().apply {
+                        val bundle = Bundle().apply {
+                            putString("movieId", mediaId)
+                            putString("movieTitle", mediaTitle)
+                            putString("posterPath", posterPath)
+                        }
+                        arguments = bundle
+                        show(childFragmentManager, "tagggg")
+                    }
+
                 }
                 MediaType.Show -> {
                     findNavController().navigate(
