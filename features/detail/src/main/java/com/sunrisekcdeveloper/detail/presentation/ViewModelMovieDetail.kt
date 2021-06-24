@@ -43,83 +43,83 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelMovieDetail @Inject constructor(
-//    private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
-//    private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
-//    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
-//    private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract
+    private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
+    private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
+    private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
+    private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract
 ) : ViewModel() {
 
-//
-//    private val eventChannel = Channel<EventDetailMovie>(Channel.BUFFERED)
-//    val eventsFlow = eventChannel.receiveAsFlow()
-//
-//    private val _state = MutableLiveData<StateDetailMovie>()
-//    val state: LiveData<StateDetailMovie>
-//        get() = _state
-//
-//    fun submitAction(action: ActionDetailMovie) = viewModelScope.launch {
-//        when (action) {
-//            is ActionDetailMovie.Load -> {
-//                fetchDetails(action.movieId)
-//            }
-//            is ActionDetailMovie.Add -> {
-//                addMediaToWatchlistUseCase(action.movieId, MediaType.movie())
-//                eventChannel.send(EventDetailMovie.saveSnackbarMessage("Successfully added \"${action.title}\"!"))
-//                eventChannel.send(EventDetailMovie.close())
-//            }
-//            is ActionDetailMovie.Remove -> {
-//                removeMediaFromWatchlistUseCase(action.movieId, MediaType.movie())
-//                eventChannel.send(EventDetailMovie.saveSnackbarMessage("Removed \"${action.title}\""))
-//                eventChannel.send(EventDetailMovie.close())
-//            }
-//            is ActionDetailMovie.SetWatched -> {
-//                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
-//                eventChannel.send(EventDetailMovie.saveSnackbarMessage("\"${action.title}\" marked as watched!"))
-//                eventChannel.send(EventDetailMovie.close())
-//            }
-//            is ActionDetailMovie.SetUnwatched -> {
-//                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
-//                eventChannel.send(EventDetailMovie.saveSnackbarMessage("\"${action.title}\" marked as unwatched"))
-//                eventChannel.send(EventDetailMovie.close())
-//            }
-//            ActionDetailMovie.Close -> {
-//                eventChannel.send(EventDetailMovie.close())
-//            }
-//            is ActionDetailMovie.ShowToast -> {
-//                eventChannel.send(EventDetailMovie.ShowToast(action.msg))
-//            }
-//            is ActionDetailMovie.AttemptRemove -> {
-//                eventChannel.send(
-//                    EventDetailMovie.showConfirmationDialog(
-//                        action.movieId,
-//                        action.title
-//                    )
-//                )
-//            }
-//            is ActionDetailMovie.AttemptUnwatch -> {
-//                eventChannel.send(
-//                    EventDetailMovie.showConfirmationDialogUnwatch(
-//                        action.movieId,
-//                        action.title
-//                    )
-//                )
-//            }
-//        }
-//    }
-//
-//    private fun fetchDetails(id: String) = viewModelScope.launch {
-//        fetchMovieDetailsUseCase(id).collect { resource ->
-//            when (resource) {
-//                is Resource.Success -> {
-//                    _state.value = StateDetailMovie.Success(resource.data)
-//                }
-//                is Resource.Error -> {
-//                    _state.value = StateDetailMovie.Error(Exception(resource.exception))
-//                }
-//                Resource.Loading -> {
-//                    _state.value = StateDetailMovie.Loading
-//                }
-//            }
-//        }
-//    }
+
+    private val eventChannel = Channel<EventDetailMovie>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    private val _state = MutableLiveData<StateDetailMovie>()
+    val state: LiveData<StateDetailMovie>
+        get() = _state
+
+    fun submitAction(action: ActionDetailMovie) = viewModelScope.launch {
+        when (action) {
+            is ActionDetailMovie.Load -> {
+                fetchDetails(action.movieId)
+            }
+            is ActionDetailMovie.Add -> {
+                addMediaToWatchlistUseCase(action.movieId, MediaType.movie())
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("Successfully added \"${action.title}\"!"))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.Remove -> {
+                removeMediaFromWatchlistUseCase(action.movieId, MediaType.movie())
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("Removed \"${action.title}\""))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.SetWatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.Watched)
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("\"${action.title}\" marked as watched!"))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.SetUnwatched -> {
+                updateMovieWatchedStatusUseCase(action.movieId, MovieWatchedStatus.NotWatched)
+                eventChannel.send(EventDetailMovie.saveSnackbarMessage("\"${action.title}\" marked as unwatched"))
+                eventChannel.send(EventDetailMovie.close())
+            }
+            ActionDetailMovie.Close -> {
+                eventChannel.send(EventDetailMovie.close())
+            }
+            is ActionDetailMovie.ShowToast -> {
+                eventChannel.send(EventDetailMovie.ShowToast(action.msg))
+            }
+            is ActionDetailMovie.AttemptRemove -> {
+                eventChannel.send(
+                    EventDetailMovie.showConfirmationDialog(
+                        action.movieId,
+                        action.title
+                    )
+                )
+            }
+            is ActionDetailMovie.AttemptUnwatch -> {
+                eventChannel.send(
+                    EventDetailMovie.showConfirmationDialogUnwatch(
+                        action.movieId,
+                        action.title
+                    )
+                )
+            }
+        }
+    }
+
+    private fun fetchDetails(id: String) = viewModelScope.launch {
+        fetchMovieDetailsUseCase(id).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    _state.value = StateDetailMovie.Success(resource.data)
+                }
+                is Resource.Error -> {
+                    _state.value = StateDetailMovie.Error(Exception(resource.exception))
+                }
+                Resource.Loading -> {
+                    _state.value = StateDetailMovie.Loading
+                }
+            }
+        }
+    }
 }
