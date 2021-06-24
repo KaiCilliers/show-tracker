@@ -211,12 +211,12 @@ class FragmentDiscovery : Fragment() {
 //                        "showtracker://detail/movie_detail?id=$mediaId&movieTitle=$mediaTitle&posterPath=$posterPath"
 //                    )
 //                    findNavController().navigate(intent)
-//                    val intent = InternalDeepLink.moduleDetailMovie(
-//                        id = mediaId,
-//                        movieTittle = mediaTitle,
-//                        posterPath = posterPath
-//                    ).toUri()
-//                    findNavController().navigate(intent)
+                    val intent = InternalDeepLink.moduleDetailMovie(
+                        id = mediaId,
+                        movieTittle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
 //                    findNavController().navigate(
 //                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
 //                            movieId = mediaId,
@@ -226,16 +226,6 @@ class FragmentDiscovery : Fragment() {
 //                    )
 
 //                    Timber.d("args: ${arguments.movieId} and ${arguments.movieTitle} and ${arguments.posterPath} and $arguments")
-                    // todo fak man, this damn bottomsheets
-                    FragmentBottomSheetMovieDetail().apply {
-                        val bundle = Bundle().apply {
-                            putString("movieId", mediaId)
-                            putString("movieTitle", mediaTitle)
-                            putString("posterPath", posterPath)
-                        }
-                        arguments = bundle
-                        show(childFragmentManager, "tagggg")
-                    }
 
                 }
                 MediaType.Show -> {
