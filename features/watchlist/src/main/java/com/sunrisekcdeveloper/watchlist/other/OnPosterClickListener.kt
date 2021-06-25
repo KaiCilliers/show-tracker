@@ -16,7 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.models
+package com.sunrisekcdeveloper.watchlist.other
 
-class MyClass {
+import com.sunrisekcdeveloper.cache.MediaType
+
+fun interface OnPosterClickListener {
+    fun onClick(mediaId: String, mediaTitle: String, posterPath: String, mediaType: MediaType)
 }

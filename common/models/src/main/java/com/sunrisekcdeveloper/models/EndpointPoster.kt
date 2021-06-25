@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail
+package com.sunrisekcdeveloper.models
 
+// todo may move this file to wherever Glide will be centralized if I do so
 class EndpointPosterTiny(private val posterPath: String) : EndpointImageContract {
     override fun url(): String {
         return "$baseUrl/w92$posterPath"
@@ -56,6 +57,6 @@ class EndpointPosterOriginal(private val posterPath: String) : EndpointImageCont
 
 interface EndpointImageContract {
     val baseUrl: String
-        get() = ""// BuildConfig.TMDB_POSTER_BASE_URL
+        get() = "https://images.tmdb.org/t/p"
     fun url(): String
 }
