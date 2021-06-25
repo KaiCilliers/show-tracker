@@ -30,4 +30,8 @@ object InternalDeepLink {
     fun moduleDetailShow(id: String, showTitle: String, posterPath: String): String {
         return "${DOMAIN}detail/show_detail?id=${id}?showTitle=${showTitle}?posterPath=${posterPath}"
     }
+
+    fun moduleWatchlist(showId: String = "none"): String {
+        return "${DOMAIN}watchlist?showId=$showId"
+    }
 }

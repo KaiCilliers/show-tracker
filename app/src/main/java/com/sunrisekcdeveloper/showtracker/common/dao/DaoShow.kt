@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.common.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import com.sunrisekcdeveloper.cache.models.EntityShow
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 

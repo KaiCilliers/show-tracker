@@ -14,6 +14,9 @@ object DefaultConfig {
 
 object Modules {
     const val detail = ":features:detail"
+    const val watchlist = ":features:watchlist"
+    const val search = ":features:search"
+    const val progress = ":features:progress"
     const val discovery = ":features:discovery"
 }
 

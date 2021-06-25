@@ -29,6 +29,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
+import com.sunrisekcdeveloper.cache.models.EntityEpisode
+import com.sunrisekcdeveloper.cache.models.EntitySeason
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
@@ -42,12 +44,8 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.model.ActionSea
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelSearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelUnwatchedSearch
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityEpisode
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.UIModelWatchlistShow
+import com.sunrisekcdeveloper.watchlist.domain.model.UIModelWatchlistMovie
+import com.sunrisekcdeveloper.watchlist.presentation.UIModelWatchlistShow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -225,7 +223,7 @@ fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) =
         dateAdded = status.dateAdded
     )
 
-fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlisMovie(
+fun WatchlistMovieWithDetails.asUIModelWatchlistMovie() = UIModelWatchlistMovie(
     id = details.id,
     title = details.title,
     overview = details.overview,

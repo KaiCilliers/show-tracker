@@ -34,6 +34,8 @@ import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.detail.domain.model.*
 import com.sunrisekcdeveloper.detail.domain.util.ActionButton
+import com.sunrisekcdeveloper.detail.ImageLoadingStandardGlide
+import com.sunrisekcdeveloper.models.EndpointPosterStandard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber

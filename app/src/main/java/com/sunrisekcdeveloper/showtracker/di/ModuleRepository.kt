@@ -29,8 +29,6 @@ import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.Re
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository.RepositoryWatchlist
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,14 +49,6 @@ object ModuleRepository {
         database: TrackerDatabase
     ) : RepositoryProgressContract =
         RepositoryProgress(remote, database)
-
-    @ActivityRetainedScoped
-    @RepoWatchlist
-    @Provides
-    fun provideRepositoryWatchlist(
-        database: TrackerDatabase
-    ) : RepositoryWatchlistContract =
-        RepositoryWatchlist(database)
 
     @ActivityRetainedScoped
     @RepoSearch

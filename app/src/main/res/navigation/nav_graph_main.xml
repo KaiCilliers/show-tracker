@@ -43,19 +43,6 @@
             app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
     <fragment
-        android:id="@+id/destination_main_watchlist_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.watchlist.presentation.FragmentWatchlist"
-        android:label="fragment_watchlist"
-        tools:layout="@layout/fragment_watchlist" >
-        <argument
-            android:name="showId"
-            app:argType="string"
-            android:defaultValue="none" />
-        <action
-            android:id="@+id/navigate_from_watchlist_fragment_to_set_progress_fragment"
-            app:destination="@id/destination_main_progress_fragment" />
-    </fragment>
-    <fragment
         android:id="@+id/destination_main_discovery_movies_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.discovery.presentation.movies.FragmentDiscoveryMovies"
         android:label="fragment_discovery_movies"
@@ -116,4 +103,5 @@
             app:argType="integer" />
     </dialog>
     <include app:graph="@navigation/detail_module_nav_graph" />
+    <include app:graph="@navigation/nav_graph_watchlist" />
 </navigation>

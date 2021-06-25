@@ -21,11 +21,11 @@ package com.sunrisekcdeveloper.showtracker.common.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import com.sunrisekcdeveloper.cache.FilterShows
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.common.util.isDateSame
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

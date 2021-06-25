@@ -19,6 +19,9 @@
 package com.sunrisekcdeveloper.showtracker.features.progress.data.repository
 
 import androidx.room.withTransaction
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistEpisode
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistSeason
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 import com.sunrisekcdeveloper.showtracker.common.util.NetworkResult
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
@@ -26,7 +29,6 @@ import com.sunrisekcdeveloper.showtracker.common.util.asEntityEpisode
 import com.sunrisekcdeveloper.showtracker.common.util.asEntitySeason
 import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 
