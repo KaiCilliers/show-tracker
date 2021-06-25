@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.common.dao.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityMovie
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie
+import com.sunrisekcdeveloper.cache.models.EntityMovie
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistMovie
 
 data class WatchlistMovieWithDetails(
     @Embedded val status: EntityWatchlistMovie,

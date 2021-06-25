@@ -19,13 +19,13 @@
 package com.sunrisekcdeveloper.showtracker.common
 
 import androidx.room.*
+import com.sunrisekcdeveloper.cache.models.*
 import com.sunrisekcdeveloper.showtracker.common.dao.*
 import com.sunrisekcdeveloper.showtracker.common.util.TrackerTypeConverters
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.DaoRemoteKeys
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.*
+import com.sunrisekcdeveloper.showtracker.features.discovery.data.local.models.RemoteKeys
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.UIModelDiscovery
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
 
 @Database(
     entities = [

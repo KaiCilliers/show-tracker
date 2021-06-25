@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
-import com.sunrisekcdeveloper.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
@@ -33,15 +32,6 @@ import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMedi
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.LoadUnwatchedMediaUseCase
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateMovieWatchedStatusUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistMoviesUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistShowsUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.UpdateMovieWatchedStatusUseCase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.UpdateShowProgressUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -64,31 +54,6 @@ object ModuleUseCase {
         @RepoProgress repo: RepositoryProgressContract
     ) : SetShowProgressUseCaseContract =
         SetShowProgressUseCase(repo)
-
-    // Watchlist
-    @Provides
-    fun provideFetchWatchlistMoviesUseCase(
-        @RepoWatchlist watchlistRepo: RepositoryWatchlistContract
-    ) : FetchWatchlistMoviesUseCaseContract =
-        FetchWatchlistMoviesUseCase(watchlistRepo)
-
-    @Provides
-    fun provideFetchWatchlistShowsUseCase(
-        @RepoWatchlist watchlistRepo: RepositoryWatchlistContract
-    ) : FetchWatchlistShowsUseCaseContract =
-        FetchWatchlistShowsUseCase(watchlistRepo)
-
-    @Provides
-    fun provideUpdateShowProgressUseCase(
-        @RepoWatchlist repo: RepositoryWatchlistContract
-    ) : UpdateShowProgressUseCaseContract =
-        UpdateShowProgressUseCase(repo)
-
-    @Provides
-    fun provideUpdateMovieWatchedStatusUseCase(
-        @RepoWatchlist repo: RepositoryWatchlistContract
-    ) : UpdateMovieWatchedStatusUseCaseContract =
-        UpdateMovieWatchedStatusUseCase(repo)
 
     // Search
     @Provides

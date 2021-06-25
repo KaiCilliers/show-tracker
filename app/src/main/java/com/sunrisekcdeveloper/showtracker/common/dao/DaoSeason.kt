@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.common.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import com.sunrisekcdeveloper.cache.models.EntitySeason
 import com.sunrisekcdeveloper.showtracker.common.base.DaoBase
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntitySeason
 
 @Dao
 interface DaoSeason : DaoBase<EntitySeason> {

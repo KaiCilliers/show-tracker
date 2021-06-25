@@ -20,8 +20,8 @@ package com.sunrisekcdeveloper.showtracker.common.dao.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityShow
-import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistShow
+import com.sunrisekcdeveloper.cache.models.EntityShow
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 
 // todo extract
 data class WatchlistShowWithDetails(
