@@ -100,6 +100,7 @@ kapt {
 dependencies {
 
     implementation project(Modules.detail)
+    implementation project(Modules.watchlist)
 
     implementation project(Core.network)
     implementation project(Core.cache)
