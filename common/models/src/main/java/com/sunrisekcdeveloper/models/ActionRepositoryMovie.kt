@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.domain.model
+package com.sunrisekcdeveloper.models
 
 sealed class ActionRepositoryMovie {
     data class Add(val id: String) : ActionRepositoryMovie()

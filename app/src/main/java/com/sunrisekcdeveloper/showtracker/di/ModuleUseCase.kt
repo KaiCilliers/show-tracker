@@ -18,10 +18,8 @@
 
 package com.sunrisekcdeveloper.showtracker.di
 
+import com.sunrisekcdeveloper.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.common.util.*
-import com.sunrisekcdeveloper.showtracker.features.detail.application.*
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
@@ -37,10 +35,12 @@ import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.LoadUnw
 import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistMoviesUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.FetchWatchlistShowsUseCase
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.UpdateMovieWatchedStatusUseCase
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase.UpdateShowProgressUseCase
 import dagger.Module
 import dagger.Provides
@@ -84,6 +84,12 @@ object ModuleUseCase {
     ) : UpdateShowProgressUseCaseContract =
         UpdateShowProgressUseCase(repo)
 
+    @Provides
+    fun provideUpdateMovieWatchedStatusUseCase(
+        @RepoWatchlist repo: RepositoryWatchlistContract
+    ) : UpdateMovieWatchedStatusUseCaseContract =
+        UpdateMovieWatchedStatusUseCase(repo)
+
     // Search
     @Provides
     fun provideSearchMediaByTitleUseCase(
@@ -96,37 +102,6 @@ object ModuleUseCase {
         @RepoSearch searchRepo: RepositorySearchContract
     ) : LoadUnwatchedMediaUseCaseContract =
         LoadUnwatchedMediaUseCase(searchRepo)
-
-    // Detail
-    @Provides
-    fun provideRemoveMediaFromWatchlistUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ) : RemoveMediaFromWatchlistUseCaseContract =
-        RemoveMediaFromWatchlistUseCase(detailRepo)
-
-    @Provides
-    fun provideUpdateMovieWatchedStatusUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ) : UpdateMovieWatchedStatusUseCaseContract =
-        UpdateMovieWatchedStatusUseCase(detailRepo)
-
-    @Provides
-    fun provideAddMediaToWatchlistUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ): AddMediaToWatchlistUseCaseContract =
-        AddMediaToWatchlistUseCase(detailRepo)
-
-    @Provides
-    fun provideFetchMovieDetailsUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ): FetchMovieDetailsUseCaseContract =
-        FetchMovieDetailsUseCase(detailRepo)
-
-    @Provides
-    fun provideFetchShowDetailsUseCase(
-        @RepoDetail detailRepo: RepositoryDetailContract
-    ): FetchShowDetailsUseCaseContract =
-        FetchShowDetailsUseCase(detailRepo)
 
     // Discovery
     @Provides

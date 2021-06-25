@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.model
+package com.sunrisekcdeveloper.models
 
-sealed class StateDetailMovie {
-    object Loading : StateDetailMovie()
-    data class Success(val data: UIModelMovieDetail) : StateDetailMovie()
-    data class Error(val exception: Exception) : StateDetailMovie()
+sealed class MovieWatchedStatus {
+    object Watched: MovieWatchedStatus()
+    object NotWatched : MovieWatchedStatus()
 
     companion object {
-        fun loading() = Loading
-        fun success(data: UIModelMovieDetail) = Success(data)
-        fun error(errorMessage: String) = Error(Exception(errorMessage))
+        fun watched() = Watched
+        fun notWatched() = NotWatched
     }
 }

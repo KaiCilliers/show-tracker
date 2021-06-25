@@ -20,9 +20,6 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.sunrisekcdeveloper.showtracker.common.*
 import com.sunrisekcdeveloper.showtracker.common.util.*
-import com.sunrisekcdeveloper.showtracker.features.detail.data.network.RemoteDataSourceDetailContract
-import com.sunrisekcdeveloper.showtracker.features.detail.data.repository.RepositoryDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
@@ -71,15 +68,6 @@ object ModuleRepository {
         db: TrackerDatabase
     ): RepositorySearchContract =
         RepositorySearch(remote, db)
-
-    @ActivityRetainedScoped
-    @RepoDetail
-    @Provides
-    fun provideRepositoryDetail(
-        @SourceDetail remote: RemoteDataSourceDetailContract,
-        database: TrackerDatabase
-    ): RepositoryDetailContract =
-        RepositoryDetail(remote, database)
 
     @ActivityRetainedScoped
     @RepoDiscovery

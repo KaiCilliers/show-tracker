@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository
 
+import com.sunrisekcdeveloper.models.ActionRepositoryMovie
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
@@ -40,6 +41,8 @@ interface RepositoryWatchlistContract {
 
     suspend fun updateWatchlistShowAsUpToDate(showId: String)
 
+    suspend fun submitMovieAction(action: ActionRepositoryMovie)
+
     class Fake() : RepositoryWatchlistContract {
         override fun watchlistMovies(filterOption: FilterMovies): Flow<Resource<List<UIModelWatchlisMovie>>> {
             return flow {
@@ -56,5 +59,9 @@ interface RepositoryWatchlistContract {
         override suspend fun updateShowProgress(action: UpdateShowAction) {  }
 
         override suspend fun updateWatchlistShowAsUpToDate(showId: String) {  }
+
+        override suspend fun submitMovieAction(action: ActionRepositoryMovie) {
+            TODO("Not yet implemented")
+        }
     }
 }

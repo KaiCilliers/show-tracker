@@ -32,9 +32,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
 import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseMovieDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.data.model.ResponseShowDetail
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.model.ResponseStandardMedia
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ListType
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.MediaType
@@ -140,62 +137,6 @@ fun ResponseStandardMedia.ResponseShow.asUIModelDiscovery(listType: ListType) = 
     posterPath = posterPath ?: "",
     listType = listType
 )
-
-fun EntityShow.asUIModelShowDetail(
-    watchlist: ShowWatchlistStatus,
-    status: ShowStatus
-) = UIModelShowDetail(
-    id = id,
-    name = title,
-    posterPath = posterPath,
-    overview = overview,
-    certification = certification,
-    firstAirDate = firstAirDate.substring(0..3),
-    seasonsTotal = seasonTotal,
-    watchlist = watchlist,
-    status = status
-)
-
-fun ResponseShowDetail.asEntityShow(certification: String = "N/A") = EntityShow(
-    id = "$id",
-    title = name,
-    overview = overview,
-    certification = certification,
-    posterPath = posterPath ?: "",
-    backdropPath = backdropPath ?: "",
-    popularityValue = popularityValue,
-    firstAirDate = firstAirYear,
-    rating = rating,
-    episodeTotal = episodeCount,
-    seasonTotal = seasonCount,
-    lastUpdated = System.currentTimeMillis()
-)
-
-fun ResponseMovieDetail.asEntityMovie(certification: String = "N/A") = EntityMovie(
-    id = "$id",
-    title = title,
-    overview = overview,
-    backdropPath = backdropPath ?: "",
-    posterPath = posterPath ?: "",
-    certification = certification,
-    releaseDate = releaseDate,
-    runTime = "$runtime",
-    rating = rating,
-    popularityValue = popularityValue,
-)
-
-fun EntityMovie.asUIModelMovieDetail(status: MovieWatchlistStatus, watched: WatchedStatus) =
-    UIModelMovieDetail(
-        id = id,
-        title = title,
-        posterPath = posterPath,
-        overview = overview,
-        releaseYear = releaseDate.substring(0..3),
-        certification = certification,
-        runtime = runTime,
-        status = status,
-        watched = watched
-    )
 
 fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(
     showId = showId,
