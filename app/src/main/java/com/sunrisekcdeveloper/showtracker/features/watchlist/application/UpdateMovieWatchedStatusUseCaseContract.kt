@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.application
+package com.sunrisekcdeveloper.showtracker.features.watchlist.application
 
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.models.MovieWatchedStatus
 import timber.log.Timber
 
 interface UpdateMovieWatchedStatusUseCaseContract {

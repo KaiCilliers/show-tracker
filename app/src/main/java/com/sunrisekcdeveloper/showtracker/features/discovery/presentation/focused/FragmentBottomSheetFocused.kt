@@ -29,8 +29,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.sunrisekcdeveloper.discovery.presentation.focused.FragmentBottomSheetFocusedArgs
-import com.sunrisekcdeveloper.discovery.presentation.focused.FragmentBottomSheetFocusedDirections
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener

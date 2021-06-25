@@ -20,23 +20,26 @@ package com.sunrisekcdeveloper.showtracker.features.watchlist.presentation
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.sunrisekcdeveloper.models.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
-import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.FetchWatchlistShowsUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateShowProgressUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.ActionWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.EventWatchlist
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.StateWatchlist
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class ViewModelWatchlist @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelWatchlist @Inject constructor(
     private val fetchWatchlistMoviesUseCase: FetchWatchlistMoviesUseCaseContract,
     private val fetchWatchlistShowsUseCase: FetchWatchlistShowsUseCaseContract,
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,

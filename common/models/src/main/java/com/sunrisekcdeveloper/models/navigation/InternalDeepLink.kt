@@ -16,11 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.domain.model
+package com.sunrisekcdeveloper.models.navigation
 
-sealed class ActionRepositoryMovie {
-    data class Add(val id: String) : ActionRepositoryMovie()
-    data class Remove(val id: String) : ActionRepositoryMovie()
-    data class Watch(val id: String) : ActionRepositoryMovie()
-    data class Unwatch(val id: String) : ActionRepositoryMovie()
+// todo consider placing navigation related items into a separate module
+object InternalDeepLink {
+
+    const val DOMAIN = "showtracker://"
+
+    fun moduleDetailMovie(id: String, movieTitle: String, posterPath: String): String {
+        return "${DOMAIN}detail/movie_detail?id=${id}?movieTitle=${movieTitle}?posterPath=${posterPath}"
+    }
+
+    fun moduleDetailShow(id: String, showTitle: String, posterPath: String): String {
+        return "${DOMAIN}detail/show_detail?id=${id}?showTitle=${showTitle}?posterPath=${posterPath}"
+    }
 }

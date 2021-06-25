@@ -20,9 +20,9 @@ package com.sunrisekcdeveloper.detail.domain.usecase
 
 import com.sunrisekcdeveloper.cache.MediaType
 import com.sunrisekcdeveloper.detail.application.RemoveMediaFromWatchlistUseCaseContract
-import com.sunrisekcdeveloper.detail.domain.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.detail.domain.model.ActionRepositoryShow
 import com.sunrisekcdeveloper.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.models.ActionRepositoryMovie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

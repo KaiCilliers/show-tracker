@@ -19,9 +19,9 @@
 package com.sunrisekcdeveloper.detail.domain.usecase
 
 import com.sunrisekcdeveloper.detail.application.UpdateMovieWatchedStatusUseCaseContract
-import com.sunrisekcdeveloper.detail.domain.model.ActionRepositoryMovie
-import com.sunrisekcdeveloper.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.detail.domain.repository.RepositoryDetailContract
+import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.models.MovieWatchedStatus
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

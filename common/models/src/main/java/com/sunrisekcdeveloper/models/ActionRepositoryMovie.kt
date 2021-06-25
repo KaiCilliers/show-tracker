@@ -16,8 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.util
+package com.sunrisekcdeveloper.models
 
-interface ButtonDetail {
-    fun paint(background: Int = -1, text: String, onClick: () -> Unit)
+sealed class ActionRepositoryMovie {
+    data class Add(val id: String) : ActionRepositoryMovie()
+    data class Remove(val id: String) : ActionRepositoryMovie()
+    data class Watch(val id: String) : ActionRepositoryMovie()
+    data class Unwatch(val id: String) : ActionRepositoryMovie()
 }

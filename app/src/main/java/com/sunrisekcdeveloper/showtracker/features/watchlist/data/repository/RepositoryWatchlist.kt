@@ -19,15 +19,15 @@
 package com.sunrisekcdeveloper.showtracker.features.watchlist.data.repository
 
 import androidx.room.withTransaction
+import com.sunrisekcdeveloper.models.ActionRepositoryMovie
 import com.sunrisekcdeveloper.showtracker.common.util.Resource
 import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
-import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistMovieWithDetails
-import com.sunrisekcdeveloper.showtracker.common.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelWatchlistMovie
 import com.sunrisekcdeveloper.showtracker.common.util.asUIModelWatchlistShow
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterMovies
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.FilterShows
 import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.*
+import com.sunrisekcdeveloper.showtracker.features.watchlist.data.local.model.EntityWatchlistMovie.Companion
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UIModelWatchlisMovie
 import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.model.UpdateShowAction
@@ -36,9 +36,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
+// todo class too big - refactor logic
 class RepositoryWatchlist(
     private val database: TrackerDatabase
 ) : RepositoryWatchlistContract {
+
+    private val daoWatchlistMovie = database.watchlistMovieDao()
 
     override suspend fun updateShowProgress(action: UpdateShowAction) {
         when (action) {
@@ -245,5 +248,61 @@ class RepositoryWatchlist(
                 lastUpdated = System.currentTimeMillis()
             )
         )
+    }
+
+    override suspend fun submitMovieAction(action: ActionRepositoryMovie) {
+        database.withTransaction {
+            when (action) {
+                is ActionRepositoryMovie.Add -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                deleted = false,
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistMovie.insert(EntityWatchlistMovie.unwatchedFrom(action.id))
+                    }
+                }
+                is ActionRepositoryMovie.Remove -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                deleted = true,
+                                dateDeleted = System.currentTimeMillis(),
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                }
+                is ActionRepositoryMovie.Watch -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                deleted = false,
+                                watched = true,
+                                dateWatched = System.currentTimeMillis(),
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistMovie.insert(EntityWatchlistMovie.watchedFrom(action.id))
+                    }
+                }
+                is ActionRepositoryMovie.Unwatch -> {
+                    if (daoWatchlistMovie.exist(action.id)) {
+                        daoWatchlistMovie.update(
+                            daoWatchlistMovie.withId(action.id).copy(
+                                watched = false,
+                                dateLastUpdated = System.currentTimeMillis()
+                            )
+                        )
+                    } else {
+                        daoWatchlistMovie.insert(EntityWatchlistMovie.unwatchedFrom(action.id))
+                    }
+                }
+            }
+        }
     }
 }

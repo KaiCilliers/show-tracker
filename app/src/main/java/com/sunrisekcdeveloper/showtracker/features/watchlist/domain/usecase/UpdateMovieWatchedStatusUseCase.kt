@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.detail.domain.usecase
+package com.sunrisekcdeveloper.showtracker.features.watchlist.domain.usecase
 
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.MovieWatchedStatus
-import com.sunrisekcdeveloper.showtracker.features.detail.application.UpdateMovieWatchedStatusUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.detail.domain.model.ActionRepositoryMovie
+// todo class used by watchlist - so imports from detail feature is not going to work later
+import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import com.sunrisekcdeveloper.showtracker.features.watchlist.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.showtracker.features.watchlist.domain.repository.RepositoryWatchlistContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class UpdateMovieWatchedStatusUseCase(
-    private val detailRepo: RepositoryDetailContract
+    private val detailRepo: RepositoryWatchlistContract
 ) : UpdateMovieWatchedStatusUseCaseContract {
     override suspend fun invoke(movieId: String, watchedStatus: MovieWatchedStatus) {
         detailRepo.submitMovieAction(

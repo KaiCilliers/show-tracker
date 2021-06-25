@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.forEach
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -34,6 +35,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+//import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
@@ -198,22 +201,27 @@ class FragmentDiscovery : Fragment() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
-                            movieId = mediaId,
-                            movieTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
+                    val intent = InternalDeepLink.moduleDetailMovie(
+                        id = mediaId,
+                        movieTitle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
                 }
                 MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
-                            mediaId,
-                            mediaTitle,
-                            posterPath
-                        )
-                    )
+                    val intent = InternalDeepLink.moduleDetailShow(
+                        id = mediaId,
+                        showTitle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
+//                    findNavController().navigate(
+//                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
+//                            mediaId,
+//                            mediaTitle,
+//                            posterPath
+//                        )
+//                    )
                 }
             }
         }

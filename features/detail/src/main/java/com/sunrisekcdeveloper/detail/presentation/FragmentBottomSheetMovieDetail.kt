@@ -24,31 +24,38 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sunrisekcdeveloper.cache.Temp
+import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.detail.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetMovieDetailBinding
-//    private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
+    private val arguments: FragmentBottomSheetMovieDetailArgs by navArgs()
     private val viewModel: ViewModelMovieDetail by viewModels()
 
+    @Inject lateinit var db: Temp
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomSheetMovieDetailBinding.inflate(inflater)
+        binding = BottomSheetMovieDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -60,12 +67,12 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
     }
 
     private fun init() {
-//        viewModel.submitAction(ActionDetailMovie.load(arguments.movieId))
+        viewModel.submitAction(ActionDetailMovie.load(arguments.movieId))
     }
 
     private fun setup() {
         // Set properties
-        (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
+//        (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
 
         // Navigation - Close fragment
         binding.imgDetailMovieClose.setOnClickListener {
@@ -73,10 +80,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         }
 
         // bind priority data
-//        binding.tvDetailMovieTitle.text = arguments.movieTitle
+        binding.tvDetailMovieTitle.text = arguments.movieTitle
         ImageLoadingStandardGlide(this)
-//            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailMoviePoster)
-            .load(EndpointPosterStandard("posterPath").url(), binding.imgDetailMoviePoster)
+            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailMoviePoster)
     }
 
     private fun observe() {

@@ -8,4 +8,5 @@ java {
 dependencies {
     implementation Libs.coroutinesCore
     api Libs.retrofit
+    api Libs.gson
 }

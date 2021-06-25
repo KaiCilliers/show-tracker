@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.showtracker.features.discovery.presentation
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -28,12 +27,16 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventD
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.ActionFocused
 import com.sunrisekcdeveloper.showtracker.features.discovery.presentation.focused.EventFocused
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelDiscovery @ViewModelInject constructor(
+// todo      Caused by: java.lang.InstantiationException: java.lang.Class<com.sunrisekcdeveloper.detail.presentation.ViewModelMovieDetail> has no zero argument constructor
+@HiltViewModel
+class ViewModelDiscovery @Inject constructor(
     loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,

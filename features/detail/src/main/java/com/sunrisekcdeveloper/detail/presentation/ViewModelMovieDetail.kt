@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.detail.presentation
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,19 +30,24 @@ import com.sunrisekcdeveloper.detail.application.RemoveMediaFromWatchlistUseCase
 import com.sunrisekcdeveloper.detail.application.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.detail.domain.model.ActionDetailMovie
 import com.sunrisekcdeveloper.detail.domain.model.EventDetailMovie
-import com.sunrisekcdeveloper.detail.domain.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.detail.domain.model.StateDetailMovie
+import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
-class ViewModelMovieDetail @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelMovieDetail @Inject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseContract,
     private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
     private val updateMovieWatchedStatusUseCase: UpdateMovieWatchedStatusUseCaseContract,
     private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract
 ) : ViewModel() {
+
 
     private val eventChannel = Channel<EventDetailMovie>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()

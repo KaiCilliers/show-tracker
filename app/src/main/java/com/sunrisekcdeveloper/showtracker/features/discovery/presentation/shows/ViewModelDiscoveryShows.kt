@@ -28,13 +28,16 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.application.LoadTop
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // todo discovery fragments share a single ViewModel?
-class ViewModelDiscoveryShows @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelDiscoveryShows @Inject constructor(
     loadPopularShowsUseCase: LoadPopularShowsUseCaseContract,
     loadTopRatedShowsUseCase: LoadTopRatedShowsUseCaseContract,
     loadAiringTodayShowsUseCase: LoadAiringTodayShowsUseCaseContract
