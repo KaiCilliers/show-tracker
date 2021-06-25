@@ -215,13 +215,6 @@ class FragmentDiscovery : Fragment() {
                         posterPath = posterPath
                     ).toUri()
                     findNavController().navigate(intent)
-//                    findNavController().navigate(
-//                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
-//                            mediaId,
-//                            mediaTitle,
-//                            posterPath
-//                        )
-//                    )
                 }
             }
         }

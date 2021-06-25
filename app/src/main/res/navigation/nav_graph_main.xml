@@ -36,12 +36,6 @@
             android:id="@+id/navigate_from_discovery_to_discovery_shows_fragment"
             app:destination="@id/destination_discovery_shows_fragment" />
         <action
-            android:id="@+id/navigate_from_discovery_to_bottom_sheet_detail_movie"
-            app:destination="@id/destination_bottom_sheet_detail_movie" />
-        <action
-            android:id="@+id/navigate_from_discovery_to_bottom_sheet_detail_show"
-            app:destination="@id/destination_bottom_sheet_detail_show" />
-        <action
             android:id="@+id/navigate_from_discovery_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
         <action
@@ -58,12 +52,6 @@
             app:argType="string"
             android:defaultValue="none" />
         <action
-            android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_show"
-            app:destination="@id/destination_bottom_sheet_detail_show" />
-        <action
-            android:id="@+id/navigate_from_watchlist_to_bottom_sheet_detail_movie"
-            app:destination="@id/destination_bottom_sheet_detail_movie" />
-        <action
             android:id="@+id/navigate_from_watchlist_fragment_to_set_progress_fragment"
             app:destination="@id/destination_main_progress_fragment" />
     </fragment>
@@ -77,9 +65,6 @@
             app:destination="@id/destination_discovery_shows_fragment"
             app:popUpTo="@id/destination_main_discovery_movies_fragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_detail_movie"
-            app:destination="@id/destination_bottom_sheet_detail_movie" />
         <action
             android:id="@+id/navigate_from_discovery_movies_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
@@ -98,66 +83,17 @@
             app:popUpTo="@id/destination_discovery_shows_fragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_detail_show"
-            app:destination="@id/destination_bottom_sheet_detail_show" />
-        <action
             android:id="@+id/navigate_from_discovery_shows_to_fragment_search"
             app:destination="@id/destination_main_search_fragment" />
         <action
             android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_focused"
             app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
-    <dialog
-        android:id="@+id/destination_bottom_sheet_detail_movie"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetMovieDetail"
-        android:label="bottom_sheet_detail_movie"
-        tools:layout="@layout/bottom_sheet_movie_detail" >
-        <argument
-            android:name="movieId"
-            app:argType="string" />
-        <argument
-            android:name="movieTitle"
-            app:argType="string" />
-        <argument
-            android:name="posterPath"
-            app:argType="string" />
-    </dialog>
-    <dialog
-        android:id="@+id/destination_bottom_sheet_detail_show"
-        android:name="com.sunrisekcdeveloper.showtracker.features.detail.presentation.FragmentBottomSheetShowDetail"
-        android:label="bottom_sheet_detail_show"
-        tools:layout="@layout/bottom_sheet_show_detail" >
-        <argument
-            android:name="showId"
-            app:argType="string" />
-        <action
-            android:id="@+id/navigate_from_detail_show_to_watchlist_fragment"
-            app:destination="@id/destination_main_watchlist_fragment" />
-        <argument android:name="showTitle"
-            app:argType="string" />
-        <argument
-            android:name="posterPath"
-            app:argType="string" />
-        <action
-            android:id="@+id/navigate_from_detail_show_to_set_progress_fragment"
-            app:destination="@id/destination_main_progress_fragment" />
-        <argument
-            android:name="fromWatchlist"
-            app:argType="boolean"
-            android:defaultValue="false" />
-    </dialog>
     <fragment
         android:id="@+id/destination_main_search_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.FragmentSearch"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/navigate_from_search_to_bottom_sheet_detail_movie"
-            app:destination="@id/destination_bottom_sheet_detail_movie" />
-        <action
-            android:id="@+id/navigate_from_search_to_bottom_sheet_detail_show"
-            app:destination="@id/destination_bottom_sheet_detail_show" />
-    </fragment>
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/destination_main_progress_fragment"
         android:name="com.sunrisekcdeveloper.showtracker.features.progress.presentation.FragmentProgress"
@@ -178,12 +114,6 @@
         <argument
             android:name="listType"
             app:argType="integer" />
-        <action
-            android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_show"
-            app:destination="@id/destination_bottom_sheet_detail_show" />
-        <action
-            android:id="@+id/navigate_from_focused_to_bottom_sheet_detail_movie"
-            app:destination="@id/destination_bottom_sheet_detail_movie" />
     </dialog>
     <include app:graph="@navigation/detail_module_nav_graph" />
 </navigation>

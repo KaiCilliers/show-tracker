@@ -99,10 +99,12 @@ kapt {
 }
 dependencies {
 
-    implementation project(":features:detail")
+    implementation project(Modules.detail)
+
     implementation project(Core.network)
     implementation project(Core.cache)
     implementation project(Core.views)
+
     implementation project(Common.models)
     implementation project(Common.uiComponents)
 

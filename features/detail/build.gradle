@@ -16,9 +16,6 @@ dependencies {
     implementation project(Common.models)
     implementation project(Common.uiComponents)
 
-    implementation Libs.hilt
-    implementation Libs.hiltLifecycleViewModel
-
     // todo BottomSheetDialogFragment needed a class from this dep
     implementation "androidx.activity:activity-ktx:1.2.1"
 
@@ -29,14 +26,11 @@ dependencies {
     implementation Libs.glide
     implementation Libs.dataStorePref
 
-    kapt Libs.hiltAndroidCompiler
     implementation Libs.hilt
     implementation Libs.hiltLifecycleViewModel
+    kapt Libs.hiltAndroidCompiler
 
     implementation Libs.googleMaterial
     implementation Libs.timber
-//    implementation Libs.gson
-//    implementation Libs.retrofit
     implementation Libs.coroutinesCore
-//    implementation Libs.roomKtx
 }
