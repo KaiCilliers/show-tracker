@@ -104,4 +104,5 @@
     </dialog>
     <include app:graph="@navigation/detail_module_nav_graph" />
     <include app:graph="@navigation/nav_graph_watchlist" />
+    <include app:graph="@navigation/nav_graph_progress" />
 </navigation>

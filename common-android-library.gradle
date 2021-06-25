@@ -2,6 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
+def apikeysPropertiesFile = rootProject.file("apikeys.properties")
+def apikeysProperties = new Properties()
+apikeysProperties.load(new FileInputStream(apikeysPropertiesFile))
+
 android {
     compileSdk DefaultConfig.compileSdk
 
@@ -11,6 +15,8 @@ android {
         versionCode Releases.versionCode
         versionName Releases.versionName
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
     }
 
     buildTypes {

@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.showtracker.features.progress.application
+package com.sunrisekcdeveloper.progress.application
 
-import com.sunrisekcdeveloper.showtracker.common.util.Resource
+import com.sunrisekcdeveloper.cache.common.Resource
 
 // todo refactor interface and class names
 interface FetchShowSeasonAndEpisodeTotalsUseCaseContract {

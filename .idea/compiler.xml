@@ -10,6 +10,7 @@
       <module name="ShowTracker.detail" target="11" />
       <module name="ShowTracker.features.detail" target="11" />
       <module name="ShowTracker.features.discovery" target="11" />
+      <module name="ShowTracker.features.progress" target="11" />
       <module name="ShowTracker.features.watchlist" target="11" />
       <module name="ShowTracker.test" target="11" />
       <module name="ShowTracker.ui-components" target="11" />

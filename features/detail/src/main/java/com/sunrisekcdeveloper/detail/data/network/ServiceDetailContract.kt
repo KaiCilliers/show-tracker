@@ -18,28 +18,29 @@
 
 package com.sunrisekcdeveloper.detail.data.network
 
+import com.sunrisekcdeveloper.detail.BuildConfig
 import com.sunrisekcdeveloper.detail.data.model.*
 import retrofit2.Response
 
 interface ServiceDetailContract {
     suspend fun movieDetails(
         id: String,
-        apiKey: String
+        apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<ResponseMovieDetail>
 
     suspend fun movieCertifications(
         id: String,
-        apiKey: String
+        apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<EnvelopeMovieReleaseDates>
 
     suspend fun showDetails(
         id: String,
-        apiKey: String
+        apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<ResponseShowDetail>
 
     suspend fun showCertifications(
         id: String,
-        apiKey: String
+        apiKey: String = BuildConfig.TMDB_API_KEY
     ): Response<EnvelopeShowCertification>
 
     class Fake() : ServiceDetailContract {

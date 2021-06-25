@@ -33,18 +33,18 @@ class RemoteDataSourceDetail(
 ) : RemoteDataSourceDetailContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
         // todo pass api key from BuildConfig
-        api.movieDetails(id = id, "")
+        api.movieDetails(id = id)
     }
 
     override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> = safeApiCall {
-        api.movieCertifications(id = id, "")
+        api.movieCertifications(id = id)
     }
 
     override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> = safeApiCall {
-        api.showDetails(id = id, "")
+        api.showDetails(id = id)
     }
 
     override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = safeApiCall {
-        api.showCertifications(id = id, "")
+        api.showCertifications(id = id)
     }
 }

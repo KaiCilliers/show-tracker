@@ -34,4 +34,8 @@ object InternalDeepLink {
     fun moduleWatchlist(showId: String = "none"): String {
         return "${DOMAIN}watchlist?showId=$showId"
     }
+
+    fun moduleProgress(showId: String, showTitle: String): String {
+        return "${DOMAIN}progress?id=$showId?title=$showTitle"
+    }
 }
