@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.net.toUri
 import androidx.core.view.forEach
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -35,6 +36,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.KeyPersistenceStore
@@ -100,13 +102,12 @@ class FragmentDiscoveryShows : Fragment() {
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             if (mediaType == MediaType.Show) {
-                findNavController().navigate(
-                    FragmentDiscoveryShowsDirections.navigateFromDiscoveryShowsToBottomSheetDetailShow(
-                        mediaId,
-                        mediaTitle,
-                        posterPath
-                    )
-                )
+                val intent = InternalDeepLink.moduleDetailShow(
+                    id = mediaId,
+                    showTitle = mediaTitle,
+                    posterPath = posterPath
+                ).toUri()
+                findNavController().navigate(intent)
             }
         }
 

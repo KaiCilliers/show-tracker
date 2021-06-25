@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -38,6 +39,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
@@ -311,21 +313,23 @@ class FragmentWatchlist : Fragment() {
                 }
                 is EventWatchlist.LoadMediaDetails -> {
                     binding.svWatchlist.hideKeyboard(requireContext(), binding.root)
-                    findNavController().navigate(
-                        when (event.type) {
-                            MediaType.Movie -> FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailMovie(
-                                event.mediaId,
-                                event.title,
-                                event.posterPath
-                            )
-                            MediaType.Show -> FragmentWatchlistDirections.navigateFromWatchlistToBottomSheetDetailShow(
-                                event.mediaId,
-                                event.title,
-                                event.posterPath,
-                                fromWatchlist = true
-                            )
+                    val intent = when (event.type) {
+                        MediaType.Movie -> {
+                            InternalDeepLink.moduleDetailMovie(
+                                id = event.mediaId,
+                                movieTitle = event.title,
+                                posterPath = event.posterPath
+                            ).toUri()
                         }
-                    )
+                        MediaType.Show -> {
+                            InternalDeepLink.moduleDetailShow(
+                                id = event.mediaId,
+                                showTitle = event.title,
+                                posterPath = event.posterPath
+                            ).toUri()
+                        }
+                    }
+                    findNavController().navigate(intent)
                 }
                 is EventWatchlist.ConfigureShow -> {
                     findNavController().navigate(

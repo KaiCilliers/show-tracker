@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -36,6 +37,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.*
@@ -185,24 +187,23 @@ class FragmentSearch : Fragment() {
             when (event) {
                 is EventSearch.LoadMediaDetails -> {
                     binding.svSearch.hideKeyboard(requireContext(), binding.root)
-                    findNavController().navigate(
-                        when (event.type) {
-                            MediaType.Movie -> {
-                                FragmentSearchDirections.navigateFromSearchToBottomSheetDetailMovie(
-                                    event.mediaId,
-                                    event.title,
-                                    event.posterPath
-                                )
-                            }
-                            MediaType.Show -> {
-                                FragmentSearchDirections.navigateFromSearchToBottomSheetDetailShow(
-                                    event.mediaId,
-                                    event.title,
-                                    event.posterPath
-                                )
-                            }
+                    val intent = when(event.type) {
+                        MediaType.Movie -> {
+                            InternalDeepLink.moduleDetailMovie(
+                                id = event.mediaId,
+                                movieTitle = event.title,
+                                posterPath = event.posterPath
+                            ).toUri()
                         }
-                    )
+                        MediaType.Show -> {
+                            InternalDeepLink.moduleDetailShow(
+                                id = event.mediaId,
+                                showTitle = event.title,
+                                posterPath = event.posterPath
+                            ).toUri()
+                        }
+                    }
+                    findNavController().navigate(intent)
                 }
                 is EventSearch.ShowToast -> {
                     Toast.makeText(requireContext(), event.msg, Toast.LENGTH_SHORT).show()

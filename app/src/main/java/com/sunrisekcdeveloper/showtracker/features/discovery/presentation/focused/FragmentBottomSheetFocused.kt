@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,6 +30,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
@@ -81,22 +83,20 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.Movie -> {
-                    findNavController().navigate(
-                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailMovie(
-                            movieId = mediaId,
-                            movieTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
+                    val intent = InternalDeepLink.moduleDetailMovie(
+                        id = mediaId,
+                        movieTitle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
                 }
                 MediaType.Show -> {
-                    findNavController().navigate(
-                        FragmentBottomSheetFocusedDirections.navigateFromFocusedToBottomSheetDetailShow(
-                            showId = mediaId,
-                            showTitle = mediaTitle,
-                            posterPath = posterPath
-                        )
-                    )
+                    val intent = InternalDeepLink.moduleDetailShow(
+                        id = mediaId,
+                        showTitle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
                 }
             }
         }
