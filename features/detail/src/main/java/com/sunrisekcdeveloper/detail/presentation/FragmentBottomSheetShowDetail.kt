@@ -26,6 +26,7 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -41,7 +42,7 @@ import timber.log.Timber
 class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetShowDetailBinding
-//    private val arguments: FragmentBottomSheetShowDetailArgs by navArgs()
+    private val arguments: FragmentBottomSheetShowDetailArgs by navArgs()
     private val viewModel: ViewModelShowDetail by viewModels()
 
     override fun onCreateView(
@@ -61,15 +62,15 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun init() {
-//        viewModel.submitAction(ActionDetailShow.load(arguments.showId))
+        viewModel.submitAction(ActionDetailShow.load(arguments.showId))
     }
 
     private fun setup() {
         (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
         binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.close()) }
-//        binding.tvDetailShowTitle.text = arguments.showTitle
+        binding.tvDetailShowTitle.text = arguments.showTitle
         ImageLoadingStandardGlide(this)
-            .load(EndpointPosterStandard("poster path").url(), binding.imgDetailShowPoster)
+            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailShowPoster)
     }
 
     private fun observe() {

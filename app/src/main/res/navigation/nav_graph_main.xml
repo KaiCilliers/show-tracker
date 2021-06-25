@@ -186,8 +186,4 @@
             app:destination="@id/destination_bottom_sheet_detail_movie" />
     </dialog>
     <include app:graph="@navigation/detail_module_nav_graph" />
-    <dialog
-        android:id="@+id/fragmentBottomSheetMovieDetail2"
-        android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetMovieDetail"
-        android:label="FragmentBottomSheetMovieDetail" />
 </navigation>

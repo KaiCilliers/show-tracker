@@ -23,7 +23,11 @@ object InternalDeepLink {
 
     const val DOMAIN = "showtracker://"
 
-    fun moduleDetailMovie(id: String, movieTittle: String, posterPath: String): String {
-        return "${DOMAIN}detail/movie_detail?id=${id}?movieTitle=${movieTittle}?posterPath=${posterPath}"
+    fun moduleDetailMovie(id: String, movieTitle: String, posterPath: String): String {
+        return "${DOMAIN}detail/movie_detail?id=${id}?movieTitle=${movieTitle}?posterPath=${posterPath}"
+    }
+
+    fun moduleDetailShow(id: String, showTitle: String, posterPath: String): String {
+        return "${DOMAIN}detail/show_detail?id=${id}?showTitle=${showTitle}?posterPath=${posterPath}"
     }
 }

@@ -19,20 +19,14 @@
 package com.sunrisekcdeveloper.detail.di
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.detail.application.AddMediaToWatchlistUseCaseContract
-import com.sunrisekcdeveloper.detail.application.FetchMovieDetailsUseCaseContract
-import com.sunrisekcdeveloper.detail.application.RemoveMediaFromWatchlistUseCaseContract
-import com.sunrisekcdeveloper.detail.application.UpdateMovieWatchedStatusUseCaseContract
+import com.sunrisekcdeveloper.detail.application.*
 import com.sunrisekcdeveloper.detail.data.network.RemoteDataSourceDetail
 import com.sunrisekcdeveloper.detail.data.network.RemoteDataSourceDetailContract
 import com.sunrisekcdeveloper.detail.data.network.ServiceDetail
 import com.sunrisekcdeveloper.detail.data.network.ServiceDetailContract
 import com.sunrisekcdeveloper.detail.data.repository.RepositoryDetail
 import com.sunrisekcdeveloper.detail.domain.repository.RepositoryDetailContract
-import com.sunrisekcdeveloper.detail.domain.usecase.AddMediaToWatchlistUseCase
-import com.sunrisekcdeveloper.detail.domain.usecase.FetchMovieDetailsUseCase
-import com.sunrisekcdeveloper.detail.domain.usecase.RemoveMediaFromWatchlistUseCase
-import com.sunrisekcdeveloper.detail.domain.usecase.UpdateMovieWatchedStatusUseCase
+import com.sunrisekcdeveloper.detail.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,6 +63,12 @@ object UseCaseModule {
     ): RepositoryDetailContract {
         return RepositoryDetail(remote, local)
     }
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchShowDetailsUseCase(
+        repo: RepositoryDetailContract
+    ): FetchShowDetailsUseCaseContract = FetchShowDetailsUseCase(repo)
 
     @Provides
     @ViewModelScoped

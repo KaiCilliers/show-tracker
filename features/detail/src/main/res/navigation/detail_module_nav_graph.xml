@@ -22,6 +22,7 @@
     android:id="@+id/detail_module_nav_graph"
     tools:ignore="InvalidNavigation">
 
+    <!-- todo rename ids to match snake case -->
     <dialog
         android:id="@+id/fragmentBottomSheetMovieDetail"
         android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetMovieDetail"
@@ -38,11 +39,20 @@
             android:name="posterPath"
             app:argType="string" />
     </dialog>
-    <fragment
+    <dialog
         android:id="@+id/fragmentBottomSheetShowDetail"
         android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetShowDetail"
         android:label="bottom_sheet_show_detail"
         tools:layout="@layout/bottom_sheet_show_detail" >
-        <deepLink app:uri="showtracker://detail/show_detail"/>
-    </fragment>
+        <deepLink app:uri="showtracker://detail/show_detail?id={showId}?showTitle={showTitle}?posterPath={posterPath}"/>
+        <argument
+            android:name="showId"
+            app:argType="string" />
+        <argument
+            android:name="showTitle"
+            app:argType="string" />
+        <argument
+            android:name="posterPath"
+            app:argType="string" />
+    </dialog>
 </navigation>

@@ -61,8 +61,6 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("FAKIN A MAN!!!!!!!!!!!!!!!!!!!!!!")
-        Timber.d("args: ${arguments.movieId} and ${arguments.movieTitle} and ${arguments.posterPath} and $arguments")
         init()
         setup()
         observe()
@@ -82,10 +80,9 @@ class FragmentBottomSheetMovieDetail : BottomSheetDialogFragment() {
         }
 
         // bind priority data
-//        binding.tvDetailMovieTitle.text = arguments.movieTitle
+        binding.tvDetailMovieTitle.text = arguments.movieTitle
         ImageLoadingStandardGlide(this)
             .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailMoviePoster)
-//            .load(EndpointPosterStandard("posterPath").url(), binding.imgDetailMoviePoster)
     }
 
     private fun observe() {

@@ -30,12 +30,15 @@ import com.sunrisekcdeveloper.detail.application.RemoveMediaFromWatchlistUseCase
 import com.sunrisekcdeveloper.detail.domain.model.ActionDetailShow
 import com.sunrisekcdeveloper.detail.domain.model.EventDetailShow
 import com.sunrisekcdeveloper.detail.domain.model.StateDetailShow
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelShowDetail @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelShowDetail @Inject constructor(
     private val fetchShowDetailsUseCase: FetchShowDetailsUseCaseContract,
     private val addMediaToWatchlistUseCase: AddMediaToWatchlistUseCaseContract,
     private val removeMediaFromWatchlistUseCase: RemoveMediaFromWatchlistUseCaseContract
