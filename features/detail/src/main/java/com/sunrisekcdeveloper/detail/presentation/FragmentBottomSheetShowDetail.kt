@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,7 @@ import com.sunrisekcdeveloper.detail.domain.model.*
 import com.sunrisekcdeveloper.detail.domain.util.ActionButton
 import com.sunrisekcdeveloper.detail.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.models.EndpointPosterStandard
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -94,12 +96,19 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
         viewModel.eventsFlow.onEach { event ->
             when (event) {
                 is EventDetailShow.LaunchStartWatching -> {
+                    val intent = InternalDeepLink.moduleProgress(
+                        event.showId,
+                        event.title
+                    ).toUri()
+                    findNavController().navigate(intent)
 //                    findNavController().navigate(
 //                        FragmentBottomSheetShowDetailDirections
 //                            .navigateFromDetailShowToSetProgressFragment(event.showId, event.title)
 //                    )
                 }
                 is EventDetailShow.GoToShowInWatchlist -> {
+                    val intent = InternalDeepLink.moduleWatchlist(event.showId).toUri()
+                    findNavController().navigate(intent)
 //                    findNavController().navigate(
 //                        FragmentBottomSheetShowDetailDirections
 //                            .navigateFromDetailShowToWatchlistFragment(event.showId)

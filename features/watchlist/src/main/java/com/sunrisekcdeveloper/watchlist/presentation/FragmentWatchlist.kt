@@ -330,6 +330,11 @@ class FragmentWatchlist : Fragment() {
                     findNavController().navigate(intent)
                 }
                 is EventWatchlist.ConfigureShow -> {
+                    val intent = InternalDeepLink.moduleProgress(
+                        event.showId,
+                        event.title
+                    ).toUri()
+                    findNavController().navigate(intent)
 //                    findNavController().navigate(
 //                        FragmentWatchlistDirections.navigateFromWatchlistFragmentToSetProgressFragment(
 //                            event.showId, event.title

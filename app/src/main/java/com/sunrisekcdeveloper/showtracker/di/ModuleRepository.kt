@@ -23,9 +23,6 @@ import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
-import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
-import com.sunrisekcdeveloper.showtracker.features.progress.data.repository.RepositoryProgress
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
@@ -40,15 +37,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object ModuleRepository {
-
-    @ActivityRetainedScoped
-    @RepoProgress
-    @Provides
-    fun provideRepositoryProgress(
-        @SourceProgress remote: RemoteDataSourceProgressContract,
-        database: TrackerDatabase
-    ) : RepositoryProgressContract =
-        RepositoryProgress(remote, database)
 
     @ActivityRetainedScoped
     @RepoSearch

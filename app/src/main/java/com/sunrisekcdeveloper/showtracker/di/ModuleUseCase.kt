@@ -22,11 +22,6 @@ import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
-import com.sunrisekcdeveloper.showtracker.features.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.progress.application.SetShowProgressUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.repository.RepositoryProgressContract
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.FetchShowSeasonAndEpisodeTotalsUseCase
-import com.sunrisekcdeveloper.showtracker.features.progress.domain.usecase.SetShowProgressUseCase
 import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
@@ -42,19 +37,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object ModuleUseCase {
-    // Progress
-    @Provides
-    fun provideFetchShowSeasonAndEpisodeTotalsUseCase(
-        @RepoProgress progressRepo: RepositoryProgressContract
-    ) : FetchShowSeasonAndEpisodeTotalsUseCaseContract =
-        FetchShowSeasonAndEpisodeTotalsUseCase(progressRepo)
-
-    @Provides
-    fun provideSetShowProgressUseCase(
-        @RepoProgress repo: RepositoryProgressContract
-    ) : SetShowProgressUseCaseContract =
-        SetShowProgressUseCase(repo)
-
     // Search
     @Provides
     fun provideSearchMediaByTitleUseCase(
