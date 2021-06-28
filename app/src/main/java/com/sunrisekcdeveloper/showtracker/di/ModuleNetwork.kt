@@ -26,10 +26,6 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.Remote
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
-import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgress
-import com.sunrisekcdeveloper.showtracker.features.progress.data.network.RemoteDataSourceProgressContract
-import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ServiceProgress
-import com.sunrisekcdeveloper.showtracker.features.progress.data.network.ServiceProgressContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearch
 import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearchContract
@@ -72,12 +68,6 @@ object ModuleNetwork {
 
     // Services
     @Singleton
-    @ApiProgress
-    @Provides
-    fun  provideServiceProgress(retrofit: Retrofit): ServiceProgressContract {
-        return retrofit.create(ServiceProgress::class.java)
-    }
-    @Singleton
     @ApiSearch
     @Provides
     fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
@@ -91,13 +81,6 @@ object ModuleNetwork {
     }
 
     // Remote Data Sources
-    @Singleton
-    @SourceProgress
-    @Provides
-    fun provideRemoteDataSourceProgress(
-        @ApiProgress api: ServiceProgressContract
-    ) : RemoteDataSourceProgressContract =
-        RemoteDataSourceProgress(api)
     @Singleton
     @SourceSearch
     @Provides
