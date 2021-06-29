@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/detail" />
             <option value="$PROJECT_DIR$/features/progress" />
+            <option value="$PROJECT_DIR$/features/search" />
             <option value="$PROJECT_DIR$/features/watchlist" />
           </set>
         </option>
