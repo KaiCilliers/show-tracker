@@ -23,18 +23,16 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.sunrisekcdeveloper.models.EndpointPosterStandard
+import com.sunrisekcdeveloper.search.databinding.ItemMediumPosterBinding
 import com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract
-import com.sunrisekcdeveloper.showtracker.common.util.EndpointPosterStandard
 import com.sunrisekcdeveloper.showtracker.common.util.OnPosterClickListener
-import com.sunrisekcdeveloper.showtracker.common.util.click
-import com.sunrisekcdeveloper.showtracker.databinding.ItemMediumPosterBinding
 import com.sunrisekcdeveloper.showtracker.features.search.domain.model.UIModelPoster
-import com.sunrisekcdeveloper.showtracker.features.search.presentation.PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium
 
 class PagingAdapterSimplePosterMedium(
-    private val image: ImageLoadingContract,
+    private val image: com.sunrisekcdeveloper.showtracker.common.idk.ImageLoadingContract,
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
-) : PagingDataAdapter<UIModelPoster, ViewHolderPagingSimplePosterMedium>(
+) : PagingDataAdapter<UIModelPoster, PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium>(
     UIMODEL_POSTER_RESULT_COMPARATOR
 ) {
 
@@ -59,7 +57,7 @@ class PagingAdapterSimplePosterMedium(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: UIModelPoster) {
             image.load(EndpointPosterStandard(data.posterPath).url(), binding.imgvItemMoviePosterMedium)
-            binding.root.click {
+            binding.root.setOnClickListener {
                 onClick.onClick(
                     data.id,
                     data.title,

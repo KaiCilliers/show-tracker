@@ -36,9 +36,6 @@
             android:id="@+id/navigate_from_discovery_to_discovery_shows_fragment"
             app:destination="@id/destination_discovery_shows_fragment" />
         <action
-            android:id="@+id/navigate_from_discovery_to_fragment_search"
-            app:destination="@id/destination_main_search_fragment" />
-        <action
             android:id="@+id/navigate_from_discovery_to_bottom_sheet_focused"
             app:destination="@id/destination_bottom_sheet_focused" />
     </fragment>
@@ -52,9 +49,6 @@
             app:destination="@id/destination_discovery_shows_fragment"
             app:popUpTo="@id/destination_main_discovery_movies_fragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/navigate_from_discovery_movies_to_fragment_search"
-            app:destination="@id/destination_main_search_fragment" />
         <action
             android:id="@+id/navigate_from_discovery_movies_to_bottom_sheet_focused"
             app:destination="@id/destination_bottom_sheet_focused" />
@@ -70,28 +64,8 @@
             app:popUpTo="@id/destination_discovery_shows_fragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/navigate_from_discovery_shows_to_fragment_search"
-            app:destination="@id/destination_main_search_fragment" />
-        <action
             android:id="@+id/navigate_from_discovery_shows_to_bottom_sheet_focused"
             app:destination="@id/destination_bottom_sheet_focused" />
-    </fragment>
-    <fragment
-        android:id="@+id/destination_main_search_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.search.presentation.FragmentSearch"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
-    <fragment
-        android:id="@+id/destination_main_progress_fragment"
-        android:name="com.sunrisekcdeveloper.showtracker.features.progress.presentation.FragmentProgress"
-        android:label="fragment_set_progress"
-        tools:layout="@layout/fragment_set_progress" >
-        <argument
-            android:name="showId"
-            app:argType="string" />
-        <argument
-            android:name="showTitle"
-            app:argType="string" />
     </fragment>
     <dialog
         android:id="@+id/destination_bottom_sheet_focused"
@@ -105,4 +79,5 @@
     <include app:graph="@navigation/detail_module_nav_graph" />
     <include app:graph="@navigation/nav_graph_watchlist" />
     <include app:graph="@navigation/nav_graph_progress" />
+    <include app:graph="@navigation/nav_graph_search" />
 </navigation>

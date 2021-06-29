@@ -117,9 +117,8 @@ class FragmentDiscoveryMovies : Fragment() {
         // Navigation - Toolbar Search
         binding.toolbarDiscoveryMovies.menu.forEach {
             it.setOnMenuItemClickListener {
-                findNavController().navigate(
-                    FragmentDiscoveryMoviesDirections.navigateFromDiscoveryMoviesToFragmentSearch()
-                )
+                val intent = InternalDeepLink.moduleSearch().toUri()
+                findNavController().navigate(intent)
                 true
             }
         }

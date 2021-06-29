@@ -30,7 +30,7 @@
         android:icon="@drawable/ic_dashboard_black_24dp"/>
 
     <item
-        android:id="@+id/destination_main_search_fragment"
+        android:id="@+id/nav_graph_search"
         android:title="@string/search"
         android:icon="@drawable/ic_baseline_search_24"/>
 

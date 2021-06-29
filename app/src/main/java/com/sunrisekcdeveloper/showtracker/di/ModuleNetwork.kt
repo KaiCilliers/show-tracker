@@ -26,10 +26,6 @@ import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.Remote
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearch
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearchContract
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.ServiceSearch
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,12 +64,6 @@ object ModuleNetwork {
 
     // Services
     @Singleton
-    @ApiSearch
-    @Provides
-    fun provideServiceSearch(retrofit: Retrofit): ServiceSearchContract {
-        return retrofit.create(ServiceSearch::class.java)
-    }
-    @Singleton
     @ApiDiscovery
     @Provides
     fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
@@ -81,14 +71,6 @@ object ModuleNetwork {
     }
 
     // Remote Data Sources
-    @Singleton
-    @SourceSearch
-    @Provides
-    fun provideRemoteDataSourceSearch(
-        @ApiSearch api: ServiceSearchContract
-    ) : RemoteDataSourceSearchContract {
-        return RemoteDataSourceSearch(api)
-    }
     @Singleton
     @SourceDiscovery
     @Provides
