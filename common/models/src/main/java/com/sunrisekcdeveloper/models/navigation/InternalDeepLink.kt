@@ -38,4 +38,8 @@ object InternalDeepLink {
     fun moduleProgress(showId: String, showTitle: String): String {
         return "${DOMAIN}progress?id=$showId?title=$showTitle"
     }
+
+    fun moduleSearch(): String {
+        return "${DOMAIN}search"
+    }
 }

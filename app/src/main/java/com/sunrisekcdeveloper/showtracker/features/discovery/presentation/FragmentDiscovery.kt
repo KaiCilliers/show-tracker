@@ -271,9 +271,8 @@ class FragmentDiscovery : Fragment() {
         // Navigation - Toolbar Search icon
         binding.toolbarDiscovery.menu.forEach {
             it.setOnMenuItemClickListener {
-                findNavController().navigate(
-                    FragmentDiscoveryDirections.navigateFromDiscoveryToFragmentSearch()
-                )
+                val intent = InternalDeepLink.moduleSearch().toUri()
+                findNavController().navigate(intent)
                 true
             }
         }

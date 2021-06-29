@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright © 2021. The Android Open Source Project
   ~
   ~ @author Kai Cilliers
@@ -17,21 +16,17 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_search"
+    app:startDestination="@id/fragmentSearch">
 
-    <item
-        android:id="@+id/nav_graph_watchlist"
-        android:title="@string/watchlist_title_updated"
-        android:icon="@drawable/ic_home_black_24dp"/>
-
-    <item
-        android:id="@+id/destination_main_discovery_fragment"
-        android:title="@string/discovery_title_updated"
-        android:icon="@drawable/ic_dashboard_black_24dp"/>
-
-    <item
-        android:id="@+id/nav_graph_search"
-        android:title="@string/search"
-        android:icon="@drawable/ic_baseline_search_24"/>
-
-</menu>
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="com.sunrisekcdeveloper.search.presentation.FragmentSearch"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search">
+        <deepLink app:uri="showtracker://search"/>
+    </fragment>
+</navigation>
