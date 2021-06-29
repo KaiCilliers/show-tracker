@@ -22,11 +22,6 @@ import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.application.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.usecase.*
-import com.sunrisekcdeveloper.showtracker.features.search.application.LoadUnwatchedMediaUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.application.SearchMediaByTitleUseCaseContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
-import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.LoadUnwatchedMediaUseCase
-import com.sunrisekcdeveloper.showtracker.features.search.domain.usecase.SearchMediaByTitleUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,19 +32,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object ModuleUseCase {
-    // Search
-    @Provides
-    fun provideSearchMediaByTitleUseCase(
-        @RepoSearch searchRepo: RepositorySearchContract
-    ): SearchMediaByTitleUseCaseContract =
-        SearchMediaByTitleUseCase(searchRepo)
-
-    @Provides
-    fun provideLoadUnwatchedMediaUseCase(
-        @RepoSearch searchRepo: RepositorySearchContract
-    ) : LoadUnwatchedMediaUseCaseContract =
-        LoadUnwatchedMediaUseCase(searchRepo)
-
     // Discovery
     @Provides
     fun provideLoadPopularMoviesUseCase(

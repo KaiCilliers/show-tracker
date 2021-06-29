@@ -23,9 +23,6 @@ import com.sunrisekcdeveloper.showtracker.common.util.*
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
 import com.sunrisekcdeveloper.showtracker.features.discovery.data.repository.RepositoryDiscovery
 import com.sunrisekcdeveloper.showtracker.features.discovery.domain.repository.RepositoryDiscoveryContract
-import com.sunrisekcdeveloper.showtracker.features.search.data.network.RemoteDataSourceSearchContract
-import com.sunrisekcdeveloper.showtracker.features.search.data.repository.RepositorySearch
-import com.sunrisekcdeveloper.showtracker.features.search.domain.repository.RepositorySearchContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,15 +34,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object ModuleRepository {
-
-    @ActivityRetainedScoped
-    @RepoSearch
-    @Provides
-    fun provideSearchRepository(
-        @SourceSearch remote: RemoteDataSourceSearchContract,
-        db: TrackerDatabase
-    ): RepositorySearchContract =
-        RepositorySearch(remote, db)
 
     @ActivityRetainedScoped
     @RepoDiscovery
