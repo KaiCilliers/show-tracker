@@ -103,6 +103,7 @@ dependencies {
     implementation project(Modules.watchlist)
     implementation project(Modules.progress)
     implementation project(Modules.search)
+    implementation project(Modules.discovery)
 
     implementation project(Core.network)
     implementation project(Core.cache)

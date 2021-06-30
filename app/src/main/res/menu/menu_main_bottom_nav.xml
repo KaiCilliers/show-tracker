@@ -25,7 +25,7 @@
         android:icon="@drawable/ic_home_black_24dp"/>
 
     <item
-        android:id="@+id/destination_main_discovery_fragment"
+        android:id="@+id/nav_graph_discovery"
         android:title="@string/discovery_title_updated"
         android:icon="@drawable/ic_dashboard_black_24dp"/>
 

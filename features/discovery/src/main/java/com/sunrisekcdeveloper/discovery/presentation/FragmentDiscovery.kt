@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.forEach
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -39,6 +40,7 @@ import com.sunrisekcdeveloper.discovery.*
 import com.sunrisekcdeveloper.discovery.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.discovery.domain.model.EventDiscovery
+import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -54,12 +56,12 @@ class FragmentDiscovery : Fragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private val viewModel: ViewModelDiscovery by viewModels()
 
-    private lateinit var adapterPopularMovies : PagingAdapterSimplePoster
-    private lateinit var adapterPopularShows : PagingAdapterSimplePoster
-    private lateinit var adapterTopRatedMovies : PagingAdapterSimplePoster
-    private lateinit var adapterTopRatedShows : PagingAdapterSimplePoster
-    private lateinit var adapterUpcomingMovies : PagingAdapterSimplePoster
-    private lateinit var adapterAiringTodayShows : PagingAdapterSimplePoster
+    private lateinit var adapterPopularMovies: PagingAdapterSimplePoster
+    private lateinit var adapterPopularShows: PagingAdapterSimplePoster
+    private lateinit var adapterTopRatedMovies: PagingAdapterSimplePoster
+    private lateinit var adapterTopRatedShows: PagingAdapterSimplePoster
+    private lateinit var adapterUpcomingMovies: PagingAdapterSimplePoster
+    private lateinit var adapterAiringTodayShows: PagingAdapterSimplePoster
 
     private var job: Job? = null
 
@@ -89,7 +91,8 @@ class FragmentDiscovery : Fragment() {
 
     private suspend fun consumedSnackBarMessage(message: String) {
         dataStore.edit { settings ->
-            settings[KeyPersistenceStore(getString(R.string.key_disc_prev_message)).asDataStoreKey()] = message
+            settings[KeyPersistenceStore(getString(R.string.key_disc_prev_message)).asDataStoreKey()] =
+                message
         }
     }
 
@@ -161,53 +164,63 @@ class FragmentDiscovery : Fragment() {
     }
 
     private fun navigateToFocusedContent(listType: ListType) {
-//        findNavController().navigate(
-//            when (listType) {
-//                ListType.MoviePopular -> {
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(1)
-//                }
-//                ListType.MovieTopRated -> {
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(3)
-//                }
-//                ListType.MovieUpcoming -> {
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(5)
-//                }
-//                ListType.ShowPopular -> {
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(2)
-//                }
-//                ListType.ShowTopRated -> {
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(4)
-//                }
-//                ListType.ShowAiringToday -> {
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetFocused(6)
-//                }
-//                ListType.NoList -> {
-//                    throw Exception("No list type associated with group")
-//                }
-//            }
-//        )
+        findNavController().navigate(
+            when (listType) {
+                ListType.MoviePopular -> {
+                    FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentBottomSheetFocused(
+                        1
+                    )
+                }
+                ListType.MovieTopRated -> {
+                    FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentBottomSheetFocused(
+                        3
+                    )
+                }
+                ListType.MovieUpcoming -> {
+                    FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentBottomSheetFocused(
+                        5
+                    )
+                }
+                ListType.ShowPopular -> {
+                    FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentBottomSheetFocused(
+                        2
+                    )
+                }
+                ListType.ShowTopRated -> {
+                    FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentBottomSheetFocused(
+                        4
+                    )
+                }
+                ListType.ShowAiringToday -> {
+                    FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentBottomSheetFocused(
+                        6
+                    )
+                }
+                ListType.NoList -> {
+                    throw Exception("No list type associated with group")
+                }
+            }
+        )
     }
 
     private fun setupBinding() {
         val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
             when (mediaType) {
                 MediaType.movie() -> {
-//                    findNavController().navigate(
-//                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailMovie(
-//                            movieId = mediaId,
-//                            movieTitle = mediaTitle,
-//                            posterPath = posterPath
-//                        )
-//                    )
+                    val intent = InternalDeepLink.moduleDetailMovie(
+                        id = mediaId,
+                        movieTitle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
                 }
                 MediaType.Show -> {
-//                    findNavController().navigate(
-//                        FragmentDiscoveryDirections.navigateFromDiscoveryToBottomSheetDetailShow(
-//                            mediaId,
-//                            mediaTitle,
-//                            posterPath
-//                        )
-//                    )
+                    val intent = InternalDeepLink.moduleDetailShow(
+                        id = mediaId,
+                        showTitle = mediaTitle,
+                        posterPath = posterPath
+                    ).toUri()
+                    findNavController().navigate(intent)
                 }
             }
         }
@@ -264,9 +277,8 @@ class FragmentDiscovery : Fragment() {
         // Navigation - Toolbar Search icon
         binding.toolbarDiscovery.menu.forEach {
             it.setOnMenuItemClickListener {
-//                findNavController().navigate(
-//                    FragmentDiscoveryDirections.navigateFromDiscoveryToFragmentSearch()
-//                )
+                val intent = InternalDeepLink.moduleSearch().toUri()
+                findNavController().navigate(intent)
                 true
             }
         }
@@ -293,14 +305,14 @@ class FragmentDiscovery : Fragment() {
     private fun navigateToSelectedTab(position: Int) {
         // Movie Tab
         if (position == 0) {
-//            findNavController().navigate(
-//                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryMoviesFragment()
-//            )
+            findNavController().navigate(
+                FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentDiscoveryMovies()
+            )
             // TV Show Tab
         } else if (position == 1) {
-//            findNavController().navigate(
-//                FragmentDiscoveryDirections.navigateFromDiscoveryToDiscoveryShowsFragment()
-//            )
+            findNavController().navigate(
+                FragmentDiscoveryDirections.actionFragmentDiscoveryToFragmentDiscoveryShows()
+            )
         }
     }
 }

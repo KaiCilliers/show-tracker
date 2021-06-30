@@ -21,11 +21,6 @@ package com.sunrisekcdeveloper.showtracker.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sunrisekcdeveloper.showtracker.BuildConfig
-import com.sunrisekcdeveloper.showtracker.common.util.*
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscoveryContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.RemoteDataSourceDiscovery
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscoveryContract
-import com.sunrisekcdeveloper.showtracker.features.discovery.data.network.ServiceDiscovery
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,22 +56,4 @@ object ModuleNetwork {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
-
-    // Services
-    @Singleton
-    @ApiDiscovery
-    @Provides
-    fun provideServiceDiscovery(retrofit: Retrofit): ServiceDiscoveryContract {
-        return retrofit.create(ServiceDiscovery::class.java)
-    }
-
-    // Remote Data Sources
-    @Singleton
-    @SourceDiscovery
-    @Provides
-    fun provideRemoteDataSourceDiscovery(
-        @ApiDiscovery api: ServiceDiscoveryContract
-    ) : RemoteDataSourceDiscoveryContract {
-        return RemoteDataSourceDiscovery(api)
-    }
 }

@@ -56,6 +56,6 @@ class EndpointPosterOriginal(private val posterPath: String) : EndpointImageCont
 
 interface EndpointImageContract {
     val baseUrl: String
-        get() = ""// BuildConfig.TMDB_POSTER_BASE_URL
+        get() = "https://images.tmdb.org/t/p"
     fun url(): String
 }
