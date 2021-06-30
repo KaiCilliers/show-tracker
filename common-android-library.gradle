@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+
+def apikeysPropertiesFile = rootProject.file("apikeys.properties")
+def apikeysProperties = new Properties()
+apikeysProperties.load(new FileInputStream(apikeysPropertiesFile))
+
+android {
+    compileSdk DefaultConfig.compileSdk
+
+    defaultConfig {
+        minSdkVersion DefaultConfig.minSdk
+        targetSdkVersion DefaultConfig.targetSdk
+        versionCode Releases.versionCode
+        versionName Releases.versionName
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            buildConfigField("String", "RootPackage", "\"com.sunrisekcdeveloper.showtracker\"")
+        }
+    }
+    kotlinOptions.jvmTarget = "1.8"
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/AL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
+}
+
+dependencies {
+    implementation Libs.kotlinStandardLib
+    testImplementation Libs.junit4
+    //androidTestImplementation Dependencies.androidXRunner
+    //androidTestImplementation Dependencies.androidXEspresso
+}

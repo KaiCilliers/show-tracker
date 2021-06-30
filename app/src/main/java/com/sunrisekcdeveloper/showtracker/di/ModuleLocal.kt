@@ -20,21 +20,21 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sunrisekcdeveloper.showtracker.common.TrackerDatabase
+import com.sunrisekcdeveloper.cache.Temp
+import com.sunrisekcdeveloper.cache.TrackerDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object ModuleLocal {
-
     @Singleton
     @Provides
-    fun provideDatabase(
+    fun provideDatabaseCache(
         @ApplicationContext context: Context
     ): TrackerDatabase = Room.databaseBuilder(
         context,
@@ -42,4 +42,8 @@ object ModuleLocal {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
+
+    @Singleton
+    @Provides
+    fun provideA() = Temp()
 }

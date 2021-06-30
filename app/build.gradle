@@ -27,7 +27,7 @@ android {
 //                                      "$projectDir/schemas".toString()]
 //            }
 //        }
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.sunrisekcdeveloper.showtracker.util.CustomTestRunner"
 
         buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
         buildConfigField("String", "TMDB_POSTER_BASE_URL", apikeysProperties['TMDB_POSTER_BASE_URL'])
@@ -43,11 +43,32 @@ android {
         includeAndroidResources = true
     }
     buildTypes {
+        debug {
+            debuggable true
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            dimension "version"
+            manifestPlaceholders.variant = "Dev"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
+        prod {
+            dimension "version"
+            manifestPlaceholders.variant = "Prod"
+            applicationIdSuffix ".prod"
+            versionNameSuffix "-prod"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -59,12 +80,37 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/gradle/incremental.annotation.processors'
+        exclude("META-INF/*.kotlin_module")
+    }
 }
 // Additionally configure kapt to correct error types by setting correctErrorTypes to true.
 kapt {
     correctErrorTypes true
 }
 dependencies {
+
+    implementation project(Modules.detail)
+    implementation project(Modules.watchlist)
+    implementation project(Modules.progress)
+    implementation project(Modules.search)
+    implementation project(Modules.discovery)
+
+    implementation project(Core.network)
+    implementation project(Core.cache)
+    implementation project(Core.views)
+
+    implementation project(Common.models)
+    implementation project(Common.uiComponents)
 
     // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -99,7 +145,8 @@ dependencies {
     // Caching
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    kapt "android.arch.persistence.room:compiler:$room_version"
+    // Deprecated
+//    kapt "android.arch.persistence.room:compiler:$room_version"
     androidTestImplementation "android.arch.persistence.room:testing:$room_testing"
 
     // DataStore

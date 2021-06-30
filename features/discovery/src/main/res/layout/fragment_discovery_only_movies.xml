@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2021. The Android Open Source Project
+  ~
+  ~ @author Kai Cilliers
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.discovery.presentation.movies.FragmentDiscoveryMovies">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <!-- POPULAR MOVIES -->
+
+            <TextView
+                android:id="@+id/tv_heading_popular_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/heading_popular_movies"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_sub_heading_popular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/most_popular_movies"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_popular_movies"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_popular_movies"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_popular" />
+
+            <!-- TOP RATED MOVIES -->
+
+            <TextView
+                android:id="@+id/tv_heading_top_rated_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/heading_top_rated_movies"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rc_popular_movies" />
+
+            <TextView
+                android:id="@+id/tv_sub_heading_highest_rated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/highest_rated_movies"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_top_rated_movies" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_top_rated_movies"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_highest_rated" />
+
+            <!-- UPCOMING MOVIES -->
+
+            <TextView
+                android:id="@+id/tv_heading_upcoming_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/heading_upcoming_movies"
+                style="@style/Widget.ShowTracker.TextView.HeaderMediaList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rc_top_rated_movies" />
+
+            <TextView
+                android:id="@+id/tv_sub_heading_upcoming"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/stay_updated"
+                style="@style/Widget.ShowTracker.TextView.SubheaderMediaList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_heading_upcoming_movies" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_upcoming_movies"
+                style="@style/Widget.ShowTracker.RecyclerView.HorizontalList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_heading_upcoming" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_discovery_movies"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:menu="@menu/menu_discovery_toolbar"
+            app:navigationIcon="?homeAsUpIndicator"
+            app:title="@string/movies_title" />
+
+        <Spinner
+            android:id="@+id/spinner_discovery_movies"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:spinnerMode="dialog"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_discovery_movies" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

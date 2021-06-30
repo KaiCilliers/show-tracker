@@ -1,0 +1,12 @@
+apply from: "$rootDir/common-android-library.gradle"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+dependencies {
+    api Libs.roomKtx
+    kapt Libs.roomCompiler
+    api Libs.pagingRuntimeKtx
+
+    api Libs.hilt
+    api Libs.hiltAndroidCompiler
+}
