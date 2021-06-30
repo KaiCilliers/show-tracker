@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.discovery.presentation.movies
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -28,12 +27,15 @@ import com.sunrisekcdeveloper.discovery.application.LoadTopRatedMoviesUseCaseCon
 import com.sunrisekcdeveloper.discovery.application.LoadUpcomingMoviesUseCaseContract
 import com.sunrisekcdeveloper.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.discovery.domain.model.EventDiscovery
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelDiscoveryMovies @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelDiscoveryMovies @Inject constructor(
     loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract

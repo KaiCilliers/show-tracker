@@ -18,40 +18,40 @@
 
 package com.sunrisekcdeveloper.discovery.data.network
 
+import com.sunrisekcdeveloper.discovery.BuildConfig
 import com.sunrisekcdeveloper.discovery.data.network.model.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.discovery.data.network.model.EnvelopePaginatedShows
-import okhttp3.RequestBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 
 interface ServiceDiscoveryContract {
     suspend fun popularMovies(
-        apiKey: String = "BuildConfig.TMDB_API_KEY",
+        apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedMovies>
 
     suspend fun topRatedMovies(
-        apiKey: String = "BuildConfig.TMDB_API_KEY",
+        apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedMovies>
 
     suspend fun upcomingMovies(
-        apiKey: String = "BuildConfig.TMDB_API_KEY",
+        apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedMovies>
 
     suspend fun popularShows(
-        apiKey: String = "BuildConfig.TMDB_API_KEY",
+        apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedShows>
 
     suspend fun topRatedShows(
-        apiKey: String = "BuildConfig.TMDB_API_KEY",
+        apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedShows>
 
     suspend fun airingTodayShows(
-        apiKey: String = "BuildConfig.TMDB_API_KEY",
+        apiKey: String = BuildConfig.TMDB_API_KEY,
         page: Int
     ): Response<EnvelopePaginatedShows>
 

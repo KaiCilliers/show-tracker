@@ -18,7 +18,6 @@
 
 package com.sunrisekcdeveloper.discovery.presentation
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -28,12 +27,15 @@ import com.sunrisekcdeveloper.discovery.domain.model.ActionDiscovery
 import com.sunrisekcdeveloper.discovery.domain.model.EventDiscovery
 import com.sunrisekcdeveloper.discovery.presentation.focused.ActionFocused
 import com.sunrisekcdeveloper.discovery.presentation.focused.EventFocused
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelDiscovery @ViewModelInject constructor(
+@HiltViewModel
+class ViewModelDiscovery @Inject constructor(
     loadUpcomingMoviesUseCase: LoadUpcomingMoviesUseCaseContract,
     loadPopularMoviesUseCase: LoadPopularMoviesUseCaseContract,
     loadTopRatedMoviesUseCase: LoadTopRatedMoviesUseCaseContract,
