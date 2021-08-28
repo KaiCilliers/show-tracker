@@ -20,7 +20,6 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.sunrisekcdeveloper.showtracker.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +40,7 @@ object ModuleNetwork {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.TMDB_BASE_URL)
+            .baseUrl("https://api.themoviedb.org/3/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(
