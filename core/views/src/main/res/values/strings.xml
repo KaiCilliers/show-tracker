@@ -13,7 +13,7 @@
     <string name="season_single_with_number">%1$s Season</string>
     <string name="runtime_with_value">%1$dh%02$dm</string>
 
-    <!-- TESTING -->
+    <!-- TESTING TODO clean up unused and rename-->
     <string name="remove">Remove</string>
     <string name="watchlist_title_updated">Watchlist</string>
     <string name="discovery_title_updated">Discovery</string>
