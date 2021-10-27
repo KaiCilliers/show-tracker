@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.search.presentation
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -29,6 +30,7 @@ import com.sunrisekcdeveloper.search.OnPosterClickListener
 import com.sunrisekcdeveloper.search.databinding.ItemSimplePosterAndTitleBinding
 import com.sunrisekcdeveloper.search.domain.model.UIModelPoster
 
+@SuppressLint("DiffUtilEquals")
 class AdapterSimplePosterTitle(
     private val image: ImageLoadingContract,
     private var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
