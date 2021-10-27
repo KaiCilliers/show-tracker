@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.detail.data.model.EnvelopeMovieReleaseDates
 import com.sunrisekcdeveloper.detail.data.model.EnvelopeShowCertification
 import com.sunrisekcdeveloper.detail.data.model.ResponseMovieDetail
 import com.sunrisekcdeveloper.detail.data.model.ResponseShowDetail
+import com.sunrisekcdeveloper.network.MNetwork
 import com.sunrisekcdeveloper.network.NetworkResult
 import com.sunrisekcdeveloper.network.RemoteDataSourceBase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,11 +30,11 @@ import kotlinx.coroutines.Dispatchers
 
 class RemoteDataSourceDetail(
     private val api: ServiceDetailContract,
+    private val foo: MNetwork,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RemoteDataSourceDetailContract, RemoteDataSourceBase(dispatcher) {
-    override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
-        // todo pass api key from BuildConfig
-        api.movieDetails(id = id)
+    override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> {
+        return foo.request { api.movieDetails(id) }
     }
 
     override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> = safeApiCall {

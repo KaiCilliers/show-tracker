@@ -48,3 +48,13 @@ abstract class TrackerDatabase : RoomDatabase() {
     abstract fun remoteKeysDiscovery(): DaoRemoteKeys
     abstract fun discoveryDao(): DaoDiscovery
 }
+
+interface CacheContract {
+    fun movieWatchlist(): DaoWatchlistMovie
+}
+
+class Cache : CacheContract {
+    override fun movieWatchlist(): DaoWatchlistMovie {
+        return TrackerDatabase.watchlistMovieDao()
+    }
+}

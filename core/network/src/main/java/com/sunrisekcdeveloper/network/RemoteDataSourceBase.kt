@@ -19,8 +19,10 @@
 package com.sunrisekcdeveloper.network
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import kotlin.coroutines.RestrictsSuspension
 
 open class RemoteDataSourceBase(
     private val dispatcher: CoroutineDispatcher
@@ -40,4 +42,27 @@ open class RemoteDataSourceBase(
                 NetworkResult.error((e.message ?: e.toString()))
             }
         }
+}
+
+interface MNetwork{
+    suspend fun <T> request(dispatcher: CoroutineDispatcher = Dispatchers.IO, request: suspend () -> Response<T>): NetworkResult<T>
+}
+
+class MIMple : MNetwork {
+    override suspend fun <T> request(dispatcher: CoroutineDispatcher, request: suspend () -> Response<T>): NetworkResult<T> {
+        return withContext(dispatcher) {
+            return@withContext try {
+                val response = request()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    body?.let { data ->
+                        return@withContext NetworkResult.success(data)
+                    }
+                }
+                NetworkResult.error("Code: ${response.code()} | ${response.errorBody()}")
+            } catch (e: Exception) {
+                NetworkResult.error((e.message ?: e.toString()))
+            }
+        }
+    }
 }

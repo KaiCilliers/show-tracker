@@ -26,6 +26,9 @@ import com.sunrisekcdeveloper.detail.ImageLoadingContract
 import com.sunrisekcdeveloper.detail.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.detail.R
 import com.sunrisekcdeveloper.detail.databinding.StMediaDetailsBinding
+import com.sunrisekcdeveloper.detail.setMaxLinesToEllipsize
+import com.sunrisekcdeveloper.models.EndpointImageContract
+import com.sunrisekcdeveloper.models.EndpointPosterStandard
 
 class StMediaDetail(
     private val ctxt: Context,
@@ -46,11 +49,14 @@ class StMediaDetail(
     }
 
     fun posterUrl(url: String) {
-        imageLoader.load(url, binding.imgDetailMediaPoster)
+        // TODO do not create objects inside function (hides dependencies)
+        //  Problem is this being a custom view
+        imageLoader.load(EndpointPosterStandard(url).url(), binding.imgDetailMediaPoster)
     }
 
     fun description(description: String) {
-      binding.tvDetailMediaDescription.text = description
+        binding.tvDetailMediaDescription.text = description
+        binding.tvDetailMediaDescription.setMaxLinesToEllipsize()
     }
 
     fun tags(tags: List<String>) {

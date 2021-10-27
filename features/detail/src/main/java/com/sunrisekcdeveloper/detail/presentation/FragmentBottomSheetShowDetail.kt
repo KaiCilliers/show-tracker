@@ -71,10 +71,8 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
 
     private fun setup() {
         (requireDialog() as BottomSheetDialog).dismissWithAnimation = true
-        binding.imgDetailShowClose.setOnClickListener { viewModel.submitAction(ActionDetailShow.close()) }
-        binding.tvDetailShowTitle.text = arguments.showTitle
-        ImageLoadingStandardGlide(this)
-            .load(EndpointPosterStandard(arguments.posterPath).url(), binding.imgDetailShowPoster)
+        binding.stMediaDetail.title(arguments.showTitle)
+        binding.stMediaDetail.posterUrl(EndpointPosterStandard(arguments.posterPath).url())
     }
 
     private fun observe() {
@@ -133,46 +131,31 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
     }
 
     private fun cleanUI() {
-        binding.layoutDetailShowSkeleton.gone()
-        binding.tvDetailShowDescription.gone()
-        binding.tvDetailShowFirstAirDate.gone()
-        binding.tvDetailShowCertification.gone()
-        binding.tvDetailShowSeasons.gone()
-        binding.tvShowSeparatorOne.gone()
-        binding.tvShowSeparatorTwo.gone()
-        binding.btnDetailShowAdd.disabled()
-        binding.btnDetailShowWatchStatus.disabled()
+        binding.stMediaDetail.gone()
     }
 
     private fun renderSuccess(data: UIModelShowDetail) {
-        binding.tvDetailShowDescription.apply {
-            text = data.overview
-            setMaxLinesToEllipsize()
-        }
-        binding.tvDetailShowFirstAirDate.text = data.firstAirDate
-        binding.tvDetailShowCertification.text = data.certification
-        binding.tvDetailShowSeasons.text = getString(
-            if (data.seasonsTotal > 1) {
-                R.string.season_plural_with_number
-            } else {
-                R.string.season_single_with_number
-            }, data.seasonsTotal.toString()
-        )
+        binding.stMediaDetail.description(data.overview)
+        binding.stMediaDetail.tags(listOf(
+            data.firstAirDate,
+            data.certification,
+            getString(
+                if (data.seasonsTotal > 1) {
+                    R.string.season_plural_with_number
+                } else {
+                    R.string.season_single_with_number
+                }, data.seasonsTotal.toString()
+            )
+        ))
 
         when (data.watchlist) {
             ShowWatchlistStatus.Watchlisted -> {
-                ActionButton(binding.btnDetailShowAdd).paint(
-                    fetchErrorColor(requireContext()),
-                    getString(R.string.show_remove)
-                ) {
+                binding.stMediaDetail.primaryButton(MediaDetailPrimaryButton.Remove) {
                     viewModel.submitAction(ActionDetailShow.attemptRemove(data.id, data.name))
                 }
             }
             ShowWatchlistStatus.NotWatchlisted -> {
-                ActionButton(binding.btnDetailShowAdd).paint(
-                    fetchPrimaryColor(requireContext()),
-                    getString(R.string.show_add)
-                ) {
+                binding.stMediaDetail.primaryButton(MediaDetailPrimaryButton.Add) {
                     viewModel.submitAction(
                         ActionDetailShow.add(
                             data.id,
@@ -185,45 +168,27 @@ class FragmentBottomSheetShowDetail : BottomSheetDialogFragment() {
 
         when (data.status) {
             ShowStatus.NotStarted -> {
-                ActionButton(binding.btnDetailShowWatchStatus).paint(
-                    text = getString(R.string.show_start_watching)
-                ) {
+                binding.stMediaDetail.secondaryButton(MediaDetailSecondaryButton.StartWatching) {
                     viewModel.submitAction(ActionDetailShow.startWatching(data.id, data.name))
                 }
             }
             ShowStatus.Started -> {
-//                if (!arguments.fromWatchlist) {
-                if(true) {
-                    ActionButton(binding.btnDetailShowWatchStatus).paint(
-                        text = getString(R.string.show_update_progress)
-                    ) {
-                        viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
-                    }
-                } else {
-                    binding.btnDetailShowWatchStatus.isGone = true
+                binding.stMediaDetail.secondaryButton(MediaDetailSecondaryButton.UpdateProgress) {
+                    viewModel.submitAction(ActionDetailShow.updateProgress(data.id))
+
                 }
             }
             ShowStatus.UpToDate -> {
-                ActionButton(binding.btnDetailShowWatchStatus).paint(
-                    text = getString(R.string.show_up_to_date)
-                ) {
+                binding.stMediaDetail.secondaryButton(MediaDetailSecondaryButton.UpToDate) {
                     viewModel.submitAction(ActionDetailShow.showToast("Show is up to date"))
                 }
             }
         }
 
-        binding.tvDetailShowDescription.visible()
-        binding.tvDetailShowFirstAirDate.visible()
-        binding.tvDetailShowCertification.visible()
-        binding.tvDetailShowSeasons.visible()
-        binding.tvShowSeparatorOne.visible()
-        binding.tvShowSeparatorTwo.visible()
-        binding.btnDetailShowAdd.enabled()
-        binding.btnDetailShowWatchStatus.enabled()
+        binding.stMediaDetail.visible()
     }
 
     private fun renderLoading() {
-        binding.layoutDetailShowSkeleton.visible()
     }
 
     private fun renderError() {
