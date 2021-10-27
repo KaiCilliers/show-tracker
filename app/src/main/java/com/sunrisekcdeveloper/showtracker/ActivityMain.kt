@@ -32,6 +32,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class ActivityMain : AppCompatActivity() {
 
+    // change to test scripts
     private lateinit var binding: ActivityMainBinding
     private var doubleBackToExitPressedLong = System.currentTimeMillis()
 
