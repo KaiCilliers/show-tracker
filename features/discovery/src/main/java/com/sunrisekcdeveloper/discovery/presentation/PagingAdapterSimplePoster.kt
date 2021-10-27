@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.discovery.presentation
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -30,6 +31,7 @@ import com.sunrisekcdeveloper.discovery.UIModelPoster
 import com.sunrisekcdeveloper.discovery.databinding.ItemSimplePosterBinding
 import com.sunrisekcdeveloper.discovery.presentation.PagingAdapterSimplePoster.ViewHolderPagingSimplePoster
 
+@SuppressLint("DiffUtilEquals")
 class PagingAdapterSimplePoster(
     private val image: ImageLoadingContract,
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }

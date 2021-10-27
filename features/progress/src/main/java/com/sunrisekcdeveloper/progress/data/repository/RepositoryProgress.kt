@@ -34,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.collections.forEach as forEachIterable
 
 class RepositoryProgress(
     private val remote: RemoteDataSourceProgressContract,
@@ -105,7 +106,7 @@ class RepositoryProgress(
                 val response = remote.showWithSeasons(showId)
                 when (response) {
                     is NetworkResult.Success -> {
-                        response.data.seasons.forEach {
+                        response.data.seasons.forEachIterable {
                             val second = remote.seasonDetails(
                                 showId, it.number
                             )
@@ -114,7 +115,7 @@ class RepositoryProgress(
 
                             when (second) {
                                 is NetworkResult.Success -> {
-                                    second.data.episodes.forEach { episode ->
+                                    second.data.episodes.forEachIterable { episode ->
                                         database.episodeDao()
                                             .insert(episode.asEntityEpisode(showId))
                                     }

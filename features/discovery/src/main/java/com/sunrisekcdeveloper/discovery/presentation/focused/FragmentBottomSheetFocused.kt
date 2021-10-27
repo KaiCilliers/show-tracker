@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.cache.MediaType
@@ -70,7 +71,7 @@ class FragmentBottomSheetFocused : BottomSheetDialogFragment() {
             viewModel.submitAction(ActionFocused.close())
         }
 
-        val onClick = OnPosterClickListener { mediaId, mediaTitle, posterPath, mediaType ->
+        val onClick = OnPosterClickListener { _, _, _, mediaType ->
             when (mediaType) {
                 MediaType.movie() -> {
 //                    findNavController().navigate(
