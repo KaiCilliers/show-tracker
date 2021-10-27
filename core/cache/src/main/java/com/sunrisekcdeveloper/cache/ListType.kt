@@ -18,6 +18,8 @@
 
 package com.sunrisekcdeveloper.cache
 
+// Lint false positive
+// TODO lint is giving a false positive when a sealed class is used in DiffUtil without overriding equals function. Changed lint check from error to warning Settings -> Editor -> Inspections -> Suspicious DiffUtil Equality. Change back once IDE is updated to latest version as the bug has been fixed: http://youtrack.jetbrains.com/issues/KT-31239
 sealed class ListType {
     object NoList : ListType()
     object MoviePopular : ListType()

@@ -18,6 +18,7 @@
 
 package com.sunrisekcdeveloper.discovery
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.discovery.PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium
 import com.sunrisekcdeveloper.discovery.databinding.ItemMediumPosterBinding
 
+@SuppressLint("DiffUtilEquals")
 class PagingAdapterSimplePosterMedium(
     private val image: ImageLoadingContract,
     private var onPosterClick: OnPosterClickListener = OnPosterClickListener { _, _, _, _ -> }
