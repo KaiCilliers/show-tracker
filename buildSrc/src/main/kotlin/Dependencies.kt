@@ -147,6 +147,7 @@ object Libs {
     val hiltTesting = "com.google.dagger:hilt-android-testing:${Versions.HILT}"
     val hiltLifecycleViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.HILT_LIFECYCLE_VIEWMODEL}"
     val hiltCompiler = "androidx.hilt:hilt-compiler:${Versions.HILT_COMPILER}"
+    val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT_ANDROID_COMPILER}"
 
     // Fragments
     val fragmentTest = "androidx.fragment:fragment-testing:${Versions.FRAGMENT}"
@@ -155,6 +156,7 @@ object Libs {
     val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
     val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     val navigationTest = "androidx.navigation:navigation-testing:${Versions.NAVIGATION}"
+    val navigationSafeArgsPlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.NAVIGATION}"
 
     // ========
     // TESTING
