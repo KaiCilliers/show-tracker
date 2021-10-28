@@ -6,6 +6,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+// todo [E07-001] [Update_script_that_bumps_app_version] When converting gradle files kotlin DSL, versionCode and versionName will use buildSrc. Thus, the script updating those values will have to be changed to update the version in buildSrc file
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"

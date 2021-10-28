@@ -16,6 +16,7 @@ android {
         versionName Releases.versionName
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
+        // todo [E07-001] [GitHub_Secrets_to_build_project._It_cant_access_file_with_apikey] The apikeys.properties isnt included in version control, so chek how to add API key to Gitub secrets to allow successful builds
         buildConfigField("String", "TMDB_API_KEY", apikeysProperties['TMDB_API_KEY'])
     }
 
