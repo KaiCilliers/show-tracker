@@ -1,7 +1,7 @@
 # https://wkrzywiec.medium.com/github-actions-for-android-first-approach-f616c24aa0f9
 name: Android Build
 
-on: pull_request
+on: push
 
 jobs:
   build:
