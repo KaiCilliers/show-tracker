@@ -1,7 +1,12 @@
 # https://wkrzywiec.medium.com/github-actions-for-android-first-approach-f616c24aa0f9
 name: Android Build
 
-on: push
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+      - '!release*'
 
 jobs:
   build:
