@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/fragmentWatchlist"
-        android:name="com.sunrisekcdeveloper.watchlist.presentation.FragmentWatchlist"
+        android:name="com.sunrisekcdeveloper.watchlist.WatchlistFragment"
         android:label="fragment_watchlist"
         tools:layout="@layout/fragment_watchlist">
         <deepLink app:uri="showtracker://watchlist?showId={showId}"/>
