@@ -41,8 +41,8 @@ import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.cache.FilterMovies
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.MediaType
-import com.sunrisekcdeveloper.models.MovieWatchedStatus
-import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
+import com.sunrisekcdeveloper.network.InternalDeepLink
 import com.sunrisekcdeveloper.views.R
 import com.sunrisekcdeveloper.watchlist.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.watchlist.extras.model.*

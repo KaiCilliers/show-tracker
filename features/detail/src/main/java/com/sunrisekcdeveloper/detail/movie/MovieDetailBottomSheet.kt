@@ -33,7 +33,7 @@ import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
 import com.sunrisekcdeveloper.detail.extras.*
-import com.sunrisekcdeveloper.models.EndpointPosterStandard
+import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber

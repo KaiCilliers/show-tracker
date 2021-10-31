@@ -31,7 +31,7 @@ import com.sunrisekcdeveloper.detail.movie.usecase.UpdateMovieWatchedStatusUseCa
 import com.sunrisekcdeveloper.detail.extras.model.ActionDetailMovie
 import com.sunrisekcdeveloper.detail.extras.model.EventDetailMovie
 import com.sunrisekcdeveloper.detail.extras.model.StateDetailMovie
-import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import com.sunrisekcdeveloper.detail.extras.model.MovieWatchedStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect

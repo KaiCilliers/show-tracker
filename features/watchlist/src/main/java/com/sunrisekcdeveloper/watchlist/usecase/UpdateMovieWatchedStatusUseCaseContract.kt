@@ -18,7 +18,7 @@
 
 package com.sunrisekcdeveloper.watchlist.usecase
 
-import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
 import timber.log.Timber
 
 interface UpdateMovieWatchedStatusUseCaseContract {

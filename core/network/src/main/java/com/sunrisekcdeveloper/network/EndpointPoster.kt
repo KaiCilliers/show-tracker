@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.models
+package com.sunrisekcdeveloper.network
 
-// todo may move this file to wherever Glide will be centralized if I do so
+// TODO [E07-002] [Move-endpoint-class] move this file to wherever Glide will be centralized. Centralized the image loading logic
 class EndpointPosterTiny(private val posterPath: String) : EndpointImageContract {
     override fun url(): String {
         return "$baseUrl/w92$posterPath"

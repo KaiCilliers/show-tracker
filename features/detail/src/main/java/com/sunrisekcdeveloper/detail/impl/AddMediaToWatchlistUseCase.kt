@@ -22,7 +22,7 @@ import com.sunrisekcdeveloper.cache.MediaType
 import com.sunrisekcdeveloper.detail.usecase.AddMediaToWatchlistUseCaseContract
 import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryShow
 import com.sunrisekcdeveloper.detail.extras.RepositoryDetailContract
-import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

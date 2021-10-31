@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.models.navigation
+package com.sunrisekcdeveloper.network
 
-// todo consider placing navigation related items into a separate module
+// TODO [E07-002] [Move-navigation-logic-to-own-module] consider placing navigation related items into a separate module if navigation is still done this way
 object InternalDeepLink {
 
     const val DOMAIN = "showtracker://"

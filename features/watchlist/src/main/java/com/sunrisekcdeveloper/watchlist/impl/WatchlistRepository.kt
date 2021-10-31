@@ -24,7 +24,7 @@ import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.cache.common.Resource
 import com.sunrisekcdeveloper.cache.models.*
-import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.watchlist.extras.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.watchlist.extras.model.UIModelWatchlistMovie
 import com.sunrisekcdeveloper.watchlist.extras.model.UpdateShowAction
 import com.sunrisekcdeveloper.watchlist.WatchlistRepositoryContract

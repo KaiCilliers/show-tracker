@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.sunrisekcdeveloper.models.EndpointPosterStandard
+import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import com.sunrisekcdeveloper.search.databinding.ItemMediumPosterBinding
 import com.sunrisekcdeveloper.search.extras.model.UIModelPoster
 import com.sunrisekcdeveloper.search.extras.PagingAdapterSimplePosterMedium.ViewHolderPagingSimplePosterMedium

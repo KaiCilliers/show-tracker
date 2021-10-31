@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.watchlist
 import com.sunrisekcdeveloper.cache.FilterMovies
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.common.Resource
-import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.watchlist.extras.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.watchlist.extras.UIModelWatchlistShow
 import com.sunrisekcdeveloper.watchlist.extras.model.UIModelWatchlistMovie
 import com.sunrisekcdeveloper.watchlist.extras.model.UpdateShowAction

@@ -25,7 +25,7 @@ import com.sunrisekcdeveloper.cache.models.EntityWatchlistMovie
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 import com.sunrisekcdeveloper.detail.DetailRemoteDataSourceContract
 import com.sunrisekcdeveloper.detail.extras.model.*
-import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.network.NetworkResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

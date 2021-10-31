@@ -38,7 +38,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.cache.MediaType
-import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+import com.sunrisekcdeveloper.network.InternalDeepLink
 import com.sunrisekcdeveloper.search.*
 import com.sunrisekcdeveloper.search.databinding.FragmentSearchBinding
 import com.sunrisekcdeveloper.search.extras.*

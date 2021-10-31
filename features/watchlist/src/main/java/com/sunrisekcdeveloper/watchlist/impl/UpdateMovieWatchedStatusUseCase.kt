@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.watchlist.impl
 
-import com.sunrisekcdeveloper.models.ActionRepositoryMovie
-import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import com.sunrisekcdeveloper.watchlist.extras.model.ActionRepositoryMovie
+import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.watchlist.usecase.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.watchlist.WatchlistRepositoryContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi

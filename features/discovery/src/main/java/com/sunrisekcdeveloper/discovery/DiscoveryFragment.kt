@@ -40,7 +40,7 @@ import com.sunrisekcdeveloper.discovery.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.discovery.extras.*
 import com.sunrisekcdeveloper.discovery.extras.model.ActionDiscovery
 import com.sunrisekcdeveloper.discovery.extras.model.EventDiscovery
-import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+import com.sunrisekcdeveloper.network.InternalDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job

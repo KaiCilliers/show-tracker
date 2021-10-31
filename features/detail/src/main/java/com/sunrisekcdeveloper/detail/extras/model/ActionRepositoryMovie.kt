@@ -16,14 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.models
+package com.sunrisekcdeveloper.detail.extras.model
 
-sealed class MovieWatchedStatus {
-    object Watched: MovieWatchedStatus()
-    object NotWatched : MovieWatchedStatus()
-
-    companion object {
-        fun watched() = Watched
-        fun notWatched() = NotWatched
-    }
+sealed class ActionRepositoryMovie {
+    data class Add(val id: String) : ActionRepositoryMovie()
+    data class Remove(val id: String) : ActionRepositoryMovie()
+    data class Watch(val id: String) : ActionRepositoryMovie()
+    data class Unwatch(val id: String) : ActionRepositoryMovie()
 }

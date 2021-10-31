@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.cache.MediaType
-import com.sunrisekcdeveloper.models.EndpointPosterStandard
+import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import com.sunrisekcdeveloper.views.databinding.ItemWatchlistShowBinding
 import timber.log.Timber
 

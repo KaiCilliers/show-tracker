@@ -46,7 +46,7 @@ import com.sunrisekcdeveloper.discovery.extras.model.ActionDiscovery
 import com.sunrisekcdeveloper.discovery.extras.model.EventDiscovery
 import com.sunrisekcdeveloper.discovery.extras.observeInLifecycle
 import com.sunrisekcdeveloper.discovery.extras.PagingAdapterSimplePoster
-import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+import com.sunrisekcdeveloper.network.InternalDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

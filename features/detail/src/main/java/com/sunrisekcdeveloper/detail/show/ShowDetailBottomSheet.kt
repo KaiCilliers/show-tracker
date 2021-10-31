@@ -36,8 +36,8 @@ import com.sunrisekcdeveloper.detail.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
 import com.sunrisekcdeveloper.detail.extras.ActionButton
 import com.sunrisekcdeveloper.detail.extras.*
-import com.sunrisekcdeveloper.models.EndpointPosterStandard
-import com.sunrisekcdeveloper.models.navigation.InternalDeepLink
+import com.sunrisekcdeveloper.network.EndpointPosterStandard
+import com.sunrisekcdeveloper.network.InternalDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber

@@ -25,7 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.cache.FilterMovies
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.common.Resource
-import com.sunrisekcdeveloper.models.MovieWatchedStatus
+import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.UpdateMovieWatchedStatusUseCaseContract

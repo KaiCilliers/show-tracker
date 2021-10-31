@@ -20,7 +20,7 @@ package com.sunrisekcdeveloper.detail.extras
 
 import com.sunrisekcdeveloper.cache.common.Resource
 import com.sunrisekcdeveloper.detail.extras.model.*
-import com.sunrisekcdeveloper.models.ActionRepositoryMovie
+import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
