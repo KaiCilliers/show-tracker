@@ -30,10 +30,6 @@ object UiComponents {
     const val uiComponents = ":ui-components"
 }
 
-object Common {
-    const val models = ":common:models"
-}
-
 object Versions {
     const val GRADLE_TOOLS = "4.1.2" // todo update version
 
