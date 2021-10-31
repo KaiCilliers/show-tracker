@@ -16,21 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.domain.model
+package com.sunrisekcdeveloper.progress.extras.model
 
-sealed class SetShowProgress {
-    data class Partial(
-        val showId: String,
-        val seasonNumber: Int,
-        val episodeNumber: Int
-    ) : SetShowProgress()
-
-    data class UpToDate(val showId: String) : SetShowProgress()
+sealed class StateProgress {
+    object Loading : StateProgress()
+    data class Success(val values: Map<Int, List<Int>>) : StateProgress()
+    data class Error(val error: Exception) : StateProgress()
 
     companion object {
-        fun partial(showId: String, seasonNumber: Int, episodeNumber: Int) =
-            Partial(showId, seasonNumber, episodeNumber)
-
-        fun upToDate(showId: String) = UpToDate(showId)
+        fun loading() = Loading
+        fun success(values: Map<Int, List<Int>>) = Success(values)
+        fun error(errorMessage: String) = Error(Exception(errorMessage))
     }
 }

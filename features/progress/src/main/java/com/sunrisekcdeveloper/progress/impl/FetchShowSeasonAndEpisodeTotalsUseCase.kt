@@ -16,7 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress
+package com.sunrisekcdeveloper.progress.impl
 
-class temp {
+import com.sunrisekcdeveloper.cache.common.Resource
+import com.sunrisekcdeveloper.progress.usecase.FetchShowSeasonAndEpisodeTotalsUseCaseContract
+import com.sunrisekcdeveloper.progress.ProgressRepositoryContract
+
+class FetchShowSeasonAndEpisodeTotalsUseCase(
+    private val repoProgress: ProgressRepositoryContract
+) : FetchShowSeasonAndEpisodeTotalsUseCaseContract {
+    override suspend fun invoke(showId: String): Resource<Map<Int, List<Int>>> {
+        repoProgress.cacheEntireShow(showId)
+        return repoProgress.showSeasons(showId)
+    }
 }

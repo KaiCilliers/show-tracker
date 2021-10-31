@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.domain.model
+package com.sunrisekcdeveloper.progress.extras.model
 
 sealed class EventProgress {
     data class SaveSnackbarMessage(val message: String) : EventProgress()

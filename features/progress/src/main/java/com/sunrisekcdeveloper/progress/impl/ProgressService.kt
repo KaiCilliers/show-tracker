@@ -16,16 +16,17 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.data.network
+package com.sunrisekcdeveloper.progress.impl
 
-import com.sunrisekcdeveloper.progress.data.model.ResponseSeasonDetailWithEpisodes
-import com.sunrisekcdeveloper.progress.data.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.extras.model.ResponseSeasonDetailWithEpisodes
+import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.ProgressServiceContract
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ServiceProgress : ServiceProgressContract {
+interface ProgressService : ProgressServiceContract {
     @GET("tv/{id}")
     override suspend fun showWithSeasons(
         @Path("id") id: String,

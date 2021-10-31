@@ -16,15 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.data.network
+package com.sunrisekcdeveloper.progress
 
-import com.sunrisekcdeveloper.progress.BuildConfig
-import com.sunrisekcdeveloper.progress.data.model.ResponseSeasonDetailWithEpisodes
-import com.sunrisekcdeveloper.progress.data.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.extras.model.ResponseSeasonDetailWithEpisodes
+import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 
-interface ServiceProgressContract {
+interface ProgressServiceContract {
     suspend fun showWithSeasons(
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
@@ -36,7 +35,7 @@ interface ServiceProgressContract {
         apiKey: String = BuildConfig.TMDB_API_KEY
     ) : Response<ResponseSeasonDetailWithEpisodes>
 
-    class Fake() : ServiceProgressContract {
+    class Fake() : ProgressServiceContract {
         var expectException = false
         override suspend fun showWithSeasons(
             id: String,

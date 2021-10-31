@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.presentation
+package com.sunrisekcdeveloper.progress
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,25 +30,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.sunrisekcdeveloper.progress.KeyPersistenceStore
 import com.sunrisekcdeveloper.progress.databinding.FragmentSetProgressBinding
-import com.sunrisekcdeveloper.progress.domain.model.ActionProgress
-import com.sunrisekcdeveloper.progress.domain.model.EventProgress
-import com.sunrisekcdeveloper.progress.domain.model.StateProgress
-import com.sunrisekcdeveloper.progress.gone
-import com.sunrisekcdeveloper.progress.observeInLifecycle
-import com.sunrisekcdeveloper.progress.visible
+import com.sunrisekcdeveloper.progress.extras.KeyPersistenceStore
+import com.sunrisekcdeveloper.progress.extras.gone
+import com.sunrisekcdeveloper.progress.extras.model.ActionProgress
+import com.sunrisekcdeveloper.progress.extras.model.EventProgress
+import com.sunrisekcdeveloper.progress.extras.model.StateProgress
+import com.sunrisekcdeveloper.progress.extras.observeInLifecycle
+import com.sunrisekcdeveloper.progress.extras.visible
 import com.sunrisekcdeveloper.views.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class FragmentProgress : Fragment() {
+class ProgressFragment : Fragment() {
 
     private lateinit var binding: FragmentSetProgressBinding
-    private val viewModel: ViewModelProgress by viewModels()
-    private val arguments: FragmentProgressArgs by navArgs()
+    private val viewModel: ProgressViewModel by viewModels()
+    private val arguments: ProgressFragmentArgs by navArgs()
 
     private var map: MutableMap<Int, List<Int>> = mutableMapOf()
 

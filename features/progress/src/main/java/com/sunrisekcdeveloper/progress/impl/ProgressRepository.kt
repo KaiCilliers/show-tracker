@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.data.repository
+package com.sunrisekcdeveloper.progress.impl
 
 import androidx.room.withTransaction
 import com.sunrisekcdeveloper.cache.TrackerDatabase
@@ -25,10 +25,10 @@ import com.sunrisekcdeveloper.cache.models.EntityWatchlistEpisode
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistSeason
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.progress.asEntityEpisode
-import com.sunrisekcdeveloper.progress.asEntitySeason
-import com.sunrisekcdeveloper.progress.data.network.RemoteDataSourceProgressContract
-import com.sunrisekcdeveloper.progress.domain.repository.RepositoryProgressContract
+import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
+import com.sunrisekcdeveloper.progress.ProgressRepositoryContract
+import com.sunrisekcdeveloper.progress.extras.asEntityEpisode
+import com.sunrisekcdeveloper.progress.extras.asEntitySeason
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,11 +36,11 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.collections.forEach as forEachIterable
 
-class RepositoryProgress(
-    private val remote: RemoteDataSourceProgressContract,
+class ProgressRepository(
+    private val remote: ProgressRemoteDataSourceContract,
     private val database: TrackerDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : RepositoryProgressContract {
+) : ProgressRepositoryContract {
 
     override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
         val entityEpisode = database.episodeDao().withId(showId, season, episode)

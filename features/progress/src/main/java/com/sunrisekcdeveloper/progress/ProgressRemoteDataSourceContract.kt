@@ -16,16 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.data.network
+package com.sunrisekcdeveloper.progress
 
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.progress.data.model.ResponseSeasonDetailWithEpisodes
-import com.sunrisekcdeveloper.progress.data.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.extras.model.ResponseSeasonDetailWithEpisodes
+import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
 
-interface RemoteDataSourceProgressContract {
+interface ProgressRemoteDataSourceContract {
     suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons>
     suspend fun seasonDetails(showId: String, season: Int): NetworkResult<ResponseSeasonDetailWithEpisodes>
-    class Fake() : RemoteDataSourceProgressContract {
+    class Fake() : ProgressRemoteDataSourceContract {
         var expectException = false
         override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> {
             return if (expectException) NetworkResult.error("Fake - Could not fetch Show (id=$showId)")

@@ -16,18 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.data.network
+package com.sunrisekcdeveloper.progress.impl
 
 import com.sunrisekcdeveloper.network.NetworkResult
 import com.sunrisekcdeveloper.network.RemoteDataSourceBase
-import com.sunrisekcdeveloper.progress.data.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
+import com.sunrisekcdeveloper.progress.ProgressServiceContract
+import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-class RemoteDataSourceProgress(
-    private val api: ServiceProgressContract,
+class ProgressRemoteDataSource(
+    private val api: ProgressServiceContract,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : RemoteDataSourceProgressContract, RemoteDataSourceBase(dispatcher) {
+) : ProgressRemoteDataSourceContract, RemoteDataSourceBase(dispatcher) {
     override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> = safeApiCall {
         api.showWithSeasons(showId)
     }

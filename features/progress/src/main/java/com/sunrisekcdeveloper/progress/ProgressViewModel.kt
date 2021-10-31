@@ -16,19 +16,19 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.presentation
+package com.sunrisekcdeveloper.progress
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.cache.common.Resource
-import com.sunrisekcdeveloper.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
-import com.sunrisekcdeveloper.progress.application.SetShowProgressUseCaseContract
-import com.sunrisekcdeveloper.progress.domain.model.ActionProgress
-import com.sunrisekcdeveloper.progress.domain.model.EventProgress
-import com.sunrisekcdeveloper.progress.domain.model.SetShowProgress
-import com.sunrisekcdeveloper.progress.domain.model.StateProgress
+import com.sunrisekcdeveloper.progress.usecase.FetchShowSeasonAndEpisodeTotalsUseCaseContract
+import com.sunrisekcdeveloper.progress.usecase.SetShowProgressUseCaseContract
+import com.sunrisekcdeveloper.progress.extras.model.ActionProgress
+import com.sunrisekcdeveloper.progress.extras.model.EventProgress
+import com.sunrisekcdeveloper.progress.extras.model.SetShowProgress
+import com.sunrisekcdeveloper.progress.extras.model.StateProgress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModelProgress @Inject constructor(
+class ProgressViewModel @Inject constructor(
     private val fetchShowSeasonAndEpisodeTotalsUseCase: FetchShowSeasonAndEpisodeTotalsUseCaseContract,
     private val setShowProgressUseCase: SetShowProgressUseCaseContract
 ) : ViewModel() {

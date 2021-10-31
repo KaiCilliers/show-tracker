@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.domain.usecase
+package com.sunrisekcdeveloper.progress.extras
 
-import com.sunrisekcdeveloper.cache.common.Resource
-import com.sunrisekcdeveloper.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
-import com.sunrisekcdeveloper.progress.domain.repository.RepositoryProgressContract
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 
-class FetchShowSeasonAndEpisodeTotalsUseCase(
-    private val repoProgress: RepositoryProgressContract
-) : FetchShowSeasonAndEpisodeTotalsUseCaseContract {
-    override suspend fun invoke(showId: String): Resource<Map<Int, List<Int>>> {
-        repoProgress.cacheEntireShow(showId)
-        return repoProgress.showSeasons(showId)
-    }
+class KeyPersistenceStore(private val key: String) : KeyPersistenceStoreContract<String> {
+    override fun value(): String = key
+
+    override fun asDataStoreKey(): Preferences.Key<String> = stringPreferencesKey(key)
+}
+
+interface KeyPersistenceStoreContract<T> {
+    fun value(): T
+    fun asDataStoreKey(): Preferences.Key<T>
 }

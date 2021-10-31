@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress
+package com.sunrisekcdeveloper.progress.extras
 
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import com.sunrisekcdeveloper.cache.models.EntityEpisode
 import com.sunrisekcdeveloper.cache.models.EntitySeason
-import com.sunrisekcdeveloper.progress.data.model.ResponseEpisode
-import com.sunrisekcdeveloper.progress.data.model.ResponseSeason
+import com.sunrisekcdeveloper.progress.extras.model.ResponseEpisode
+import com.sunrisekcdeveloper.progress.extras.model.ResponseSeason
 import kotlinx.coroutines.flow.Flow
 
 fun ResponseEpisode.asEntityEpisode(showId: String) = EntityEpisode(

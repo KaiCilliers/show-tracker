@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.application
+package com.sunrisekcdeveloper.progress.usecase
 
 import com.sunrisekcdeveloper.cache.common.Resource
 

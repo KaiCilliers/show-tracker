@@ -16,19 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.di
+package com.sunrisekcdeveloper.progress
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.progress.application.FetchShowSeasonAndEpisodeTotalsUseCaseContract
-import com.sunrisekcdeveloper.progress.application.SetShowProgressUseCaseContract
-import com.sunrisekcdeveloper.progress.data.network.RemoteDataSourceProgress
-import com.sunrisekcdeveloper.progress.data.network.RemoteDataSourceProgressContract
-import com.sunrisekcdeveloper.progress.data.network.ServiceProgress
-import com.sunrisekcdeveloper.progress.data.network.ServiceProgressContract
-import com.sunrisekcdeveloper.progress.data.repository.RepositoryProgress
-import com.sunrisekcdeveloper.progress.domain.repository.RepositoryProgressContract
-import com.sunrisekcdeveloper.progress.domain.usecase.FetchShowSeasonAndEpisodeTotalsUseCase
-import com.sunrisekcdeveloper.progress.domain.usecase.SetShowProgressUseCase
+import com.sunrisekcdeveloper.progress.usecase.FetchShowSeasonAndEpisodeTotalsUseCaseContract
+import com.sunrisekcdeveloper.progress.usecase.SetShowProgressUseCaseContract
+import com.sunrisekcdeveloper.progress.impl.ProgressRemoteDataSource
+import com.sunrisekcdeveloper.progress.impl.ProgressService
+import com.sunrisekcdeveloper.progress.impl.ProgressRepository
+import com.sunrisekcdeveloper.progress.impl.FetchShowSeasonAndEpisodeTotalsUseCase
+import com.sunrisekcdeveloper.progress.impl.SetShowProgressUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,37 +37,37 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(ViewModelComponent::class)
 @ExperimentalCoroutinesApi
-object ModuleProgress {
+object ProgressModule {
 
     @Provides
     @ViewModelScoped
-    fun provideServiceProgress(retrofit: Retrofit): ServiceProgressContract {
-        return retrofit.create(ServiceProgress::class.java)
+    fun provideServiceProgress(retrofit: Retrofit): ProgressServiceContract {
+        return retrofit.create(ProgressService::class.java)
     }
 
     @Provides
     @ViewModelScoped
     fun provideRemoteDataSourceProgress(
-        api: ServiceProgressContract
-    ): RemoteDataSourceProgressContract = RemoteDataSourceProgress(api)
+        api: ProgressServiceContract
+    ): ProgressRemoteDataSourceContract = ProgressRemoteDataSource(api)
 
     @Provides
     @ViewModelScoped
     fun provideRepositoryProgress(
-        remote: RemoteDataSourceProgressContract,
+        remote: ProgressRemoteDataSourceContract,
         local: TrackerDatabase
-    ): RepositoryProgressContract = RepositoryProgress(remote,local)
+    ): ProgressRepositoryContract = ProgressRepository(remote,local)
 
     @Provides
     @ViewModelScoped
     fun provideFetchShowSeasonAndEpisodeTotalsUseCase(
-        repo: RepositoryProgressContract
+        repo: ProgressRepositoryContract
     ): FetchShowSeasonAndEpisodeTotalsUseCaseContract = FetchShowSeasonAndEpisodeTotalsUseCase(repo)
 
     @Provides
     @ViewModelScoped
     fun provideSetShowProgressUseCase(
-        repo: RepositoryProgressContract
+        repo: ProgressRepositoryContract
     ): SetShowProgressUseCaseContract = SetShowProgressUseCase(repo)
 
 }

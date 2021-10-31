@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.application
+package com.sunrisekcdeveloper.progress.usecase
 
-import com.sunrisekcdeveloper.progress.domain.model.SetShowProgress
+import com.sunrisekcdeveloper.progress.extras.model.SetShowProgress
 import timber.log.Timber
 
 interface SetShowProgressUseCaseContract {

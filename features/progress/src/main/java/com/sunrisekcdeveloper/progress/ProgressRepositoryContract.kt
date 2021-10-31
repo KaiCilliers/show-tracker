@@ -16,18 +16,18 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.domain.repository
+package com.sunrisekcdeveloper.progress
 
 import com.sunrisekcdeveloper.cache.common.Resource
 import timber.log.Timber
 
 // todo redo naming conventions for Interfaces - remove contract suffix and implementations can have suffix "Base" if no other name can be given
-interface RepositoryProgressContract {
+interface ProgressRepositoryContract {
     suspend fun cacheEntireShow(showId: String)
     suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>>
     suspend fun setShowProgress(showId: String, season: Int, episode: Int)
     suspend fun setNewShowAsUpToDate(showId: String)
-    class Fake() : RepositoryProgressContract {
+    class Fake() : ProgressRepositoryContract {
         var expectException = false
         override suspend fun cacheEntireShow(showId: String) {
             Timber.d("Fake - cached Show (id=$showId)")

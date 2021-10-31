@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.data.model
+package com.sunrisekcdeveloper.progress.extras.model
 
 import com.google.gson.annotations.SerializedName
 

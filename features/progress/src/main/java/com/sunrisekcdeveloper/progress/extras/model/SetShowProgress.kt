@@ -16,18 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress
+package com.sunrisekcdeveloper.progress.extras.model
 
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
+sealed class SetShowProgress {
+    data class Partial(
+        val showId: String,
+        val seasonNumber: Int,
+        val episodeNumber: Int
+    ) : SetShowProgress()
 
-class KeyPersistenceStore(private val key: String) : KeyPersistenceStoreContract<String> {
-    override fun value(): String = key
+    data class UpToDate(val showId: String) : SetShowProgress()
 
-    override fun asDataStoreKey(): Preferences.Key<String> = stringPreferencesKey(key)
-}
+    companion object {
+        fun partial(showId: String, seasonNumber: Int, episodeNumber: Int) =
+            Partial(showId, seasonNumber, episodeNumber)
 
-interface KeyPersistenceStoreContract<T> {
-    fun value(): T
-    fun asDataStoreKey(): Preferences.Key<T>
+        fun upToDate(showId: String) = UpToDate(showId)
+    }
 }

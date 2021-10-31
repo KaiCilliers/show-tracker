@@ -16,16 +16,16 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.progress.domain.usecase
+package com.sunrisekcdeveloper.progress.impl
 
-import com.sunrisekcdeveloper.progress.application.SetShowProgressUseCaseContract
-import com.sunrisekcdeveloper.progress.domain.model.SetShowProgress
-import com.sunrisekcdeveloper.progress.domain.repository.RepositoryProgressContract
+import com.sunrisekcdeveloper.progress.usecase.SetShowProgressUseCaseContract
+import com.sunrisekcdeveloper.progress.extras.model.SetShowProgress
+import com.sunrisekcdeveloper.progress.ProgressRepositoryContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class SetShowProgressUseCase(
-    private val repo: RepositoryProgressContract
+    private val repo: ProgressRepositoryContract
 ) : SetShowProgressUseCaseContract {
     override suspend fun invoke(progress: SetShowProgress) {
         when (progress) {
