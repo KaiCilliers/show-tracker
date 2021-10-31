@@ -26,9 +26,12 @@ object Core {
     const val views = ":core:views"
 }
 
+object UiComponents {
+    const val uiComponents = ":ui-components"
+}
+
 object Common {
     const val models = ":common:models"
-    const val uiComponents = ":common:ui-components"
 }
 
 object Versions {
