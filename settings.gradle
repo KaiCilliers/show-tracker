@@ -2,7 +2,7 @@ rootProject.name = "ShowTracker"
 include ':app'
 include ':core:network'
 include ':features:detail'
-include ':core:cache'
+include ':core:storage'
 include ':features:discovery'
 include ':ui-components'
 include ':features:watchlist'
