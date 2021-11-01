@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.sunrisekcdeveloper.search.R
 
 interface ImageLoadingContract {
     fun load(url: String, view: ImageView)
@@ -41,7 +40,6 @@ class ImageLoadingStandardGlide(private val context: Context) : ImageLoadingCont
         Glide.with(context)
             .load(url)
             .centerCrop()
-            .error(R.drawable.error_poster)
             .transition(DrawableTransitionOptions.withCrossFade(100))
             .into(view)
     }

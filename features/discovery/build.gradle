@@ -12,7 +12,6 @@ android {
 dependencies {
     implementation project(Core.network)
     implementation project(Core.cache)
-    implementation project(Core.views)
     implementation project(UiComponents.uiComponents)
 
     // todo BottomSheetDialogFragment needed a class from this dep

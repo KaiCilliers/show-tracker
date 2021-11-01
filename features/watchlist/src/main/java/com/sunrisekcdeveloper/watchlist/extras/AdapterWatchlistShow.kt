@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.cache.MediaType
 import com.sunrisekcdeveloper.network.EndpointPosterStandard
-import com.sunrisekcdeveloper.views.databinding.ItemWatchlistShowBinding
+import com.sunrisekcdeveloper.watchlist.databinding.ItemWatchlistShowBinding
 import timber.log.Timber
 
 class AdapterWatchlistShow(

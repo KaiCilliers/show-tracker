@@ -23,7 +23,6 @@ object Modules {
 object Core {
     const val network = ":core:network"
     const val cache = ":core:cache"
-    const val views = ":core:views"
 }
 
 object UiComponents {

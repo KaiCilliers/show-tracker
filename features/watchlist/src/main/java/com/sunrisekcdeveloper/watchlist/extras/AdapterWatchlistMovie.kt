@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.cache.MediaType
 import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
-import com.sunrisekcdeveloper.views.R
-import com.sunrisekcdeveloper.views.databinding.ItemWatchlistMovieBinding
+import com.sunrisekcdeveloper.cache.R
+import com.sunrisekcdeveloper.watchlist.databinding.ItemWatchlistMovieBinding
 import com.sunrisekcdeveloper.watchlist.extras.model.UIModelWatchlistMovie
 
 class AdapterWatchlistMovie(

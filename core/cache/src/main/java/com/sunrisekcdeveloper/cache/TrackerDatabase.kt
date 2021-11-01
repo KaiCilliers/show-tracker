@@ -22,6 +22,7 @@ import androidx.room.*
 import com.sunrisekcdeveloper.cache.dao.*
 import com.sunrisekcdeveloper.cache.models.*
 
+// TODO [E07-002] [Remove_strings.xml_and_drawables] When deleting :core:views module, i needed a module to place strings and drawables used by all feature modules. :cache module was the solution and these values should not be in this module
 @Database(
     entities = [
         EntityMovie::class, EntityWatchlistMovie::class,

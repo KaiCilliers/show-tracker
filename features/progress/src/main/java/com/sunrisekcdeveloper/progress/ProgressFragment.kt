@@ -38,7 +38,6 @@ import com.sunrisekcdeveloper.progress.extras.model.EventProgress
 import com.sunrisekcdeveloper.progress.extras.model.StateProgress
 import com.sunrisekcdeveloper.progress.extras.observeInLifecycle
 import com.sunrisekcdeveloper.progress.extras.visible
-import com.sunrisekcdeveloper.views.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber

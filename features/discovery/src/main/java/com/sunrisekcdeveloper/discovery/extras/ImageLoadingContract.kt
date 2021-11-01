@@ -41,7 +41,6 @@ class ImageLoadingStandardGlide(private val context: Context) : ImageLoadingCont
         Glide.with(context)
             .load(url)
             .centerCrop()
-            .error(R.drawable.error_poster)
             .transition(DrawableTransitionOptions.withCrossFade(100))
             .into(view)
     }
