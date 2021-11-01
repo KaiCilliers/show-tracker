@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.progress
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
+import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.progress.usecase.FetchShowSeasonAndEpisodeTotalsUseCaseContract
 import com.sunrisekcdeveloper.progress.usecase.SetShowProgressUseCaseContract
 import com.sunrisekcdeveloper.progress.impl.ProgressRemoteDataSource
@@ -49,7 +50,7 @@ object ProgressModule {
     @ViewModelScoped
     fun provideRemoteDataSourceProgress(
         api: ProgressServiceContract
-    ): ProgressRemoteDataSourceContract = ProgressRemoteDataSource(api)
+    ): ProgressRemoteDataSourceContract = ProgressRemoteDataSource(api, NetworkContract.Impl())
 
     @Provides
     @ViewModelScoped

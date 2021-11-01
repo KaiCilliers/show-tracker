@@ -19,6 +19,7 @@
 package com.sunrisekcdeveloper.search
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
+import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.search.usecase.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.search.usecase.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.search.implementations.SearchRemoteDataSource
@@ -68,5 +69,5 @@ object SearchModule {
     @ViewModelScoped
     fun provideRemoteDataSourceSearch(
         api: SearchServiceContract
-    ): SearchRemoteDataSourceContract = SearchRemoteDataSource(api)
+    ): SearchRemoteDataSourceContract = SearchRemoteDataSource(api, NetworkContract.Impl())
 }

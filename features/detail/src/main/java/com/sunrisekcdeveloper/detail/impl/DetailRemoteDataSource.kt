@@ -24,29 +24,29 @@ import com.sunrisekcdeveloper.detail.extras.EnvelopeShowCertification
 import com.sunrisekcdeveloper.detail.extras.ResponseMovieDetail
 import com.sunrisekcdeveloper.detail.extras.ResponseShowDetail
 import com.sunrisekcdeveloper.detail.DetailServiceContract
+import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.network.RemoteDataSourceBase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class DetailRemoteDataSource(
     private val api: DetailServiceContract,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : DetailRemoteDataSourceContract, RemoteDataSourceBase(dispatcher) {
-    override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = safeApiCall {
+    private val network: NetworkContract
+) : DetailRemoteDataSourceContract {
+    override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> = network.request {
         // todo pass api key from BuildConfig
         api.movieDetails(id = id)
     }
 
-    override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> = safeApiCall {
+    override suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates> = network.request {
         api.movieCertifications(id = id)
     }
 
-    override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> = safeApiCall {
+    override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> = network.request {
         api.showDetails(id = id)
     }
 
-    override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = safeApiCall {
+    override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = network.request {
         api.showCertifications(id = id)
     }
 }

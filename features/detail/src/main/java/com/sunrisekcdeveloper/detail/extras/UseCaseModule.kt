@@ -33,6 +33,7 @@ import com.sunrisekcdeveloper.detail.usecase.RemoveMediaFromWatchlistUseCaseCont
 import com.sunrisekcdeveloper.detail.movie.usecase.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.detail.show.impl.FetchShowDetailsUseCase
 import com.sunrisekcdeveloper.detail.usecase.AddMediaToWatchlistUseCaseContract
+import com.sunrisekcdeveloper.network.NetworkContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,7 +59,7 @@ object UseCaseModule {
     fun provideRemoteDetailDataSource(
         api: DetailServiceContract
     ): DetailRemoteDataSourceContract {
-        return DetailRemoteDataSource(api)
+        return DetailRemoteDataSource(api, NetworkContract.Impl())
     }
 
     @Provides

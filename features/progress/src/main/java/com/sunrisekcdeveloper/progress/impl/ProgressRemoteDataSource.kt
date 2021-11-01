@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.progress.impl
 
+import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.network.RemoteDataSourceBase
 import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
 import com.sunrisekcdeveloper.progress.ProgressServiceContract
 import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
@@ -28,13 +28,13 @@ import kotlinx.coroutines.Dispatchers
 
 class ProgressRemoteDataSource(
     private val api: ProgressServiceContract,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ProgressRemoteDataSourceContract, RemoteDataSourceBase(dispatcher) {
-    override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> = safeApiCall {
+    private val network: NetworkContract
+) : ProgressRemoteDataSourceContract {
+    override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> = network.request {
         api.showWithSeasons(showId)
     }
 
-    override suspend fun seasonDetails(showId: String, season: Int) = safeApiCall {
+    override suspend fun seasonDetails(showId: String, season: Int) = network.request {
         api.seasonsWithEpisodes(showId, season)
     }
 }

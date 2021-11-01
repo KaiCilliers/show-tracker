@@ -22,36 +22,36 @@ import com.sunrisekcdeveloper.discovery.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.discovery.DiscoveryServiceContract
 import com.sunrisekcdeveloper.discovery.extras.model.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.discovery.extras.model.EnvelopePaginatedShows
+import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.network.RemoteDataSourceBase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class DiscoveryRemoteDataSource(
     private val api: DiscoveryServiceContract,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : DiscoveryRemoteDataSourceContract, RemoteDataSourceBase(dispatcher) {
-    override suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
+    private val network: NetworkContract
+) : DiscoveryRemoteDataSourceContract {
+    override suspend fun popularMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> = network.request {
         api.popularMovies(page = page)
     }
 
-    override suspend fun topRatedMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
+    override suspend fun topRatedMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> = network.request {
         api.topRatedMovies(page = page)
     }
 
-    override suspend fun upcomingMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
+    override suspend fun upcomingMovies(page: Int): NetworkResult<EnvelopePaginatedMovies> = network.request {
         api.upcomingMovies(page = page)
     }
 
-    override suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShows> = safeApiCall {
+    override suspend fun popularShows(page: Int): NetworkResult<EnvelopePaginatedShows> = network.request {
         api.popularShows(page = page)
     }
 
-    override suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShows> = safeApiCall {
+    override suspend fun topRatedShows(page: Int): NetworkResult<EnvelopePaginatedShows> = network.request {
         api.topRatedShows(page = page)
     }
 
-    override suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShows> = safeApiCall {
+    override suspend fun airingTodayShows(page: Int): NetworkResult<EnvelopePaginatedShows> = network.request {
         api.airingTodayShows(page = page)
     }
 }

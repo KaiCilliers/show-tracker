@@ -18,8 +18,8 @@
 
 package com.sunrisekcdeveloper.search.implementations
 
+import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.network.RemoteDataSourceBase
 import com.sunrisekcdeveloper.network.models.EnvelopePaginatedMovies
 import com.sunrisekcdeveloper.network.models.EnvelopePaginatedShows
 import com.sunrisekcdeveloper.search.SearchRemoteDataSourceContract
@@ -29,19 +29,19 @@ import kotlinx.coroutines.Dispatchers
 
 class SearchRemoteDataSource(
     private val api: SearchServiceContract,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : SearchRemoteDataSourceContract, RemoteDataSourceBase(dispatcher) {
+    private val network: NetworkContract
+) : SearchRemoteDataSourceContract {
     override suspend fun moviesByTitle(
         query: String,
         page: Int
-    ): NetworkResult<EnvelopePaginatedMovies> = safeApiCall {
+    ): NetworkResult<EnvelopePaginatedMovies> = network.request {
         api.searchMoviesByTitle(query = query, page = page)
     }
 
     override suspend fun showsByTitle(
         query: String,
         page: Int
-    ): NetworkResult<EnvelopePaginatedShows> = safeApiCall {
+    ): NetworkResult<EnvelopePaginatedShows> = network.request {
         api.searchShowByTitle(query = query, page = page)
     }
 }

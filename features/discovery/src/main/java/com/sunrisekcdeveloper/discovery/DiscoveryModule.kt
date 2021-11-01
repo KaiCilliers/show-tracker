@@ -21,6 +21,7 @@ package com.sunrisekcdeveloper.discovery
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.discovery.impl.*
 import com.sunrisekcdeveloper.discovery.usecase.*
+import com.sunrisekcdeveloper.network.NetworkContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +45,7 @@ object DiscoveryModule {
     @ViewModelScoped
     fun provideRemoteDataSourceDiscovery(
         api: DiscoveryServiceContract
-    ): DiscoveryRemoteDataSourceContract = DiscoveryRemoteDataSource(api)
+    ): DiscoveryRemoteDataSourceContract = DiscoveryRemoteDataSource(api, NetworkContract.Impl())
 
     @Provides
     @ViewModelScoped
