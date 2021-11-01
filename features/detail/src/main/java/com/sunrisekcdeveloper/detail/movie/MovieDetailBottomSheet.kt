@@ -28,7 +28,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.sunrisekcdeveloper.cache.Temp
 import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
@@ -37,7 +36,6 @@ import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -47,7 +45,6 @@ class MovieDetailBottomSheet : BottomSheetDialogFragment() {
     private val arguments: MovieDetailBottomSheetArgs by navArgs()
     private val viewModel: MovieDetailViewModel by viewModels()
 
-    @Inject lateinit var db: Temp
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

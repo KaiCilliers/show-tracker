@@ -20,7 +20,6 @@ package com.sunrisekcdeveloper.showtracker.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sunrisekcdeveloper.cache.Temp
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import dagger.Module
 import dagger.Provides
@@ -42,8 +41,4 @@ object ModuleLocal {
         "tracker_database")
         .fallbackToDestructiveMigration()
         .build()
-
-    @Singleton
-    @Provides
-    fun provideA() = Temp()
 }
