@@ -32,6 +32,9 @@ abstract class DaoMovie : DaoBase<EntityMovie> {
     @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
     abstract suspend fun withId(id: String): EntityMovie?
 
+    @Query("SELECT EXISTS(SELECT * FROM tbl_movie WHERE movie_id = :id)")
+    abstract suspend fun exist(id: String): Boolean
+
     @Query("SELECT * FROM tbl_movie WHERE movie_id = :id")
     protected abstract fun movieFlow(id: String): Flow<EntityMovie?>
 

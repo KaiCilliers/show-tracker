@@ -92,6 +92,8 @@ android {
         implementation project(Core.network)
         implementation project(Core.storage)
 
+        implementation project(Domain.movie)
+
         implementation Libs.moshi
         implementation Libs.retrofitGsonConverter
         implementation Libs.retrofitMoshiConverter

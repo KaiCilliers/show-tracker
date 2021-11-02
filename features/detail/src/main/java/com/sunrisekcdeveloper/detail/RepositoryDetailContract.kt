@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.extras
+package com.sunrisekcdeveloper.detail
 
 import com.sunrisekcdeveloper.cache.common.Resource
 import com.sunrisekcdeveloper.detail.extras.model.*
@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 
+// TODO [E07-002] [Update_class_naming] These feature repos need to be called services and the existing services need to be called API
 interface RepositoryDetailContract {
     suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>>
     suspend fun showDetails(id: String): Flow<Resource<UIModelShowDetail>>

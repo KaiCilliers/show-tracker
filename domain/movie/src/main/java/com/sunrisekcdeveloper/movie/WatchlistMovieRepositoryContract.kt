@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail
+package com.sunrisekcdeveloper.movie
 
-class ShowRepository {
+import kotlinx.coroutines.flow.Flow
+
+interface WatchlistMovieRepositoryContract {
+    suspend fun get(id: String): WatchlistMovie?
+    suspend fun update(movie: WatchlistMovie)
+    suspend fun add(movie: WatchlistMovie)
+    suspend fun distinctFlow(id: String): Flow<WatchlistMovie?>
 }

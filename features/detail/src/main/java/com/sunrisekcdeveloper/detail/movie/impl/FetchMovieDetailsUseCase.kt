@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.detail.movie.impl
 import com.sunrisekcdeveloper.cache.common.Resource
 import com.sunrisekcdeveloper.detail.movie.usecase.FetchMovieDetailsUseCaseContract
 import com.sunrisekcdeveloper.detail.extras.model.UIModelMovieDetail
-import com.sunrisekcdeveloper.detail.extras.RepositoryDetailContract
+import com.sunrisekcdeveloper.detail.RepositoryDetailContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 

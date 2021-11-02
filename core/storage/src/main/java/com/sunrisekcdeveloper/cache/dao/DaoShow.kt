@@ -33,5 +33,8 @@ abstract class DaoShow : DaoBase<EntityShow> {
     @Query("SELECT * FROM tbl_show WHERE show_id = :id")
     protected abstract fun showFlow(id: String): Flow<EntityShow?>
 
+    @Query("SELECT EXISTS(SELECT * FROM tbl_show WHERE show_id = :id)")
+    abstract suspend fun exist(id: String): Boolean
+
     open fun distinctShowFlow(id: String): Flow<EntityShow?> = showFlow(id).distinctUntilChanged()
 }

@@ -16,15 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.extras
+package com.sunrisekcdeveloper.detail
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.detail.impl.DetailRemoteDataSource
-import com.sunrisekcdeveloper.detail.DetailRemoteDataSourceContract
-import com.sunrisekcdeveloper.detail.impl.DetailService
-import com.sunrisekcdeveloper.detail.DetailServiceContract
-import com.sunrisekcdeveloper.detail.impl.AddMediaToWatchlistUseCase
-import com.sunrisekcdeveloper.detail.impl.RemoveMediaFromWatchlistUseCase
+import com.sunrisekcdeveloper.detail.domain.MovieRepository
+import com.sunrisekcdeveloper.detail.domain.TVShowRepository
+import com.sunrisekcdeveloper.detail.domain.WatchlistMovieRepository
+import com.sunrisekcdeveloper.detail.domain.WatchlistTVShowRepository
+import com.sunrisekcdeveloper.detail.impl.*
 import com.sunrisekcdeveloper.detail.movie.impl.FetchMovieDetailsUseCase
 import com.sunrisekcdeveloper.detail.movie.impl.UpdateMovieWatchedStatusUseCase
 import com.sunrisekcdeveloper.detail.movie.usecase.FetchMovieDetailsUseCaseContract
@@ -46,7 +45,7 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(ViewModelComponent::class)
 // todo rename
-object UseCaseModule {
+object DetailModule {
 
     @Provides
     @ViewModelScoped
@@ -68,7 +67,12 @@ object UseCaseModule {
         remote: DetailRemoteDataSourceContract,
         local: TrackerDatabase
     ): RepositoryDetailContract {
-        return RepositoryDetail(remote, local)
+        return DetailRepository(
+            MovieRepository(remote, local),
+            WatchlistMovieRepository(local),
+            TVShowRepository(remote,local),
+            WatchlistTVShowRepository(local)
+        )
     }
 
     @Provides

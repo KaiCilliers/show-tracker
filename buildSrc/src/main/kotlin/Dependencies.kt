@@ -29,6 +29,11 @@ object UiComponents {
     const val uiComponents = ":ui-components"
 }
 
+object Domain {
+    const val movie = ":domain:movie"
+    const val show = ":domain:show"
+}
+
 object Versions {
     const val GRADLE_TOOLS = "4.1.2" // todo update version
 

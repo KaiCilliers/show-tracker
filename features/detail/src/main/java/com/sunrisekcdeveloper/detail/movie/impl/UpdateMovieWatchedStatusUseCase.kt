@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.detail.movie.impl
 
 import com.sunrisekcdeveloper.detail.movie.usecase.UpdateMovieWatchedStatusUseCaseContract
-import com.sunrisekcdeveloper.detail.extras.RepositoryDetailContract
+import com.sunrisekcdeveloper.detail.RepositoryDetailContract
 import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
 import com.sunrisekcdeveloper.detail.extras.model.MovieWatchedStatus
 import kotlinx.coroutines.ExperimentalCoroutinesApi

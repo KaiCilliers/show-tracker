@@ -21,7 +21,7 @@ package com.sunrisekcdeveloper.detail.impl
 import com.sunrisekcdeveloper.cache.MediaType
 import com.sunrisekcdeveloper.detail.usecase.RemoveMediaFromWatchlistUseCaseContract
 import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryShow
-import com.sunrisekcdeveloper.detail.extras.RepositoryDetailContract
+import com.sunrisekcdeveloper.detail.RepositoryDetailContract
 import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 

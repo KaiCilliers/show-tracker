@@ -16,22 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.show.impl
+package com.sunrisekcdeveloper.movie
 
-import com.sunrisekcdeveloper.cache.common.Resource
-import com.sunrisekcdeveloper.detail.show.usecase.FetchShowDetailsUseCaseContract
-import com.sunrisekcdeveloper.detail.extras.model.UIModelShowDetail
-import com.sunrisekcdeveloper.detail.RepositoryDetailContract
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
-@ExperimentalCoroutinesApi
-class FetchShowDetailsUseCase(
-    private val detailRepo: RepositoryDetailContract
-) : FetchShowDetailsUseCaseContract {
-    override suspend fun invoke(id: String): Flow<Resource<UIModelShowDetail>> {
-        detailRepo.updateShowDetails(id)
-        return detailRepo.showDetails(id)
-    }
-
+interface MovieRepositoryContract {
+    suspend fun get(id: String): Movie?
+    suspend fun add(movie: Movie)
+    suspend fun sync(id: String)
+    suspend fun distinctFlow(id: String): Flow<Movie?>
 }

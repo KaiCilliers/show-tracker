@@ -26,8 +26,15 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import com.sunrisekcdeveloper.cache.models.EntityMovie
 import com.sunrisekcdeveloper.cache.models.EntityShow
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistMovie
+import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 import com.sunrisekcdeveloper.detail.R
 import com.sunrisekcdeveloper.detail.extras.model.*
+import com.sunrisekcdeveloper.movie.*
+import com.sunrisekcdeveloper.show.Meta
+import com.sunrisekcdeveloper.show.Status
+import com.sunrisekcdeveloper.show.TVShow
+import com.sunrisekcdeveloper.show.WatchlistTVShow
 import kotlinx.coroutines.flow.Flow
 
 fun ResponseMovieDetail.asEntityMovie(certification: String = "N/A") = EntityMovie(
@@ -84,6 +91,127 @@ fun EntityShow.asUIModelShowDetail(
     watchlist = watchlist,
     status = status
 )
+
+fun EntityWatchlistMovie.toDomain(): WatchlistMovie {
+    return WatchlistMovie(
+        id = id,
+        status = MovieStatus(watched, deleted),
+        meta = WatchlistMeta(dateAdded, dateLastUpdated, dateWatched, dateDeleted)
+    )
+}
+
+fun WatchlistMovie.toEntity(): EntityWatchlistMovie {
+    return EntityWatchlistMovie(
+        id = id,
+        watched = status.watched,
+        dateAdded = meta.dateAdded,
+        dateWatched = meta.dateWatched,
+        deleted = status.deleted,
+        dateDeleted = meta.dateDeleted,
+        dateLastUpdated = meta.dateLastUpdated
+    )
+}
+fun EntityMovie.toDomain(): Movie {
+    return Movie(
+        identification = Identification(id, title, overview),
+        images = ImageUrl(posterPath, backdropPath),
+        stats = Stats(rating, popularityValue),
+        meta = MovieMeta(certification, releaseDate, runTime)
+    )
+}
+fun Movie.toEntity(): EntityMovie {
+    return EntityMovie(
+        id = identification.id,
+        title = identification.title,
+        overview = identification.overview,
+        posterPath = images.poster,
+        backdropPath = images.backdrop,
+        rating = stats.rating,
+        popularityValue = stats.popularity,
+        certification = meta.certification,
+        releaseDate = meta.releaseDate,
+        runTime = meta.runtime
+    )
+}
+
+fun Movie.asUIModel(status: MovieWatchlistStatus, watched: WatchedStatus): UIModelMovieDetail {
+    return UIModelMovieDetail(
+        id = identification.id,
+        title = identification.title,
+        overview = identification.overview,
+        posterPath = images.poster,
+        releaseYear = meta.releaseDate,
+        certification = meta.certification,
+        runtime = meta.runtime,
+        status = status,
+        watched = watched
+    )
+}
+
+fun EntityWatchlistShow.toDomain(): WatchlistTVShow {
+    return WatchlistTVShow(
+        id = id,
+        status = Status(currentEpisodeNumber, currentEpisodeName, currentSeasonNumber, currentSeasonEpisodeTotal, started, upToDate, deleted),
+        meta = com.sunrisekcdeveloper.show.WatchlistMeta(dateDeleted, dateAdded, lastUpdated)
+    )
+}
+
+fun WatchlistTVShow.toEntity(): EntityWatchlistShow {
+    return EntityWatchlistShow(
+        id = id,
+        currentEpisodeNumber = status.currentEpisodeNumber,
+        currentEpisodeName = status.currentEpisodeName,
+        currentSeasonNumber = status.currentSeasonNumber,
+        currentSeasonEpisodeTotal = status.currentSeasonEpisodeTotal,
+        started = status.started,
+        upToDate = status.upToDate,
+        deleted = status.deleted,
+        dateDeleted = meta.dateDeleted,
+        dateAdded = meta.dateAdded,
+        lastUpdated = meta.lastUpdated
+    )
+}
+
+fun EntityShow.toDomain(): TVShow {
+    return TVShow(
+        identification = com.sunrisekcdeveloper.show.Identification(id, title, overview),
+        stats = com.sunrisekcdeveloper.show.Stats(rating, certification, popularityValue, episodeTotal, seasonTotal),
+        images = com.sunrisekcdeveloper.show.ImageUrl(posterPath, backdropPath),
+        meta = Meta(firstAirDate, lastUpdated)
+    )
+}
+
+fun TVShow.toEntity(): EntityShow {
+    return EntityShow(
+        id = identification.id,
+        title = identification.title,
+        overview = identification.overview,
+        certification = stats.certification,
+        posterPath = images.posterPath,
+        backdropPath = images.backdropPath,
+        popularityValue = stats.popularityValue,
+        firstAirDate = meta.firstAirDate,
+        rating = stats.rating,
+        episodeTotal = stats.episodeTotal,
+        seasonTotal = stats.seasonTotal,
+        lastUpdated = meta.lastUpdated
+    )
+}
+
+fun TVShow.toUiModel(watchlist: ShowWatchlistStatus,
+                     status: ShowStatus): UIModelShowDetail {
+    return UIModelShowDetail(
+        id = identification.id,
+        name = identification.title,
+        posterPath = images.posterPath,
+        overview = identification.overview,
+        certification = stats.certification,
+        firstAirDate = meta.firstAirDate,
+        seasonsTotal = stats.seasonTotal,
+        watchlist = watchlist,
+        status = status
+    )
+}
 
 fun View.gone() {
     this.visibility = View.GONE

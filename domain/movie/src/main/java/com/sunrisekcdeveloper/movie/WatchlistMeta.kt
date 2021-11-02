@@ -16,7 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail
+package com.sunrisekcdeveloper.movie
 
-class MovieRepository {
-}
+data class WatchlistMeta(
+    val dateAdded: Long = System.currentTimeMillis(),
+    val dateLastUpdated: Long = System.currentTimeMillis(),
+    val dateWatched: Long,
+    val dateDeleted: Long = -1L
+)
