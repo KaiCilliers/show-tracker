@@ -16,24 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.watchlist.impl
+package com.sunrisekcdeveloper.watchlist.domain
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.show.episode.WatchlistEpisode
-import com.sunrisekcdeveloper.show.episode.WatchlistEpisodeRepositoryContract
+import com.sunrisekcdeveloper.show.season.WatchlistSeason
+import com.sunrisekcdeveloper.show.season.WatchlistSeasonRepositoryContract
 import com.sunrisekcdeveloper.watchlist.extras.toDomain
 import com.sunrisekcdeveloper.watchlist.extras.toEntity
 
-class WatchlistEpisodeRepository(
-    database: TrackerDatabase
-) : WatchlistEpisodeRepositoryContract{
+class WatchlistSeasonRepository(database: TrackerDatabase) : WatchlistSeasonRepositoryContract {
 
-    private val watchlistEpisodeDao = database.watchlistEpisodeDao()
+    private val dao = database.watchlistSeasonDao()
 
-    override suspend fun get(showId: String, episode: Int, season: Int): WatchlistEpisode? =
-        watchlistEpisodeDao.withId(showId, episode, season)?.toDomain()
+    override suspend fun get(showId: String, season: Int): WatchlistSeason? = dao.withId(showId, season)?.toDomain()
 
-    override suspend fun update(episode: WatchlistEpisode) = watchlistEpisodeDao.update(episode.toEntity())
+    override suspend fun update(season: WatchlistSeason) = dao.update(season.toEntity())
 
-    override suspend fun add(episode: WatchlistEpisode) = watchlistEpisodeDao.insert(episode.toEntity())
+    override suspend fun add(season: WatchlistSeason) = dao.insert(season.toEntity())
 }

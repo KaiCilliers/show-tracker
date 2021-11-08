@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.watchlist.impl
+package com.sunrisekcdeveloper.watchlist.domain
 
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.TrackerDatabase

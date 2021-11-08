@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.watchlist
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.network.NetworkContract
+import com.sunrisekcdeveloper.watchlist.domain.*
 import com.sunrisekcdeveloper.watchlist.impl.*
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistShowsUseCaseContract
