@@ -26,6 +26,12 @@ import com.sunrisekcdeveloper.cache.models.EntityEpisode
 interface DaoEpisode : DaoBase<EntityEpisode> {
 
     @Query("""
+            SELECT EXISTS(SELECT * FROM tbl_episode WHERE episode_show_id = :showId 
+            AND episode_season_number = :season AND episode_number = :episode= :episode) 
+    """)
+    suspend fun exist(showId: String, season: Int, episode: Int): Boolean
+
+    @Query("""
          SELECT * FROM tbl_episode WHERE episode_show_id = :showId
             AND episode_season_number = :season ORDER BY episode_number ASC LIMIT 1 
     """)

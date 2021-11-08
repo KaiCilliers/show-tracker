@@ -16,13 +16,28 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.season
 
-import kotlinx.coroutines.flow.Flow
-
-interface TVShowRepositoryContract {
-    suspend fun get(id: String): TVShow?
-    suspend fun add(show: TVShow)
-    suspend fun sync(id: String)
-    fun distinctFlow(id: String): Flow<TVShow?>
-}
+data class Season(
+    val identification: Identification,
+    val images: ImageUrl,
+    val stats: Stats,
+    val meta: Meta
+)
+data class Identification(
+    val showId: String,
+    val id: String,
+    val name: String,
+    val overview: String
+)
+data class ImageUrl(
+    val posterPath: String
+)
+data class Stats(
+    val number: Int,
+    val airDate: Long,
+    val episodeTotal: Int
+)
+data class Meta(
+    val lastUpdated: Long = System.currentTimeMillis()
+)

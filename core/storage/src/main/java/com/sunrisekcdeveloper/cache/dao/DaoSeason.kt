@@ -25,6 +25,9 @@ import com.sunrisekcdeveloper.cache.models.EntitySeason
 @Dao
 interface DaoSeason : DaoBase<EntitySeason> {
 
+    @Query("SELECT EXISTS(SELECT * FROM tbl_season WHERE season_show_id = :showId AND season_number = :season)")
+    suspend fun exist(showId: String, season: Int): Boolean
+
     @Query("SELECT * FROM tbl_season WHERE season_show_id = :showId AND season_number = :season")
     suspend fun withId(showId: String, season: Int): EntitySeason
 

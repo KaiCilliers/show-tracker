@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.valueobjects
 
-import kotlinx.coroutines.flow.Flow
-
-interface TVShowRepositoryContract {
-    suspend fun get(id: String): TVShow?
-    suspend fun add(show: TVShow)
-    suspend fun sync(id: String)
-    fun distinctFlow(id: String): Flow<TVShow?>
-}
+data class Status(
+    val currentEpisodeNumber: Int,
+    val currentEpisodeName: String,
+    val currentSeasonNumber: Int,
+    val currentSeasonEpisodeTotal: Int,
+    val started: Boolean,
+    val upToDate: Boolean,
+    val deleted: Boolean = false
+)

@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.movie
+package com.sunrisekcdeveloper.watchlist.extras
 
-data class WatchlistMeta(
-    val dateAdded: Long = System.currentTimeMillis(),
-    val dateLastUpdated: Long = System.currentTimeMillis(),
-    val dateWatched: Long,
-    val dateDeleted: Long = -1L
-)
+class CertificationsShowWatchlist(private val data: List<ResponseShowCertification>) :
+    CertificationsContractWatchlist {
+    override fun from(iso: String): String {
+        if (data.isEmpty()) return noneAvailable
+        return data.find { it.iso == iso }?.certification ?: data[0].certification
+    }
+}

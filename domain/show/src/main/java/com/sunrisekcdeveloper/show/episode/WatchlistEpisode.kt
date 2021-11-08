@@ -16,13 +16,22 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.episode
 
-import kotlinx.coroutines.flow.Flow
-
-interface TVShowRepositoryContract {
-    suspend fun get(id: String): TVShow?
-    suspend fun add(show: TVShow)
-    suspend fun sync(id: String)
-    fun distinctFlow(id: String): Flow<TVShow?>
-}
+data class WatchlistEpisode(
+    val showId: String,
+    val status: WatchlistStatus,
+    val meta: WatchlistMeta
+)
+data class WatchlistStatus(
+    val episodeNumber: Int,
+    val seasonNumber: Int,
+    val watched: Boolean
+)
+data class WatchlistMeta(
+    val initialSetProgressBatch: Boolean,
+    val viaUpToDateAction: Boolean,
+    val dateWatched: Long,
+    val onEpisodeSinceDate: Long,
+    val lastUpdated: Long
+)

@@ -16,14 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.movie.valueobjects
 
-data class Status(
-    val currentEpisodeNumber: Int,
-    val currentEpisodeName: String,
-    val currentSeasonNumber: Int,
-    val currentSeasonEpisodeTotal: Int,
-    val started: Boolean,
-    val upToDate: Boolean,
-    val deleted: Boolean = false
+data class MovieMeta(
+    val certification: String,
+    val releaseDate: String,
+    val runtime: String
 )

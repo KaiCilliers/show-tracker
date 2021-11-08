@@ -19,21 +19,19 @@
 package com.sunrisekcdeveloper.watchlist
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
+import com.sunrisekcdeveloper.network.NetworkContract
+import com.sunrisekcdeveloper.watchlist.impl.*
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistShowsUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.UpdateMovieWatchedStatusUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.UpdateShowProgressUseCaseContract
-import com.sunrisekcdeveloper.watchlist.impl.WatchlistRepository
-import com.sunrisekcdeveloper.watchlist.impl.FetchWatchlistMoviesUseCase
-import com.sunrisekcdeveloper.watchlist.impl.FetchWatchlistShowsUseCase
-import com.sunrisekcdeveloper.watchlist.impl.UpdateMovieWatchedStatusUseCase
-import com.sunrisekcdeveloper.watchlist.impl.UpdateShowProgressUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import retrofit2.Retrofit
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -43,8 +41,31 @@ object WatchlistModule {
     @Provides
     @ViewModelScoped
     fun provideRepositoryWatchlist(
+        remote: WatchlistRemoteDataSourceContract,
         db: TrackerDatabase
-    ): WatchlistRepositoryContract = WatchlistRepository(db)
+    ): WatchlistRepositoryContract = WatchlistRepository(
+        watchlistShowRepo = WatchlistTVShowRepository(db),
+        showRepository = TVShowRepository(remote, db),
+        watchlistMovieRepo = WatchlistMovieRepository(db),
+        watchlistSeasonRepo = WatchlistSeasonRepository(db),
+        seasonRepo = SeasonRepository(remote, db),
+        watchlistEpisodeRepo = WatchlistEpisodeRepository(db),
+        episodeRepo = EpisodeRepository(remote, db)
+    )
+
+    @Provides
+    @ViewModelScoped
+    fun provideServiceWatchlist(retrofit: Retrofit): WatchlistServiceContract {
+        return retrofit.create(WatchlistService::class.java)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideRemoteWatchlistDataSource(
+        api: WatchlistServiceContract
+    ): WatchlistRemoteDataSourceContract {
+        return WatchlistRemoteDataSource(api, NetworkContract.Impl())
+    }
 
     @Provides
     @ViewModelScoped

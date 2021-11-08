@@ -24,6 +24,8 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
+import com.sunrisekcdeveloper.cache.dao.relations.WatchlistMovieWithDetails
+import com.sunrisekcdeveloper.cache.dao.relations.WatchlistShowWithDetails
 import com.sunrisekcdeveloper.cache.models.EntityMovie
 import com.sunrisekcdeveloper.cache.models.EntityShow
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistMovie
@@ -31,10 +33,12 @@ import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
 import com.sunrisekcdeveloper.detail.R
 import com.sunrisekcdeveloper.detail.extras.model.*
 import com.sunrisekcdeveloper.movie.*
-import com.sunrisekcdeveloper.show.Meta
-import com.sunrisekcdeveloper.show.Status
+import com.sunrisekcdeveloper.movie.valueobjects.*
+import com.sunrisekcdeveloper.show.FullTVShow
+import com.sunrisekcdeveloper.show.valueobjects.Meta
+import com.sunrisekcdeveloper.show.valueobjects.Status
 import com.sunrisekcdeveloper.show.TVShow
-import com.sunrisekcdeveloper.show.WatchlistTVShow
+import com.sunrisekcdeveloper.show.valueobjects.WatchlistTVShow
 import kotlinx.coroutines.flow.Flow
 
 fun ResponseMovieDetail.asEntityMovie(certification: String = "N/A") = EntityMovie(
@@ -100,6 +104,44 @@ fun EntityWatchlistMovie.toDomain(): WatchlistMovie {
     )
 }
 
+fun WatchlistMovieWithDetails.toDomain(): FullMovie {
+    return FullMovie(
+        details = Movie(
+            identification = Identification(
+                id = details.id,
+                title = details.title,
+                overview = details.overview
+            ),
+            images = ImageUrl(
+                poster = details.posterPath,
+                backdrop = details.backdropPath
+            ),
+            stats = Stats(
+                rating = details.rating,
+                popularity = details.popularityValue
+            ),
+            meta = MovieMeta(
+                certification = details.certification,
+                releaseDate = details.releaseDate,
+                runtime = details.runTime
+            )
+        ),
+        status = WatchlistMovie(
+            id = details.id,
+            status = MovieStatus(
+                watched = status.watched,
+                deleted = status.deleted
+            ),
+            meta = WatchlistMeta(
+                dateAdded = status.dateAdded,
+                dateLastUpdated = status.dateLastUpdated,
+                dateWatched = status.dateWatched,
+                dateDeleted = status.dateDeleted
+            )
+        )
+    )
+}
+
 fun WatchlistMovie.toEntity(): EntityWatchlistMovie {
     return EntityWatchlistMovie(
         id = id,
@@ -152,7 +194,51 @@ fun EntityWatchlistShow.toDomain(): WatchlistTVShow {
     return WatchlistTVShow(
         id = id,
         status = Status(currentEpisodeNumber, currentEpisodeName, currentSeasonNumber, currentSeasonEpisodeTotal, started, upToDate, deleted),
-        meta = com.sunrisekcdeveloper.show.WatchlistMeta(dateDeleted, dateAdded, lastUpdated)
+        meta = com.sunrisekcdeveloper.show.valueobjects.WatchlistMeta(dateDeleted, dateAdded, lastUpdated)
+    )
+}
+
+fun WatchlistShowWithDetails.toDomain(): FullTVShow {
+    return FullTVShow(
+        details = TVShow(
+            identification = com.sunrisekcdeveloper.show.valueobjects.Identification(
+                id = details.id,
+                title = details.title,
+                overview = details.overview
+            ),
+            images = com.sunrisekcdeveloper.show.valueobjects.ImageUrl(
+                posterPath = details.posterPath,
+                backdropPath = details.backdropPath
+            ),
+            stats = com.sunrisekcdeveloper.show.valueobjects.Stats(
+                rating = details.rating,
+                certification = details.certification,
+                popularityValue = details.popularityValue,
+                episodeTotal = details.episodeTotal,
+                seasonTotal = details.seasonTotal
+            ),
+            meta = Meta(
+                firstAirDate = details.firstAirDate,
+                lastUpdated = details.lastUpdated
+            )
+        ),
+        status = WatchlistTVShow(
+            id = details.id,
+            status = Status(
+                currentEpisodeNumber = status.currentEpisodeNumber,
+                currentEpisodeName = status.currentEpisodeName,
+                currentSeasonNumber = status.currentSeasonNumber,
+                currentSeasonEpisodeTotal = status.currentSeasonEpisodeTotal,
+                started = status.started,
+                upToDate = status.upToDate,
+                deleted = status.deleted
+            ),
+            meta = com.sunrisekcdeveloper.show.valueobjects.WatchlistMeta(
+                dateDeleted = status.dateDeleted,
+                dateAdded = status.dateAdded,
+                lastUpdated = status.lastUpdated
+            )
+        )
     )
 }
 
@@ -174,9 +260,15 @@ fun WatchlistTVShow.toEntity(): EntityWatchlistShow {
 
 fun EntityShow.toDomain(): TVShow {
     return TVShow(
-        identification = com.sunrisekcdeveloper.show.Identification(id, title, overview),
-        stats = com.sunrisekcdeveloper.show.Stats(rating, certification, popularityValue, episodeTotal, seasonTotal),
-        images = com.sunrisekcdeveloper.show.ImageUrl(posterPath, backdropPath),
+        identification = com.sunrisekcdeveloper.show.valueobjects.Identification(id, title, overview),
+        stats = com.sunrisekcdeveloper.show.valueobjects.Stats(
+            rating,
+            certification,
+            popularityValue,
+            episodeTotal,
+            seasonTotal
+        ),
+        images = com.sunrisekcdeveloper.show.valueobjects.ImageUrl(posterPath, backdropPath),
         meta = Meta(firstAirDate, lastUpdated)
     )
 }

@@ -16,10 +16,22 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.season
 
+data class WatchlistSeason(
+    val showId: String,
+    val status: Status,
+    val meta: WatchlistMeta
+)
+data class Status(
+    val number: Int,
+    val completed: Boolean,
+    val currentEpisode: Int
+)
 data class WatchlistMeta(
-    val dateDeleted: Long = -1L,
-    val dateAdded: Long = System.currentTimeMillis(),
-    val lastUpdated: Long = System.currentTimeMillis()
+    val dateStarted: Long,
+    val dateCompleted: Long,
+    val startedTrackingSeason: Boolean,
+    val finishedBeforeTracking: Boolean,
+    val lastUpdated: Long
 )

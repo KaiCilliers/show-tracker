@@ -16,12 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.movie.valueobjects
 
-data class Stats(
-    val rating: Float,
-    val certification: String,
-    val popularityValue: Float,
-    val episodeTotal: Int,
-    val seasonTotal: Int
+data class ImageUrl(
+    val poster: String,
+    val backdrop: String
 )

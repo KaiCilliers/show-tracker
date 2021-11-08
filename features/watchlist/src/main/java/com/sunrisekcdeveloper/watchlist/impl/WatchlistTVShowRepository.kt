@@ -16,22 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.domain
+package com.sunrisekcdeveloper.watchlist.impl
 
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.detail.extras.toDomain
-import com.sunrisekcdeveloper.detail.extras.toEntity
-import com.sunrisekcdeveloper.show.*
-import com.sunrisekcdeveloper.show.valueobjects.TVShowFilter
-import com.sunrisekcdeveloper.show.valueobjects.WatchlistTVShow
+import com.sunrisekcdeveloper.show.FullTVShow
+import com.sunrisekcdeveloper.show.WatchlistTVShowRepositoryContract
+import com.sunrisekcdeveloper.show.valueobjects.*
+import com.sunrisekcdeveloper.watchlist.extras.toDomain
+import com.sunrisekcdeveloper.watchlist.extras.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WatchlistTVShowRepository(
     storage: TrackerDatabase
 ) : WatchlistTVShowRepositoryContract {
-
     private val dao = storage.watchlistShowDao()
 
     override suspend fun get(id: String): WatchlistTVShow? = dao.withId(id)?.toDomain()

@@ -16,18 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.domain
+package com.sunrisekcdeveloper.watchlist.impl
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.detail.DetailRemoteDataSourceContract
-import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.show.*
+import com.sunrisekcdeveloper.show.TVShow
+import com.sunrisekcdeveloper.show.TVShowRepositoryContract
+import com.sunrisekcdeveloper.watchlist.WatchlistRemoteDataSourceContract
+import com.sunrisekcdeveloper.watchlist.extras.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+// TODO [E07-002] [CommonImplementationModule] Have a module which houses repository implementations of domain objects to prevent duplicate implementations in feature modules
 class TVShowRepository(
-    private val remote: DetailRemoteDataSourceContract,
+    private val remote: WatchlistRemoteDataSourceContract,
     database: TrackerDatabase
 ) : TVShowRepositoryContract {
 
@@ -47,9 +49,9 @@ class TVShowRepository(
         remote.showDetail(id).apply {
             if (this is NetworkResult.Success && certification is NetworkResult.Success) {
                 add(data.asEntityShow(
-                        CertificationsContract.Smart(CertificationsShow(certification.data.results))
-                            .fromUS()
-                    ).toDomain()
+                    CertificationsContractWatchlist.Smart(CertificationsShowWatchlist(certification.data.results))
+                        .fromUS()
+                ).toDomain()
                 )
             }
         }

@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.watchlist.extras
 
-import kotlinx.coroutines.flow.Flow
-
-interface TVShowRepositoryContract {
-    suspend fun get(id: String): TVShow?
-    suspend fun add(show: TVShow)
-    suspend fun sync(id: String)
-    fun distinctFlow(id: String): Flow<TVShow?>
+interface CertificationsContractWatchlist {
+    val noneAvailable: String
+        get() = "N/A"
+    fun from(iso: String): String
+    class Smart(private val origin: CertificationsContractWatchlist) {
+        fun fromUS() = origin.from("US")
+    }
 }

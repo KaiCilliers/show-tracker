@@ -16,24 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.domain
+package com.sunrisekcdeveloper.watchlist.impl
 
 import com.sunrisekcdeveloper.cache.FilterMovies
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.detail.extras.toDomain
-import com.sunrisekcdeveloper.detail.extras.toEntity
-import com.sunrisekcdeveloper.movie.FullMovie
-import com.sunrisekcdeveloper.movie.WatchlistMovie
-import com.sunrisekcdeveloper.movie.WatchlistMovieRepositoryContract
-import com.sunrisekcdeveloper.movie.valueobjects.MovieFilter
+import com.sunrisekcdeveloper.movie.*
+import com.sunrisekcdeveloper.movie.valueobjects.*
+import com.sunrisekcdeveloper.watchlist.extras.toDomain
+import com.sunrisekcdeveloper.watchlist.extras.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class WatchlistMovieRepository(
-    storage: TrackerDatabase
-) : WatchlistMovieRepositoryContract {
+class WatchlistMovieRepository(database: TrackerDatabase) : WatchlistMovieRepositoryContract {
 
-    private val dao = storage.watchlistMovieDao()
+    private val dao = database.watchlistMovieDao()
 
     override suspend fun get(id: String): WatchlistMovie? = dao.withId(id)?.toDomain()
 

@@ -18,6 +18,10 @@
 
 package com.sunrisekcdeveloper.movie
 
+import com.sunrisekcdeveloper.movie.valueobjects.Identification
+import com.sunrisekcdeveloper.movie.valueobjects.ImageUrl
+import com.sunrisekcdeveloper.movie.valueobjects.MovieMeta
+
 data class Movie(
     val identification: Identification,
     val images: ImageUrl,

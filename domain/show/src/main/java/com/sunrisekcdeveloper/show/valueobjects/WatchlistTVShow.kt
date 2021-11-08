@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.valueobjects
 
 data class WatchlistTVShow(
     val id: String,

@@ -18,6 +18,11 @@
 
 package com.sunrisekcdeveloper.show
 
+import com.sunrisekcdeveloper.show.valueobjects.Identification
+import com.sunrisekcdeveloper.show.valueobjects.ImageUrl
+import com.sunrisekcdeveloper.show.valueobjects.Meta
+import com.sunrisekcdeveloper.show.valueobjects.Stats
+
 data class TVShow(
     val identification: Identification,
     val images: ImageUrl,

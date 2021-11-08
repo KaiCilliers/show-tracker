@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.movie
+package com.sunrisekcdeveloper.show.valueobjects
 
-data class ImageUrl(
-    val poster: String,
-    val backdrop: String
+data class Identification(
+    val id: String,
+    val title: String,
+    val overview: String
 )

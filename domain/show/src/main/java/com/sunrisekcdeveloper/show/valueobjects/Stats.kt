@@ -16,9 +16,12 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.movie
+package com.sunrisekcdeveloper.show.valueobjects
 
-data class MovieStatus(
-    val watched: Boolean,
-    val deleted: Boolean = false
+data class Stats(
+    val rating: Float,
+    val certification: String,
+    val popularityValue: Float,
+    val episodeTotal: Int,
+    val seasonTotal: Int
 )

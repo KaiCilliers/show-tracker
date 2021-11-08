@@ -18,8 +18,7 @@
 
 package com.sunrisekcdeveloper.movie
 
-data class MovieMeta(
-    val certification: String,
-    val releaseDate: String,
-    val runtime: String
+data class FullMovie(
+    val status: WatchlistMovie,
+    val details: Movie
 )

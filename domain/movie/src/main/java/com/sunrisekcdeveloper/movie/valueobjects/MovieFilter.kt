@@ -16,13 +16,6 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.movie.valueobjects
 
-import kotlinx.coroutines.flow.Flow
-
-interface TVShowRepositoryContract {
-    suspend fun get(id: String): TVShow?
-    suspend fun add(show: TVShow)
-    suspend fun sync(id: String)
-    fun distinctFlow(id: String): Flow<TVShow?>
-}
+enum class MovieFilter { NoFilters, Watched, Unwatched, AddedToday }

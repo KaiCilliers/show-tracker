@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.movie
+package com.sunrisekcdeveloper.show
 
-data class Identification(
-    val id: String,
-    val title: String,
-    val overview: String
+import com.sunrisekcdeveloper.show.valueobjects.WatchlistTVShow
+
+data class FullTVShow(
+    val details: TVShow,
+    val status: WatchlistTVShow
 )

@@ -18,11 +18,14 @@
 
 package com.sunrisekcdeveloper.show
 
+import com.sunrisekcdeveloper.show.valueobjects.TVShowFilter
+import com.sunrisekcdeveloper.show.valueobjects.WatchlistTVShow
 import kotlinx.coroutines.flow.Flow
 
 interface WatchlistTVShowRepositoryContract {
     suspend fun get(id: String): WatchlistTVShow?
     suspend fun update(show: WatchlistTVShow)
     suspend fun add(show: WatchlistTVShow)
-    suspend fun distinctFlow(id: String): Flow<WatchlistTVShow?>
+    fun distinctFlow(id: String): Flow<WatchlistTVShow?>
+    fun distinctFlow(filter: TVShowFilter): Flow<List<FullTVShow>>
 }

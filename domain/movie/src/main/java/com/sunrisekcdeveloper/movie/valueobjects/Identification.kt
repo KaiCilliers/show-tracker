@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.movie.valueobjects
 
-data class Meta(
-    val firstAirDate: String,
-    val lastUpdated: Long
+data class Identification(
+    val id: String,
+    val title: String,
+    val overview: String
 )

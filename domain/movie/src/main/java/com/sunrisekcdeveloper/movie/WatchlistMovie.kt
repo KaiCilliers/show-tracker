@@ -18,6 +18,9 @@
 
 package com.sunrisekcdeveloper.movie
 
+import com.sunrisekcdeveloper.movie.valueobjects.MovieStatus
+import com.sunrisekcdeveloper.movie.valueobjects.WatchlistMeta
+
 data class WatchlistMovie(
     val id: String,
     val status: MovieStatus,

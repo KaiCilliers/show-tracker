@@ -18,11 +18,13 @@
 
 package com.sunrisekcdeveloper.movie
 
+import com.sunrisekcdeveloper.movie.valueobjects.MovieFilter
 import kotlinx.coroutines.flow.Flow
 
 interface WatchlistMovieRepositoryContract {
     suspend fun get(id: String): WatchlistMovie?
     suspend fun update(movie: WatchlistMovie)
     suspend fun add(movie: WatchlistMovie)
-    suspend fun distinctFlow(id: String): Flow<WatchlistMovie?>
+    fun distinctFlow(id: String): Flow<WatchlistMovie?>
+    fun distinctFlow(filter: MovieFilter): Flow<List<FullMovie>>
 }

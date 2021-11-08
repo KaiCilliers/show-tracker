@@ -16,10 +16,9 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.valueobjects
 
-data class Identification(
-    val id: String,
-    val title: String,
-    val overview: String
+data class ImageUrl(
+    val posterPath: String,
+    val backdropPath: String
 )

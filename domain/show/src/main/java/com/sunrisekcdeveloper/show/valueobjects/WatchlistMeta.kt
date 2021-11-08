@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.show
+package com.sunrisekcdeveloper.show.valueobjects
 
-data class ImageUrl(
-    val posterPath: String,
-    val backdropPath: String
+data class WatchlistMeta(
+    val dateDeleted: Long = -1L,
+    val dateAdded: Long = System.currentTimeMillis(),
+    val lastUpdated: Long = System.currentTimeMillis()
 )
