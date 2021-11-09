@@ -25,4 +25,5 @@ interface TVShowRepositoryContract {
     suspend fun add(show: TVShow)
     suspend fun sync(id: String)
     fun distinctFlow(id: String): Flow<TVShow?>
+    suspend fun unwatched(): List<TVShow>
 }

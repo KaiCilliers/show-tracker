@@ -31,9 +31,16 @@ import com.sunrisekcdeveloper.cache.MediaType
 import com.sunrisekcdeveloper.cache.UIModelDiscovery
 import com.sunrisekcdeveloper.cache.dao.relations.WatchlistMovieWithDetails
 import com.sunrisekcdeveloper.cache.dao.relations.WatchlistShowWithDetails
+import com.sunrisekcdeveloper.movie.Movie
+import com.sunrisekcdeveloper.movie.valueobjects.MovieMeta
 import com.sunrisekcdeveloper.network.models.ResponseStandardMedia
 import com.sunrisekcdeveloper.search.extras.model.UIModelPoster
 import com.sunrisekcdeveloper.search.extras.model.UIModelSearch
+import com.sunrisekcdeveloper.show.TVShow
+import com.sunrisekcdeveloper.show.valueobjects.Identification
+import com.sunrisekcdeveloper.show.valueobjects.ImageUrl
+import com.sunrisekcdeveloper.show.valueobjects.Meta
+import com.sunrisekcdeveloper.show.valueobjects.Stats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -140,6 +147,77 @@ fun ResponseStandardMedia.ResponseShow.asUIModelSearch() = UIModelSearch(
     popularity = popularity,
     ratingVotes = voteCount
 )
+
+fun WatchlistMovieWithDetails.toMovieDomain(): Movie {
+    return Movie(
+        identification = com.sunrisekcdeveloper.movie.valueobjects.Identification(
+            id = details.id,
+            title = details.title,
+            overview = details.overview
+        ),
+        images = com.sunrisekcdeveloper.movie.valueobjects.ImageUrl(
+            poster = details.posterPath,
+            backdrop = details.backdropPath
+        ),
+        stats = com.sunrisekcdeveloper.movie.Stats(
+            rating = details.rating,
+            popularity = details.popularityValue
+        ),
+        meta = MovieMeta(
+            certification = details.certification,
+            releaseDate = details.releaseDate,
+            runtime = details.runTime
+        )
+    )
+}
+
+fun WatchlistShowWithDetails.toTVShowDomain(): TVShow {
+    return TVShow(
+        identification = Identification(
+            id = details.id,
+            title = details.title,
+            overview = details.overview
+        ),
+        images = ImageUrl(
+            posterPath = details.posterPath,
+            backdropPath = details.backdropPath
+        ),
+        stats = Stats(
+            rating = details.rating,
+            certification = details.certification,
+            popularityValue = details.popularityValue,
+            episodeTotal = details.episodeTotal,
+            seasonTotal = details.seasonTotal
+        ),
+        meta = Meta(
+            firstAirDate = details.firstAirDate,
+            lastUpdated = details.lastUpdated
+        )
+    )
+}
+
+fun Movie.toUiPosterModel(): UIModelPoster {
+    return UIModelPoster(
+        id = identification.id,
+        title = identification.title,
+        posterPath = images.poster,
+        backdropPath = images.backdrop,
+        type = MediaType.movie(),
+        listType = ListType.noList()
+    )
+}
+
+fun TVShow.toUiPosterModel(): UIModelPoster {
+    return UIModelPoster(
+        id = identification.id,
+        title = identification.title,
+        posterPath = images.posterPath,
+        backdropPath = images.backdropPath,
+        type = MediaType.show(),
+        listType = ListType.noList()
+    )
+}
+
 // see more https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
 inline fun <reified T> Flow<T>.observeOnLifecycle(
     lifecycleOwner: LifecycleOwner,

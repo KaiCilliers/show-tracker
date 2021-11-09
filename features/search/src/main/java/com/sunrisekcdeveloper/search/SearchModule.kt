@@ -20,6 +20,8 @@ package com.sunrisekcdeveloper.search
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.network.NetworkContract
+import com.sunrisekcdeveloper.search.domain.MovieRepository
+import com.sunrisekcdeveloper.search.domain.TVShowRepository
 import com.sunrisekcdeveloper.search.usecase.LoadUnwatchedMediaUseCaseContract
 import com.sunrisekcdeveloper.search.usecase.SearchMediaByTitleUseCaseContract
 import com.sunrisekcdeveloper.search.implementations.SearchRemoteDataSource
@@ -55,9 +57,13 @@ object SearchModule {
     @Provides
     @ViewModelScoped
     fun provideRepositorySearch(
-        db: TrackerDatabase,
-        remote: SearchRemoteDataSourceContract
-    ): SearchRepositoryContract = SearchRepository(remote, db)
+        remote: SearchRemoteDataSourceContract,
+        storage: TrackerDatabase
+    ): SearchRepositoryContract = SearchRepository(
+        remote,
+        showRepo = TVShowRepository(storage),
+        movieRepo = MovieRepository(storage)
+    )
 
     @Provides
     @ViewModelScoped

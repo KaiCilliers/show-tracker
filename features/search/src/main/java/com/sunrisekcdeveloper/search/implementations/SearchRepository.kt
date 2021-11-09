@@ -21,31 +21,34 @@ package com.sunrisekcdeveloper.search.implementations
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.cache.common.Resource
-import com.sunrisekcdeveloper.search.extras.asUiModelPosterResult
+import com.sunrisekcdeveloper.movie.MovieRepositoryContract
 import com.sunrisekcdeveloper.search.SearchRemoteDataSourceContract
 import com.sunrisekcdeveloper.search.extras.PagingSourceSearch
 import com.sunrisekcdeveloper.search.extras.model.UIModelPoster
 import com.sunrisekcdeveloper.search.extras.model.UIModelSearch
 import com.sunrisekcdeveloper.search.SearchRepositoryContract
+import com.sunrisekcdeveloper.search.extras.toUiPosterModel
+import com.sunrisekcdeveloper.show.FullTVShow
+import com.sunrisekcdeveloper.show.TVShow
+import com.sunrisekcdeveloper.show.TVShowRepositoryContract
+import com.sunrisekcdeveloper.show.WatchlistTVShowRepositoryContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
 
 class SearchRepository(
-    private val remote: SearchRemoteDataSourceContract,
-    private val database: TrackerDatabase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val remote: SearchRemoteDataSourceContract, // paging makes it difficult to remove this
+    private val movieRepo: MovieRepositoryContract, // CONTINUE HERE implement this contract like you did tv show
+    private val showRepo: TVShowRepositoryContract
 ) : SearchRepositoryContract {
 
     override suspend fun loadUnwatchedMedia(): Resource<List<UIModelPoster>> {
-        val movie = database.watchlistMovieDao().unwatched()
-        val shows = database.watchlistShowDao().unwatched()
+        val movie = movieRepo.unwatched()
+        val shows = showRepo.unwatched()
 
-        val list =
-            movie.map { it.asUiModelPosterResult() } + shows.map { it.asUiModelPosterResult() }
+        val list = movie.map { it.toUiPosterModel() } + shows.map { it.toUiPosterModel() }
 
         return Resource.Success(list.sortedBy { it.title })
     }

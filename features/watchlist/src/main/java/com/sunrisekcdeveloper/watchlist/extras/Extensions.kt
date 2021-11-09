@@ -49,6 +49,55 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+
+fun WatchlistMovieWithDetails.toMovieDomain(): Movie {
+    return Movie(
+        identification = com.sunrisekcdeveloper.movie.valueobjects.Identification(
+            id = details.id,
+            title = details.title,
+            overview = details.overview
+        ),
+        images = com.sunrisekcdeveloper.movie.valueobjects.ImageUrl(
+            poster = details.posterPath,
+            backdrop = details.backdropPath
+        ),
+        stats = com.sunrisekcdeveloper.movie.Stats(
+            rating = details.rating,
+            popularity = details.popularityValue
+        ),
+        meta = MovieMeta(
+            certification = details.certification,
+            releaseDate = details.releaseDate,
+            runtime = details.runTime
+        )
+    )
+}
+
+fun WatchlistShowWithDetails.toTVShowDomain(): TVShow {
+    return TVShow(
+        identification = com.sunrisekcdeveloper.show.valueobjects.Identification(
+            id = details.id,
+            title = details.title,
+            overview = details.overview
+        ),
+        images = com.sunrisekcdeveloper.show.valueobjects.ImageUrl(
+            posterPath = details.posterPath,
+            backdropPath = details.backdropPath
+        ),
+        stats = com.sunrisekcdeveloper.show.valueobjects.Stats(
+            rating = details.rating,
+            certification = details.certification,
+            popularityValue = details.popularityValue,
+            episodeTotal = details.episodeTotal,
+            seasonTotal = details.seasonTotal
+        ),
+        meta = com.sunrisekcdeveloper.show.valueobjects.Meta(
+            firstAirDate = details.firstAirDate,
+            lastUpdated = details.lastUpdated
+        )
+    )
+}
+
 // todo add lsat episode in season to EntityWatchlistSeason and/or EntitySeason
 fun WatchlistShowWithDetails.asUIModelWatchlistShow(lastEpisodeInSeason: Int) =
     UIModelWatchlistShow(

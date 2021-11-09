@@ -32,6 +32,7 @@ class TVShowRepository(
 ) : TVShowRepositoryContract {
 
     private val dao = database.showDao()
+    private val watchlistShowDao = database.watchlistShowDao()
 
     override suspend fun get(id: String): TVShow? {
         if (!dao.exist(id)) {
@@ -56,4 +57,8 @@ class TVShowRepository(
     }
 
     override fun distinctFlow(id: String): Flow<TVShow?> = dao.distinctShowFlow(id).map { it?.toDomain() }
+
+    override suspend fun unwatched(): List<TVShow> {
+        return watchlistShowDao.unwatched().map { it.toTVShowDomain() }
+    }
 }

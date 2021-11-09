@@ -305,6 +305,54 @@ fun TVShow.toUiModel(watchlist: ShowWatchlistStatus,
     )
 }
 
+fun WatchlistMovieWithDetails.toMovieDomain(): Movie {
+    return Movie(
+        identification = com.sunrisekcdeveloper.movie.valueobjects.Identification(
+            id = details.id,
+            title = details.title,
+            overview = details.overview
+        ),
+        images = com.sunrisekcdeveloper.movie.valueobjects.ImageUrl(
+            poster = details.posterPath,
+            backdrop = details.backdropPath
+        ),
+        stats = com.sunrisekcdeveloper.movie.Stats(
+            rating = details.rating,
+            popularity = details.popularityValue
+        ),
+        meta = MovieMeta(
+            certification = details.certification,
+            releaseDate = details.releaseDate,
+            runtime = details.runTime
+        )
+    )
+}
+
+fun WatchlistShowWithDetails.toTVShowDomain(): TVShow {
+    return TVShow(
+        identification = com.sunrisekcdeveloper.show.valueobjects.Identification(
+            id = details.id,
+            title = details.title,
+            overview = details.overview
+        ),
+        images = com.sunrisekcdeveloper.show.valueobjects.ImageUrl(
+            posterPath = details.posterPath,
+            backdropPath = details.backdropPath
+        ),
+        stats = com.sunrisekcdeveloper.show.valueobjects.Stats(
+            rating = details.rating,
+            certification = details.certification,
+            popularityValue = details.popularityValue,
+            episodeTotal = details.episodeTotal,
+            seasonTotal = details.seasonTotal
+        ),
+        meta = Meta(
+            firstAirDate = details.firstAirDate,
+            lastUpdated = details.lastUpdated
+        )
+    )
+}
+
 fun View.gone() {
     this.visibility = View.GONE
 }

@@ -25,4 +25,5 @@ interface MovieRepositoryContract {
     suspend fun add(movie: Movie)
     suspend fun sync(id: String)
     suspend fun distinctFlow(id: String): Flow<Movie?>
+    suspend fun unwatched(): List<Movie>
 }

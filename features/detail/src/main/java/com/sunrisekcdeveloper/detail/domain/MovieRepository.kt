@@ -30,6 +30,7 @@ class MovieRepository(
     database: TrackerDatabase
 ) : MovieRepositoryContract {
     private val movieDao = database.movieDao()
+    private val watchlistMovieDao = database.watchlistMovieDao()
 
     override suspend fun get(id: String): Movie? {
         if (!movieDao.exist(id)) {
@@ -57,5 +58,9 @@ class MovieRepository(
     }
 
     override suspend fun distinctFlow(id: String): Flow<Movie?> = movieDao.distinctMovieFlow(id).map { it?.toDomain() }
+
+    override suspend fun unwatched(): List<Movie> {
+        return watchlistMovieDao.unwatched().map { it.toMovieDomain() }
+    }
 }
 
