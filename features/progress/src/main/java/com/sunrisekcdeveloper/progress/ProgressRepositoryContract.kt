@@ -19,7 +19,7 @@
 package com.sunrisekcdeveloper.progress
 
 import com.sunrisekcdeveloper.cache.common.Resource
-import timber.log.Timber
+import com.sunrisekcdeveloper.common.timber
 
 // todo redo naming conventions for Interfaces - remove contract suffix and implementations can have suffix "Base" if no other name can be given
 interface ProgressRepositoryContract {
@@ -29,8 +29,9 @@ interface ProgressRepositoryContract {
     suspend fun setNewShowAsUpToDate(showId: String)
     class Fake() : ProgressRepositoryContract {
         var expectException = false
+        private val log by timber()
         override suspend fun cacheEntireShow(showId: String) {
-            Timber.d("Fake - cached Show (id=$showId)")
+            log.d("Fake - cached Show (id=$showId)")
         }
 
         override suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>> {
@@ -44,11 +45,11 @@ interface ProgressRepositoryContract {
         }
 
         override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
-            Timber.d("Fake - Set Show (id=$showId) season (number=$season) episode (number=$episode) progress")
+            log.d("Fake - Set Show (id=$showId) season (number=$season) episode (number=$episode) progress")
         }
 
         override suspend fun setNewShowAsUpToDate(showId: String) {
-            Timber.d("Fake - Set Show (id=$showId) as up to date")
+            log.d("Fake - Set Show (id=$showId) as up to date")
         }
     }
 }

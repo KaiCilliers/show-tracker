@@ -30,6 +30,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.progress.databinding.FragmentSetProgressBinding
 import com.sunrisekcdeveloper.progress.extras.KeyPersistenceStore
 import com.sunrisekcdeveloper.progress.extras.gone
@@ -40,7 +41,6 @@ import com.sunrisekcdeveloper.progress.extras.observeInLifecycle
 import com.sunrisekcdeveloper.progress.extras.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ProgressFragment : Fragment() {
@@ -48,6 +48,7 @@ class ProgressFragment : Fragment() {
     private lateinit var binding: FragmentSetProgressBinding
     private val viewModel: ProgressViewModel by viewModels()
     private val arguments: ProgressFragmentArgs by navArgs()
+    private val log by timber()
 
     private var map: MutableMap<Int, List<Int>> = mutableMapOf()
 
@@ -221,7 +222,7 @@ class ProgressFragment : Fragment() {
                     id: Long
                 ) {
                     if (map.isNotEmpty()) {
-                        Timber.e("Episodes for sesason ${position + 1}: ${map.getValue(position + 1)}")
+                        log.e("Episodes for sesason ${position + 1}: ${map.getValue(position + 1)}")
                         adapterEpisode.clear()
                         adapterEpisode.addAll(
                             map.getValue(position+1)
@@ -231,12 +232,12 @@ class ProgressFragment : Fragment() {
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    Timber.e("nothing selected")
+                    log.e("nothing selected")
                 }
             }
 
         binding.btnProgressConfirm.setOnClickListener {
-            Timber.e("Selected: S${binding.spinProgressSeason.selectedItem}E${binding.spinProgressEpisode.selectedItem}")
+            log.e("Selected: S${binding.spinProgressSeason.selectedItem}E${binding.spinProgressEpisode.selectedItem}")
             viewModel.submitAction(
                 ActionProgress.attemptSetProgress(
                     arguments.showId,

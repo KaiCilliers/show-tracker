@@ -27,10 +27,10 @@ import com.sunrisekcdeveloper.cache.ListType
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.cache.UIModelDiscovery
 import com.sunrisekcdeveloper.cache.models.RemoteKeys
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.discovery.DiscoveryRemoteDataSourceContract
 import com.sunrisekcdeveloper.discovery.extras.asUIModelDiscovery
 import com.sunrisekcdeveloper.network.NetworkResult
-import timber.log.Timber
 import java.io.InvalidObjectException
 
 // TODO Refactor all the RemoteMediator business logic boilerplate
@@ -39,6 +39,8 @@ class RemoteMediatorDiscoveryPopularMovies(
     private val remote: DiscoveryRemoteDataSourceContract,
     private val database: TrackerDatabase
 ) : RemoteMediator<Int, UIModelDiscovery>() {
+
+    private val log by timber()
 
     companion object {
         private const val TMDB_STARTING_PAGE_INDEX = 1
@@ -49,8 +51,8 @@ class RemoteMediatorDiscoveryPopularMovies(
         state: PagingState<Int, UIModelDiscovery>
     ): MediatorResult {
 
-        Timber.d("Load Type: $loadType")
-        Timber.d("PagingState: $state")
+        log.d("Load Type: $loadType")
+        log.d("PagingState: $state")
 
         val page = when (loadType) {
             LoadType.REFRESH -> {

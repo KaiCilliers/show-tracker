@@ -18,16 +18,17 @@
 
 package com.sunrisekcdeveloper.watchlist.usecase
 
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
-import timber.log.Timber
 
 interface UpdateMovieWatchedStatusUseCaseContract {
     suspend operator fun invoke(movieId: String, watchedStatus: MovieWatchedStatus)
     class Fake() : UpdateMovieWatchedStatusUseCaseContract {
+        private val log by timber()
         override suspend fun invoke(movieId: String, watchedStatus: MovieWatchedStatus) {
             when (watchedStatus) {
-                MovieWatchedStatus.Watched -> { Timber.d("Fake - Updated Movie )id=$movieId) status to Watched") }
-                MovieWatchedStatus.NotWatched -> { Timber.d("Fake - Updated Movie )id=$movieId) status to Unwatched") }
+                MovieWatchedStatus.Watched -> { log.d("Fake - Updated Movie )id=$movieId) status to Watched") }
+                MovieWatchedStatus.NotWatched -> { log.d("Fake - Updated Movie )id=$movieId) status to Unwatched") }
             }
         }
     }

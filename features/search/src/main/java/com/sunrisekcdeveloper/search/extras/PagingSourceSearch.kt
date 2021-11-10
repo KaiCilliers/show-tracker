@@ -21,15 +21,17 @@ package com.sunrisekcdeveloper.search.extras
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.network.NetworkResult
 import com.sunrisekcdeveloper.search.SearchRemoteDataSourceContract
 import com.sunrisekcdeveloper.search.extras.model.UIModelSearch
-import timber.log.Timber
 
 class PagingSourceSearch(
     private val remote: SearchRemoteDataSourceContract,
     private val query: String
 ) : PagingSource<Int, UIModelSearch>() {
+
+    private val log by timber()
 
     companion object {
         private const val SEARCH_STARTING_PAGE_INDEX = 1
@@ -62,7 +64,7 @@ class PagingSourceSearch(
             }
             is NetworkResult.Error -> {
                 // todo dont swallow exceptions
-                Timber.d("Error - movie search call was not successful: ${movieResponse.exception}")
+                log.e("Error - movie search call was not successful: ${movieResponse.exception}")
             }
         }
         when (showResponse) {
@@ -70,7 +72,7 @@ class PagingSourceSearch(
                 result.addAll(showResponse.data.media.map { it.asUIModelSearch() })
             }
             is NetworkResult.Error -> {
-                Timber.d("Error - show search call was not successful: ${showResponse.exception}")
+                log.e("Error - show search call was not successful: ${showResponse.exception}")
             }
         }
 

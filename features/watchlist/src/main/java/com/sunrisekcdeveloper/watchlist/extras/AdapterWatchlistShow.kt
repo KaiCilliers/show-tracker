@@ -24,15 +24,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import com.sunrisekcdeveloper.watchlist.databinding.ItemWatchlistShowBinding
-import timber.log.Timber
 
 class AdapterWatchlistShow(
     private val image: ImageLoadingContract,
     var onButtonClicked: OnShowStatusClickListener = OnShowStatusClickListener { _ -> },
     var onPosterClickListener: OnPosterClickListener = OnPosterClickListener { _, _, _, _-> }
 ) : ListAdapter<UIModelWatchlistShow, AdapterWatchlistShow.ViewHolderWatchlistShow>(WATCHLIST_SHOW_COMPARATOR) {
+
+    private val log by timber()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWatchlistShow =
         ViewHolderWatchlistShow.from(parent, image, onButtonClicked, onPosterClickListener)
 
@@ -42,17 +45,17 @@ class AdapterWatchlistShow(
 
 
     fun positionOfItem(showId: String): Int {
-        Timber.d("I want the position of the show with ID: $showId")
+        log.d("I want the position of the show with ID: $showId")
         val data = currentList
-        Timber.d("data: ${data.map { "${it.id}: ${it.title}" }}")
+        log.d("data: ${data.map { "${it.id}: ${it.title}" }}")
         val item = data.find {
             it.id == showId
         }
-        Timber.e("item found: $item")
+        log.e("item found: $item")
         var position = -1
         item?.let {
             position = data.indexOf(item)
-            Timber.e("position found $position")
+            log.e("position found $position")
         }
         return position
     }
@@ -63,6 +66,9 @@ class AdapterWatchlistShow(
         private val onButtonClicked: OnShowStatusClickListener,
         private val onPosterClickListener: OnPosterClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        private val log by timber()
+
         fun bind(item: UIModelWatchlistShow) {
             image.load(EndpointPosterStandard(item.posterPath).url(), binding.imgvWatchlistShowPoster)
             binding.imgvWatchlistShowPoster.setOnClickListener {
@@ -77,12 +83,12 @@ class AdapterWatchlistShow(
             binding.tvWatchlistShowTitle.text = item.title
 
             binding.btnWatchlistShowStartWatching.setOnClickListener {
-                Timber.e("adapter - start watching...")
+                log.e("adapter - start watching...")
                 onButtonClicked.onClick(ShowAdapterAction.StartWatchingShow(item.id, item.title))
             }
 
             binding.btnWatchlistShowCurrentEpisode.setOnClickListener {
-                Timber.e("adapter - mark season...")
+                log.e("adapter - mark season...")
                 onButtonClicked.onClick(
                     ShowAdapterAction.MarkSeason(
                         item.id,
@@ -92,9 +98,9 @@ class AdapterWatchlistShow(
             }
 
             binding.btnWatchlistShowMarkAsWatched.setOnClickListener {
-                Timber.e("current episode: ${item.currentEpisodeNumber} and last episode: ${item.lastEpisodeInSeason} (total episodes in season ${item.currentSeasonNumber} is ${item.episodesInSeason})")
+                log.e("current episode: ${item.currentEpisodeNumber} and last episode: ${item.lastEpisodeInSeason} (total episodes in season ${item.currentSeasonNumber} is ${item.episodesInSeason})")
                 if (item.currentEpisodeNumber == item.lastEpisodeInSeason) {
-                    Timber.e("adapter - episode mark season...")
+                    log.e("adapter - episode mark season...")
                     onButtonClicked.onClick(
                         ShowAdapterAction.MarkSeason(
                             item.id,
@@ -102,7 +108,7 @@ class AdapterWatchlistShow(
                         )
                     )
                 } else {
-                    Timber.e("adapter - mark episode...")
+                    log.e("adapter - mark episode...")
                     onButtonClicked.onClick(
                         ShowAdapterAction.MarkEpisode(
                             item.id,

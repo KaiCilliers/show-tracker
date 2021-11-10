@@ -25,6 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.sunrisekcdeveloper.cache.FilterMovies
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.common.Resource
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistMoviesUseCaseContract
 import com.sunrisekcdeveloper.watchlist.usecase.FetchWatchlistShowsUseCaseContract
@@ -39,7 +40,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,6 +52,7 @@ class WatchlistViewModel @Inject constructor(
 
     private val eventChannel = Channel<EventWatchlist>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
+    private val log by timber()
 
     val _state = MutableLiveData<StateWatchlist>()
     val state: LiveData<StateWatchlist>
@@ -89,7 +90,7 @@ class WatchlistViewModel @Inject constructor(
     }
 
     fun submitAction(action: ActionWatchlist) = viewModelScope.launch {
-        Timber.e("action submitted: $action")
+        log.e("action submitted: $action")
         when (action) {
             ActionWatchlist.LoadWatchlistData -> {
                 watchlistData()
