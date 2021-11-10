@@ -19,15 +19,16 @@
 package com.sunrisekcdeveloper.detail.usecase
 
 import com.sunrisekcdeveloper.cache.MediaType
-import timber.log.Timber
+import com.sunrisekcdeveloper.common.timber
 
 interface RemoveMediaFromWatchlistUseCaseContract {
     suspend operator fun invoke(id: String, type: MediaType)
     class Fake() : RemoveMediaFromWatchlistUseCaseContract {
+        private val log by timber()
         override suspend fun invoke(id: String, type: MediaType) {
             when (type) {
-                MediaType.Movie -> { Timber.d("Fake - Removed Movie (id=$id) from Watchlist") }
-                MediaType.Show -> { Timber.d("Fake - Removed Show (id=$id) from Watchlist") }
+                MediaType.Movie -> { log.d("Fake - Removed Movie (id=$id) from Watchlist") }
+                MediaType.Show -> { log.d("Fake - Removed Show (id=$id) from Watchlist") }
             }
         }
     }

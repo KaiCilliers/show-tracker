@@ -31,6 +31,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
@@ -40,7 +41,6 @@ import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import com.sunrisekcdeveloper.network.InternalDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ShowDetailBottomSheet : BottomSheetDialogFragment() {
@@ -48,6 +48,7 @@ class ShowDetailBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetShowDetailBinding
     private val arguments: ShowDetailBottomSheetArgs by navArgs()
     private val viewModel: ShowDetailViewModel by viewModels()
+    private val log by timber()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,7 +89,7 @@ class ShowDetailBottomSheet : BottomSheetDialogFragment() {
                     renderSuccess(state.data)
                 }
                 is StateDetailShow.Error -> {
-                    Timber.e(state.exception)
+                    log.e(state.exception)
                     renderError()
                 }
             }

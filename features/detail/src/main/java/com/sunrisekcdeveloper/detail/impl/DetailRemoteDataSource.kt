@@ -23,8 +23,6 @@ import com.sunrisekcdeveloper.detail.DetailServiceContract
 import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 class DetailRemoteDataSource(
     private val api: DetailServiceContract,

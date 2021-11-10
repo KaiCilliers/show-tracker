@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
@@ -35,7 +36,6 @@ import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.network.EndpointPosterStandard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -44,6 +44,7 @@ class MovieDetailBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetMovieDetailBinding
     private val arguments: MovieDetailBottomSheetArgs by navArgs()
     private val viewModel: MovieDetailViewModel by viewModels()
+    private val log by timber()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,7 +92,7 @@ class MovieDetailBottomSheet : BottomSheetDialogFragment() {
                     renderSuccess(state.data)
                 }
                 is StateDetailMovie.Error -> {
-                    Timber.e(state.exception)
+                    log.e(state.exception)
                     renderError()
                 }
             }

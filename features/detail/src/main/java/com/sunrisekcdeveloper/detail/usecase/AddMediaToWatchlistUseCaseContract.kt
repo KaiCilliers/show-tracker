@@ -19,15 +19,16 @@
 package com.sunrisekcdeveloper.detail.usecase
 
 import com.sunrisekcdeveloper.cache.MediaType
-import timber.log.Timber
+import com.sunrisekcdeveloper.common.timber
 
 interface AddMediaToWatchlistUseCaseContract {
     suspend operator fun invoke(id: String, type: MediaType)
     class Fake() : AddMediaToWatchlistUseCaseContract {
+        private val log by timber()
         override suspend fun invoke(id: String, type: MediaType) {
             when (type) {
-                MediaType.Movie -> { Timber.d("Fake - Add Movie (id=$id) to Watchlist") }
-                MediaType.Show -> { Timber.d("Fake - Add Show (id=$id) to Watchlist") }
+                MediaType.Movie -> { log.d("Fake - Add Movie (id=$id) to Watchlist") }
+                MediaType.Show -> { log.d("Fake - Add Show (id=$id) to Watchlist") }
             }
         }
     }
