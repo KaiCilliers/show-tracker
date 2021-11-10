@@ -45,5 +45,6 @@ class TimberLogger(thisRef: Any, tag: String? = null): Timber.Tree() {
             .replace("BottomSheet", "BotSh")
             .replace("RemoteMediator", "RemMed")
             .replace("Activity", "Act")
+            .take(23)
     }
 }
