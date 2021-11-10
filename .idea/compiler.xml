@@ -5,8 +5,7 @@
       <module name="ShowTracker.app" target="11" />
       <module name="ShowTracker.buildSrc" target="11" />
       <module name="ShowTracker.common.ui-components" target="11" />
-      <module name="ShowTracker.core.cache" target="11" />
-      <module name="ShowTracker.core.views" target="11" />
+      <module name="ShowTracker.core.storage" target="11" />
       <module name="ShowTracker.detail" target="11" />
       <module name="ShowTracker.features.detail" target="11" />
       <module name="ShowTracker.features.discovery" target="11" />

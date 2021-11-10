@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".presentation.FragmentBottomSheetMovieDetail">
+    tools:context=".movie.MovieDetailBottomSheet">
 
     <!-- TODO  give correct poster dimensions-->
     <ImageView
@@ -31,7 +31,6 @@
         android:layout_width="135dp"
         android:layout_height="241dp"
         android:layout_margin="@dimen/margin_small"
-        tools:src="@drawable/error_poster"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_detail_movie_add"/>

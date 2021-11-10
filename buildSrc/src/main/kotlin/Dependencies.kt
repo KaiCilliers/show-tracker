@@ -22,13 +22,16 @@ object Modules {
 
 object Core {
     const val network = ":core:network"
-    const val cache = ":core:cache"
-    const val views = ":core:views"
+    const val storage = ":core:storage"
 }
 
-object Common {
-    const val models = ":common:models"
-    const val uiComponents = ":common:ui-components"
+object UiComponents {
+    const val uiComponents = ":ui-components"
+}
+
+object Domain {
+    const val movie = ":domain:movie"
+    const val show = ":domain:show"
 }
 
 object Versions {

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2021. The Android Open Source Project
+  ~
+  ~ @author Kai Cilliers
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!--todo add overview to "start watching state" -->
+<!-- todo cleanup -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_watchlist_show_season_progress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:trackCornerRadius="10dp"
+        android:layout_margin="@dimen/margin_medium"
+        app:trackThickness="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_watchlist_show_current_episode"
+        app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_watchlist_show_mark_as_watched"/>
+
+    <TextView
+        android:id="@+id/tv_watchlist_show_progress_current_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        tools:text="23"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintTop_toBottomOf="@id/progress_watchlist_show_season_progress"
+        app:layout_constraintStart_toStartOf="@id/progress_watchlist_show_season_progress"/>
+
+    <TextView
+        android:id="@+id/tv_watchlist_show_seperator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/separator_left_to_right"
+        android:layout_margin="@dimen/margin_small"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        app:layout_constraintStart_toEndOf="@id/tv_watchlist_show_progress_current_episode"
+        app:layout_constraintTop_toTopOf="@id/tv_watchlist_show_progress_current_episode"
+        app:layout_constraintBottom_toBottomOf="@id/tv_watchlist_show_progress_current_episode"/>
+
+    <TextView
+        android:id="@+id/tv_watchlist_show_progress_max_episodes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        tools:text="50"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintTop_toTopOf="@id/tv_watchlist_show_progress_current_episode"
+        app:layout_constraintStart_toEndOf="@id/tv_watchlist_show_seperator"
+        app:layout_constraintBottom_toBottomOf="@id/tv_watchlist_show_progress_current_episode"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgv_watchlist_show_poster"
+        android:layout_width="128dp"
+        android:layout_height="172dp"
+        android:layout_margin="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_watchlist_show_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        tools:text="TV Show Title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_watchlist_show_up_to_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/info_up_to_date_show"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textAlignment="center"
+        tools:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_watchlist_show_start_watching"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/action_start_watching"
+        android:layout_margin="4dp"
+        tools:visibility="gone"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_watchlist_show_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_watchlist_show_current_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        tools:text="S02E11"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_watchlist_show_title"
+        app:layout_constraintStart_toEndOf="@id/imgv_watchlist_show_poster"/>
+
+    <TextView
+        android:id="@+id/tv_watchlist_show_episode_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Episode Name"
+        android:layout_margin="4dp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        app:layout_constraintTop_toBottomOf="@id/tv_watchlist_show_title"
+        app:layout_constraintStart_toEndOf="@id/btn_watchlist_show_current_episode"
+        app:layout_constraintBottom_toBottomOf="@id/btn_watchlist_show_current_episode"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_watchlist_show_mark_as_watched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:textColor="@color/white"
+        android:text="@string/action_set_watched"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

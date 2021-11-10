@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.sunrisekcdeveloper.search.presentation.FragmentSearch"
+        android:name="com.sunrisekcdeveloper.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <deepLink app:uri="showtracker://search"/>

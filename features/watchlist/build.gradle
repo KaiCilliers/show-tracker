@@ -11,10 +11,10 @@ android {
 
 dependencies {
     implementation project(Core.network)
-    implementation project(Core.cache)
-    implementation project(Core.views)
-    implementation project(Common.models)
-    implementation project(Common.uiComponents)
+    implementation project(Core.storage)
+    implementation project(UiComponents.uiComponents)
+    implementation project(Domain.show)
+    implementation project(Domain.movie)
 
     implementation Libs.androidxCoreKtx
     implementation Libs.androidxAppCompat

@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/fragmentProgress"
-        android:name="com.sunrisekcdeveloper.progress.presentation.FragmentProgress"
+        android:name="com.sunrisekcdeveloper.progress.ProgressFragment"
         android:label="fragment_set_progress"
         tools:layout="@layout/fragment_set_progress">
         <deepLink app:uri="showtracker://progress?id={showId}?title={showTitle}"/>

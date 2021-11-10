@@ -13,19 +13,19 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/common" />
-            <option value="$PROJECT_DIR$/common/models" />
-            <option value="$PROJECT_DIR$/common/ui-components" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/core/cache" />
             <option value="$PROJECT_DIR$/core/network" />
-            <option value="$PROJECT_DIR$/core/views" />
+            <option value="$PROJECT_DIR$/core/storage" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/movie" />
+            <option value="$PROJECT_DIR$/domain/show" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/detail" />
             <option value="$PROJECT_DIR$/features/discovery" />
             <option value="$PROJECT_DIR$/features/progress" />
             <option value="$PROJECT_DIR$/features/search" />
             <option value="$PROJECT_DIR$/features/watchlist" />
+            <option value="$PROJECT_DIR$/ui-components" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

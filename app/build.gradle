@@ -90,7 +90,9 @@ android {
         implementation project(Modules.discovery)
 
         implementation project(Core.network)
-        implementation project(Core.cache)
+        implementation project(Core.storage)
+
+        implementation project(Domain.movie)
 
         implementation Libs.moshi
         implementation Libs.retrofitGsonConverter

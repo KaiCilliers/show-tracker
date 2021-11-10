@@ -25,7 +25,7 @@
     <!-- todo rename ids to match snake case -->
     <dialog
         android:id="@+id/fragmentBottomSheetMovieDetail"
-        android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetMovieDetail"
+        android:name="com.sunrisekcdeveloper.detail.movie.MovieDetailBottomSheet"
         android:label="bottom_sheet_movie_detail"
         tools:layout="@layout/bottom_sheet_movie_detail">
         <deepLink app:uri="showtracker://detail/movie_detail?id={movieId}?movieTitle={movieTitle}?posterPath={posterPath}"/>
@@ -41,7 +41,7 @@
     </dialog>
     <dialog
         android:id="@+id/fragmentBottomSheetShowDetail"
-        android:name="com.sunrisekcdeveloper.detail.presentation.FragmentBottomSheetShowDetail"
+        android:name="com.sunrisekcdeveloper.detail.show.ShowDetailBottomSheet"
         android:label="bottom_sheet_show_detail"
         tools:layout="@layout/bottom_sheet_show_detail" >
         <deepLink app:uri="showtracker://detail/show_detail?id={showId}?showTitle={showTitle}?posterPath={posterPath}"/>

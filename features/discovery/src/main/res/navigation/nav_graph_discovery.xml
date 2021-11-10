@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/fragmentDiscovery"
-        android:name="com.sunrisekcdeveloper.discovery.presentation.FragmentDiscovery"
+        android:name="com.sunrisekcdeveloper.discovery.DiscoveryFragment"
         android:label="FragmentDiscovery" >
         <action
             android:id="@+id/action_fragmentDiscovery_to_fragmentDiscoveryMovies"
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentDiscoveryMovies"
-        android:name="com.sunrisekcdeveloper.discovery.presentation.movies.FragmentDiscoveryMovies"
+        android:name="com.sunrisekcdeveloper.discovery.DiscoveryMoviesFragment"
         android:label="FragmentDiscoveryMovies" >
         <action
             android:id="@+id/action_fragmentDiscoveryMovies_to_fragmentBottomSheetFocused"
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentDiscoveryShows"
-        android:name="com.sunrisekcdeveloper.discovery.presentation.shows.FragmentDiscoveryShows"
+        android:name="com.sunrisekcdeveloper.discovery.DiscoveryShowsFragment"
         android:label="FragmentDiscoveryShows" >
         <action
             android:id="@+id/action_fragmentDiscoveryShows_to_fragmentDiscoveryMovies"
@@ -63,7 +63,7 @@
     </fragment>
     <dialog
         android:id="@+id/fragmentBottomSheetFocused"
-        android:name="com.sunrisekcdeveloper.discovery.presentation.focused.FragmentBottomSheetFocused"
+        android:name="com.sunrisekcdeveloper.discovery.FocusedBottomSheet"
         android:label="FragmentBottomSheetFocused" >
         <argument
             android:name="listType"
