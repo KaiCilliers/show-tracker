@@ -16,23 +16,26 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.domain
+package com.sunrisekcdeveloper.progress.domain
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
-import com.sunrisekcdeveloper.detail.DetailRemoteDataSourceContract
-import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.show.*
-import com.sunrisekcdeveloper.show.season.Season
-import com.sunrisekcdeveloper.show.valueobjects.Identification
-import com.sunrisekcdeveloper.show.valueobjects.ImageUrl
-import com.sunrisekcdeveloper.show.valueobjects.Meta
-import com.sunrisekcdeveloper.show.valueobjects.Stats
+import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
+import com.sunrisekcdeveloper.progress.extras.*
+import com.sunrisekcdeveloper.show.TVShow
+import com.sunrisekcdeveloper.show.TVShowRepositoryContract
+import com.sunrisekcdeveloper.show.TVShowWithSeasons
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+// seriously, this solution is a good step forward, but
+// it can be improved upon with a commons module
+// each feature having to implement al the
+// model interfaces is ridiculous
+// The model cant provide a concrete class, but
+// a common module can house it for me
 class TVShowRepository(
-    private val remote: DetailRemoteDataSourceContract,
+    private val remote: ProgressRemoteDataSourceContract,
     database: TrackerDatabase
 ) : TVShowRepositoryContract {
 
@@ -53,9 +56,9 @@ class TVShowRepository(
         remote.showDetail(id).apply {
             if (this is NetworkResult.Success && certification is NetworkResult.Success) {
                 add(data.asEntityShow(
-                        CertificationsContract.Smart(CertificationsShow(certification.data.results))
-                            .fromUS()
-                    ).toDomain()
+                    CertificationsContract.Smart(CertificationsShow(certification.data.results))
+                        .fromUS()
+                ).toDomain()
                 )
             }
         }
@@ -74,7 +77,8 @@ class TVShowRepository(
             show.data.toDomain(
                 showId = id,
                 certification = if (certification is NetworkResult.Success) {
-                    CertificationsContract.Smart(CertificationsShow(certification.data.results)).fromUS()
+                    CertificationsContract.Smart(CertificationsShow(certification.data.results))
+                        .fromUS()
                 } else { "N/A" }
             )
         } else { null }

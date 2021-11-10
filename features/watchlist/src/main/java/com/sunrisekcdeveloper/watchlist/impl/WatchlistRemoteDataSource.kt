@@ -22,10 +22,7 @@ import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
 import com.sunrisekcdeveloper.watchlist.WatchlistRemoteDataSourceContract
 import com.sunrisekcdeveloper.watchlist.WatchlistServiceContract
-import com.sunrisekcdeveloper.watchlist.extras.EnvelopeShowCertification
-import com.sunrisekcdeveloper.watchlist.extras.ResponseEpisode
-import com.sunrisekcdeveloper.watchlist.extras.ResponseSeason
-import com.sunrisekcdeveloper.watchlist.extras.ResponseShowDetail
+import com.sunrisekcdeveloper.watchlist.extras.*
 
 class WatchlistRemoteDataSource(
     private val api: WatchlistServiceContract,
@@ -49,5 +46,12 @@ class WatchlistRemoteDataSource(
 
     override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = network.request {
         api.showCertifications(id)
+    }
+
+    override suspend fun seasonDetails(
+        showId: String,
+        season: Int
+    ): NetworkResult<ResponseSeasonDetailWithEpisodes> {
+        TODO("Not yet implemented")
     }
 }

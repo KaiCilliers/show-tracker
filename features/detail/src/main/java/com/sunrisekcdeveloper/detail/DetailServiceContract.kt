@@ -22,6 +22,11 @@ import com.sunrisekcdeveloper.detail.extras.*
 import retrofit2.Response
 
 interface DetailServiceContract {
+    suspend fun showWithSeasons(
+        id: String,
+        apiKey: String = BuildConfig.TMDB_API_KEY
+    ): Response<ResponseShowDetailWithSeasons>
+
     suspend fun movieDetails(
         id: String,
         apiKey: String = BuildConfig.TMDB_API_KEY
@@ -43,6 +48,13 @@ interface DetailServiceContract {
     ): Response<EnvelopeShowCertification>
 
     class Fake() : DetailServiceContract {
+        override suspend fun showWithSeasons(
+            id: String,
+            apiKey: String
+        ): Response<ResponseShowDetailWithSeasons> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun movieDetails(
             id: String,
             apiKey: String

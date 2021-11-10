@@ -19,10 +19,7 @@
 package com.sunrisekcdeveloper.detail.impl
 
 import com.sunrisekcdeveloper.detail.DetailServiceContract
-import com.sunrisekcdeveloper.detail.extras.EnvelopeMovieReleaseDates
-import com.sunrisekcdeveloper.detail.extras.EnvelopeShowCertification
-import com.sunrisekcdeveloper.detail.extras.ResponseMovieDetail
-import com.sunrisekcdeveloper.detail.extras.ResponseShowDetail
+import com.sunrisekcdeveloper.detail.extras.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -52,4 +49,10 @@ interface DetailService : DetailServiceContract {
         @Path("id" )id: String,
         @Query("api_key") apiKey: String
     ): Response<EnvelopeShowCertification>
+
+    @GET("tv/{id}")
+    override suspend fun showWithSeasons(
+        @Path("id") id: String,
+        @Query("api_key") apiKey: String
+    ): Response<ResponseShowDetailWithSeasons>
 }

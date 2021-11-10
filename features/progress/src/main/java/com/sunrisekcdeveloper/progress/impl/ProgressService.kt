@@ -18,9 +18,8 @@
 
 package com.sunrisekcdeveloper.progress.impl
 
-import com.sunrisekcdeveloper.progress.extras.model.ResponseSeasonDetailWithEpisodes
-import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
 import com.sunrisekcdeveloper.progress.ProgressServiceContract
+import com.sunrisekcdeveloper.progress.extras.model.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -39,4 +38,31 @@ interface ProgressService : ProgressServiceContract {
         @Path("seasonNumber") seasonNumber: Int,
         @Query("api_key") apiKey: String
     ): Response<ResponseSeasonDetailWithEpisodes>
+
+    @GET("tv/{id}")
+    override suspend fun showDetails(
+        @Path("id") id: String,
+        @Query("api_key") apiKey: String
+    ): Response<ResponseShowDetail>
+
+    @GET("tv/{id}/content_ratings")
+    override suspend fun showCertifications(
+        @Path("id" )id: String,
+        @Query("api_key") apiKey: String
+    ): Response<EnvelopeShowCertification>
+
+    @GET("tv/{showId}/season/{number}")
+    override suspend fun season(
+        @Path("showId") showId: String,
+        @Path("number") season: Int,
+        @Query("api_key") apiKey: String
+    ): Response<ResponseSeason>
+
+    @GET("/tv/{tv_id}/season/{season_number}/episode/{episode_number}")
+    override suspend fun episodeDetails(
+        @Path("tv_id") showId: String,
+        @Path("season_number") season: Int,
+        @Path("episode_number") episode: Int,
+        @Query("api_key") apiKey: String
+    ): Response<ResponseEpisode>
 }

@@ -20,6 +20,7 @@ package com.sunrisekcdeveloper.progress
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.network.NetworkContract
+import com.sunrisekcdeveloper.progress.domain.*
 import com.sunrisekcdeveloper.progress.usecase.FetchShowSeasonAndEpisodeTotalsUseCaseContract
 import com.sunrisekcdeveloper.progress.usecase.SetShowProgressUseCaseContract
 import com.sunrisekcdeveloper.progress.impl.ProgressRemoteDataSource
@@ -27,6 +28,11 @@ import com.sunrisekcdeveloper.progress.impl.ProgressService
 import com.sunrisekcdeveloper.progress.impl.ProgressRepository
 import com.sunrisekcdeveloper.progress.impl.FetchShowSeasonAndEpisodeTotalsUseCase
 import com.sunrisekcdeveloper.progress.impl.SetShowProgressUseCase
+import com.sunrisekcdeveloper.show.TVShowRepositoryContract
+import com.sunrisekcdeveloper.show.WatchlistTVShowRepositoryContract
+import com.sunrisekcdeveloper.show.episode.WatchlistEpisodeRepositoryContract
+import com.sunrisekcdeveloper.show.season.SeasonRepositoryContract
+import com.sunrisekcdeveloper.show.season.WatchlistSeasonRepositoryContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,7 +63,14 @@ object ProgressModule {
     fun provideRepositoryProgress(
         remote: ProgressRemoteDataSourceContract,
         local: TrackerDatabase
-    ): ProgressRepositoryContract = ProgressRepository(remote,local)
+    ): ProgressRepositoryContract = ProgressRepository(
+        EpisodeRepository(remote, local),
+        WatchlistEpisodeRepository(local),
+        SeasonRepository(remote, local),
+        WatchlistSeasonRepository(local),
+        TVShowRepository(remote, local),
+        WatchlistTVShowRepository(local)
+    )
 
     @Provides
     @ViewModelScoped

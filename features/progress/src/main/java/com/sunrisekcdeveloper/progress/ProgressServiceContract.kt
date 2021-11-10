@@ -18,8 +18,7 @@
 
 package com.sunrisekcdeveloper.progress
 
-import com.sunrisekcdeveloper.progress.extras.model.ResponseSeasonDetailWithEpisodes
-import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.extras.model.*
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 
@@ -35,8 +34,46 @@ interface ProgressServiceContract {
         apiKey: String = BuildConfig.TMDB_API_KEY
     ) : Response<ResponseSeasonDetailWithEpisodes>
 
+    suspend fun showDetails(
+        id: String,
+        apiKey: String = BuildConfig.TMDB_API_KEY
+    ): Response<ResponseShowDetail>
+
+    suspend fun showCertifications(
+        id: String,
+        apiKey: String = BuildConfig.TMDB_API_KEY
+    ): Response<EnvelopeShowCertification>
+
+    suspend fun season(
+        showId: String,
+        season: Int,
+        apiKey: String = BuildConfig.TMDB_API_KEY
+    ): Response<ResponseSeason>
+
+    suspend fun episodeDetails(
+        showId: String, season: Int, episode: Int,
+        apiKey: String = BuildConfig.TMDB_API_KEY
+    ): Response<ResponseEpisode>
+
     class Fake() : ProgressServiceContract {
+        override suspend fun episodeDetails(
+            showId: String,
+            season: Int,
+            episode: Int,
+            apiKey: String
+        ): Response<ResponseEpisode> {
+            TODO("Not yet implemented")
+        }
+
         var expectException = false
+        override suspend fun season(
+            showId: String,
+            season: Int,
+            apiKey: String
+        ): Response<ResponseSeason> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun showWithSeasons(
             id: String,
             apiKey: String
@@ -52,6 +89,17 @@ interface ProgressServiceContract {
         ): Response<ResponseSeasonDetailWithEpisodes> {
             return if (expectException) Response.error(0, "Fake - Could not fetch season (number=$seasonNumber) from Show (id=$showId)".toResponseBody())
             else Response.success(ResponseSeasonDetailWithEpisodes.single())
+        }
+
+        override suspend fun showDetails(id: String, apiKey: String): Response<ResponseShowDetail> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun showCertifications(
+            id: String,
+            apiKey: String
+        ): Response<EnvelopeShowCertification> {
+            TODO("Not yet implemented")
         }
     }
 }

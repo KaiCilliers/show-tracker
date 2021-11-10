@@ -13,7 +13,7 @@ data class Identification(
     val overview: String
     )
 data class Meta(
-    val airDate: Long,
+    val airDate: String,
     val stillPath: String,
     val lastUpdated: Long
 )

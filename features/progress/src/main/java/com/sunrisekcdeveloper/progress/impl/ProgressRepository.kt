@@ -18,118 +18,103 @@
 
 package com.sunrisekcdeveloper.progress.impl
 
-import androidx.room.withTransaction
-import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.cache.common.Resource
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistEpisode
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistSeason
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
-import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
 import com.sunrisekcdeveloper.progress.ProgressRepositoryContract
-import com.sunrisekcdeveloper.progress.extras.asEntityEpisode
-import com.sunrisekcdeveloper.progress.extras.asEntitySeason
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
+import com.sunrisekcdeveloper.progress.extras.toDomain
+import com.sunrisekcdeveloper.progress.extras.toEntity
+import com.sunrisekcdeveloper.show.TVShowRepositoryContract
+import com.sunrisekcdeveloper.show.WatchlistTVShowRepositoryContract
+import com.sunrisekcdeveloper.show.episode.EpisodeRepositoryContract
+import com.sunrisekcdeveloper.show.episode.WatchlistEpisodeRepositoryContract
+import com.sunrisekcdeveloper.show.season.SeasonRepositoryContract
+import com.sunrisekcdeveloper.show.season.WatchlistSeasonRepositoryContract
 import kotlin.collections.forEach as forEachIterable
 
 class ProgressRepository(
-    private val remote: ProgressRemoteDataSourceContract,
-    private val database: TrackerDatabase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val episodeRepo: EpisodeRepositoryContract,
+    private val watchlistEpisodeRepo: WatchlistEpisodeRepositoryContract,
+    private val seasonRepo: SeasonRepositoryContract,
+    private val watchlistSeasonRepo: WatchlistSeasonRepositoryContract,
+    private val showRepo: TVShowRepositoryContract,
+    private val watchlistShowRepo: WatchlistTVShowRepositoryContract
 ) : ProgressRepositoryContract {
 
     override suspend fun setShowProgress(showId: String, season: Int, episode: Int) {
-        val entityEpisode = database.episodeDao().withId(showId, season, episode)
-        val entitySeason = database.seasonDao().withId(showId, season)
+        val entityEpisode = episodeRepo.get(showId, season, episode)?.toEntity()
+        val entitySeason = seasonRepo.get(showId, season)?.toEntity()
 
-        database.withTransaction {
-            database.watchlistEpisodeDao().insert(
-                EntityWatchlistEpisode.notWatchedFrom(
-                    showId,
-                    entitySeason.number,
-                    entityEpisode.number
+        entityEpisode?.let { episode ->
+            entitySeason?.let { season ->
+                watchlistEpisodeRepo.add(
+                    EntityWatchlistEpisode.notWatchedFrom(
+                        showId,
+                        season.number,
+                        episode.number
+                    ).toDomain()
                 )
-            )
-            database.watchlistSeasonDao().insert(
-                EntityWatchlistSeason.partialFrom(
-                    showId,
-                    entitySeason.number,
-                    entityEpisode.number
+                watchlistSeasonRepo.add(
+                    EntityWatchlistSeason.partialFrom(
+                        showId,
+                        season.number,
+                        episode.number
+                    ).toDomain()
                 )
-            )
-            database.watchlistShowDao().insert(
-                EntityWatchlistShow.partialFrom(
-                    showId,
-                    entityEpisode.number,
-                    entityEpisode.name,
-                    entitySeason.number,
-                    entitySeason.episodeTotal
+                watchlistShowRepo.add(
+                    EntityWatchlistShow.partialFrom(
+                        showId,
+                        episode.number,
+                        episode.name,
+                        season.number,
+                        season.episodeTotal
+                    ).toDomain()
                 )
-            )
+            }
         }
     }
 
     override suspend fun setNewShowAsUpToDate(showId: String) {
-        val season = database.seasonDao().lastInShow(showId)
-        val episode = database.episodeDao().lastInSeason(showId, season.number)
-
-        database.withTransaction {
-            database.watchlistEpisodeDao()
-                .insert(EntityWatchlistEpisode.completedFrom(showId, season.number, episode.number))
-            database.watchlistSeasonDao().insert(
-                EntityWatchlistSeason.upToDateSeasonFrom(
-                    showId,
-                    season.number,
-                    episode.number
+        seasonRepo.lastInShow(showId)?.toEntity()?.let { season ->
+            episodeRepo.lastInSeason(showId, season.number)?.toEntity()?.let { episode ->
+                watchlistEpisodeRepo.add(
+                    EntityWatchlistEpisode.completedFrom(
+                        showId,
+                        season.number,
+                        episode.number
+                    ).toDomain()
                 )
-            )
-            database.watchlistShowDao().insert(
-                EntityWatchlistShow.upToDateEntryFrom(
-                    showId,
-                    episode.number,
-                    episode.name,
-                    season.number,
-                    season.episodeTotal
+                watchlistSeasonRepo.add(
+                    EntityWatchlistSeason.upToDateSeasonFrom(
+                        showId,
+                        season.number,
+                        episode.number
+                    ).toDomain()
                 )
-            )
+                watchlistShowRepo.add(
+                    EntityWatchlistShow.upToDateEntryFrom(
+                        showId,
+                        episode.number,
+                        episode.name,
+                        season.number,
+                        season.episodeTotal
+                    ).toDomain()
+                )
+            }
         }
     }
 
-    // todo refactor logic
+    // this logic like most logic related to movies and tv show management can use some refactoring
     override suspend fun cacheEntireShow(showId: String) {
-        withContext(dispatcher) {
-            launch {
-                val response = remote.showWithSeasons(showId)
-                when (response) {
-                    is NetworkResult.Success -> {
-                        response.data.seasons.forEachIterable {
-                            val second = remote.seasonDetails(
-                                showId, it.number
-                            )
+        showRepo.showWithSeasons(showId)?.let { tvShow ->
+            tvShow.seasons.forEachIterable { season ->
+                // get and save season information
+                seasonRepo.get(showId, season.stats.number)?.let { seasonRepo.add(it) }
 
-                            database.seasonDao().insert(it.asEntitySeason(showId))
-
-                            when (second) {
-                                is NetworkResult.Success -> {
-                                    second.data.episodes.forEachIterable { episode ->
-                                        database.episodeDao()
-                                            .insert(episode.asEntityEpisode(showId))
-                                    }
-                                }
-                                is NetworkResult.Error -> {
-                                    // todo dont swallow exceptions
-                                    Timber.e("Error fetching season details with show_id: $showId and season number: ${it.number}. [${second.exception}]")
-                                }
-                            }
-                        }
-                    }
-                    is NetworkResult.Error -> {
-                        Timber.e("Error fetching details for show with ID: $showId. [${response.exception}]")
-                    }
+                // get and save episode information
+                seasonRepo.seasonWithEpisodes(showId, season.stats.number)?.let { season ->
+                    season.episodes.forEachIterable { episodeRepo.add(it) }
                 }
             }
         }
@@ -137,14 +122,11 @@ class ProgressRepository(
 
     @ExperimentalStdlibApi
     override suspend fun showSeasons(showId: String): Resource<Map<Int, List<Int>>> {
-        val seasons = database.seasonDao().allFromShow(showId)
-        // todo handle if list is empty
-        // todo handle check to ensure this is all the seasons
-
+        // passing -1 as a default value is not ideal
         return Resource.Success(
-            seasons.map { season ->
-                val episodes = database.episodeDao().allInSeason(showId, season.number)
-                season.number to episodes.map { it.number }
+            seasonRepo.allFromShow(showId).map { season ->
+                val episodes = episodeRepo.allInSeason(showId, season.stats.number)
+                season.stats.number to episodes.map { it?.identification?.number ?: -1 }
             }.toMap()
         )
     }

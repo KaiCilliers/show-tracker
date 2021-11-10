@@ -48,6 +48,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun WatchlistMovieWithDetails.toMovieDomain(): Movie {
@@ -328,7 +330,7 @@ fun WatchlistTVShow.toEntity(): EntityWatchlistShow {
 fun EntityEpisode.toDomain(): Episode {
     return Episode(
         identification = Identification(showId, seasonNumber, number, name, overview),
-        meta = Meta(airDate, stillPath, lastUpdated)
+        meta = Meta(airDate.toDate(), stillPath, lastUpdated)
     )
 }
 
@@ -338,7 +340,7 @@ fun Episode.toEntity(): EntityEpisode {
         seasonNumber = identification.seasonNumber,
         number = identification.number,
         name = identification.name,
-        airDate = meta.airDate,
+        airDate = -1L,
         overview = identification.overview,
         stillPath = meta.stillPath,
         lastUpdated = meta.lastUpdated
@@ -349,8 +351,8 @@ fun ResponseEpisode.toDomain(showId: String): Episode {
     return Episode(
         identification = Identification(showId, seasonNumber, number, name, overview),
         meta = Meta(
-            airDate = dateAired?.toLong() ?: 0L,
-            stillPath = stillPath ?: "",
+            airDate = dateAired.orEmpty(),
+            stillPath = stillPath.orEmpty(),
             lastUpdated = System.currentTimeMillis()
         )
     )
@@ -361,7 +363,7 @@ fun ResponseEpisode.toEntity(showId: String): EntityEpisode {
         seasonNumber = seasonNumber,
         number = number,
         name = name,
-        airDate = dateAired?.toLong() ?: 0L,
+        airDate = -1L,
         overview = overview,
         stillPath = stillPath ?: "",
         lastUpdated = System.currentTimeMillis()
@@ -372,9 +374,15 @@ fun EntitySeason.toDomain(): Season {
     return Season(
         identification = com.sunrisekcdeveloper.show.season.Identification(showId, id.toString(), name, overview),
         images = ImageUrl(posterPath),
-        stats = Stats(number, airDate, episodeTotal),
+        stats = Stats(number, airDate.toDate(), episodeTotal),
         meta = com.sunrisekcdeveloper.show.season.Meta(lastUpdated)
     )
+}
+
+fun Long.toDate(): String {
+    val date = Date(this)
+    val format = SimpleDateFormat("yyyy.MM.dd")
+    return format.format(date)
 }
 
 fun Season.toEntity(): EntitySeason {
@@ -385,7 +393,7 @@ fun Season.toEntity(): EntitySeason {
         name = identification.name,
         overview = identification.overview,
         posterPath = images.posterPath,
-        airDate = stats.airDate,
+        airDate = -1L, // I need to store dates as strings not long
         episodeTotal = stats.episodeTotal,
         lastUpdated = meta.lastUpdated
     )
@@ -400,7 +408,7 @@ fun ResponseSeason.toDomain(showId: String): Season {
             overview
         ),
         images = ImageUrl(posterPath.orEmpty()),
-        stats = Stats(number, dateAired.toLong(), episodeCount),
+        stats = Stats(number, dateAired, episodeCount),
         meta = com.sunrisekcdeveloper.show.season.Meta(System.currentTimeMillis())
     )
 }
@@ -458,6 +466,29 @@ fun WatchlistMovie.toEntity(): EntityWatchlistMovie {
         deleted = status.deleted,
         dateDeleted = meta.dateDeleted,
         dateLastUpdated = meta.dateLastUpdated
+    )
+}
+
+fun ResponseSeasonDetailWithEpisodes.toDomain(showId: String): SeasonWithEpisodes {
+    return SeasonWithEpisodes(
+        season = Season(
+            identification = com.sunrisekcdeveloper.show.season.Identification(
+                showId = showId,
+                id = id.toString(),
+                name = name,
+                overview = overview
+            ),
+            images = ImageUrl(
+                posterPath = posterPath.orEmpty(),
+            ),
+            stats = Stats(
+                number = number,
+                airDate = dateAired.orEmpty(),
+                episodeTotal = episodes.size
+            ),
+            meta = com.sunrisekcdeveloper.show.season.Meta(lastUpdated = System.currentTimeMillis())
+        ),
+        episodes = episodes.map { it.toDomain(showId) }
     )
 }
 

@@ -157,3 +157,26 @@ data class ResponseSeason(
         }
     }
 }
+
+data class EnvelopeShowCertification(
+    @SerializedName("id") val id: Int,
+    @SerializedName("results") val results: List<ResponseShowCertification>
+)
+
+data class ResponseShowCertification(
+    @SerializedName("iso_3166_1") val iso: String,
+    @SerializedName("rating") val certification: String
+)
+
+data class ResponseShowDetail(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("overview") val overview: String,
+    @SerializedName("backdrop_path") val backdropPath: String?,
+    @SerializedName("poster_path") val posterPath: String?,
+    @SerializedName("vote_average") val rating: Float,
+    @SerializedName("first_air_date") val firstAirYear: String,
+    @SerializedName("number_of_episodes") val episodeCount: Int,
+    @SerializedName("number_of_seasons") val seasonCount: Int,
+    @SerializedName("popularity") val popularityValue: Float
+)

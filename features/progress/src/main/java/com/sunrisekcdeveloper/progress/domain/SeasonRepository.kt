@@ -16,22 +16,21 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.watchlist.domain
+package com.sunrisekcdeveloper.progress.domain
 
 import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.show.episode.Episode
-import com.sunrisekcdeveloper.show.season.*
-import com.sunrisekcdeveloper.watchlist.WatchlistRemoteDataSourceContract
-import com.sunrisekcdeveloper.watchlist.extras.ResponseEpisode
-import com.sunrisekcdeveloper.watchlist.extras.ResponseSeasonDetailWithEpisodes
-import com.sunrisekcdeveloper.watchlist.extras.toDomain
-import com.sunrisekcdeveloper.watchlist.extras.toEntity
+import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
+import com.sunrisekcdeveloper.progress.extras.toDomain
+import com.sunrisekcdeveloper.progress.extras.toEntity
+import com.sunrisekcdeveloper.show.season.Season
+import com.sunrisekcdeveloper.show.season.SeasonRepositoryContract
+import com.sunrisekcdeveloper.show.season.SeasonWithEpisodes
 
 class SeasonRepository(
-    private val remote: WatchlistRemoteDataSourceContract,
+    private val remote: ProgressRemoteDataSourceContract,
     database: TrackerDatabase
-) : SeasonRepositoryContract {
+): SeasonRepositoryContract {
 
     private val seasonDao = database.seasonDao()
 

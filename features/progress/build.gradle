@@ -14,6 +14,8 @@ dependencies {
     implementation project(Core.network)
     implementation project(Core.storage)
     implementation project(UiComponents.uiComponents)
+    implementation project(Domain.movie)
+    implementation project(Domain.show)
 
     implementation Libs.androidxCoreKtx
     implementation Libs.androidxAppCompat

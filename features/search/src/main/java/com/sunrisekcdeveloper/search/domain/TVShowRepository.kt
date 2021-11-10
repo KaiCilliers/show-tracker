@@ -22,6 +22,7 @@ import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.search.extras.toTVShowDomain
 import com.sunrisekcdeveloper.show.TVShow
 import com.sunrisekcdeveloper.show.TVShowRepositoryContract
+import com.sunrisekcdeveloper.show.TVShowWithSeasons
 import kotlinx.coroutines.flow.Flow
 
 class TVShowRepository(
@@ -47,4 +48,8 @@ class TVShowRepository(
     }
 
     override suspend fun unwatched(): List<TVShow> =  dao.unwatched().map { it.toTVShowDomain() }
+
+    override suspend fun showWithSeasons(id: String): TVShowWithSeasons? {
+        TODO("Not yet implemented")
+    }
 }

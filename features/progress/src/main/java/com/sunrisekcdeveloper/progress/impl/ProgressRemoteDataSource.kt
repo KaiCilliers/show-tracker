@@ -22,7 +22,7 @@ import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
 import com.sunrisekcdeveloper.progress.ProgressRemoteDataSourceContract
 import com.sunrisekcdeveloper.progress.ProgressServiceContract
-import com.sunrisekcdeveloper.progress.extras.model.ResponseShowDetailWithSeasons
+import com.sunrisekcdeveloper.progress.extras.model.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -36,5 +36,25 @@ class ProgressRemoteDataSource(
 
     override suspend fun seasonDetails(showId: String, season: Int) = network.request {
         api.seasonsWithEpisodes(showId, season)
+    }
+
+    override suspend fun episodeDetails(
+        showId: String,
+        season: Int,
+        episode: Int
+    ): NetworkResult<ResponseEpisode> = network.request {
+        api.episodeDetails(showId, season, episode)
+    }
+
+    override suspend fun season(showId: String, season: Int): NetworkResult<ResponseSeason> = network.request {
+        api.season(showId, season)
+    }
+
+    override suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail> = network.request {
+        api.showDetails(id = id)
+    }
+
+    override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = network.request {
+        api.showCertifications(id = id)
     }
 }

@@ -19,11 +19,8 @@
 package com.sunrisekcdeveloper.detail.impl
 
 import com.sunrisekcdeveloper.detail.DetailRemoteDataSourceContract
-import com.sunrisekcdeveloper.detail.extras.EnvelopeMovieReleaseDates
-import com.sunrisekcdeveloper.detail.extras.EnvelopeShowCertification
-import com.sunrisekcdeveloper.detail.extras.ResponseMovieDetail
-import com.sunrisekcdeveloper.detail.extras.ResponseShowDetail
 import com.sunrisekcdeveloper.detail.DetailServiceContract
+import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.network.NetworkContract
 import com.sunrisekcdeveloper.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
@@ -48,5 +45,9 @@ class DetailRemoteDataSource(
 
     override suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification> = network.request {
         api.showCertifications(id = id)
+    }
+
+    override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> = network.request {
+        api.showWithSeasons(showId)
     }
 }

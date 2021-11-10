@@ -18,13 +18,7 @@
 
 package com.sunrisekcdeveloper.detail
 
-import com.sunrisekcdeveloper.detail.extras.EnvelopeMovieReleaseDates
-import com.sunrisekcdeveloper.detail.extras.EnvelopeShowCertification
-import com.sunrisekcdeveloper.detail.extras.ResponseCertificationAndReleaseDate
-import com.sunrisekcdeveloper.detail.extras.ResponseMovieDetail
-import com.sunrisekcdeveloper.detail.extras.ResponseMovieReleaseDates
-import com.sunrisekcdeveloper.detail.extras.ResponseShowCertification
-import com.sunrisekcdeveloper.detail.extras.ResponseShowDetail
+import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.network.NetworkResult
 
 interface DetailRemoteDataSourceContract {
@@ -32,8 +26,13 @@ interface DetailRemoteDataSourceContract {
     suspend fun movieReleaseDates(id: String): NetworkResult<EnvelopeMovieReleaseDates>
     suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail>
     suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification>
+    suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons>
 
     class Fake : DetailRemoteDataSourceContract {
+        override suspend fun showWithSeasons(showId: String): NetworkResult<ResponseShowDetailWithSeasons> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun movieDetails(id: String): NetworkResult<ResponseMovieDetail> {
             return NetworkResult.success(
                 ResponseMovieDetail(

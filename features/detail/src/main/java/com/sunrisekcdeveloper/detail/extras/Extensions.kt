@@ -38,8 +38,60 @@ import com.sunrisekcdeveloper.show.FullTVShow
 import com.sunrisekcdeveloper.show.valueobjects.Meta
 import com.sunrisekcdeveloper.show.valueobjects.Status
 import com.sunrisekcdeveloper.show.TVShow
+import com.sunrisekcdeveloper.show.TVShowWithSeasons
+import com.sunrisekcdeveloper.show.season.Season
 import com.sunrisekcdeveloper.show.valueobjects.WatchlistTVShow
 import kotlinx.coroutines.flow.Flow
+
+fun ResponseSeason.toDomain(showId: String): Season {
+    return Season(
+        identification = com.sunrisekcdeveloper.show.season.Identification(
+            showId = showId,
+            id = id.toString(),
+            name = name,
+            overview = overview
+        ),
+        images = com.sunrisekcdeveloper.show.season.ImageUrl(
+            posterPath = posterPath.orEmpty()
+        ),
+        stats = com.sunrisekcdeveloper.show.season.Stats(
+            number = number,
+            airDate = dateAired,
+            episodeTotal = episodeCount
+        ),
+        meta = com.sunrisekcdeveloper.show.season.Meta(
+            lastUpdated = System.currentTimeMillis()
+        )
+    )
+}
+
+fun ResponseShowDetailWithSeasons.toDomain(showId: String, certification: String): TVShowWithSeasons {
+    return TVShowWithSeasons(
+        show = TVShow(
+            identification = com.sunrisekcdeveloper.show.valueobjects.Identification(
+                id = id.toString(),
+                title = name,
+                overview = overview
+            ),
+            images = com.sunrisekcdeveloper.show.valueobjects.ImageUrl(
+                posterPath = posterPath.orEmpty(),
+                backdropPath = backdropPath.orEmpty()
+            ),
+            stats = com.sunrisekcdeveloper.show.valueobjects.Stats(
+                rating = rating,
+                certification = certification,
+                popularityValue = popularityValue,
+                episodeTotal = episodeCount,
+                seasonTotal = seasonCount
+            ),
+            meta = Meta(
+                firstAirDate = firstAirYear,
+                lastUpdated = System.currentTimeMillis()
+            )
+        ),
+        seasons = seasons.map { it.toDomain(showId) }
+    )
+}
 
 fun ResponseMovieDetail.asEntityMovie(certification: String = "N/A") = EntityMovie(
     id = "$id",

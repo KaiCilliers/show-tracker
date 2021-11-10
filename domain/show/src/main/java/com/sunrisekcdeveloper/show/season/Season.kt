@@ -35,7 +35,7 @@ data class ImageUrl(
 )
 data class Stats(
     val number: Int,
-    val airDate: Long,
+    val airDate: String,
     val episodeTotal: Int
 )
 data class Meta(

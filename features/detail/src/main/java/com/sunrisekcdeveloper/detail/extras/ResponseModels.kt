@@ -20,6 +20,76 @@ package com.sunrisekcdeveloper.detail.extras
 
 import com.google.gson.annotations.SerializedName
 
+data class ResponseShowDetailWithSeasons(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("overview") val overview: String,
+    @SerializedName("backdrop_path") val backdropPath: String?,
+    @SerializedName("poster_path") val posterPath: String?,
+    @SerializedName("vote_average") val rating: Float,
+    @SerializedName("first_air_date") val firstAirYear: String,
+    @SerializedName("number_of_episodes") val episodeCount: Int,
+    @SerializedName("number_of_seasons") val seasonCount: Int,
+    @SerializedName("popularity") val popularityValue: Float,
+    @SerializedName("seasons") val seasons: List<ResponseSeason>
+) {
+    companion object {
+        fun create(amount: Int): List<ResponseShowDetailWithSeasons> {
+            val list = mutableListOf<ResponseShowDetailWithSeasons>()
+            repeat(amount) {
+                list.add(
+                    ResponseShowDetailWithSeasons(
+                        id = it,
+                        name = "name$it",
+                        overview = "overview$it",
+                        backdropPath = "backdropPath$it",
+                        posterPath = "posterPath$it",
+                        rating = 1f,
+                        firstAirYear = "firstAirYear$it",
+                        episodeCount = 1,
+                        seasonCount = 1,
+                        popularityValue = 1f,
+                        seasons = ResponseSeason.create(20)
+                    )
+                )
+            }
+            return list.toList()
+        }
+
+        fun single() = create(1)[0]
+    }
+}
+
+data class ResponseSeason(
+    @SerializedName("id") val id: Int,
+    @SerializedName("season_number") val number: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("overview") val overview: String,
+    @SerializedName("poster_path") val posterPath: String?,
+    @SerializedName("episode_count") val episodeCount: Int,
+    @SerializedName("air_date") val dateAired: String
+) {
+    companion object {
+        fun create(amount: Int): List<ResponseSeason> {
+            val list = mutableListOf<ResponseSeason>()
+            repeat(amount) {
+                list.add(
+                    ResponseSeason(
+                        id = it,
+                        number = it,
+                        name = "name$it",
+                        overview = "overview$it",
+                        posterPath = "posterPath$it",
+                        episodeCount = 1,
+                        dateAired = "dateAired$it"
+                    )
+                )
+            }
+            return list.toList()
+        }
+    }
+}
+
 data class ResponseShowDetail(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,

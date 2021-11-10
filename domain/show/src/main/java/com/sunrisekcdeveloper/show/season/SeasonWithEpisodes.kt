@@ -16,15 +16,11 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.watchlist
+package com.sunrisekcdeveloper.show.season
 
-import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.watchlist.extras.*
+import com.sunrisekcdeveloper.show.episode.Episode
 
-interface WatchlistRemoteDataSourceContract {
-    suspend fun episodeDetails(showId: String, season: Int, episode: Int): NetworkResult<ResponseEpisode>
-    suspend fun season(showId: String, season: Int): NetworkResult<ResponseSeason>
-    suspend fun seasonDetails(showId: String, season: Int): NetworkResult<ResponseSeasonDetailWithEpisodes>
-    suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail>
-    suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification>
-}
+data class SeasonWithEpisodes(
+    val season: Season,
+    val episodes: List<Episode>
+)

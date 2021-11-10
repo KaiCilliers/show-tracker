@@ -16,15 +16,23 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.watchlist
+package com.sunrisekcdeveloper.progress.extras
 
-import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.watchlist.extras.*
+import com.sunrisekcdeveloper.progress.extras.model.ResponseShowCertification
 
-interface WatchlistRemoteDataSourceContract {
-    suspend fun episodeDetails(showId: String, season: Int, episode: Int): NetworkResult<ResponseEpisode>
-    suspend fun season(showId: String, season: Int): NetworkResult<ResponseSeason>
-    suspend fun seasonDetails(showId: String, season: Int): NetworkResult<ResponseSeasonDetailWithEpisodes>
-    suspend fun showDetail(id: String): NetworkResult<ResponseShowDetail>
-    suspend fun showCertification(id: String): NetworkResult<EnvelopeShowCertification>
+interface CertificationsContract {
+    val noneAvailable: String
+        get() = "N/A"
+    fun from(iso: String): String
+    class Smart(private val origin: CertificationsContract) {
+        fun fromUS() = origin.from("US")
+    }
+}
+
+class CertificationsShow(private val data: List<ResponseShowCertification>) :
+    CertificationsContract {
+    override fun from(iso: String): String {
+        if (data.isEmpty()) return noneAvailable
+        return data.find { it.iso == iso }?.certification ?: data[0].certification
+    }
 }
