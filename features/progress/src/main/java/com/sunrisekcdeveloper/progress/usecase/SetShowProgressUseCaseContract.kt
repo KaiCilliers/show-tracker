@@ -18,16 +18,17 @@
 
 package com.sunrisekcdeveloper.progress.usecase
 
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.progress.extras.model.SetShowProgress
-import timber.log.Timber
 
 interface SetShowProgressUseCaseContract {
     suspend operator fun invoke(progress: SetShowProgress)
     class Fake() : SetShowProgressUseCaseContract {
+        private val log by timber()
         override suspend fun invoke(progress: SetShowProgress) {
             when (progress) {
-                is SetShowProgress.Partial -> { Timber.d("Fake - Setting Show (id=${progress.showId} Partial") }
-                is SetShowProgress.UpToDate -> { Timber.d("Fake - Setting Show (id=${progress.showId} Up to date") }
+                is SetShowProgress.Partial -> { log.d("Fake - Setting Show (id=${progress.showId} Partial") }
+                is SetShowProgress.UpToDate -> { log.d("Fake - Setting Show (id=${progress.showId} Up to date") }
             }
         }
     }

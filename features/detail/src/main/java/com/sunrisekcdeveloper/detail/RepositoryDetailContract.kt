@@ -19,12 +19,12 @@
 package com.sunrisekcdeveloper.detail
 
 import com.sunrisekcdeveloper.cache.common.Resource
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.detail.extras.model.*
 import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
-import timber.log.Timber
 
 // TODO [E07-002] [Update_class_naming] These feature repos need to be called services and the existing services need to be called API
 interface RepositoryDetailContract {
@@ -38,6 +38,7 @@ interface RepositoryDetailContract {
     class Fake() : RepositoryDetailContract {
 
         var expectException = false
+        private val log by timber()
 
         override suspend fun movieDetails(id: String): Flow<Resource<UIModelMovieDetail>> {
             return flow {
@@ -83,26 +84,26 @@ interface RepositoryDetailContract {
 
         override suspend fun submitMovieAction(action: ActionRepositoryMovie) {
             when (action) {
-                is ActionRepositoryMovie.Add -> { Timber.d("Fake - Add Movie") }
-                is ActionRepositoryMovie.Remove -> { Timber.d("Fake - Remove Movie") }
-                is ActionRepositoryMovie.Watch -> { Timber.d("Fake - Watch Movie") }
-                is ActionRepositoryMovie.Unwatch -> { Timber.d("Fake - Unwatch Movie") }
+                is ActionRepositoryMovie.Add -> { log.d("Fake - Add Movie") }
+                is ActionRepositoryMovie.Remove -> { log.d("Fake - Remove Movie") }
+                is ActionRepositoryMovie.Watch -> { log.d("Fake - Watch Movie") }
+                is ActionRepositoryMovie.Unwatch -> { log.d("Fake - Unwatch Movie") }
             }
         }
 
         override suspend fun submitShowAction(action: ActionRepositoryShow) {
             when (action) {
-                is ActionRepositoryShow.Add -> { Timber.d("Fake - Add Show") }
-                is ActionRepositoryShow.Remove -> { Timber.d("Fake - Remove Show") }
+                is ActionRepositoryShow.Add -> { log.d("Fake - Add Show") }
+                is ActionRepositoryShow.Remove -> { log.d("Fake - Remove Show") }
             }
         }
 
         override suspend fun updateMovieDetails(id: String) {
-            Timber.d("Fake - Update Movie details with id: $id")
+            log.d("Fake - Update Movie details with id: $id")
         }
 
         override suspend fun updateShowDetails(id: String) {
-            Timber.d("Fake - Update Show details with id: $id")
+            log.d("Fake - Update Show details with id: $id")
         }
     }
 }

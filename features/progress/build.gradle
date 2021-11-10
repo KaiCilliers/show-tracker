@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation project(Core.network)
     implementation project(Core.storage)
+    implementation project(Core.common)
     implementation project(UiComponents.uiComponents)
     implementation project(Domain.movie)
     implementation project(Domain.show)

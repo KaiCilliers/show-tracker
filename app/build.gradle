@@ -91,6 +91,7 @@ android {
 
         implementation project(Core.network)
         implementation project(Core.storage)
+        implementation project(Core.common)
 
         implementation project(Domain.movie)
 

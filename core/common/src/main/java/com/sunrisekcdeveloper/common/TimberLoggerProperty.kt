@@ -16,20 +16,20 @@
  * limitations under the License.
  */
 
-package com.sunrisekcdeveloper.detail.usecase
+package com.sunrisekcdeveloper.common
 
-import com.sunrisekcdeveloper.cache.MediaType
-import com.sunrisekcdeveloper.common.timber
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
-interface RemoveMediaFromWatchlistUseCaseContract {
-    suspend operator fun invoke(id: String, type: MediaType)
-    class Fake() : RemoveMediaFromWatchlistUseCaseContract {
-        private val log by timber()
-        override suspend fun invoke(id: String, type: MediaType) {
-            when (type) {
-                MediaType.Movie -> { log.d("Fake - Removed Movie (id=$id) from Watchlist") }
-                MediaType.Show -> { log.d("Fake - Removed Show (id=$id) from Watchlist") }
-            }
-        }
+class TimberLoggerProperty<T: Any>(private val tag: String? = null): ReadOnlyProperty<T, TimberLogger> {
+
+    @Volatile var logger: TimberLogger? = null
+
+    override fun getValue(thisRef: T, property: KProperty<*>): TimberLogger {
+        logger?.let { return it }
+        logger = TimberLogger(thisRef, tag)
+        return logger!!
     }
 }
+
+inline fun <reified T: Any> T.timber(tag: String? = null) = TimberLoggerProperty<T>(tag)

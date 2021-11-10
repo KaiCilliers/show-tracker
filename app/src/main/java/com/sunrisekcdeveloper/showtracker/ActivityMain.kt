@@ -24,10 +24,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.get
 import androidx.navigation.ui.setupWithNavController
+import com.sunrisekcdeveloper.common.timber
 import com.sunrisekcdeveloper.showtracker.R
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ActivityMain : AppCompatActivity() {
@@ -35,6 +35,7 @@ class ActivityMain : AppCompatActivity() {
     // change to test scripts
     private lateinit var binding: ActivityMainBinding
     private var doubleBackToExitPressedLong = System.currentTimeMillis()
+    private val log by timber()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +51,8 @@ class ActivityMain : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Timber.e("${findNavController(R.id.nav_host_fragment_main).currentBackStackEntry?.destination}")
-        Timber.e("${findNavController(R.id.nav_host_fragment_main).currentDestination}")
+        log.e("${findNavController(R.id.nav_host_fragment_main).currentBackStackEntry?.destination}")
+        log.e("${findNavController(R.id.nav_host_fragment_main).currentDestination}")
         if (findNavController(R.id.nav_host_fragment_main).currentDestination != findNavController(R.id.nav_host_fragment_main).graph[R.id.destination_main_discovery_fragment]
             || doubleBackToExitPressedLong + 2000 > System.currentTimeMillis()) {
             super.onBackPressed()

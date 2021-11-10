@@ -18,8 +18,6 @@
 
 package com.sunrisekcdeveloper.detail.impl
 
-import androidx.room.withTransaction
-import com.sunrisekcdeveloper.cache.TrackerDatabase
 import com.sunrisekcdeveloper.cache.common.Resource
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistMovie
 import com.sunrisekcdeveloper.cache.models.EntityWatchlistShow
@@ -27,18 +25,14 @@ import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.extras.*
 import com.sunrisekcdeveloper.detail.extras.model.*
 import com.sunrisekcdeveloper.detail.extras.model.ActionRepositoryMovie
-import com.sunrisekcdeveloper.movie.Movie
 import com.sunrisekcdeveloper.movie.MovieRepositoryContract
 import com.sunrisekcdeveloper.movie.WatchlistMovieRepositoryContract
-import com.sunrisekcdeveloper.network.NetworkResult
-import com.sunrisekcdeveloper.show.TVShow
 import com.sunrisekcdeveloper.show.TVShowRepositoryContract
 import com.sunrisekcdeveloper.show.WatchlistTVShowRepositoryContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class DetailRepository(
