@@ -23,6 +23,7 @@ object Modules {
 object Core {
     const val network = ":core:network"
     const val storage = ":core:storage"
+    const val common = ":core:common"
 }
 
 object UiComponents {
