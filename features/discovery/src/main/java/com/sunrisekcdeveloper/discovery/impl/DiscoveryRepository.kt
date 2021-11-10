@@ -30,7 +30,7 @@ import com.sunrisekcdeveloper.discovery.extras.paging.*
 import com.sunrisekcdeveloper.discovery.DiscoveryRepositoryContract
 import kotlinx.coroutines.flow.Flow
 
-// todo The base discovery lists need to look different each day (so why not rank them based on popularity? - just to give it a less static feel)
+// TODO [E07-002] [DiscoveryWithDomainModules] Discovery needs to use the domain module - not yet implemented
 class DiscoveryRepository(
     private val remote: DiscoveryRemoteDataSourceContract,
     private val database: TrackerDatabase
