@@ -1,6 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Dark Theme specific attributes -->
-    <style name="Theme.ShowTracker" parent="Base.Theme.ShowTracker">
+    <style name="Theme.ShowTracker.Dark" parent="Base.Theme.ShowTracker">
+        <item name="colorPrimary">@color/brand_blue_grey</item>
+        <item name="colorPrimaryVariant">@color/brand_blue_grey_light</item>
+        <item name="colorSecondary">@color/brand_gold</item>
+        <item name="colorSecondaryVariant">@color/brand_gold_light</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/brand_blue_grey_dark</item>
+        <item name="colorOnBackground">@color/white</item>
     </style>
 </resources>

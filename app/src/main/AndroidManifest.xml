@@ -12,7 +12,7 @@
         android:label="ShowTracker"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ShowTracker">
+        android:theme="@style/Theme.ShowTracker.Light">
         <activity android:name=".ActivityMain" /> <!-- This alias has to be placed after all activities have been declared -->
         <activity-alias
             android:name=".LaunchActivity"

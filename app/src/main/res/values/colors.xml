@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue_grey_500">#607d8b</color>
-    <color name="blue_grey_300">#8eacbb</color>
-    <color name="blue_grey_700">#34515e</color>
-    <color name="blue_light_500">#03a9f4</color>
-    <color name="blue_light_200">#67daff</color>
-    <color name="blue_light_800">#007ac1</color>
-    <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
     <color name="skeleton">#CCCCCC</color>
-
     <color name="asd114">#01579B</color>
 
+    <!-- Light variant -->
+    <color name="brand_cyan">#4dd0e1</color>
+    <color name="brand_cyan_light">#88ffff</color>
+    <color name="brand_cyan_dark">#009faf</color>
+
+    <!-- Dark variant -->
+    <color name="brand_blue_grey">#263238</color>
+    <color name="brand_blue_grey_light">#4f5b62</color>
+    <color name="brand_blue_grey_dark">#000a12</color>
+
+    <!-- Secondary color -->
+    <color name="brand_gold">#e6df37</color>
+    <color name="brand_gold_light">#ffff6d</color>
+    <color name="brand_gold_dark">#b0ae00</color>
+
+    <!-- White and black -->
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 </resources>
