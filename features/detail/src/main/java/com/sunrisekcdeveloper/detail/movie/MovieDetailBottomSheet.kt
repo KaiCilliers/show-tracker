@@ -29,6 +29,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.common.timber
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetMovieDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
@@ -41,9 +42,9 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class MovieDetailBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: BottomSheetMovieDetailBinding
     private val arguments: MovieDetailBottomSheetArgs by navArgs()
     private val viewModel: MovieDetailViewModel by viewModels()
+    private val binding by viewBinding(BottomSheetMovieDetailBinding::bind)
     private val log by timber()
 
     override fun onCreateView(
@@ -51,8 +52,7 @@ class MovieDetailBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomSheetMovieDetailBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.bottom_sheet_movie_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

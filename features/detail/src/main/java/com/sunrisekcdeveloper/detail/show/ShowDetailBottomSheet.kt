@@ -32,6 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sunrisekcdeveloper.common.timber
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.detail.*
 import com.sunrisekcdeveloper.detail.databinding.BottomSheetShowDetailBinding
 import com.sunrisekcdeveloper.detail.extras.model.*
@@ -45,7 +46,7 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class ShowDetailBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: BottomSheetShowDetailBinding
+    private val binding by viewBinding(BottomSheetShowDetailBinding::bind)
     private val arguments: ShowDetailBottomSheetArgs by navArgs()
     private val viewModel: ShowDetailViewModel by viewModels()
     private val log by timber()
@@ -55,8 +56,7 @@ class ShowDetailBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomSheetShowDetailBinding.inflate(inflater)
-        return binding.root
+        return inflater.inflate(R.layout.bottom_sheet_show_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

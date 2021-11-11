@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.cache.ListType
 import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.discovery.databinding.FragmentDiscoveryBinding
 import com.sunrisekcdeveloper.discovery.extras.*
 import com.sunrisekcdeveloper.discovery.extras.model.ActionDiscovery
@@ -53,7 +54,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DiscoveryFragment : Fragment() {
 
-    private lateinit var binding: FragmentDiscoveryBinding
+    private val binding by viewBinding(FragmentDiscoveryBinding::bind)
     private val viewModel: DiscoveryViewModel by viewModels()
 
     private lateinit var adapterPopularMovies: PagingAdapterSimplePoster
@@ -79,8 +80,7 @@ class DiscoveryFragment : Fragment() {
         adapterTopRatedShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         adapterUpcomingMovies = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         adapterAiringTodayShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
-        binding = FragmentDiscoveryBinding.inflate(inflater)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_discovery, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

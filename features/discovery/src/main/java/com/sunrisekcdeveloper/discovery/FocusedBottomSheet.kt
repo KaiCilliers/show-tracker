@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.discovery.databinding.BottomSheetFocusedDiscoveryBinding
 import com.sunrisekcdeveloper.discovery.extras.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FocusedBottomSheet : BottomSheetDialogFragment() {
 
-    lateinit var binding: BottomSheetFocusedDiscoveryBinding
+    private val binding by viewBinding(BottomSheetFocusedDiscoveryBinding::bind)
     private val viewModel: DiscoveryViewModel by viewModels()
 //    private val arguments: FragmentBottomSheetFocusedArgs by navArgs()
 
@@ -50,8 +51,7 @@ class FocusedBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomSheetFocusedDiscoveryBinding.inflate(inflater)
-        return binding.root
+        return inflater.inflate(R.layout.bottom_sheet_focused_discovery, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

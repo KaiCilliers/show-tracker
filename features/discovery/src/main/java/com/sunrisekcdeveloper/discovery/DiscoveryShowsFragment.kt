@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.cache.ListType
 import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.discovery.databinding.FragmentDiscoveryOnlyShowsBinding
 import com.sunrisekcdeveloper.discovery.extras.ImageLoadingStandardGlide
 import com.sunrisekcdeveloper.discovery.extras.KeyPersistenceStore
@@ -60,7 +61,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DiscoveryShowsFragment : Fragment() {
 
-    private lateinit var binding: FragmentDiscoveryOnlyShowsBinding
+    private val binding by viewBinding(FragmentDiscoveryOnlyShowsBinding::bind)
     private val viewModel: DiscoveryShowsViewModel by viewModels()
 
     private lateinit var adapterPopularShows : PagingAdapterSimplePoster
@@ -80,12 +81,11 @@ class DiscoveryShowsFragment : Fragment() {
         adapterPopularShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         adapterTopRatedShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
         adapterAiringShows = PagingAdapterSimplePoster(ImageLoadingStandardGlide(this))
-        binding = FragmentDiscoveryOnlyShowsBinding.inflate(inflater)
-        renderSpinner()
-        return binding.root
+        return inflater.inflate(R.layout.fragment_discovery_only_shows, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        renderSpinner()
         setup()
         setupBinding()
         observeViewModel()

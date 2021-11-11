@@ -41,9 +41,9 @@ import com.google.android.material.tabs.TabLayout
 import com.sunrisekcdeveloper.cache.FilterMovies
 import com.sunrisekcdeveloper.cache.FilterShows
 import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.watchlist.extras.model.MovieWatchedStatus
 import com.sunrisekcdeveloper.network.InternalDeepLink
-import com.sunrisekcdeveloper.cache.R
 import com.sunrisekcdeveloper.watchlist.databinding.FragmentWatchlistBinding
 import com.sunrisekcdeveloper.watchlist.extras.model.*
 import com.sunrisekcdeveloper.watchlist.extras.*
@@ -60,7 +60,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class WatchlistFragment : Fragment() {
 
-    private lateinit var binding: FragmentWatchlistBinding
+    private val binding by viewBinding(FragmentWatchlistBinding::bind)
     private val viewModel: WatchlistViewModel by viewModels()
     private val arguments: WatchlistFragmentArgs by navArgs()
 
@@ -82,8 +82,7 @@ class WatchlistFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentWatchlistBinding.inflate(inflater)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_watchlist, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

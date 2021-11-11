@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.cache.MediaType
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.network.InternalDeepLink
 import com.sunrisekcdeveloper.search.*
 import com.sunrisekcdeveloper.search.databinding.FragmentSearchBinding
@@ -59,7 +60,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
+    private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel: SearchViewModel by viewModels()
 
     private lateinit var adapterSearchResults: PagingAdapterSimplePosterMedium
@@ -75,8 +76,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

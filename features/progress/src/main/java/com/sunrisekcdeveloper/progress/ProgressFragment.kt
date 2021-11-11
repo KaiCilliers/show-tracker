@@ -31,6 +31,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.sunrisekcdeveloper.common.timber
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.progress.databinding.FragmentSetProgressBinding
 import com.sunrisekcdeveloper.progress.extras.KeyPersistenceStore
 import com.sunrisekcdeveloper.progress.extras.gone
@@ -45,7 +46,7 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class ProgressFragment : Fragment() {
 
-    private lateinit var binding: FragmentSetProgressBinding
+    private val binding by viewBinding(FragmentSetProgressBinding::bind)
     private val viewModel: ProgressViewModel by viewModels()
     private val arguments: ProgressFragmentArgs by navArgs()
     private val log by timber()
@@ -60,8 +61,7 @@ class ProgressFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSetProgressBinding.inflate(inflater)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_set_progress, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

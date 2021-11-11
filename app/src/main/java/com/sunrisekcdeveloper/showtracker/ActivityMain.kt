@@ -25,7 +25,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.get
 import androidx.navigation.ui.setupWithNavController
 import com.sunrisekcdeveloper.common.timber
-import com.sunrisekcdeveloper.showtracker.R
+import com.sunrisekcdeveloper.common.viewBinding
 import com.sunrisekcdeveloper.showtracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,13 +33,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class ActivityMain : AppCompatActivity() {
 
     // change to test scripts
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
     private var doubleBackToExitPressedLong = System.currentTimeMillis()
     private val log by timber()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setup()
     }
