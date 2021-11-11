@@ -26,6 +26,10 @@ android {
             buildConfigField("String", "RootPackage", "\"com.sunrisekcdeveloper.showtracker\"")
         }
     }
+    // TODO [E07-007] [ViewBinding_in_:common] Remove unneeded viewBinding setting in feature modules as they have inherited in from common android library gradle file
+    buildFeatures {
+        viewBinding = true
+    }
     kotlinOptions.jvmTarget = "1.8"
 
     packagingOptions {

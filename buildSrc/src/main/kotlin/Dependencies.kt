@@ -42,7 +42,7 @@ object Versions {
     const val COROUTINE = "1.2.1"
     const val COROUTINE_TEST = "1.3.0" // todo update version
 
-    const val APP_COMPAT = "1.2.0" // todo update version
+    const val APP_COMPAT = "1.3.1"
     const val CONSTRAINT_LAYOUT = "2.0.4"
     const val ANDROIDX_CORE = "1.3.2" // todo update version
     const val LEGACY_SUPPORT = "1.0.0"
@@ -111,6 +111,7 @@ object Libs {
     val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
     val lifecycleLiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.LIFECYCLE}"
     val lifecycleExt = "androidx.lifecycle:lifecycle-extensions:${Versions.LIFECYCLE}"
+    val lifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:${Versions.LIFECYCLE}"
 
     // Coroutines
     val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.COROUTINE}"

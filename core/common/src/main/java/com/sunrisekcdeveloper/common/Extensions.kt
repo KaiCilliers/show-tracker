@@ -18,16 +18,19 @@
 
 package com.sunrisekcdeveloper.common
 
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
+import android.view.LayoutInflater
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 
-class TimberLoggerProperty<T: Any>(private val tag: String? = null): ReadOnlyProperty<T, TimberLogger> {
+// Logging Timber delegate
+inline fun <reified T: Any> T.timber(tag: String? = null) = TimberLoggerProperty<T>(tag)
 
-    @Volatile var logger: TimberLogger? = null
+// ViewBinding Delegate Fragment
+fun <T: ViewBinding> Fragment.viewBinding(viewBindingFactory: (View) -> T) =
+    FragmentViewBindingDelegate(this, viewBindingFactory)
 
-    override fun getValue(thisRef: T, property: KProperty<*>): TimberLogger {
-        logger?.let { return it }
-        logger = TimberLogger(thisRef, tag)
-        return logger!!
-    }
-}
+// ViewBinding delegate Activity
+inline fun <T: ViewBinding> AppCompatActivity.viewBinding(crossinline bindInflater: (LayoutInflater) -> T) =
+    lazy(LazyThreadSafetyMode.NONE) { bindInflater.invoke(layoutInflater) }
