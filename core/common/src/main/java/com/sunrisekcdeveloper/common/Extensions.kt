@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 // Logging Timber delegate
@@ -34,3 +35,22 @@ fun <T: ViewBinding> Fragment.viewBinding(viewBindingFactory: (View) -> T) =
 // ViewBinding delegate Activity
 inline fun <T: ViewBinding> AppCompatActivity.viewBinding(crossinline bindInflater: (LayoutInflater) -> T) =
     lazy(LazyThreadSafetyMode.NONE) { bindInflater.invoke(layoutInflater) }
+
+/**
+ * Recyclerview
+ * Remove the adapter after the view has been detached from window to prevent memory leaks
+ * Use when the current fragment is going to be REPLACED (Not needed when using FragmentTransaction.add)
+ */
+fun <VH: RecyclerView.ViewHolder> RecyclerView.setNullableAdapter(adapter: RecyclerView.Adapter<VH>) {
+    this.adapter = adapter
+    this.clearReference()
+}
+internal fun RecyclerView.clearReference() {
+    addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View?) { }
+
+        override fun onViewDetachedFromWindow(v: View?) {
+            this@clearReference.adapter = null
+        }
+    })
+}
