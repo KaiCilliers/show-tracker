@@ -1,4 +1,14 @@
 apply from: "$rootDir/common-android-library.gradle"
 
+android {
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
 dependencies {
+    implementation project(Core.common)
+    implementation Libs.timber
+    implementation Libs.googleMaterial
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 }

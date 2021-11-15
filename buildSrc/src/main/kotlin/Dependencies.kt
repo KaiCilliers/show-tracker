@@ -42,7 +42,7 @@ object Versions {
     const val COROUTINE = "1.2.1"
     const val COROUTINE_TEST = "1.3.0" // todo update version
 
-    const val APP_COMPAT = "1.2.0" // todo update version
+    const val APP_COMPAT = "1.3.1" // todo update version
     const val CONSTRAINT_LAYOUT = "2.0.4"
     const val ANDROIDX_CORE = "1.3.2" // todo update version
     const val LEGACY_SUPPORT = "1.0.0"
@@ -54,7 +54,7 @@ object Versions {
 
     const val LIFECYCLE = "2.2.0" // todo update version
 
-    const val GOOGLE_MATERIAL = "1.3.0"
+    const val GOOGLE_MATERIAL = "1.4.0"
 
     const val GLIDE = "4.10.0" // todo update version
 

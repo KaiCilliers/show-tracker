@@ -131,6 +131,11 @@ class MovieDetailBottomSheet : BottomSheetDialogFragment() {
         binding.tvDetailMovieRuntime.text = getString(R.string.runtime_with_value, hours, minutes)
         binding.tvDetailMovieReleaseYear.text = data.releaseYear
         binding.tvDetailMovieCertification.text = data.certification
+        binding.captionsNice.submitInformation(
+            getString(R.string.runtime_with_value, hours, minutes),
+            data.releaseYear,
+            data.certification
+        )
 
         when (data.status) {
             MovieWatchlistStatus.Watchlisted -> {

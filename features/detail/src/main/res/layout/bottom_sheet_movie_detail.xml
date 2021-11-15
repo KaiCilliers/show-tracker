@@ -43,6 +43,7 @@
         android:text="@string/media_add"
         android:enabled="false"
         tools:enabled="true"
+        app:layout_constraintTop_toBottomOf="@id/captions_nice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_detail_movie_watch_status"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -99,6 +100,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_detail_movie_poster"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_movie_release_year" />
+
+    <com.sunrisekcdeveloper.ui_components.StCaptions
+        android:id="@+id/captions_nice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_movie_description"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tv_detail_movie_release_year"

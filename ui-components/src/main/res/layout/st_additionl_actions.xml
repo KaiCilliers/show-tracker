@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.sunrisekcdeveloper.ui_components.StAdditionalAction
+        android:id="@+id/additional_actions_my_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"/>
+
+    <com.sunrisekcdeveloper.ui_components.StAdditionalAction
+        android:id="@+id/additional_actions_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"/>
+
+    <com.sunrisekcdeveloper.ui_components.StAdditionalAction
+        android:id="@+id/additional_actions_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

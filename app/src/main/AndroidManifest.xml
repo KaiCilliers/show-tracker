@@ -13,10 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowTracker">
+        <activity android:name=".MainActivity"/>
         <activity android:name=".ActivityMain" /> <!-- This alias has to be placed after all activities have been declared -->
         <activity-alias
             android:name=".LaunchActivity"
-            android:targetActivity=".ActivityMain">
+            android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
