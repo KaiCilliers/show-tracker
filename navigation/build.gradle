@@ -1,0 +1,19 @@
+apply from: "$rootDir/common-android-library.gradle"
+
+android {
+    buildTypes {
+        debug {
+            debuggable true
+            buildConfigField("String", "RootPackage", "\"com.sunrisekcdeveloper.showtracker\"")
+        }
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation Libs.androidxCoreKtx
+    implementation Libs.androidxAppCompat
+    implementation Libs.navigationFragmentKtx
+}

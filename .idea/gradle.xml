@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/features/progress" />
             <option value="$PROJECT_DIR$/features/search" />
             <option value="$PROJECT_DIR$/features/watchlist" />
+            <option value="$PROJECT_DIR$/navigation" />
             <option value="$PROJECT_DIR$/ui-components" />
           </set>
         </option>
